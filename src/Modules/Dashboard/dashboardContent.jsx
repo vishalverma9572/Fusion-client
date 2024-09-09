@@ -2,11 +2,9 @@ import { Text } from "@mantine/core";
 
 const Dashboard = () => {
   return (
-    <div>
-      <Text c="black" fz="lg">
-        Hello Team Members!
-      </Text>
-    </div>
+    <>
+      <Text>I am a DashBoard Content</Text>
+    </>
   );
 };
 

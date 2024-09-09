@@ -1,9 +1,12 @@
 import '@mantine/core/styles.css';
 import { MantineProvider } from '@mantine/core';
-import Dashboard from './Pages/dashboard.jsx';
+import { Layout } from './components/layout.jsx';
+import Dashboard from './Modules/Dashboard/dashboardContent.jsx';
 
 export default function App() {
   return <MantineProvider>
-    <Dashboard />
+    <Layout>
+      <Dashboard />
+    </Layout>
   </MantineProvider>;
 }
