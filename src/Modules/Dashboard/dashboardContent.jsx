@@ -1,9 +1,15 @@
-import { Text } from "@mantine/core";
+import DashBoardBreadcrumbs from "../../components/dashboardHeadBreadcrumbs";
+import RecentTabs from "../../components/recentTabs";
+import SortOptions from "../../components/sortOptions";
+import DashboardContentArea from "../../components/dashboardContentArea";
 
 const Dashboard = () => {
   return (
     <>
-      <Text>I am a DashBoard Content</Text>
+      <DashBoardBreadcrumbs />
+      <RecentTabs />
+      <SortOptions />
+      <DashboardContentArea />
     </>
   );
 };
