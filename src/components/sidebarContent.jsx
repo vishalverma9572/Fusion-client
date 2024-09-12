@@ -54,9 +54,14 @@ const otherItems = [
   { label: "Help", icon: <HelpIcon size={18} /> },
 ];
 
-const SidebarContent = ({ isCollapsed, setIsCollapsed }) => {
+const SidebarContent = ({ isCollapsed, setIsCollapsed, closeSidebar }) => {
   const [hover, setHover] = useState(null);
   const [selected, setSelected] = useState(null);
+
+  const toggleSidebar = () => {
+    closeSidebar();
+    setIsCollapsed(!isCollapsed);
+  }
 
   return (
     <>
@@ -66,7 +71,7 @@ const SidebarContent = ({ isCollapsed, setIsCollapsed }) => {
         )}
 
         <Flex
-          onClick={() => setIsCollapsed(!isCollapsed)}
+          onClick={toggleSidebar}
           onMouseEnter={() => setHover("toggle")}
           onMouseLeave={() => setHover(null)}
           bg={hover == "toggle" ? "#e9ecef" : ""}
@@ -141,6 +146,7 @@ const SidebarContent = ({ isCollapsed, setIsCollapsed }) => {
 SidebarContent.propTypes = {
   isCollapsed: PropTypes.bool.isRequired,
   setIsCollapsed: PropTypes.func.isRequired,
+  closeSidebar: PropTypes.func.isRequired,
 };
 
 export default SidebarContent;

@@ -52,10 +52,10 @@ const DashboardContentArea = () => {
       <Grid mt="xl">
         {options.map((option, index) => {
             return (
-                <Grid.Col span={6} key={index}>
+                <Grid.Col span={{base:12,md:6}} key={index}>
                 <Paper
                     shadow="lg"
-                    ml="lg"
+                    ml={{md: "lg"}}
                     radius="md"
                     px="lg"
                     pt="sm"
