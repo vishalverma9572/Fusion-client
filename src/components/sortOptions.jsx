@@ -10,7 +10,7 @@ const categories = [
 const SortOptions = () => {
   return (
     <>
-      <Flex align="center" mt="md" gap="4rem" ml="lg">
+      <Flex align="center" mt="md" rowGap={"1rem"} columnGap={"4rem"} ml={{md: "lg"}} wrap={"wrap"}>
         <Flex align="center" gap="0.5rem">
           <Text fw={600} size="1.5rem">
             Notfications
