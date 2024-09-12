@@ -51,7 +51,7 @@ const RecentTabs = () => {
 
 	return (
 		<>
-			<Flex justify="flex-start" align="center" gap={{base:"0.5rem", md:"1rem"}} mt={{base:"1rem", md:"3rem"}} ml={{md: "lg"}}>
+			<Flex justify="flex-start" align="center" gap={{base:"0.5rem", md:"1rem"}} mt={{base:"1rem", md:"1.5rem"}} ml={{md: "lg"}}>
         <Button onClick={handlePrev} variant="default" p={0} style={{ border: "none" }}>
 					<CaretCircleLeft className={classes.fusionCaretCircleIcon} weight="light" />
 				</Button>
@@ -61,8 +61,8 @@ const RecentTabs = () => {
             <Tabs.List style={{ display: 'flex', flexWrap: 'nowrap' }}>
               {
                 tabItems.map((item, index) => (
-                  <Tabs.Tab value={`${index}`} key={index} className={classes.fusionRecentTab} >
-                    <Text className={activeTab===`${index}` ? classes.fusionActiveRecentTab : "" }>
+                  <Tabs.Tab value={`${index}`} key={index} className={activeTab===`${index}` ? classes.fusionActiveRecentTab : "" }>
+                    <Text>
                       {item.title}
                     </Text>
                   </Tabs.Tab>

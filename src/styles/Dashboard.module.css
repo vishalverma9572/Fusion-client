@@ -16,16 +16,12 @@
 .fusionCaretIcon {
     font-size: 1rem;
     @media (min-width: $mantine-breakpoint-md) {
-        font-size: 2rem;
+        font-size: 1.25rem;
     }
 }
 
-.fusionRecentTab {
-    border: none;
-}
-
 .fusionActiveRecentTab {
-    font-weight: bold;
+    background-color: #e3f1f1;
 }
 
 .fusionTabsContainer {

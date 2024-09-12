@@ -45,17 +45,17 @@ export function Layout({ children }) {
       <AppShell.Header bg="#fbfbfb">
         <Flex justify={{base:"space-between", sm:"flex-end"}}  align="center" pl="sm">
           <Burger opened={opened} onClick={openSidebar} hiddenFrom="sm" size="sm" />
-          <Flex justify="flex-end" align="center" gap="lg" py="sm" px="xl">
+          <Flex justify="flex-end" align="center" gap="lg" py="sm" px={{base:"sm", md:"lg"}}>
             <Indicator>
               <Bell color="orange" size="32px" cursor="pointer" />
             </Indicator>
             <Popover
               opened={popoverOpened}
               onChange={setPopoverOpened}
-              width={330}
+              width={340}
               position="bottom-end"
               withArrow
-              shadow="lg"
+              shadow="xl"
             >
               <Popover.Target>
                 <Avatar
