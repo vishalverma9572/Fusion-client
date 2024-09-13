@@ -1,13 +1,13 @@
-import DashBoardBreadcrumbs from "../../components/dashboardHeadBreadcrumbs";
-import RecentTabs from "../../components/recentTabs";
-import DashboardContentArea from "../../components/dashboardContentArea";
+import Breadcrumbs from "../../components/Breadcrumbs";
+import RecentTabs from "../../components/Tabs";
+import DashBoardNotifications from "./dashboardNotifications.jsx";
 
 const Dashboard = () => {
   return (
     <>
-      <DashBoardBreadcrumbs />
+      <Breadcrumbs />
       <RecentTabs />
-      <DashboardContentArea />
+      <DashBoardNotifications />
     </>
   );
 };

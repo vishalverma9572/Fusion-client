@@ -54,14 +54,14 @@ const otherItems = [
   { label: "Help", icon: <HelpIcon size={18} /> },
 ];
 
-const SidebarContent = ({ isCollapsed, setIsCollapsed, closeSidebar }) => {
+const SidebarContent = ({ isCollapsed, toggleSidebar }) => {
   const [hover, setHover] = useState(null);
   const [selected, setSelected] = useState(null);
 
-  const toggleSidebar = () => {
-    closeSidebar();
-    setIsCollapsed(!isCollapsed);
-  }
+  const handleModuleClick = (itemlabel) => {
+    setSelected(itemlabel);
+    toggleSidebar();
+  };
 
   return (
     <>
@@ -82,7 +82,13 @@ const SidebarContent = ({ isCollapsed, setIsCollapsed, closeSidebar }) => {
           {isCollapsed ? <CaretRight size={24} /> : <CaretLeft size={24} />}
         </Flex>
       </Flex>
-      <ScrollArea mah={600} type={!isCollapsed && "hover"} scrollbars="y">
+      <ScrollArea
+        mah={600}
+        type={!isCollapsed && "always"}
+        scrollbars="y"
+        onMouseEnter={() => toggleSidebar()}
+        onMouseLeave={() => !isCollapsed && toggleSidebar()}
+      >
         <Stack spacing="xs" mt="16px" align="flex-start" gap="4px">
           {Modules.map((item) => (
             <Tooltip
@@ -91,7 +97,6 @@ const SidebarContent = ({ isCollapsed, setIsCollapsed, closeSidebar }) => {
               position="right"
               offset={-16}
               withArrow={isCollapsed && true}
-              transitionProps={{ transition: "fade-right", duration: 500 }}
               p={!isCollapsed && 0}
             >
               <Button
@@ -113,7 +118,7 @@ const SidebarContent = ({ isCollapsed, setIsCollapsed, closeSidebar }) => {
                 }
                 onMouseEnter={() => setHover(item.label)}
                 onMouseLeave={() => setHover(null)}
-                onClick={() => setSelected(item.label)}
+                onClick={() => handleModuleClick(item.label)}
               >
                 {!isCollapsed && item.label}
               </Button>
@@ -126,14 +131,27 @@ const SidebarContent = ({ isCollapsed, setIsCollapsed, closeSidebar }) => {
         label={!isCollapsed && "Miscellaneous"}
         labelPosition="center"
       />
-      <Stack spacing="xs" mt="2px" align="flex-start" gap={4}>
+      <Stack
+        spacing="xs"
+        mt="2px"
+        align="flex-start"
+        gap={4}
+        onMouseEnter={() => toggleSidebar()}
+        onMouseLeave={() => !isCollapsed && toggleSidebar()}
+      >
         {otherItems.map((item) => (
           <Button
             key={item.label}
             variant="transparent"
             leftSection={item.icon}
             style={{ justifyContent: "flex-start" }}
-            color="#535455"
+            color={
+              hover == item.label || selected == item.label
+                ? "blue"
+                : "#535455"
+            }
+            onMouseEnter={() => setHover(item.label)}
+            onMouseLeave={() => setHover(null)}
           >
             {!isCollapsed && item.label}
           </Button>
@@ -145,8 +163,7 @@ const SidebarContent = ({ isCollapsed, setIsCollapsed, closeSidebar }) => {
 
 SidebarContent.propTypes = {
   isCollapsed: PropTypes.bool.isRequired,
-  setIsCollapsed: PropTypes.func.isRequired,
-  closeSidebar: PropTypes.func.isRequired,
+  toggleSidebar: PropTypes.func.isRequired,
 };
 
 export default SidebarContent;
