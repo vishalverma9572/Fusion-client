@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { User, SignOut, Bell } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import {
   Avatar,
@@ -12,35 +13,39 @@ import {
   Stack,
   Text,
   Button,
-  Box,
-  Badge,
-  Divider,
 } from "@mantine/core";
 import PropTypes from "prop-types";
 import { logoutRoute } from "../helper/api_routes";
 
 const Header = ({ opened, toggleSidebar }) => {
   const [popoverOpened, setPopoverOpened] = useState(false);
+  const username = useSelector((state) => state.user.username);
+  const roles = useSelector((state) => state.user.roles);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
     console.log(token);
-    
+
     try {
-        await axios.post(logoutRoute, {}, { // 3 hours got wasted just because of an empty brackets :)
+      await axios.post(
+        logoutRoute,
+        {},
+        {
+          // 3 hours got wasted just because of an empty brackets :)
           headers: {
-            'Authorization': `Token ${token}`,
-            'Content-Type': 'application/json',
+            Authorization: `Token ${token}`,
+            "Content-Type": "application/json",
           },
-        });
-        localStorage.removeItem('authToken'); 
-        navigate('accounts/login'); 
-        console.log("User logged out successfully");
+        }
+      );
+      localStorage.removeItem("authToken");
+      navigate("accounts/login");
+      console.log("User logged out successfully");
     } catch (err) {
-        console.error("Logout error:", err);
+      console.error("Logout error:", err);
     }
-};
+  };
 
   return (
     <>
@@ -48,7 +53,7 @@ const Header = ({ opened, toggleSidebar }) => {
         justify={{ base: "space-between", sm: "flex-end" }}
         align="center"
         pl="sm"
-        h="64px" //Height has already been set in layout.jsx but had to set the height here as well for properly aligning the avatar 
+        h="64px" //Height has already been set in layout.jsx but had to set the height here as well for properly aligning the avatar
       >
         <Burger
           opened={opened}
@@ -59,9 +64,12 @@ const Header = ({ opened, toggleSidebar }) => {
         <Flex
           justify="flex-end"
           align="center"
-          gap="lg"
+          gap="xl"
           px={{ base: "sm", md: "lg" }}
         >
+          <Button variant="outline" size="md" color="cyan">
+            {roles[0].charAt(0).toUpperCase() + roles[0].slice(1)}
+          </Button>
           <Indicator>
             <Bell color="orange" size="32px" cursor="pointer" />
           </Indicator>
@@ -95,17 +103,8 @@ const Header = ({ opened, toggleSidebar }) => {
                 />
                 <Stack gap={8}>
                   <Text size="lg" fz={24} fw={700}>
-                    Little Krishna
+                    {username}
                   </Text>
-                  <Group gap={8}>
-                    <Text size="sm" c="dimmed">
-                      Student
-                    </Text>
-                    <Divider orientation="vertical" />
-                    <Text size="sm" c="dimmed">
-                      22BCS000
-                    </Text>
-                  </Group>
 
                   <Group spacing="xs">
                     <Button
@@ -127,41 +126,6 @@ const Header = ({ opened, toggleSidebar }) => {
                     </Button>
                   </Group>
                 </Stack>
-                <Group spacing="xs">
-                  <Badge variant="light" color="blue">
-                    Sem V
-                  </Badge>
-                  <Badge variant="light" color="blue">
-                    B.Tech | CSE
-                  </Badge>
-                  <Badge variant="light" color="blue">
-                    CPI 8.1
-                  </Badge>
-                </Group>
-                <Box>
-                  <Text size="sm" weight={500} mb="xs">
-                    Change Your Authority
-                  </Text>
-                  <Group spacing="xs">
-                    {[
-                      "Student",
-                      "Co-coordinator",
-                      "Coordinator",
-                      "Admin",
-                      "Professor",
-                      "Director",
-                    ].map((role) => (
-                      <Button
-                        key={role}
-                        variant="outline"
-                        size="xs"
-                        color="cyan"
-                      >
-                        {role}
-                      </Button>
-                    ))}
-                  </Group>
-                </Box>
               </Group>
             </Popover.Dropdown>
           </Popover>

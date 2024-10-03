@@ -11,13 +11,16 @@ import {
 } from "@mantine/core";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios"; // Import axios
+import axios from "axios";
 import { loginRoute } from "../helper/api_routes";
+import { useDispatch } from "react-redux";
+import { setUserName, setRoles } from "../redux/userslice.jsx";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,8 +32,11 @@ const LoginPage = () => {
       });
 
       if (response.status === 200) {
-        const { token } = response.data; 
-            localStorage.setItem('authToken', token);
+        const { token, name, designations } = response.data;
+        
+        dispatch(setUserName(name));
+        dispatch(setRoles(designations));
+        localStorage.setItem("authToken", token);
         console.log("Login successful", response.data);
         navigate("/");
       }
