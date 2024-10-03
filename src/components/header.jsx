@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { User, SignOut, Bell } from "@phosphor-icons/react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import {
   Avatar,
   Burger,
@@ -15,9 +17,30 @@ import {
   Divider,
 } from "@mantine/core";
 import PropTypes from "prop-types";
+import { logoutRoute } from "../helper/api_routes";
 
 const Header = ({ opened, toggleSidebar }) => {
   const [popoverOpened, setPopoverOpened] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    const token = localStorage.getItem('authToken');
+    console.log(token);
+    
+    try {
+        await axios.post(logoutRoute, {}, { // 3 hours got wasted just because of an empty brackets :)
+          headers: {
+            'Authorization': `Token ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        localStorage.removeItem('authToken'); 
+        navigate('accounts/login'); 
+        console.log("User logged out successfully");
+    } catch (err) {
+        console.error("Logout error:", err);
+    }
+};
 
   return (
     <>
@@ -98,8 +121,9 @@ const Header = ({ opened, toggleSidebar }) => {
                       variant="light"
                       color="pink"
                       size="xs"
+                      onClick={handleLogout}
                     >
-                      Sign out
+                      Log out
                     </Button>
                   </Group>
                 </Stack>

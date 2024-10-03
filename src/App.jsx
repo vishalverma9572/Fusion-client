@@ -18,7 +18,7 @@ export default function App() {
             </Layout>
           }
         />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/accounts/login" element={<LoginPage />} />
         <Route path="/reset-password" element={<ForgotPassword />} />
       </Routes>
     </MantineProvider>
