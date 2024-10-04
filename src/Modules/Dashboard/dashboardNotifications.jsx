@@ -1,8 +1,10 @@
 import PropTypes from "prop-types"; // Import PropTypes
+import axios from "axios"; 
 import { Badge, Divider, Flex, Grid, Paper, Select, Text } from "@mantine/core";
 import { Funnel, Trash } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import classes from "./Dashboard.module.css";
+import { notificationReadRoute } from "../../helper/api_routes";
 
 const categories = [
   { title: "Most Recent" },
@@ -60,6 +62,34 @@ const DashboardNotifications = ({
 
   const notificationsToDisplay =
     activeTab === "1" ? announcementsList : notificationsList;
+
+  
+    const markAsRead = async (notifId) => {
+      const token = localStorage.getItem("authToken");
+      console.log({notificationReadRoute, notifId,token})
+
+      try {
+        const response = await axios.post(
+          notificationReadRoute,  // API endpoint to mark as read
+          { id: notifId },
+          {
+            headers: {
+              Authorization: `Token ${token}`,  // Use token for authorization
+            },
+          }
+
+        );
+        if (response.status === 200) {
+          console.log("Notification marked as read:", notifId);
+          // remove the notification from the list after it's marked as read
+          setSortedNotifications((prev) =>
+            prev.filter((notification) => notification.id !== notifId)
+          );
+        }
+      } catch (err) {
+        console.error("Error marking notification as read:", err);
+      }
+    };
 
   return (
     <>
@@ -140,7 +170,8 @@ const DashboardNotifications = ({
                       <Divider my="sm" w="10rem" />
                     </Flex>
 
-                    <Trash size={28} weight="bold" />
+                    <Trash size={28} weight="bold" onClick={() => markAsRead(notification.id)} // Call API on click
+                      style={{ cursor: "pointer" }} />
                   </Flex>
                   <Text>
                     {notification.description || "No description available."}
@@ -158,6 +189,7 @@ const DashboardNotifications = ({
 DashboardNotifications.propTypes = {
   notificationsList: PropTypes.arrayOf(
     PropTypes.shape({
+      id: PropTypes.number.isRequired,
       verb: PropTypes.string.isRequired,
       timestamp: PropTypes.string.isRequired,
       data: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
@@ -165,6 +197,7 @@ DashboardNotifications.propTypes = {
   ).isRequired,
   announcementsList: PropTypes.arrayOf(
     PropTypes.shape({
+      id: PropTypes.number.isRequired,
       verb: PropTypes.string.isRequired,
       timestamp: PropTypes.string.isRequired,
       data: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
