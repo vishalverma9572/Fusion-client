@@ -14,6 +14,7 @@ import {
   Text,
   Button,
 } from "@mantine/core";
+import avatarImage from "../assets/avatar.png";
 import PropTypes from "prop-types";
 import { logoutRoute } from "../helper/api_routes";
 
@@ -25,7 +26,6 @@ const Header = ({ opened, toggleSidebar }) => {
 
   const handleLogout = async () => {
     const token = localStorage.getItem("authToken");
-    console.log(token);
 
     try {
       await axios.post(
@@ -40,7 +40,7 @@ const Header = ({ opened, toggleSidebar }) => {
         }
       );
       localStorage.removeItem("authToken");
-      navigate("accounts/login");
+      navigate("/accounts/login");
       console.log("User logged out successfully");
     } catch (err) {
       console.error("Logout error:", err);
@@ -85,8 +85,8 @@ const Header = ({ opened, toggleSidebar }) => {
               <Avatar
                 size="46px"
                 radius="xl"
-                src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-1.png"
-                onClick={() => setPopoverOpened((o) => !o)}
+                src={avatarImage}
+                onClick={() => setPopoverOpened((opened) => !opened)}
                 style={{ cursor: "pointer" }}
               />
             </Popover.Target>
@@ -94,16 +94,17 @@ const Header = ({ opened, toggleSidebar }) => {
               style={{
                 border: "1px solid #f0f0f0",
               }}
+              w={400}
             >
               <Group spacing="xs">
                 <Avatar
                   size="xl"
                   radius="xl"
-                  src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-1.png"
+                  src={avatarImage}
                 />
                 <Stack gap={8}>
                   <Text size="lg" fz={24} fw={700}>
-                    {username}
+                  {username.length > 15 ? username.slice(0, 15) + "..." : username}
                   </Text>
 
                   <Group spacing="xs">
@@ -112,6 +113,7 @@ const Header = ({ opened, toggleSidebar }) => {
                       variant="light"
                       color="blue"
                       size="xs"
+                      onClick={() => navigate("/profile")}
                     >
                       Profile
                     </Button>

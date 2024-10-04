@@ -33,7 +33,7 @@ const LoginPage = () => {
     
         localStorage.setItem("authToken", token);
         console.log("Login successful", response.data);
-        navigate("/");
+        navigate("/dashboard");
       }
     } catch (err) {
       console.error("Login error:", err);

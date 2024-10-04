@@ -12,7 +12,7 @@ const items = [
   </Text>
 ));
 
-const DashBoardBreadcrumbs = () => {
+const CustomBreadcrumbs = () => {
   return (
     <>
       <Breadcrumbs
@@ -28,4 +28,4 @@ const DashBoardBreadcrumbs = () => {
   );
 };
 
-export default DashBoardBreadcrumbs;
+export default CustomBreadcrumbs;

@@ -35,28 +35,119 @@ import IIITLOGO from "../assets/IIITJ_logo.webp";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Modules = [
-  { label: "Home", id:"home", icon: <HomeIcon size={18} /> },
-  // { label: "Course Management", id:"course_management", icon: <OtherIcon size={18} /> },
-  { label: "Academics", id:"course_registration", icon: <AcademicsIcon size={18} /> },
-  { label: "Program & Curriculum", id:"program_and_curriculum", icon: <CurriculumIcon size={18} /> },
-  { label: "Mess Management", id:"mess_management", icon: <MessIcon size={18} /> },
-  { label: "Visitor's Hostel", id:"visitor_hostel", icon: <GuestIcon size={18} /> },
-  { label: "HealthCare Center", id:"phc", icon: <HealthIcon size={18} /> },
-  { label: "File Tracking", id:"fts", icon: <FileTrackingIcon size={18} /> },
-  { label: "Scholarship Portal", id:"spacs", icon: <ScholarshipIcon size={18} /> },
-  { label: "Complaint System", id:"complaint_management", icon: <ComplaintIcon size={18} /> },
-  { label: "Placement Cell", id:"placement_cell", icon: <PlacementIcon size={18} /> },
-  { label: "Department Portal", id:"department", icon: <DepartmentIcon size={18} /> },
-  { label: "Research", id:"rspc", icon: <ResearchIcon size={18} /> },
-  { label: "Purchase and Store", id:"purchase_and_store", icon: <StoreIcon size={18} /> },
-  { label: "Human Resource", id:"hr", icon: <HumanResourceIcon size={18} /> },
-  { label: "Examination", id:"examinations", icon: <ExamIcon size={18} /> },
-  { label: "Gymkhana", id:"gymkhana", icon: <GymkhanaIcon size={18} /> },
-  { label: "Institute Work Departments", id:"iwd", icon: <IWDIcon size={18} /> },
-  { label: "Hostel Management", id:"hostel_management", icon: <HostelIcon size={18} /> },
-  { label: "Other Academic Procedure", id:"other_academics", icon: <OtherAcademicIcon size={18} /> },
+  {
+    label: "Home",
+    id: "home",
+    icon: <HomeIcon size={18} />,
+    url: "/dashboard",
+  },
+  // { label: "Course Management", id:"course_management", icon: <OtherIcon size={18} />, url: "/" },
+  {
+    label: "Academics",
+    id: "course_registration",
+    icon: <AcademicsIcon size={18} />,
+    url: "/",
+  },
+  {
+    label: "Program & Curriculum",
+    id: "program_and_curriculum",
+    icon: <CurriculumIcon size={18} />,
+    url: "/",
+  },
+  {
+    label: "Mess Management",
+    id: "mess_management",
+    icon: <MessIcon size={18} />,
+    url: "/",
+  },
+  {
+    label: "Visitor's Hostel",
+    id: "visitor_hostel",
+    icon: <GuestIcon size={18} />,
+    url: "/",
+  },
+  {
+    label: "HealthCare Center",
+    id: "phc",
+    icon: <HealthIcon size={18} />,
+    url: "/",
+  },
+  {
+    label: "File Tracking",
+    id: "fts",
+    icon: <FileTrackingIcon size={18} />,
+    url: "/",
+  },
+  {
+    label: "Scholarship Portal",
+    id: "spacs",
+    icon: <ScholarshipIcon size={18} />,
+    url: "/",
+  },
+  {
+    label: "Complaint System",
+    id: "complaint_management",
+    icon: <ComplaintIcon size={18} />,
+    url: "/",
+  },
+  {
+    label: "Placement Cell",
+    id: "placement_cell",
+    icon: <PlacementIcon size={18} />,
+    url: "/",
+  },
+  {
+    label: "Department Portal",
+    id: "department",
+    icon: <DepartmentIcon size={18} />,
+    url: "/",
+  },
+  { label: "Research", id: "rspc", icon: <ResearchIcon size={18} />, url: "/" },
+  {
+    label: "Purchase and Store",
+    id: "purchase_and_store",
+    icon: <StoreIcon size={18} />,
+    url: "/",
+  },
+  {
+    label: "Human Resource",
+    id: "hr",
+    icon: <HumanResourceIcon size={18} />,
+    url: "/",
+  },
+  {
+    label: "Examination",
+    id: "examinations",
+    icon: <ExamIcon size={18} />,
+    url: "/",
+  },
+  {
+    label: "Gymkhana",
+    id: "gymkhana",
+    icon: <GymkhanaIcon size={18} />,
+    url: "/",
+  },
+  {
+    label: "Institute Work Departments",
+    id: "iwd",
+    icon: <IWDIcon size={18} />,
+    url: "/",
+  },
+  {
+    label: "Hostel Management",
+    id: "hostel_management",
+    icon: <HostelIcon size={18} />,
+    url: "/",
+  },
+  {
+    label: "Other Academic Procedure",
+    id: "other_academics",
+    icon: <OtherAcademicIcon size={18} />,
+    url: "/",
+  },
 ];
 
 const otherItems = [
@@ -69,17 +160,22 @@ const SidebarContent = ({ isCollapsed, toggleSidebar }) => {
   const [hover, setHover] = useState(null);
   const [selected, setSelected] = useState(null);
   const [filteredModules, setFilteredModules] = useState([]);
-  const accessibleModules = useSelector((state) => state.user.accessibleModules);
+  const accessibleModules = useSelector(
+    (state) => state.user.accessibleModules
+  );
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const filteredModules = Modules.filter((module) => accessibleModules[module.id] || module.id==="home");
+    const filteredModules = Modules.filter(
+      (module) => accessibleModules[module.id] || module.id === "home"
+    );
     setFilteredModules(filteredModules);
-    console.log(filteredModules);
   }, [accessibleModules]);
 
-  const handleModuleClick = (itemlabel) => {
-    setSelected(itemlabel);
+  const handleModuleClick = (item) => {
+    setSelected(item.label);
     toggleSidebar();
+    navigate(item.url);
   };
 
   return (
@@ -101,80 +197,79 @@ const SidebarContent = ({ isCollapsed, toggleSidebar }) => {
           {isCollapsed ? <CaretRight size={24} /> : <CaretLeft size={24} />}
         </Flex>
       </Flex>
-      <ScrollArea
-        mah={600}
-        type={!isCollapsed && "always"}
-        scrollbars="y"
+
+      <Stack
+      h="100%"
+        justify="space-around"
         onMouseEnter={() => toggleSidebar()}
         onMouseLeave={() => !isCollapsed && toggleSidebar()}
       >
-        <Stack spacing="xs" mt="16px" align="flex-start" gap="4px">
-          {filteredModules.map((item) => (
-            <Tooltip
-              key={item.label}
-              label={isCollapsed && item.label}
-              position="right"
-              offset={-16}
-              withArrow={isCollapsed && true}
-              p={!isCollapsed && 0}
-            >
-              <Button
+        <ScrollArea
+          mah={600}
+          type={!isCollapsed && "always"}
+          scrollbars="y"
+        >
+          <Stack spacing="xs" mt="16px" align="flex-start" gap="4px">
+            {filteredModules.map((item) => (
+              <Tooltip
                 key={item.label}
-                variant={
-                  hover == item.label
-                    ? "subtle"
-                    : selected == item.label
-                    ? "outline"
-                    : "transparent"
-                }
-                leftSection={item.icon}
-                style={{ display: "flex", justifyContent: "flex-start" }}
-                w="90%"
-                color={
-                  hover == item.label || selected == item.label
-                    ? "blue"
-                    : "#535455"
-                }
-                onMouseEnter={() => setHover(item.label)}
-                onMouseLeave={() => setHover(null)}
-                onClick={() => handleModuleClick(item.label)}
+                label={isCollapsed && item.label}
+                position="right"
+                offset={-16}
+                withArrow={isCollapsed && true}
+                p={!isCollapsed && 0}
               >
-                {!isCollapsed && item.label}
-              </Button>
-            </Tooltip>
+                <Button
+                  key={item.label}
+                  variant={
+                    hover == item.label
+                      ? "subtle"
+                      : selected == item.label
+                      ? "outline"
+                      : "transparent"
+                  }
+                  leftSection={item.icon}
+                  style={{ display: "flex", justifyContent: "flex-start" }}
+                  w="90%"
+                  color={
+                    hover == item.label || selected == item.label
+                      ? "blue"
+                      : "#535455"
+                  }
+                  onMouseEnter={() => setHover(item.label)}
+                  onMouseLeave={() => setHover(null)}
+                  onClick={() => handleModuleClick(item)}
+                >
+                  {!isCollapsed && item.label}
+                </Button>
+              </Tooltip>
+            ))}
+          </Stack>
+        </ScrollArea>
+        <Divider
+          my="sm"
+          label={!isCollapsed && "Miscellaneous"}
+          labelPosition="center"
+        />
+        <Stack spacing="xs" mt="2px" align="flex-start" gap={4}>
+          {otherItems.map((item) => (
+            <Button
+              key={item.label}
+              variant="transparent"
+              leftSection={item.icon}
+              style={{ justifyContent: "flex-start" }}
+              color={
+                hover == item.label || selected == item.label
+                  ? "blue"
+                  : "#535455"
+              }
+              onMouseEnter={() => setHover(item.label)}
+              onMouseLeave={() => setHover(null)}
+            >
+              {!isCollapsed && item.label}
+            </Button>
           ))}
         </Stack>
-      </ScrollArea>
-      <Divider
-        my="sm"
-        label={!isCollapsed && "Miscellaneous"}
-        labelPosition="center"
-      />
-      <Stack
-        spacing="xs"
-        mt="2px"
-        align="flex-start"
-        gap={4}
-        onMouseEnter={() => toggleSidebar()}
-        onMouseLeave={() => !isCollapsed && toggleSidebar()}
-      >
-        {otherItems.map((item) => (
-          <Button
-            key={item.label}
-            variant="transparent"
-            leftSection={item.icon}
-            style={{ justifyContent: "flex-start" }}
-            color={
-              hover == item.label || selected == item.label
-                ? "blue"
-                : "#535455"
-            }
-            onMouseEnter={() => setHover(item.label)}
-            onMouseLeave={() => setHover(null)}
-          >
-            {!isCollapsed && item.label}
-          </Button>
-        ))}
       </Stack>
     </>
   );
