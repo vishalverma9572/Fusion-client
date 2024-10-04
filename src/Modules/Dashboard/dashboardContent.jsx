@@ -6,7 +6,7 @@ import { dashboardRoute } from "../../helper/api_routes.jsx";
 import { Button, Flex, Tabs, Text } from "@mantine/core";
 import { CaretCircleLeft, CaretCircleRight } from "@phosphor-icons/react";
 import classes from "./Dashboard.module.css";
-import { setRoles, setUserName } from "../../redux/userslice.jsx";
+import { setRoles, setUserName, setAccessibleModules } from "../../redux/userslice.jsx";
 import { useDispatch } from "react-redux";
 
 const Dashboard = () => {
@@ -29,13 +29,13 @@ const Dashboard = () => {
           });
 
           if (response.status === 200) {
-            console.log(response);
-            
             const notificationsList = response.data.notifications;
             const name = response.data.name
-            const designations = response.data.desgination_info  // spelling is wrong in backend;
+            const designations = response.data.desgination_info;  // spelling is wrong in backend
+            const accessibleModules = response.data.accessible_modules;
             dispatch(setUserName(name));
             dispatch(setRoles(designations));
+            dispatch(setAccessibleModules(accessibleModules));
             setNotificationsList(notificationsList);
 
             // the flag field of data decides whether it is notification or announcement

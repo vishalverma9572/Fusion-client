@@ -5,6 +5,7 @@ const userSlice = createSlice({
   initialState: {
     username: "User",
     roles: ["Guest-User"],
+    accessibleModules: {},
   },
   reducers: {
     setUserName: (state, action) => {
@@ -12,6 +13,9 @@ const userSlice = createSlice({
     },
     setRoles: (state, action) => {
       state.roles = action.payload;
+    },
+    setAccessibleModules: (state, action) => {
+      state.accessibleModules = action.payload;
     },
     clearUserName: (state) => {
       state.username = "User";
@@ -22,5 +26,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { setUserName, setRoles, clearUserName, clearRoles } = userSlice.actions;
+export const { setUserName, setRoles, setAccessibleModules, clearUserName, clearRoles } = userSlice.actions;
 export default userSlice.reducer;

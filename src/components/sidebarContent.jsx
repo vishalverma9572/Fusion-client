@@ -9,43 +9,54 @@ import {
 import { CaretRight, CaretLeft } from "@phosphor-icons/react";
 import {
   House as HomeIcon,
+  Books as AcademicsIcon,
   CalendarBlank as CurriculumIcon,
   ForkKnife as MessIcon,
-  Heart as HealthIcon,
-  Tray as ComplainIcon,
+  Bed as GuestIcon,
+  Hospital as HealthIcon,
+  FileText as FileTrackingIcon,
+  GraduationCap as ScholarshipIcon,
+  Mailbox as ComplaintIcon,
   LetterCircleP as PlacementIcon,
   SquaresFour as DepartmentIcon,
+  Flask as ResearchIcon,
+  Storefront as StoreIcon,
+  UsersThree as HumanResourceIcon,
+  Exam as ExamIcon,
   Barbell as GymkhanaIcon,
+  Wrench as IWDIcon,
   City as HostelIcon,
-  DotsThreeCircle as OtherIcon,
-  Books as AcademicsIcon,
+  Certificate as OtherAcademicIcon,
   Question as HelpIcon,
-  GraduationCap as ScholarshipIcon,
-  Bed as GuestIcon,
   User as ProfileIcon,
   Gear as SettingsIcon,
 } from "@phosphor-icons/react";
 import IIITLOGO from "../assets/IIITJ_logo.webp";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const Modules = [
-  { label: "Home", icon: <HomeIcon size={18} /> },
-  { label: "Academics", icon: <AcademicsIcon size={18} /> },
-  { label: "Program & Curriculum", icon: <CurriculumIcon size={18} /> },
-  { label: "Mess Management", icon: <MessIcon size={18} /> },
-  { label: "Visitor's Hostel", icon: <GuestIcon size={18} /> },
-  { label: "HealthCare Center", icon: <HealthIcon size={18} /> },
-  { label: "Scholarship Portal", icon: <ScholarshipIcon size={18} /> },
-  { label: "Complaint System", icon: <ComplainIcon size={18} /> },
-  { label: "Placement Cell", icon: <PlacementIcon size={18} /> },
-  { label: "Department Portal", icon: <DepartmentIcon size={18} /> },
-  { label: "Gymkhana", icon: <GymkhanaIcon size={18} /> },
-  { label: "Hostel Management", icon: <HostelIcon size={18} /> },
-  { label: "Other", icon: <OtherIcon size={18} /> },
-  { label: "Dummy-Data1", icon: <OtherIcon size={18} /> },
-  { label: "Dummy-Data2", icon: <OtherIcon size={18} /> },
-  { label: "Dummy-Data3", icon: <OtherIcon size={18} /> },
+  { label: "Home", id:"home", icon: <HomeIcon size={18} /> },
+  // { label: "Course Management", id:"course_management", icon: <OtherIcon size={18} /> },
+  { label: "Academics", id:"course_registration", icon: <AcademicsIcon size={18} /> },
+  { label: "Program & Curriculum", id:"program_and_curriculum", icon: <CurriculumIcon size={18} /> },
+  { label: "Mess Management", id:"mess_management", icon: <MessIcon size={18} /> },
+  { label: "Visitor's Hostel", id:"visitor_hostel", icon: <GuestIcon size={18} /> },
+  { label: "HealthCare Center", id:"phc", icon: <HealthIcon size={18} /> },
+  { label: "File Tracking", id:"fts", icon: <FileTrackingIcon size={18} /> },
+  { label: "Scholarship Portal", id:"spacs", icon: <ScholarshipIcon size={18} /> },
+  { label: "Complaint System", id:"complaint_management", icon: <ComplaintIcon size={18} /> },
+  { label: "Placement Cell", id:"placement_cell", icon: <PlacementIcon size={18} /> },
+  { label: "Department Portal", id:"department", icon: <DepartmentIcon size={18} /> },
+  { label: "Research", id:"rspc", icon: <ResearchIcon size={18} /> },
+  { label: "Purchase and Store", id:"purchase_and_store", icon: <StoreIcon size={18} /> },
+  { label: "Human Resource", id:"hr", icon: <HumanResourceIcon size={18} /> },
+  { label: "Examination", id:"examinations", icon: <ExamIcon size={18} /> },
+  { label: "Gymkhana", id:"gymkhana", icon: <GymkhanaIcon size={18} /> },
+  { label: "Institute Work Departments", id:"iwd", icon: <IWDIcon size={18} /> },
+  { label: "Hostel Management", id:"hostel_management", icon: <HostelIcon size={18} /> },
+  { label: "Other Academic Procedure", id:"other_academics", icon: <OtherAcademicIcon size={18} /> },
 ];
 
 const otherItems = [
@@ -57,6 +68,14 @@ const otherItems = [
 const SidebarContent = ({ isCollapsed, toggleSidebar }) => {
   const [hover, setHover] = useState(null);
   const [selected, setSelected] = useState(null);
+  const [filteredModules, setFilteredModules] = useState([]);
+  const accessibleModules = useSelector((state) => state.user.accessibleModules);
+
+  useEffect(() => {
+    const filteredModules = Modules.filter((module) => accessibleModules[module.id] || module.id==="home");
+    setFilteredModules(filteredModules);
+    console.log(filteredModules);
+  }, [accessibleModules]);
 
   const handleModuleClick = (itemlabel) => {
     setSelected(itemlabel);
@@ -90,7 +109,7 @@ const SidebarContent = ({ isCollapsed, toggleSidebar }) => {
         onMouseLeave={() => !isCollapsed && toggleSidebar()}
       >
         <Stack spacing="xs" mt="16px" align="flex-start" gap="4px">
-          {Modules.map((item) => (
+          {filteredModules.map((item) => (
             <Tooltip
               key={item.label}
               label={isCollapsed && item.label}
