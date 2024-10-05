@@ -6,6 +6,7 @@ import Dashboard from "./Modules/Dashboard/dashboardNotifications.jsx";
 import Profile from "./Modules/Profile/profile.jsx";
 import LoginPage from "./pages/login.jsx";
 import ForgotPassword from "./pages/forgotPassword.jsx";
+import AcademicPage from "./Modules/Academic/index.jsx";
 
 export default function App() {
   return (
@@ -17,6 +18,14 @@ export default function App() {
           element={
             <Layout>
               <Dashboard />
+            </Layout>
+          }
+        />
+        <Route
+          path="/academics"
+          element={
+            <Layout>
+              <AcademicPage />
             </Layout>
           }
         />

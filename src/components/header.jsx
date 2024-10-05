@@ -17,6 +17,7 @@ import {
 import avatarImage from "../assets/avatar.png";
 import PropTypes from "prop-types";
 import { logoutRoute } from "../helper/api_routes";
+import { Menu } from "@mantine/core";
 
 const Header = ({ opened, toggleSidebar }) => {
   const [popoverOpened, setPopoverOpened] = useState(false);
@@ -67,9 +68,23 @@ const Header = ({ opened, toggleSidebar }) => {
           gap="xl"
           px={{ base: "sm", md: "lg" }}
         >
-          <Button variant="outline" size="md" color="cyan">
-            {roles[0].charAt(0).toUpperCase() + roles[0].slice(1)}
-          </Button>
+          <Menu shadow="md" width={200}>
+            {/* Button displays the first role */}
+            <Menu.Target>
+              <Button variant="outline" c="cyan" size="md">
+                {roles[0].charAt(0).toUpperCase() + roles[0].slice(1)}
+              </Button>
+            </Menu.Target>
+
+            <Menu.Dropdown>
+              {/* Dropdown displays the remaining roles */}
+              {roles.slice(1).map((role, index) => (
+                <Menu.Item key={index}>
+                  {role.charAt(0).toUpperCase() + role.slice(1)}
+                </Menu.Item>
+              ))}
+            </Menu.Dropdown>
+          </Menu>
           <Indicator>
             <Bell color="orange" size="32px" cursor="pointer" />
           </Indicator>
@@ -97,14 +112,12 @@ const Header = ({ opened, toggleSidebar }) => {
               w={400}
             >
               <Group spacing="xs">
-                <Avatar
-                  size="xl"
-                  radius="xl"
-                  src={avatarImage}
-                />
+                <Avatar size="xl" radius="xl" src={avatarImage} />
                 <Stack gap={8}>
                   <Text size="lg" fz={24} fw={700}>
-                  {username.length > 18 ? username.slice(0, 18) + "..." : username}
+                    {username.length > 18
+                      ? username.slice(0, 18) + "..."
+                      : username}
                   </Text>
 
                   <Group spacing="xs">

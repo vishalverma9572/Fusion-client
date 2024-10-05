@@ -93,6 +93,9 @@ const Dashboard = () => {
         const { notifications, name, desgination_info, accessible_modules } =
           data;
 
+          console.log(desgination_info);
+          
+
         dispatch(setUserName(name));
         dispatch(setRoles(desgination_info));
         dispatch(setAccessibleModules(accessible_modules));

@@ -43,7 +43,7 @@ const LoginPage = () => {
   return (
     <Center w="100%">
       <Container w={420} my={100}>
-        <Title ta="center">Login</Title>
+        <Title ta="center">Welcome to Fusion!</Title>
 
         <Paper
           withBorder

@@ -34,8 +34,9 @@ import {
 import IIITLOGO from "../assets/IIITJ_logo.webp";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { setCurrentModule } from "../redux/moduleslice.jsx";
 
 const Modules = [
   {
@@ -49,7 +50,7 @@ const Modules = [
     label: "Academics",
     id: "course_registration",
     icon: <AcademicsIcon size={18} />,
-    url: "/",
+    url: "/academics",
   },
   {
     label: "Program & Curriculum",
@@ -157,6 +158,7 @@ const otherItems = [
 ];
 
 const SidebarContent = ({ isCollapsed, toggleSidebar }) => {
+  const dispatch = useDispatch();
   const [hover, setHover] = useState(null);
   const [selected, setSelected] = useState(null);
   const [filteredModules, setFilteredModules] = useState([]);
@@ -175,6 +177,7 @@ const SidebarContent = ({ isCollapsed, toggleSidebar }) => {
   const handleModuleClick = (item) => {
     setSelected(item.label);
     toggleSidebar();
+    dispatch(setCurrentModule(item.label));
     navigate(item.url);
   };
 
