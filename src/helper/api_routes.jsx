@@ -5,3 +5,5 @@ export const loginRoute = `${host}/api/auth/login/`;
 export const logoutRoute = `${host}/api/auth/logout/`;
 export const dashboardRoute = `${host}/api/dashboard/`;
 export const notificationReadRoute = `${host}/api/notificationread`;
+export const notificationDeleteRoute = `${host}/api/notificationdelete`;
+export const notificationUnreadRoute = `${host}/api/notificationunread`;
