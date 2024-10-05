@@ -163,7 +163,7 @@ const SidebarContent = ({ isCollapsed, toggleSidebar }) => {
   const [selected, setSelected] = useState(null);
   const [filteredModules, setFilteredModules] = useState([]);
   const accessibleModules = useSelector(
-    (state) => state.user.accessibleModules
+    (state) => state.user.currentAccessibleModules
   );
   const navigate = useNavigate();
 

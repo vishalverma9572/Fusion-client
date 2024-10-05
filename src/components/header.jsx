@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { User, SignOut, Bell } from "@phosphor-icons/react";
+import { User, SignOut, Bell, UserSwitch } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setRole, setCurrentAccessibleModules } from "../redux/userslice.jsx";
 import axios from "axios";
 import {
   Avatar,
@@ -13,17 +14,25 @@ import {
   Stack,
   Text,
   Button,
+  Select,
 } from "@mantine/core";
+import classes from "../Modules/Dashboard/Dashboard.module.css";
 import avatarImage from "../assets/avatar.png";
 import PropTypes from "prop-types";
 import { logoutRoute } from "../helper/api_routes";
-import { Menu } from "@mantine/core";
 
 const Header = ({ opened, toggleSidebar }) => {
   const [popoverOpened, setPopoverOpened] = useState(false);
   const username = useSelector((state) => state.user.username);
   const roles = useSelector((state) => state.user.roles);
+  const role = useSelector((state) => state.user.role);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleRoleChange = async(newRole) => {
+    dispatch(setRole(newRole));
+    dispatch(setCurrentAccessibleModules());
+  };
 
   const handleLogout = async () => {
     const token = localStorage.getItem("authToken");
@@ -68,23 +77,18 @@ const Header = ({ opened, toggleSidebar }) => {
           gap="xl"
           px={{ base: "sm", md: "lg" }}
         >
-          <Menu shadow="md" width={200}>
-            {/* Button displays the first role */}
-            <Menu.Target>
-              <Button variant="outline" c="cyan" size="md">
-                {roles[0].charAt(0).toUpperCase() + roles[0].slice(1)}
-              </Button>
-            </Menu.Target>
-
-            <Menu.Dropdown>
-              {/* Dropdown displays the remaining roles */}
-              {roles.slice(1).map((role, index) => (
-                <Menu.Item key={index}>
-                  {role.charAt(0).toUpperCase() + role.slice(1)}
-                </Menu.Item>
-              ))}
-            </Menu.Dropdown>
-          </Menu>
+          <Select
+            classNames={{
+              option: classes.selectoptions,
+              input: classes.selectinputs,
+            }}
+            variant="filled"
+            leftSection={<UserSwitch />}
+            data={roles}
+            value={role}
+            onChange={handleRoleChange}
+            placeholder="Role"
+          />
           <Indicator>
             <Bell color="orange" size="32px" cursor="pointer" />
           </Indicator>
