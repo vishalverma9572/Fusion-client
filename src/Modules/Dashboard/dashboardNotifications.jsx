@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Funnel } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState, useRef } from "react";
 import classes from "./Dashboard.module.css";
-import { notificationReadRoute, dashboardRoute } from "../../helper/api_routes";
+import { notificationReadRoute, dashboardRoute,notificationDeleteRoute,notificationUnreadRoute } from "../../helper/api_routes";
 import { Empty } from "../../components/empty";
 import { Tabs } from "@mantine/core";
 import { CaretCircleLeft, CaretCircleRight } from "@phosphor-icons/react";
@@ -28,8 +28,12 @@ import {
 
 const categories = ["Most Recent", "Tags", "Title"];
 
-const NotificationItem = ({ notification, markAsRead }) => {
+const NotificationItem = ({ notification, markAsRead, deleteNotification,markAsUnread }) => {
+
   const { module } = JSON.parse(notification.data.replace(/'/g, '"') || "{}");
+
+  
+
   return (
     <Grid.Col span={12} key={notification.id}>
       <Paper
@@ -54,18 +58,25 @@ const NotificationItem = ({ notification, markAsRead }) => {
             </Text>
             <Divider my="sm" w="10rem" />
           </Flex>
-          <CloseButton variant="transparent" style={{ cursor: "pointer" }} />
+          <CloseButton
+            variant="transparent"
+            style={{ cursor: "pointer" }}
+            onClick={() => deleteNotification(notification.id)}
+          />
         </Flex>
         <Flex justify="space-between">
           <Text>{notification.description || "No description available."}</Text>
           <Button
-            variant="filled"
-            color={notification.unread ? "blue" : "gray"}
-            onClick={() => markAsRead(notification.id)}
-            style={{ cursor: "pointer" }}
-          >
-            {notification.unread ? "Mark as read" : "Unread"}
+              variant="filled"
+              color={notification.unread ? "blue" : "gray"}
+              onClick={() =>
+                notification.unread ? markAsRead(notification.id) : markAsUnread(notification.id)
+              }
+              style={{ cursor: "pointer" }}
+            >
+              {notification.unread ? "Mark as read" : "Unread"}
           </Button>
+
         </Flex>
       </Paper>
     </Grid.Col>
@@ -172,7 +183,63 @@ const Dashboard = () => {
     }
   };
 
+
+  const markAsUnread = async (notifId) => {
+    const token = localStorage.getItem("authToken");
+    try {
+      const response = await axios.post(
+        notificationUnreadRoute, // Use the unread route
+        { id: notifId },
+        { headers: { Authorization: `Token ${token}` } }
+      );
+      if (response.status === 200) {
+        setNotificationsList((prev) =>
+          prev.map((notif) =>
+            notif.id === notifId ? { ...notif, unread: true } : notif
+          )
+        );
+        setAnnouncementsList((prev) =>
+          prev.map((notif) =>
+            notif.id === notifId ? { ...notif, unread: true } : notif
+          )
+        );
+      }
+    } catch (err) {
+      console.error("Error marking notification as unread:", err);
+    }
+  };
+
   console.log(sortedNotifications);
+
+ const deleteNotification = async (notifId) => {
+  const token = localStorage.getItem("authToken"); // Get token from local storage
+
+  try {
+    const response = await axios.post(
+      notificationDeleteRoute,  // Your API endpoint for deleting notifications
+      { id: notifId },          // Pass the notification ID in the request body
+      {
+        headers: {
+          Authorization: `Token ${token}`  // Add token to the Authorization header
+        }
+      }
+    );
+
+    if (response.status === 200) {
+      // Update notifications list by removing the deleted notification
+      setNotificationsList((prev) => prev.filter((notif) => notif.id !== notifId));
+      setAnnouncementsList((prev) => prev.filter((notif) => notif.id !== notifId));
+
+      console.log("Notification deleted successfully");
+    }
+  } catch (err) {
+    console.error("Error deleting notification:", err);
+  }
+};
+
+
+  
+  
   
 
   return (
@@ -237,7 +304,9 @@ const Dashboard = () => {
               {activeTab === "1" ? "Announcements" : "Notifications"}
             </Text>
             <Badge color="red" size="sm" p={6}>
-              {notificationsToDisplay.filter((n) => n.unread).length}
+              {notificationsToDisplay
+                .filter((n) => !n.deleted && n.unread) 
+                .length}
             </Badge>
           </Flex>
           <Select
@@ -256,16 +325,20 @@ const Dashboard = () => {
       </Flex>
 
       <Grid mt="xl">
-        {sortedNotifications.length === 0 ? (
+        {sortedNotifications.filter(notification => !notification.deleted).length === 0 ? (
           <Empty />
         ) : (
-          sortedNotifications.map((notification) => (
-            <NotificationItem
-              notification={notification}
-              key={notification.id}
-              markAsRead={markAsRead}
-            />
-          ))
+          sortedNotifications
+            .filter(notification => !notification.deleted) 
+            .map((notification) => (
+              <NotificationItem
+                notification={notification}
+                key={notification.id}
+                markAsRead={markAsRead}
+                markAsUnread={markAsUnread}
+                deleteNotification={deleteNotification}
+              />
+            ))
         )}
       </Grid>
     </>
@@ -288,4 +361,6 @@ NotificationItem.propTypes = {
     unread: PropTypes.bool.isRequired,
   }).isRequired,
   markAsRead: PropTypes.func.isRequired,
+  markAsUnread: PropTypes.func.isRequired,
+  deleteNotification: PropTypes.func.isRequired, 
 };
