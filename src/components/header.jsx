@@ -83,7 +83,7 @@ const Header = ({ opened, toggleSidebar }) => {
               input: classes.selectinputs,
             }}
             variant="filled"
-            leftSection={<UserSwitch />}
+            leftSection={<UserSwitch size="24px" />}
             data={roles}
             value={role}
             onChange={handleRoleChange}

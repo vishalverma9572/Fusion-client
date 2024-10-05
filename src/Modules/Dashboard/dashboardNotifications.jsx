@@ -1,41 +1,47 @@
+import axios from "axios";
+import PropTypes from "prop-types";
+import { SortAscending } from "@phosphor-icons/react";
+import { useEffect, useMemo, useState, useRef } from "react";
+import classes from "./Dashboard.module.css";
+import {
+  notificationReadRoute,
+  dashboardRoute,
+  notificationDeleteRoute,
+  notificationUnreadRoute,
+} from "../../helper/api_routes";
+import { Empty } from "../../components/empty";
+import { Tabs, Container, Loader } from "@mantine/core";
+import { CaretCircleLeft, CaretCircleRight } from "@phosphor-icons/react";
+import CustomBreadcrumbs from "../../components/Breadcrumbs.jsx";
+import {
+  setRoles,
+  setRole,
+  setUserName,
+  setAccessibleModules,
+  setCurrentAccessibleModules,
+} from "../../redux/userslice.jsx";
+import { useDispatch } from "react-redux";
 import {
   Badge,
   Button,
-  CloseButton,
-  Container,
   Divider,
   Flex,
   Grid,
-  Loader,
   Paper,
   Select,
-  Tabs,
   Text,
+  CloseButton,
 } from "@mantine/core";
-import { CaretCircleLeft, CaretCircleRight, SortAscending } from "@phosphor-icons/react";
-import axios from "axios";
-import PropTypes from "prop-types";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
-import CustomBreadcrumbs from "../../components/Breadcrumbs.jsx";
-import { Empty } from "../../components/empty";
-import { dashboardRoute, notificationDeleteRoute, notificationReadRoute, notificationUnreadRoute } from "../../helper/api_routes";
-import {
-  setAccessibleModules,
-  setCurrentAccessibleModules,
-  setRole,
-  setRoles,
-  setUserName,
-} from "../../redux/userslice.jsx";
-import classes from "./Dashboard.module.css";
 
 const categories = ["Most Recent", "Tags", "Title"];
 
-const NotificationItem = ({ notification, markAsRead, deleteNotification, markAsUnread }) => {
-
-  const { module } = JSON.parse(notification.data.replace(/'/g, '"') || "{}");
-
-
+const NotificationItem = ({
+  notification,
+  markAsRead,
+  deleteNotification,
+  markAsUnread,
+}) => {
+  const { module } = notification.data;
 
   return (
     <Grid.Col span={{ base: 12, md: 6 }} key={notification.id}>
@@ -73,13 +79,14 @@ const NotificationItem = ({ notification, markAsRead, deleteNotification, markAs
             variant="filled"
             color={notification.unread ? "blue" : "gray"}
             onClick={() =>
-              notification.unread ? markAsRead(notification.id) : markAsUnread(notification.id)
+              notification.unread
+                ? markAsRead(notification.id)
+                : markAsUnread(notification.id)
             }
             style={{ cursor: "pointer" }}
           >
             {notification.unread ? "Mark as read" : "Unread"}
           </Button>
-
         </Flex>
       </Paper>
     </Grid.Col>
@@ -112,26 +119,29 @@ const Dashboard = () => {
         dispatch(setRoles(desgination_info));
         dispatch(setRole(desgination_info[0]));
         dispatch(setAccessibleModules(accessible_modules));
-        dispatch(setCurrentAccessibleModules(accessible_modules[desgination_info[0]]));
+        dispatch(
+          setCurrentAccessibleModules(accessible_modules[desgination_info[0]])
+        );
 
         const notificationsData = notifications.map((item) => ({
           ...item,
-          parsedData: JSON.parse(item.data.replace(/'/g, '"')),
+          data: JSON.parse(item.data.replace(/'/g, '"')),
         }));
 
         setNotificationsList(
           notificationsData.filter(
-            (item) => item.parsedData?.flag !== "announcement"
+            (item) => item.data?.flag !== "announcement"
           )
         );
         setAnnouncementsList(
           notificationsData.filter(
-            (item) => item.parsedData?.flag === "announcement"
+            (item) => item.data?.flag === "announcement"
           )
         );
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
-      } finally {
+      }
+      finally {
         setLoading(false);
       }
     };
@@ -157,7 +167,7 @@ const Dashboard = () => {
   const sortedNotifications = useMemo(() => {
     const sortMap = {
       "Most Recent": (a, b) => new Date(b.timestamp) - new Date(a.timestamp),
-      Tags: (a, b) => a.module.localeCompare(b.module),
+      Tags: (a, b) => a.data.module.localeCompare(b.data.module),
       Title: (a, b) => a.verb.localeCompare(b.verb),
     };
     return [...notificationsToDisplay].sort(sortMap[sortedBy]);
@@ -188,7 +198,6 @@ const Dashboard = () => {
     }
   };
 
-
   const markAsUnread = async (notifId) => {
     const token = localStorage.getItem("authToken");
     try {
@@ -214,26 +223,28 @@ const Dashboard = () => {
     }
   };
 
-  console.log(sortedNotifications);
-
   const deleteNotification = async (notifId) => {
     const token = localStorage.getItem("authToken"); // Get token from local storage
 
     try {
       const response = await axios.post(
-        notificationDeleteRoute,  // Your API endpoint for deleting notifications
-        { id: notifId },          // Pass the notification ID in the request body
+        notificationDeleteRoute, // Your API endpoint for deleting notifications
+        { id: notifId }, // Pass the notification ID in the request body
         {
           headers: {
-            Authorization: `Token ${token}`  // Add token to the Authorization header
-          }
+            Authorization: `Token ${token}`, // Add token to the Authorization header
+          },
         }
       );
 
       if (response.status === 200) {
         // Update notifications list by removing the deleted notification
-        setNotificationsList((prev) => prev.filter((notif) => notif.id !== notifId));
-        setAnnouncementsList((prev) => prev.filter((notif) => notif.id !== notifId));
+        setNotificationsList((prev) =>
+          prev.filter((notif) => notif.id !== notifId)
+        );
+        setAnnouncementsList((prev) =>
+          prev.filter((notif) => notif.id !== notifId)
+        );
 
         console.log("Notification deleted successfully");
       }
@@ -242,78 +253,80 @@ const Dashboard = () => {
     }
   };
 
+  const notification_count = notificationsToDisplay.filter(
+    (n) => !n.deleted && n.unread
+  ).length;
 
-
-
-
+  console.log(sortedNotifications);
+  
 
   return (
     <>
       <CustomBreadcrumbs />
-      <Flex
-        justify="flex-start"
-        align="center"
-        gap={{ base: "0.5rem", md: "1rem" }}
-        mt={{ base: "1rem", md: "1.5rem" }}
-        ml={{ md: "lg" }}
-      >
-        <Button
-          onClick={() => handleTabChange("prev")}
-          variant="default"
-          p={0}
-          style={{ border: "none" }}
+      <Flex justify="space-between" align="center" mt="lg">
+        <Flex
+          justify="flex-start"
+          align="center"
+          gap={{ base: "0.5rem", md: "1rem" }}
+          mt={{ base: "1rem", md: "1.5rem" }}
+          ml={{ md: "lg" }}
         >
-          <CaretCircleLeft
-            className={classes.fusionCaretCircleIcon}
-            weight="light"
-          />
-        </Button>
+          <Button
+            onClick={() => handleTabChange("prev")}
+            variant="default"
+            p={0}
+            style={{ border: "none" }}
+          >
+            <CaretCircleLeft
+              className={classes.fusionCaretCircleIcon}
+              weight="light"
+            />
+          </Button>
 
-        <div className={classes.fusionTabsContainer} ref={tabsListRef}>
-          <Tabs value={activeTab} onChange={setActiveTab}>
-            <Tabs.List style={{ display: "flex", flexWrap: "nowrap" }}>
-              {tabItems.map((item, index) => (
-                <Tabs.Tab
-                  value={`${index}`}
-                  key={index}
-                  className={
-                    activeTab === `${index}`
-                      ? classes.fusionActiveRecentTab
-                      : ""
-                  }
-                >
-                  <Text>{item.title}</Text>
-                </Tabs.Tab>
-              ))}
-            </Tabs.List>
-          </Tabs>
-        </div>
+          <div className={classes.fusionTabsContainer} ref={tabsListRef}>
+            <Tabs value={activeTab} onChange={setActiveTab}>
+              <Tabs.List style={{ display: "flex", flexWrap: "nowrap" }}>
+                {tabItems.map((item, index) => (
+                  <Tabs.Tab
+                    value={`${index}`}
+                    key={index}
+                    className={
+                      activeTab === `${index}`
+                        ? classes.fusionActiveRecentTab
+                        : ""
+                    }
+                  >
+                    <Flex gap="4px">
+                      <Text>{item.title}</Text>
+                      {activeTab == index && (
+                        <Badge
+                          color={notification_count == 0 ? "grey" : "blue"}
+                          size="sm"
+                          p={6}
+                        >
+                          {notification_count}
+                        </Badge>
+                      )}
+                    </Flex>
+                  </Tabs.Tab>
+                ))}
+              </Tabs.List>
+            </Tabs>
+          </div>
 
-        <Button
-          onClick={() => handleTabChange("next")}
-          variant="default"
-          p={0}
-          style={{ border: "none" }}
-        >
-          <CaretCircleRight
-            className={classes.fusionCaretCircleIcon}
-            weight="light"
-          />
-        </Button>
-      </Flex>
-
-      <Flex align="center" mt="md" rowGap="1rem" columnGap="4rem" wrap="wrap">
-        <Flex w="100%" justify="space-between">
-          <Flex align="center" gap="0.5rem">
-            <Text fw={600} size="1.5rem">
-              {activeTab === "1" ? "Announcements" : "Notifications"}
-            </Text>
-            <Badge color="red" size="sm" p={6}>
-              {notificationsToDisplay
-                .filter((n) => !n.deleted && n.unread)
-                .length}
-            </Badge>
-          </Flex>
+          <Button
+            onClick={() => handleTabChange("next")}
+            variant="default"
+            p={0}
+            style={{ border: "none" }}
+          >
+            <CaretCircleRight
+              className={classes.fusionCaretCircleIcon}
+              weight="light"
+            />
+          </Button>
+        </Flex>
+        <Flex align="center" mt="md" rowGap="1rem" columnGap="4rem" wrap="wrap">
           <Select
             classNames={{
               option: classes.selectoptions,
@@ -330,7 +343,7 @@ const Dashboard = () => {
       </Flex>
 
       <Grid mt="xl">
-        {loading ? (
+      {loading ? (
           <Container py="xl">
             <Loader size="lg" />
           </Container>
@@ -338,7 +351,7 @@ const Dashboard = () => {
           <Empty />
         ) : (
           sortedNotifications
-            .filter(notification => !notification.deleted)
+            .filter((notification) => !notification.deleted)
             .map((notification) => (
               <NotificationItem
                 notification={notification}
@@ -362,8 +375,7 @@ NotificationItem.propTypes = {
     verb: PropTypes.string.isRequired,
     description: PropTypes.string,
     timestamp: PropTypes.string.isRequired,
-    data: PropTypes.string.isRequired, // Assuming data is a string
-    parsedData: PropTypes.shape({
+    data: PropTypes.shape({
       module: PropTypes.string,
       flag: PropTypes.string,
     }),

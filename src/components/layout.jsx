@@ -27,7 +27,7 @@ export function Layout({ children }) {
       padding="md"
       bg="#fbfbfb"
     >
-      <AppShell.Header bg="#fbfbfb">
+      <AppShell.Header bg="#F5F7F8">
         <Header opened={opened} toggleSidebar={toggleSidebar} />
       </AppShell.Header>
 
@@ -44,7 +44,7 @@ export function Layout({ children }) {
         />
       </AppShell.Navbar>
 
-      <AppShell.Main>{children}</AppShell.Main>
+      <AppShell.Main bg="#F5F7F8">{children}</AppShell.Main>
     </AppShell>
   );
 }
