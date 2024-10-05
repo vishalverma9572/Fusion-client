@@ -12,7 +12,7 @@ export default function App() {
   return (
     <MantineProvider>
       <Routes>
-      <Route path="/" element={<Navigate to="/accounts/login" replace />} />
+        <Route path="/" element={<Navigate to="/accounts/login" replace />} />
         <Route
           path="/dashboard"
           element={
