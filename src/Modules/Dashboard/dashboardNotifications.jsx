@@ -1,43 +1,44 @@
-import axios from "axios";
-import PropTypes from "prop-types";
-import { SortAscending } from "@phosphor-icons/react";
-import { useEffect, useMemo, useState, useRef } from "react";
-import classes from "./Dashboard.module.css";
-import { notificationReadRoute, dashboardRoute,notificationDeleteRoute,notificationUnreadRoute } from "../../helper/api_routes";
-import { Empty } from "../../components/empty";
-import { Tabs } from "@mantine/core";
-import { CaretCircleLeft, CaretCircleRight } from "@phosphor-icons/react";
-import CustomBreadcrumbs from "../../components/Breadcrumbs.jsx";
-import {
-  setRoles,
-  setRole,
-  setUserName,
-  setAccessibleModules,
-  setCurrentAccessibleModules,
-} from "../../redux/userslice.jsx";
-import { useDispatch } from "react-redux";
 import {
   Badge,
   Button,
+  CloseButton,
+  Container,
   Divider,
   Flex,
   Grid,
+  Loader,
   Paper,
   Select,
+  Tabs,
   Text,
-  CloseButton,
 } from "@mantine/core";
+import { CaretCircleLeft, CaretCircleRight, SortAscending } from "@phosphor-icons/react";
+import axios from "axios";
+import PropTypes from "prop-types";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+import CustomBreadcrumbs from "../../components/Breadcrumbs.jsx";
+import { Empty } from "../../components/empty";
+import { dashboardRoute, notificationDeleteRoute, notificationReadRoute, notificationUnreadRoute } from "../../helper/api_routes";
+import {
+  setAccessibleModules,
+  setCurrentAccessibleModules,
+  setRole,
+  setRoles,
+  setUserName,
+} from "../../redux/userslice.jsx";
+import classes from "./Dashboard.module.css";
 
 const categories = ["Most Recent", "Tags", "Title"];
 
-const NotificationItem = ({ notification, markAsRead, deleteNotification,markAsUnread }) => {
+const NotificationItem = ({ notification, markAsRead, deleteNotification, markAsUnread }) => {
 
   const { module } = JSON.parse(notification.data.replace(/'/g, '"') || "{}");
 
-  
+
 
   return (
-    <Grid.Col span={{base:12,md:6}} key={notification.id}>
+    <Grid.Col span={{ base: 12, md: 6 }} key={notification.id}>
       <Paper
         radius="md"
         px="lg"
@@ -69,14 +70,14 @@ const NotificationItem = ({ notification, markAsRead, deleteNotification,markAsU
         <Flex justify="space-between">
           <Text>{notification.description || "No description available."}</Text>
           <Button
-              variant="filled"
-              color={notification.unread ? "blue" : "gray"}
-              onClick={() =>
-                notification.unread ? markAsRead(notification.id) : markAsUnread(notification.id)
-              }
-              style={{ cursor: "pointer" }}
-            >
-              {notification.unread ? "Mark as read" : "Unread"}
+            variant="filled"
+            color={notification.unread ? "blue" : "gray"}
+            onClick={() =>
+              notification.unread ? markAsRead(notification.id) : markAsUnread(notification.id)
+            }
+            style={{ cursor: "pointer" }}
+          >
+            {notification.unread ? "Mark as read" : "Unread"}
           </Button>
 
         </Flex>
@@ -90,6 +91,7 @@ const Dashboard = () => {
   const [announcementsList, setAnnouncementsList] = useState([]);
   const [activeTab, setActiveTab] = useState("0");
   const [sortedBy, setSortedBy] = useState("Most Recent");
+  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const tabsListRef = useRef(null);
   const tabItems = [{ title: "Notifications" }, { title: "Announcements" }];
@@ -104,7 +106,7 @@ const Dashboard = () => {
           headers: { Authorization: `Token ${token}` },
         });
         const { notifications, name, desgination_info, accessible_modules } =
-          data;          
+          data;
 
         dispatch(setUserName(name));
         dispatch(setRoles(desgination_info));
@@ -129,6 +131,8 @@ const Dashboard = () => {
         );
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -212,36 +216,36 @@ const Dashboard = () => {
 
   console.log(sortedNotifications);
 
- const deleteNotification = async (notifId) => {
-  const token = localStorage.getItem("authToken"); // Get token from local storage
+  const deleteNotification = async (notifId) => {
+    const token = localStorage.getItem("authToken"); // Get token from local storage
 
-  try {
-    const response = await axios.post(
-      notificationDeleteRoute,  // Your API endpoint for deleting notifications
-      { id: notifId },          // Pass the notification ID in the request body
-      {
-        headers: {
-          Authorization: `Token ${token}`  // Add token to the Authorization header
+    try {
+      const response = await axios.post(
+        notificationDeleteRoute,  // Your API endpoint for deleting notifications
+        { id: notifId },          // Pass the notification ID in the request body
+        {
+          headers: {
+            Authorization: `Token ${token}`  // Add token to the Authorization header
+          }
         }
+      );
+
+      if (response.status === 200) {
+        // Update notifications list by removing the deleted notification
+        setNotificationsList((prev) => prev.filter((notif) => notif.id !== notifId));
+        setAnnouncementsList((prev) => prev.filter((notif) => notif.id !== notifId));
+
+        console.log("Notification deleted successfully");
       }
-    );
-
-    if (response.status === 200) {
-      // Update notifications list by removing the deleted notification
-      setNotificationsList((prev) => prev.filter((notif) => notif.id !== notifId));
-      setAnnouncementsList((prev) => prev.filter((notif) => notif.id !== notifId));
-
-      console.log("Notification deleted successfully");
+    } catch (err) {
+      console.error("Error deleting notification:", err);
     }
-  } catch (err) {
-    console.error("Error deleting notification:", err);
-  }
-};
+  };
 
 
-  
-  
-  
+
+
+
 
   return (
     <>
@@ -306,7 +310,7 @@ const Dashboard = () => {
             </Text>
             <Badge color="red" size="sm" p={6}>
               {notificationsToDisplay
-                .filter((n) => !n.deleted && n.unread) 
+                .filter((n) => !n.deleted && n.unread)
                 .length}
             </Badge>
           </Flex>
@@ -326,11 +330,15 @@ const Dashboard = () => {
       </Flex>
 
       <Grid mt="xl">
-        {sortedNotifications.filter(notification => !notification.deleted).length === 0 ? (
+        {loading ? (
+          <Container py="xl">
+            <Loader size="lg" />
+          </Container>
+        ) : sortedNotifications.filter(notification => !notification.deleted).length === 0 ? (
           <Empty />
         ) : (
           sortedNotifications
-            .filter(notification => !notification.deleted) 
+            .filter(notification => !notification.deleted)
             .map((notification) => (
               <NotificationItem
                 notification={notification}
@@ -363,5 +371,5 @@ NotificationItem.propTypes = {
   }).isRequired,
   markAsRead: PropTypes.func.isRequired,
   markAsUnread: PropTypes.func.isRequired,
-  deleteNotification: PropTypes.func.isRequired, 
+  deleteNotification: PropTypes.func.isRequired,
 };
