@@ -12,7 +12,7 @@ import {
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { loginRoute } from "../helper/api_routes";
+import { loginRoute } from "../routes/api_routes";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");

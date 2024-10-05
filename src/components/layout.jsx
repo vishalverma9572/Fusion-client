@@ -1,4 +1,4 @@
-import { AppShell } from "@mantine/core";
+import { AppShell, Divider } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
 import SidebarContent from "./sidebarContent";
@@ -25,10 +25,10 @@ export function Layout({ children }) {
         collapsed: { mobile: !opened },
       }}
       padding="md"
-      bg="#fbfbfb"
     >
-      <AppShell.Header bg="#F5F7F8">
+      <AppShell.Header>
         <Header opened={opened} toggleSidebar={toggleSidebar} />
+        <Divider />
       </AppShell.Header>
 
       <AppShell.Navbar

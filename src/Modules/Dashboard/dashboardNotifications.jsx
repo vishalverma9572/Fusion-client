@@ -8,7 +8,7 @@ import {
   dashboardRoute,
   notificationDeleteRoute,
   notificationUnreadRoute,
-} from "../../helper/api_routes";
+} from "../../routes/api_routes.jsx";
 import { Empty } from "../../components/empty";
 import { Tabs, Container, Loader } from "@mantine/core";
 import { CaretCircleLeft, CaretCircleRight } from "@phosphor-icons/react";
@@ -84,6 +84,7 @@ const NotificationItem = ({
                 : markAsUnread(notification.id)
             }
             style={{ cursor: "pointer" }}
+            miw="120px"
           >
             {notification.unread ? "Mark as read" : "Unread"}
           </Button>
@@ -164,6 +165,8 @@ const Dashboard = () => {
   const notificationsToDisplay =
     activeTab === "1" ? announcementsList : notificationsList;
 
+
+  //sortMap is an object that maps sorting categories to sorting functions.
   const sortedNotifications = useMemo(() => {
     const sortMap = {
       "Most Recent": (a, b) => new Date(b.timestamp) - new Date(a.timestamp),
@@ -202,7 +205,7 @@ const Dashboard = () => {
     const token = localStorage.getItem("authToken");
     try {
       const response = await axios.post(
-        notificationUnreadRoute, // Use the unread route
+        notificationUnreadRoute,
         { id: notifId },
         { headers: { Authorization: `Token ${token}` } }
       );
@@ -224,21 +227,20 @@ const Dashboard = () => {
   };
 
   const deleteNotification = async (notifId) => {
-    const token = localStorage.getItem("authToken"); // Get token from local storage
+    const token = localStorage.getItem("authToken");
 
     try {
       const response = await axios.post(
-        notificationDeleteRoute, // Your API endpoint for deleting notifications
-        { id: notifId }, // Pass the notification ID in the request body
+        notificationDeleteRoute,
+        { id: notifId },
         {
           headers: {
-            Authorization: `Token ${token}`, // Add token to the Authorization header
+            Authorization: `Token ${token}`,
           },
         }
       );
 
       if (response.status === 200) {
-        // Update notifications list by removing the deleted notification
         setNotificationsList((prev) =>
           prev.filter((notif) => notif.id !== notifId)
         );
@@ -298,7 +300,7 @@ const Dashboard = () => {
                   >
                     <Flex gap="4px">
                       <Text>{item.title}</Text>
-                      {activeTab == index && (
+                      {activeTab == !index && (
                         <Badge
                           color={notification_count == 0 ? "grey" : "blue"}
                           size="sm"
