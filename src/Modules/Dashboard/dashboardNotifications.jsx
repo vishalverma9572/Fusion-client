@@ -169,6 +169,9 @@ const Dashboard = () => {
     }
   };
 
+  console.log(sortedNotifications);
+  
+
   return (
     <>
       <CustomBreadcrumbs />

@@ -104,7 +104,7 @@ const Header = ({ opened, toggleSidebar }) => {
                 />
                 <Stack gap={8}>
                   <Text size="lg" fz={24} fw={700}>
-                  {username.length > 15 ? username.slice(0, 15) + "..." : username}
+                  {username.length > 18 ? username.slice(0, 18) + "..." : username}
                   </Text>
 
                   <Group spacing="xs">

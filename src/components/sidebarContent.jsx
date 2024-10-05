@@ -199,7 +199,7 @@ const SidebarContent = ({ isCollapsed, toggleSidebar }) => {
       </Flex>
 
       <Stack
-      h="100%"
+      h="90%"
         justify="space-around"
         onMouseEnter={() => toggleSidebar()}
         onMouseLeave={() => !isCollapsed && toggleSidebar()}
