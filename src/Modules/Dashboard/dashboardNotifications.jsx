@@ -1,6 +1,6 @@
 import axios from "axios";
 import PropTypes from "prop-types";
-import { Funnel } from "@phosphor-icons/react";
+import { SortAscending } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState, useRef } from "react";
 import classes from "./Dashboard.module.css";
 import { notificationReadRoute, dashboardRoute,notificationDeleteRoute,notificationUnreadRoute } from "../../helper/api_routes";
@@ -10,8 +10,10 @@ import { CaretCircleLeft, CaretCircleRight } from "@phosphor-icons/react";
 import CustomBreadcrumbs from "../../components/Breadcrumbs.jsx";
 import {
   setRoles,
+  setRole,
   setUserName,
   setAccessibleModules,
+  setCurrentAccessibleModules,
 } from "../../redux/userslice.jsx";
 import { useDispatch } from "react-redux";
 import {
@@ -35,7 +37,7 @@ const NotificationItem = ({ notification, markAsRead, deleteNotification,markAsU
   
 
   return (
-    <Grid.Col span={12} key={notification.id}>
+    <Grid.Col span={{base:12,md:6}} key={notification.id}>
       <Paper
         radius="md"
         px="lg"
@@ -102,14 +104,13 @@ const Dashboard = () => {
           headers: { Authorization: `Token ${token}` },
         });
         const { notifications, name, desgination_info, accessible_modules } =
-          data;
-
-          console.log(desgination_info);
-          
+          data;          
 
         dispatch(setUserName(name));
         dispatch(setRoles(desgination_info));
+        dispatch(setRole(desgination_info[0]));
         dispatch(setAccessibleModules(accessible_modules));
+        dispatch(setCurrentAccessibleModules(accessible_modules[desgination_info[0]]));
 
         const notificationsData = notifications.map((item) => ({
           ...item,
@@ -315,7 +316,7 @@ const Dashboard = () => {
               input: classes.selectinputs,
             }}
             variant="filled"
-            leftSection={<Funnel />}
+            leftSection={<SortAscending />}
             data={categories}
             value={sortedBy}
             onChange={setSortedBy}
