@@ -12,7 +12,7 @@ import {
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { notifications, Notifications } from "@mantine/notifications";
+import { notifications } from "@mantine/notifications";
 
 import { loginRoute } from "../routes/api_routes";
 
