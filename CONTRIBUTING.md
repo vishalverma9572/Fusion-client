@@ -48,7 +48,7 @@ This project is using Eslint and Prettier for linting and formatting the code.
 
 ## Standard commit message 📦
 
-This project is using the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0-beta.2/) standard. Please follow these steps to ensure your commit messages are standardized:
+This project is using the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) standard. Please follow these steps to ensure your commit messages are standardized:
 
 - Commit messages should have this format:
   `<type>[optional scope]: <description>`
