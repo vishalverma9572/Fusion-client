@@ -50,7 +50,7 @@ const Header = ({ opened, toggleSidebar }) => {
             Authorization: `Token ${token}`,
             "Content-Type": "application/json",
           },
-        }
+        },
       );
       localStorage.removeItem("authToken");
       navigate("/accounts/login");
@@ -75,8 +75,10 @@ const Header = ({ opened, toggleSidebar }) => {
           hiddenFrom="sm"
           size="sm"
         />
-        <Flex justify="space-between" align="center">
-          <img src={fusion_logo} alt="" height="72px" />
+        <Flex justify="space-between" align="center" h="100%">
+          <Text fz="h2" ff="monospace">
+            FUSION - IIITDMJ's ERP Portal
+          </Text>
           <Flex
             justify="flex-end"
             align="center"
@@ -95,6 +97,7 @@ const Header = ({ opened, toggleSidebar }) => {
               onChange={handleRoleChange}
               placeholder="Role"
               mr="64px"
+              size="md"
             />
             <Indicator>
               <Bell color="orange" size="32px" cursor="pointer" />

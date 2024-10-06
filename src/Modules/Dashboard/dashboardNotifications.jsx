@@ -3,16 +3,17 @@ import PropTypes from "prop-types";
 import { SortAscending } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState, useRef } from "react";
 import classes from "./Dashboard.module.css";
+import { Empty } from "../../components/empty";
+import { Tabs, Container, Loader } from "@mantine/core";
+import { CaretCircleLeft, CaretCircleRight } from "@phosphor-icons/react";
+import CustomBreadcrumbs from "../../components/Breadcrumbs.jsx";
+import { useDispatch } from "react-redux";
 import {
   notificationReadRoute,
   dashboardRoute,
   notificationDeleteRoute,
   notificationUnreadRoute,
 } from "../../routes/api_routes.jsx";
-import { Empty } from "../../components/empty";
-import { Tabs, Container, Loader } from "@mantine/core";
-import { CaretCircleLeft, CaretCircleRight } from "@phosphor-icons/react";
-import CustomBreadcrumbs from "../../components/Breadcrumbs.jsx";
 import {
   setRoles,
   setRole,
@@ -20,7 +21,6 @@ import {
   setAccessibleModules,
   setCurrentAccessibleModules,
 } from "../../redux/userslice.jsx";
-import { useDispatch } from "react-redux";
 import {
   Badge,
   Button,
@@ -40,6 +40,7 @@ const NotificationItem = ({
   markAsRead,
   deleteNotification,
   markAsUnread,
+  loading,
 }) => {
   const { module } = notification.data;
 
@@ -83,6 +84,8 @@ const NotificationItem = ({
                 ? markAsRead(notification.id)
                 : markAsUnread(notification.id)
             }
+            loaderProps={{ type: "dots" }}
+            loading={loading == notification.id ? true : false}
             style={{ cursor: "pointer" }}
             miw="120px"
           >
@@ -99,7 +102,8 @@ const Dashboard = () => {
   const [announcementsList, setAnnouncementsList] = useState([]);
   const [activeTab, setActiveTab] = useState("0");
   const [sortedBy, setSortedBy] = useState("Most Recent");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [read_Loading, setRead_Loading] = useState(-1);
   const dispatch = useDispatch();
   const tabsListRef = useRef(null);
   const tabItems = [{ title: "Notifications" }, { title: "Announcements" }];
@@ -110,6 +114,7 @@ const Dashboard = () => {
       if (!token) return console.error("No authentication token found!");
 
       try {
+        setLoading(true);
         const { data } = await axios.get(dashboardRoute, {
           headers: { Authorization: `Token ${token}` },
         });
@@ -121,7 +126,7 @@ const Dashboard = () => {
         dispatch(setRole(desgination_info[0]));
         dispatch(setAccessibleModules(accessible_modules));
         dispatch(
-          setCurrentAccessibleModules(accessible_modules[desgination_info[0]])
+          setCurrentAccessibleModules(accessible_modules[desgination_info[0]]),
         );
 
         const notificationsData = notifications.map((item) => ({
@@ -131,18 +136,17 @@ const Dashboard = () => {
 
         setNotificationsList(
           notificationsData.filter(
-            (item) => item.data?.flag !== "announcement"
-          )
+            (item) => item.data?.flag !== "announcement",
+          ),
         );
         setAnnouncementsList(
           notificationsData.filter(
-            (item) => item.data?.flag === "announcement"
-          )
+            (item) => item.data?.flag === "announcement",
+          ),
         );
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
-      }
-      finally {
+      } finally {
         setLoading(false);
       }
     };
@@ -165,6 +169,12 @@ const Dashboard = () => {
   const notificationsToDisplay =
     activeTab === "1" ? announcementsList : notificationsList;
 
+  const notification_for_badge_count =
+    activeTab === "0" ? announcementsList : notificationsList;
+
+  const notification_count = notification_for_badge_count.filter(
+    (n) => !n.deleted && n.unread,
+  ).length;
 
   //sortMap is an object that maps sorting categories to sorting functions.
   const sortedNotifications = useMemo(() => {
@@ -179,50 +189,56 @@ const Dashboard = () => {
   const markAsRead = async (notifId) => {
     const token = localStorage.getItem("authToken");
     try {
+      setRead_Loading(notifId);
       const response = await axios.post(
         notificationReadRoute,
         { id: notifId },
-        { headers: { Authorization: `Token ${token}` } }
+        { headers: { Authorization: `Token ${token}` } },
       );
       if (response.status === 200) {
         setNotificationsList((prev) =>
           prev.map((notif) =>
-            notif.id === notifId ? { ...notif, unread: false } : notif
-          )
+            notif.id === notifId ? { ...notif, unread: false } : notif,
+          ),
         );
         setAnnouncementsList((prev) =>
           prev.map((notif) =>
-            notif.id === notifId ? { ...notif, unread: false } : notif
-          )
+            notif.id === notifId ? { ...notif, unread: false } : notif,
+          ),
         );
       }
     } catch (err) {
       console.error("Error marking notification as read:", err);
+    } finally {
+      setRead_Loading(-1);
     }
   };
 
   const markAsUnread = async (notifId) => {
     const token = localStorage.getItem("authToken");
     try {
+      setRead_Loading(notifId);
       const response = await axios.post(
         notificationUnreadRoute,
         { id: notifId },
-        { headers: { Authorization: `Token ${token}` } }
+        { headers: { Authorization: `Token ${token}` } },
       );
       if (response.status === 200) {
         setNotificationsList((prev) =>
           prev.map((notif) =>
-            notif.id === notifId ? { ...notif, unread: true } : notif
-          )
+            notif.id === notifId ? { ...notif, unread: true } : notif,
+          ),
         );
         setAnnouncementsList((prev) =>
           prev.map((notif) =>
-            notif.id === notifId ? { ...notif, unread: true } : notif
-          )
+            notif.id === notifId ? { ...notif, unread: true } : notif,
+          ),
         );
       }
     } catch (err) {
       console.error("Error marking notification as unread:", err);
+    } finally {
+      setRead_Loading(-1);
     }
   };
 
@@ -237,15 +253,15 @@ const Dashboard = () => {
           headers: {
             Authorization: `Token ${token}`,
           },
-        }
+        },
       );
 
       if (response.status === 200) {
         setNotificationsList((prev) =>
-          prev.filter((notif) => notif.id !== notifId)
+          prev.filter((notif) => notif.id !== notifId),
         );
         setAnnouncementsList((prev) =>
-          prev.filter((notif) => notif.id !== notifId)
+          prev.filter((notif) => notif.id !== notifId),
         );
 
         console.log("Notification deleted successfully");
@@ -254,13 +270,6 @@ const Dashboard = () => {
       console.error("Error deleting notification:", err);
     }
   };
-
-  const notification_count = notificationsToDisplay.filter(
-    (n) => !n.deleted && n.unread
-  ).length;
-
-  console.log(sortedNotifications);
-  
 
   return (
     <>
@@ -345,11 +354,12 @@ const Dashboard = () => {
       </Flex>
 
       <Grid mt="xl">
-      {loading ? (
+        {loading ? (
           <Container py="xl">
             <Loader size="lg" />
           </Container>
-        ) : sortedNotifications.filter(notification => !notification.deleted).length === 0 ? (
+        ) : sortedNotifications.filter((notification) => !notification.deleted)
+            .length === 0 ? (
           <Empty />
         ) : (
           sortedNotifications
@@ -361,6 +371,7 @@ const Dashboard = () => {
                 markAsRead={markAsRead}
                 markAsUnread={markAsUnread}
                 deleteNotification={deleteNotification}
+                loading={read_Loading}
               />
             ))
         )}
@@ -386,4 +397,5 @@ NotificationItem.propTypes = {
   markAsRead: PropTypes.func.isRequired,
   markAsUnread: PropTypes.func.isRequired,
   deleteNotification: PropTypes.func.isRequired,
+  loading: PropTypes.number.isRequired,
 };
