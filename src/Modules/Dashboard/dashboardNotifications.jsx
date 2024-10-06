@@ -1,27 +1,15 @@
 import axios from "axios";
 import PropTypes from "prop-types";
-import { SortAscending } from "@phosphor-icons/react";
+import {
+  SortAscending,
+  CaretCircleLeft,
+  CaretCircleRight,
+} from "@phosphor-icons/react";
 import { useEffect, useMemo, useState, useRef } from "react";
-import classes from "./Dashboard.module.css";
-import { Empty } from "../../components/empty";
-import { Tabs, Container, Loader } from "@mantine/core";
-import { CaretCircleLeft, CaretCircleRight } from "@phosphor-icons/react";
-import CustomBreadcrumbs from "../../components/Breadcrumbs.jsx";
-import { useDispatch } from "react-redux";
 import {
-  notificationReadRoute,
-  dashboardRoute,
-  notificationDeleteRoute,
-  notificationUnreadRoute,
-} from "../../routes/api_routes.jsx";
-import {
-  setRoles,
-  setRole,
-  setUserName,
-  setAccessibleModules,
-  setCurrentAccessibleModules,
-} from "../../redux/userslice.jsx";
-import {
+  Tabs,
+  Container,
+  Loader,
   Badge,
   Button,
   Divider,
@@ -32,16 +20,26 @@ import {
   Text,
   CloseButton,
 } from "@mantine/core";
+import { useDispatch } from "react-redux";
+import classes from "./Dashboard.module.css";
+import { Empty } from "../../components/empty";
+import CustomBreadcrumbs from "../../components/Breadcrumbs";
+import {
+  notificationReadRoute,
+  getNotificationsRoute,
+  notificationDeleteRoute,
+  notificationUnreadRoute,
+} from "../../routes/api_routes";
 
 const categories = ["Most Recent", "Tags", "Title"];
 
-const NotificationItem = ({
+function NotificationItem({
   notification,
   markAsRead,
   deleteNotification,
   markAsUnread,
   loading,
-}) => {
+}) {
   const { module } = notification.data;
 
   return (
@@ -85,8 +83,9 @@ const NotificationItem = ({
                 : markAsUnread(notification.id)
             }
             loaderProps={{ type: "dots" }}
-            loading={loading == notification.id ? true : false}
+            loading={loading === notification.id}
             style={{ cursor: "pointer" }}
+            ml="sm"
             miw="120px"
           >
             {notification.unread ? "Mark as read" : "Unread"}
@@ -95,9 +94,9 @@ const NotificationItem = ({
       </Paper>
     </Grid.Col>
   );
-};
+}
 
-const Dashboard = () => {
+function Dashboard() {
   const [notificationsList, setNotificationsList] = useState([]);
   const [announcementsList, setAnnouncementsList] = useState([]);
   const [activeTab, setActiveTab] = useState("0");
@@ -115,20 +114,10 @@ const Dashboard = () => {
 
       try {
         setLoading(true);
-        const { data } = await axios.get(dashboardRoute, {
+        const { data } = await axios.get(getNotificationsRoute, {
           headers: { Authorization: `Token ${token}` },
         });
-        const { notifications, name, desgination_info, accessible_modules } =
-          data;
-
-        dispatch(setUserName(name));
-        dispatch(setRoles(desgination_info));
-        dispatch(setRole(desgination_info[0]));
-        dispatch(setAccessibleModules(accessible_modules));
-        dispatch(
-          setCurrentAccessibleModules(accessible_modules[desgination_info[0]]),
-        );
-
+        const { notifications } = data;
         const notificationsData = notifications.map((item) => ({
           ...item,
           data: JSON.parse(item.data.replace(/'/g, '"')),
@@ -176,7 +165,7 @@ const Dashboard = () => {
     (n) => !n.deleted && n.unread,
   ).length;
 
-  //sortMap is an object that maps sorting categories to sorting functions.
+  // sortMap is an object that maps sorting categories to sorting functions.
   const sortedNotifications = useMemo(() => {
     const sortMap = {
       "Most Recent": (a, b) => new Date(b.timestamp) - new Date(a.timestamp),
@@ -309,9 +298,9 @@ const Dashboard = () => {
                   >
                     <Flex gap="4px">
                       <Text>{item.title}</Text>
-                      {activeTab == !index && (
+                      {activeTab !== `${index}` && (
                         <Badge
-                          color={notification_count == 0 ? "grey" : "blue"}
+                          color={notification_count === 0 ? "grey" : "blue"}
                           size="sm"
                           p={6}
                         >
@@ -378,7 +367,7 @@ const Dashboard = () => {
       </Grid>
     </>
   );
-};
+}
 
 export default Dashboard;
 

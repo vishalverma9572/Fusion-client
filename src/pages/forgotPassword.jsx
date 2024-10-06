@@ -9,7 +9,7 @@ import {
   Title,
 } from "@mantine/core";
 
-const ForgotPassword = () => {
+function ForgotPassword() {
   return (
     <Center w="100%">
       <Container w={420} my={100}>
@@ -46,6 +46,6 @@ const ForgotPassword = () => {
       </Container>
     </Center>
   );
-};
+}
 
 export default ForgotPassword;

@@ -1,13 +1,13 @@
-import { createSlice, current } from '@reduxjs/toolkit';
+import { createSlice, current } from "@reduxjs/toolkit";
 
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState: {
     username: "User",
     roles: ["Guest-User"],
     role: "Guest-User",
     accessibleModules: {},
-    currentAccessibleModules:{},
+    currentAccessibleModules: {},
   },
   reducers: {
     setUserName: (state, action) => {
@@ -23,7 +23,9 @@ const userSlice = createSlice({
       state.accessibleModules = action.payload;
     },
     setCurrentAccessibleModules: (state) => {
-      state.currentAccessibleModules = current(state.accessibleModules)[state.role];
+      state.currentAccessibleModules = current(state.accessibleModules)[
+        state.role
+      ];
     },
     clearUserName: (state) => {
       state.username = "User";
@@ -34,5 +36,13 @@ const userSlice = createSlice({
   },
 });
 
-export const { setUserName, setRoles, setRole, setAccessibleModules, setCurrentAccessibleModules, clearUserName, clearRoles } = userSlice.actions;
+export const {
+  setUserName,
+  setRoles,
+  setRole,
+  setAccessibleModules,
+  setCurrentAccessibleModules,
+  clearUserName,
+  clearRoles,
+} = userSlice.actions;
 export default userSlice.reducer;

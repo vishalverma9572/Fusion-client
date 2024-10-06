@@ -1,16 +1,27 @@
 import { MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { Route, Routes, Navigate } from "react-router-dom";
-import { Layout } from "./components/layout.jsx";
-import Dashboard from "./Modules/Dashboard/dashboardNotifications.jsx";
-import Profile from "./Modules/Profile/profile.jsx";
-import LoginPage from "./pages/login.jsx";
-import ForgotPassword from "./pages/forgotPassword.jsx";
-import AcademicPage from "./Modules/Academic/index.jsx";
+import { Route, Routes, Navigate, useLocation } from "react-router-dom";
+import { Layout } from "./components/layout";
+import Dashboard from "./Modules/Dashboard/dashboardNotifications";
+import Profile from "./Modules/Profile/profile";
+import LoginPage from "./pages/login";
+import ForgotPassword from "./pages/forgotPassword";
+import AcademicPage from "./Modules/Academic/index";
+import ValidateAuth from "./helper/validateauth";
+import { Notifications } from "@mantine/notifications";
 
 export default function App() {
+  const location = useLocation();
   return (
     <MantineProvider>
+      <Notifications
+        position="top-right"
+        zIndex={1000}
+        autoClose={2000}
+        limit={1}
+      />
+      {location.pathname !== "/accounts/login" &&
+        location.pathname !== "/reset-password" && <ValidateAuth />}
       <Routes>
         <Route path="/" element={<Navigate to="/accounts/login" replace />} />
         <Route

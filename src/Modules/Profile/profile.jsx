@@ -1,15 +1,13 @@
 import { Stack, Text } from "@mantine/core";
 import CustomBreadcrumbs from "../../components/Breadcrumbs";
 
-const Profile = () => {
+function Profile() {
   return (
-    <>
-      <Stack>
-        <CustomBreadcrumbs />
-        <Text>Profile Page</Text>
-      </Stack>
-    </>
+    <Stack>
+      <CustomBreadcrumbs />
+      <Text>Profile Page</Text>
+    </Stack>
   );
-};
+}
 
 export default Profile;

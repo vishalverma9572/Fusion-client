@@ -1,14 +1,10 @@
-import { Container, Text } from '@mantine/core';
-import notfound from '../assets/notfound.svg';
+import { Container, Text } from "@mantine/core";
+import notfound from "../assets/notfound.svg";
 
-export const Empty = () => {
+export function Empty() {
   return (
-    <Container style={{ textAlign: 'center', padding: '40px 20px' }}>
-      <img
-        src={notfound}
-        height={200}
-        alt="404"
-      />
+    <Container style={{ textAlign: "center", padding: "40px 20px" }}>
+      <img src={notfound} height={200} alt="404" />
       <Text size="xl" weight={500} mt="lg" mb="sm">
         No new notifications found!
       </Text>
@@ -22,4 +18,4 @@ export const Empty = () => {
       </a> */}
     </Container>
   );
-};
+}

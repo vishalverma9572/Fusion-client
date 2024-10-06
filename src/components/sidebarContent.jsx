@@ -6,7 +6,6 @@ import {
   Divider,
   Tooltip,
 } from "@mantine/core";
-import { CaretRight, CaretLeft } from "@phosphor-icons/react";
 import {
   House as HomeIcon,
   Books as AcademicsIcon,
@@ -30,13 +29,15 @@ import {
   Question as HelpIcon,
   User as ProfileIcon,
   Gear as SettingsIcon,
+  CaretRight,
+  CaretLeft,
 } from "@phosphor-icons/react";
-import IIITLOGO from "../assets/IIITJ_logo.webp";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setCurrentModule } from "../redux/moduleslice.jsx";
+import IIITLOGO from "../assets/IIITJ_logo.webp";
+import { setCurrentModule } from "../redux/moduleslice";
 
 const Modules = [
   {
@@ -157,21 +158,21 @@ const otherItems = [
   { label: "Help", icon: <HelpIcon size={18} /> },
 ];
 
-const SidebarContent = ({ isCollapsed, toggleSidebar }) => {
+function SidebarContent({ isCollapsed, toggleSidebar }) {
   const dispatch = useDispatch();
   const [hover, setHover] = useState(null);
   const [selected, setSelected] = useState(null);
   const [filteredModules, setFilteredModules] = useState([]);
   const accessibleModules = useSelector(
-    (state) => state.user.currentAccessibleModules
+    (state) => state.user.currentAccessibleModules,
   );
   const navigate = useNavigate();
 
   useEffect(() => {
-    const filteredModules = Modules.filter(
-      (module) => accessibleModules[module.id] || module.id === "home"
+    const filterModules = Modules.filter(
+      (module) => accessibleModules[module.id] || module.id === "home",
     );
-    setFilteredModules(filteredModules);
+    setFilteredModules(filterModules);
   }, [accessibleModules]);
 
   const handleModuleClick = (item) => {
@@ -183,7 +184,7 @@ const SidebarContent = ({ isCollapsed, toggleSidebar }) => {
 
   return (
     <>
-      <Flex gap={32} align="center" h={64} justify={"center"}>
+      <Flex gap={32} align="center" h={64} justify="center">
         {!isCollapsed && (
           <img src={IIITLOGO} alt="IIIT Logo" style={{ maxWidth: "150px" }} />
         )}
@@ -192,7 +193,7 @@ const SidebarContent = ({ isCollapsed, toggleSidebar }) => {
           onClick={toggleSidebar}
           onMouseEnter={() => setHover("toggle")}
           onMouseLeave={() => setHover(null)}
-          bg={hover == "toggle" ? "#e9ecef" : ""}
+          bg={hover === "toggle" ? "#e9ecef" : ""}
           style={{ borderRadius: "6px" }}
           justify="center"
           p="4px"
@@ -202,16 +203,12 @@ const SidebarContent = ({ isCollapsed, toggleSidebar }) => {
       </Flex>
 
       <Stack
-      h="90%"
+        h="90%"
         justify="space-around"
         onMouseEnter={() => toggleSidebar()}
         onMouseLeave={() => !isCollapsed && toggleSidebar()}
       >
-        <ScrollArea
-          mah={600}
-          type={!isCollapsed && "always"}
-          scrollbars="y"
-        >
+        <ScrollArea mah={600} type={!isCollapsed && "always"} scrollbars="y">
           <Stack spacing="xs" mt="16px" align="flex-start" gap="4px">
             {filteredModules.map((item) => (
               <Tooltip
@@ -225,17 +222,17 @@ const SidebarContent = ({ isCollapsed, toggleSidebar }) => {
                 <Button
                   key={item.label}
                   variant={
-                    hover == item.label
+                    hover === item.label
                       ? "subtle"
-                      : selected == item.label
-                      ? "outline"
-                      : "transparent"
+                      : selected === item.label
+                        ? "outline"
+                        : "transparent"
                   }
                   leftSection={item.icon}
                   style={{ display: "flex", justifyContent: "flex-start" }}
                   w="90%"
                   color={
-                    hover == item.label || selected == item.label
+                    hover === item.label || selected === item.label
                       ? "blue"
                       : "#535455"
                   }
@@ -262,7 +259,7 @@ const SidebarContent = ({ isCollapsed, toggleSidebar }) => {
               leftSection={item.icon}
               style={{ justifyContent: "flex-start" }}
               color={
-                hover == item.label || selected == item.label
+                hover === item.label || selected === item.label
                   ? "blue"
                   : "#535455"
               }
@@ -276,7 +273,7 @@ const SidebarContent = ({ isCollapsed, toggleSidebar }) => {
       </Stack>
     </>
   );
-};
+}
 
 SidebarContent.propTypes = {
   isCollapsed: PropTypes.bool.isRequired,

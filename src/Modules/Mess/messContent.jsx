@@ -1,7 +1,5 @@
-const MessContent = () => {
-  return (
-    <div>MessContent</div>
-  )
+function MessContent() {
+  return <div>MessContent</div>;
 }
 
-export default MessContent
+export default MessContent;

@@ -1,9 +1,8 @@
 import { AppShell, Divider } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
-import SidebarContent from "./sidebarContent";
-
 import PropTypes from "prop-types";
+import SidebarContent from "./sidebarContent";
 import Header from "./header";
 
 export function Layout({ children }) {
@@ -11,7 +10,11 @@ export function Layout({ children }) {
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const toggleSidebar = () => {
-    isCollapsed ? open() : close();
+    if (isCollapsed) {
+      open();
+    } else {
+      close();
+    }
     setIsCollapsed(!isCollapsed);
   };
 
