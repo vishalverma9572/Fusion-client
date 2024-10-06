@@ -298,7 +298,7 @@ function Dashboard() {
                   >
                     <Flex gap="4px">
                       <Text>{item.title}</Text>
-                      {activeTab !== index && (
+                      {activeTab !== index.toString() && (
                         <Badge
                           color={notification_count === 0 ? "grey" : "blue"}
                           size="sm"
