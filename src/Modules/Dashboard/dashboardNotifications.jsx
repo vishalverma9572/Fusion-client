@@ -23,13 +23,13 @@ import {
 import { useDispatch } from "react-redux";
 import classes from "./Dashboard.module.css";
 import { Empty } from "../../components/empty";
-import CustomBreadcrumbs from "../../components/Breadcrumbs";
+import CustomBreadcrumbs from "../../components/Breadcrumbs.jsx";
 import {
   notificationReadRoute,
-  getNotificationsRoute,
   notificationDeleteRoute,
   notificationUnreadRoute,
-} from "../../routes/api_routes";
+  getNotificationsRoute,
+} from "../../routes/api_routes.jsx";
 
 const categories = ["Most Recent", "Tags", "Title"];
 
@@ -298,7 +298,7 @@ function Dashboard() {
                   >
                     <Flex gap="4px">
                       <Text>{item.title}</Text>
-                      {activeTab !== `${index}` && (
+                      {activeTab !== index && (
                         <Badge
                           color={notification_count === 0 ? "grey" : "blue"}
                           size="sm"
