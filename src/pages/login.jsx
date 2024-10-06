@@ -12,9 +12,9 @@ import {
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { notifications, Notifications } from "@mantine/notifications";
+
 import { loginRoute } from "../routes/api_routes";
-import { notifications } from "@mantine/notifications";
-import { Notifications } from "@mantine/notifications";
 
 function LoginPage() {
   const [username, setUsername] = useState("");
@@ -23,14 +23,8 @@ function LoginPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem("authToken") != null) {
-      notifications.show({
-        title: "Already Logged In",
-        message: "You are already logged in, redirecting to dashboard...",
-        color: "blue",
-        position: "top-center"
-      });
-      setTimeout(() => navigate("/dashboard"), 2000)
+    if (localStorage.getItem("authToken")) {
+      navigate("/dashboard");
     }
   }, [navigate]);
 
@@ -59,14 +53,14 @@ function LoginPage() {
           title: "Login Failed",
           message: "Invalid username or password",
           color: "red",
-          position: "top-center"
+          position: "top-center",
         });
       } else {
         notifications.show({
           title: "Error",
           message: "Something went wrong. Please try again later.",
           color: "red",
-          position: "top-center"
+          position: "top-center",
         });
       }
     } finally {
@@ -75,60 +69,57 @@ function LoginPage() {
   };
 
   return (
-    <>
-      
-      <Center w="100%">
-        <Container w={420} my={100}>
-          <Title ta="center">Welcome to Fusion!</Title>
+    <Center w="100%">
+      <Container w={420} my={100}>
+        <Title ta="center">Welcome to Fusion!</Title>
 
-          <Paper
-            withBorder
-            shadow="lg"
-            p={30}
-            mt={40}
-            radius="md"
-            style={{ border: "2px solid #15ABFF" }}
-          >
-            <form onSubmit={handleSubmit}>
-              <TextInput
-                label="Username/Email"
-                placeholder="username or email"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-                disabled={loading}
-              />
-              <PasswordInput
-                label="Password"
-                placeholder="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                mt="lg"
-                disabled={loading}
-              />
-              <Group justify="space-between" mt="lg">
-                <Link style={{ textDecoration: "none" }} to="/reset-password">
-                  <Anchor component="button" size="sm" c="#15ABFF">
-                    Forgot password?
-                  </Anchor>
-                </Link>
-              </Group>
-              <Button
-                fullWidth
-                size="md"
-                mt="xl"
-                bg="#15ABFF"
-                type="submit"
-                loading={loading}
-              >
-                Sign in
-              </Button>
-            </form>
-          </Paper>
-        </Container>
-      </Center>
-    </>
+        <Paper
+          withBorder
+          shadow="lg"
+          p={30}
+          mt={40}
+          radius="md"
+          style={{ border: "2px solid #15ABFF" }}
+        >
+          <form onSubmit={handleSubmit}>
+            <TextInput
+              label="Username/Email"
+              placeholder="username or email"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              disabled={loading}
+            />
+            <PasswordInput
+              label="Password"
+              placeholder="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              mt="lg"
+              disabled={loading}
+            />
+            <Group justify="space-between" mt="lg">
+              <Link style={{ textDecoration: "none" }} to="/reset-password">
+                <Anchor component="button" size="sm" c="#15ABFF">
+                  Forgot password?
+                </Anchor>
+              </Link>
+            </Group>
+            <Button
+              fullWidth
+              size="md"
+              mt="xl"
+              bg="#15ABFF"
+              type="submit"
+              loading={loading}
+            >
+              Sign in
+            </Button>
+          </form>
+        </Paper>
+      </Container>
+    </Center>
   );
 }
 
