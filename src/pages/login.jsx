@@ -14,7 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { notifications } from "@mantine/notifications";
 
-import { loginRoute } from "../routes/api_routes";
+import { loginRoute } from "../routes/globalRoutes";
 
 function LoginPage() {
   const [username, setUsername] = useState("");

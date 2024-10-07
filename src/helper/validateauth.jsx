@@ -10,7 +10,7 @@ import {
   clearUserName,
   clearRoles,
 } from "../redux/userslice";
-import { authRoute } from "../routes/api_routes";
+import { authRoute } from "../routes/globalRoutes";
 
 function ValidateAuth() {
   const dispatch = useDispatch();

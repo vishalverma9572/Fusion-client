@@ -29,7 +29,7 @@ import {
   notificationDeleteRoute,
   notificationUnreadRoute,
   getNotificationsRoute,
-} from "../../routes/api_routes.jsx";
+} from "../../routes/dashboardRoutes";
 
 const categories = ["Most Recent", "Tags", "Title"];
 

@@ -20,7 +20,7 @@ import PropTypes from "prop-types";
 import { setRole, setCurrentAccessibleModules } from "../redux/userslice";
 import classes from "../Modules/Dashboard/Dashboard.module.css";
 import avatarImage from "../assets/avatar.png";
-import { logoutRoute, updateRoleRoute } from "../routes/api_routes";
+import { logoutRoute, updateRoleRoute } from "../routes/dashboardRoutes";
 
 function Header({ opened, toggleSidebar }) {
   const [popoverOpened, setPopoverOpened] = useState(false);
