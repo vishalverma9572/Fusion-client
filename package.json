@@ -10,7 +10,7 @@
     "lint:fix": "eslint --fix .",
     "preview": "vite preview",
     "prepare": "husky install",
-    "format": "prettier --write \"src/**/*.{js,jsx,md}\""
+    "format": "prettier --write \"src/**/*.{js,jsx}\""
   },
   "dependencies": {
     "@mantine/core": "^7.12.2",
@@ -48,7 +48,7 @@
     "vite": "^5.4.1"
   },
   "lint-staged": {
-    "*.{js,jsx,md}": [
+    "*.{js,jsx}": [
       "prettier --write",
       "eslint --fix",
       "git add"
