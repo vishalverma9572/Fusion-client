@@ -12,6 +12,7 @@
 - [ReactJS](https://react.dev/learn) as the main frontend library
 - [Mantine UI](https://mantine.dev/getting-started/) for UI components
 - [Redux](https://redux-toolkit.js.org/introduction/getting-started) for state management
+- [Phosphor-icons](https://phosphoricons.com/) for icons
 
 Check the `package.json` file for more information about all the libraries being used.
 This project is using Eslint and Prettier for linting and formatting the code.
@@ -25,6 +26,8 @@ This project is using Eslint and Prettier for linting and formatting the code.
 5. Run `npm run dev` to start the development server.
    The development server will start at `http://localhost:5173/`
 
+Make sure that your backend server is running properly before starting the frontend server.
+
 ## Project Structure and important information
 
 1. All the required assets(images, audio, videos) for the project are in the `src/assets` folder.
@@ -35,7 +38,10 @@ This project is using Eslint and Prettier for linting and formatting the code.
 6. All the web pages related to a a **module** are in `src/modules/<module-name>` folder.
 7. All the components related to a **module** are in the `src/modules/<module-name>/components` folder.
 8. All the styles related to a **module** are in the `src/modules/<module-name>/styles` folder.
-9. All the state management related code is in the `src/redux` folder. The `src/redux/userSlice.jsx` file contains user-related states. You can access the username and role of the user using the `useSelector` hook.
+9. All the state management related code is in the `src/redux` folder. The `src/redux/userSlice.jsx` file contains user-related states. 
+
+
+- Note: You can access the username and role of the user using the `useSelector` hook.
 
 ```jsx
 import { useSelector } from 'react-redux';
