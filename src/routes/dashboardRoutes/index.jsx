@@ -1,4 +1,4 @@
-export const host = "http://127.0.0.1:8000";
+import { host } from "../globalRoutes";
 
 export const logoutRoute = `${host}/api/auth/logout/`;
 export const updateRoleRoute = `${host}/api/update-role/`;
