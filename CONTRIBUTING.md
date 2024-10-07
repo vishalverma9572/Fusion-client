@@ -35,7 +35,22 @@ This project is using Eslint and Prettier for linting and formatting the code.
 6. All the web pages related to a a **module** are in `src/modules/<module-name>` folder.
 7. All the components related to a **module** are in the `src/modules/<module-name>/components` folder.
 8. All the styles related to a **module** are in the `src/modules/<module-name>/styles` folder.
-9. All the state management related code is in the `src/redux` folder.
+9. All the state management related code is in the `src/redux` folder. The `src/redux/userSlice.jsx` file contains user-related states. You can access the username and role of the user using the `useSelector` hook.
+
+```jsx
+import { useSelector } from 'react-redux';
+
+const ExampleComponent = () => {
+  const role = useSelector(state => state.user.role);
+  const username = useSelector(state => state.user.username);
+  return (
+    <div>
+      {username}
+      {role}
+    </div>
+  );
+}
+```
 
 ## Style Guide
 
