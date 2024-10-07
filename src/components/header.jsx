@@ -20,7 +20,7 @@ import PropTypes from "prop-types";
 import { setRole, setCurrentAccessibleModules } from "../redux/userslice";
 import classes from "../Modules/Dashboard/Dashboard.module.css";
 import avatarImage from "../assets/avatar.png";
-import { logoutRoute } from "../routes/api_routes";
+import { logoutRoute, updateRoleRoute } from "../routes/api_routes";
 
 function Header({ opened, toggleSidebar }) {
   const [popoverOpened, setPopoverOpened] = useState(false);
@@ -31,11 +31,26 @@ function Header({ opened, toggleSidebar }) {
   const dispatch = useDispatch();
 
   const handleRoleChange = async (newRole) => {
-    if (newRole === role) return;
-    dispatch(setRole(newRole));
-    dispatch(setCurrentAccessibleModules());
+    const token = localStorage.getItem("authToken");
+    try {
+      const response = await axios.patch(
+        updateRoleRoute,
+        {
+          last_selected_role: newRole,
+        },
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        },
+      );
+      console.log(response.data.message);
+      dispatch(setRole(newRole));
+      dispatch(setCurrentAccessibleModules());
+    } catch (error) {
+      console.error("Error updating last selected role:", error.response.data);
+    }
   };
-
   const handleLogout = async () => {
     const token = localStorage.getItem("authToken");
 

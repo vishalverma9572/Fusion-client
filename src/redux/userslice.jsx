@@ -6,8 +6,8 @@ const userSlice = createSlice({
     username: "User",
     roles: ["Guest-User"],
     role: "Guest-User",
-    accessibleModules: {},
-    currentAccessibleModules: {},
+    accessibleModules: {}, // Format---> {role: {module: true}}
+    currentAccessibleModules: {}, // Format---> {module: true}
   },
   reducers: {
     setUserName: (state, action) => {

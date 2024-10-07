@@ -16,7 +16,6 @@ function ValidateAuth() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // eslint-disable-next-line consistent-return
     const validateUser = async () => {
       const token = localStorage.getItem("authToken");
       if (!token) return console.error("No authentication token found!");
@@ -25,11 +24,20 @@ function ValidateAuth() {
           headers: { Authorization: `Token ${token}` },
         });
 
-        const { name, designation_info, accessible_modules } = data;
+        const {
+          name,
+          designation_info,
+          accessible_modules,
+          last_selected_role,
+        } = data;
 
         dispatch(setUserName(name));
         dispatch(setRoles(designation_info));
-        dispatch(setRole(designation_info[0]));
+        if (last_selected_role) {
+          dispatch(setRole(last_selected_role));
+        } else {
+          dispatch(setRole(designation_info[0]));
+        }
         dispatch(setAccessibleModules(accessible_modules));
 
         dispatch(setCurrentAccessibleModules());
