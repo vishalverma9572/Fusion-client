@@ -1,13 +1,10 @@
 import React from "react";
-import LeaveForm from "./pages/leaveForm";
-import { MantineProvider } from '@mantine/core';
+import { Header } from "./components/headers";
+
 export default function HR() {
   return (
-    <MantineProvider withGlobalStyles withNormalizeCSS>
-      <div>
-        <h1>HR Module</h1>
-        <LeaveForm />
-      </div>
-    </MantineProvider>
+    <div>
+      <Header />
+    </div>
   );
 }
