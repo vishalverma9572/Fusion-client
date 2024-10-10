@@ -1,10 +1,6 @@
 import React from "react";
+import { Header } from "./components/headers";
 
 export default function HR() {
-  return (
-    <>
-      <h1>HR MODULE</h1>
-      <p>HR Module is under construction</p>
-    </>
-  );
+  return <Header />;
 }
