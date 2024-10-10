@@ -1,10 +1,10 @@
 import React from "react";
+import Form from "./components/FormComponent/Form";
 
 export default function HR() {
   return (
-    <>
-      <h1>HR MODULE</h1>
-      <p>HR Module is under construction</p>
-    </>
+    <div>
+      <Form />
+    </div>
   );
 }
