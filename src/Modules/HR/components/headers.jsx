@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Container, Tabs } from "@mantine/core";
 import classes from "../styles/headers.module.css";
+import { CaretRight } from "@phosphor-icons/react";
+import "./headers.css";
 
 // Import components for each subtab
 import LeaveFormComponent from "./leaveForm";
-// import LeaveRequestComponent from './LeaveRequestComponent';
+import LeaveRequestComponent from "./FormComponent/Form";
 // import LeaveInboxComponent from './LeaveInboxComponent';
 // import LeaveArchiveComponent from './LeaveArchiveComponent';
 
@@ -39,10 +41,17 @@ const subTabs = {
 
 export function Header() {
   const [activeTab, setActiveTab] = useState("Leave");
-  const [activeSubTab, setActiveSubTab] = useState("");
+  const [activeSubTab, setActiveSubTab] = useState("Leave Form");
 
   const items = tabs.map((tab) => (
-    <Tabs.Tab value={tab} key={tab} onClick={() => setActiveTab(tab)}>
+    <Tabs.Tab
+      value={tab}
+      key={tab}
+      onClick={() => {
+        setActiveTab(tab);
+        setActiveSubTab(subTabs[tab][0]); // Default to the first subtab when switching main tabs
+      }}
+    >
       {tab}
     </Tabs.Tab>
   ));
@@ -57,48 +66,69 @@ export function Header() {
     switch (activeSubTab) {
       case "Leave Form":
         return <LeaveFormComponent />;
-      //   case "Leave Request":
-      //     return <LeaveRequestComponent />;
-      //   case "Leave Inbox":
-      //     return <LeaveInboxComponent />;
-      //   case "Leave Archive":
-      //     return <LeaveArchiveComponent />;
-
-      //   case "LTC Form":
-      //     return <LTCFormComponent />;
-      //   case "LTC Request":
-      //     return <LTCRequestComponent />;
-      //   case "LTC Inbox":
-      //     return <LTCInboxComponent />;
-      //   case "LTC Archive":
-      //     return <LTCArchiveComponent />;
-
-      //   case "CPDA Form":
-      //     return <CPDAFormComponent />;
-      //   case "CPDA Request":
-      //     return <CPDARequestComponent />;
-      //   case "CPDA Inbox":
-      //     return <CPDAInboxComponent />;
-      //   case "CPDA Archive":
-      //     return <CPDAArchiveComponent />;
-
-      //   case "Appraisal Form":
-      //     return <AppraisalFormComponent />;
-      //   case "Appraisal Request":
-      //     return <AppraisalRequestComponent />;
-      //   case "Appraisal Inbox":
-      //     return <AppraisalInboxComponent />;
-      //   case "Appraisal Archive":
-      //     return <AppraisalArchiveComponent />;
-
+      case "Leave Request":
+        return <LeaveRequestComponent />;
+      // case "Leave Inbox":
+      //   return <LeaveInboxComponent />;
+      // case "Leave Archive":
+      //   return <LeaveArchiveComponent />;
+      // case "LTC Form":
+      //   return <LTCFormComponent />;
+      // case "LTC Request":
+      //   return <LTCRequestComponent />;
+      // case "LTC Inbox":
+      //   return <LTCInboxComponent />;
+      // case "LTC Archive":
+      //   return <LTCArchiveComponent />;
+      // case "CPDA Form":
+      //   return <CPDAFormComponent />;
+      // case "CPDA Request":
+      //   return <CPDARequestComponent />;
+      // case "CPDA Inbox":
+      //   return <CPDAInboxComponent />;
+      // case "CPDA Archive":
+      //   return <CPDAArchiveComponent />;
+      // case "Appraisal Form":
+      //   return <AppraisalFormComponent />;
+      // case "Appraisal Request":
+      //   return <AppraisalRequestComponent />;
+      // case "Appraisal Inbox":
+      //   return <AppraisalInboxComponent />;
+      // case "Appraisal Archive":
+      //   return <AppraisalArchiveComponent />;
       default:
         return <p>Select a subtab to view its content</p>;
     }
   };
 
+  // Function to create dynamic breadcrumb
+  const getBreadcrumb = () => {
+    const base = "Human Resources";
+    const iconStyle = { paddingTop: "3px", marginLeft: "3px" }; // Adjust the margin value as needed
+
+    return (
+      <span>
+        {base}
+        {activeTab && (
+          <>
+            <CaretRight size={20} style={iconStyle} /> {activeTab}
+          </>
+        )}
+        {activeSubTab && (
+          <>
+            <CaretRight size={20} style={iconStyle} /> {activeSubTab}
+          </>
+        )}
+      </span>
+    );
+  };
+
   return (
-    <div className={classes.header}>
+    <div className={`${classes.header} HR_header`}>
       <Container size="md" style={{ marginLeft: 0 }}>
+        {/* Breadcrumb Section */}
+        <div className="breadcrumb">{getBreadcrumb()}</div>
+
         <Tabs
           defaultValue={activeTab}
           variant="outline"

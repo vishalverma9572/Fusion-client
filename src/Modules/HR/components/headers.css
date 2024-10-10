@@ -1,0 +1,6 @@
+.HR_header .breadcrumb {
+    font-family: var(--mantine-font-family-monospace);
+    font-size: 20px;
+    font-weight: normal !important;
+    margin-bottom: 30px;
+  }

@@ -1,5 +1,5 @@
 
-.app-container {
+.form-table-container .app-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,7 +8,7 @@
     min-height: 100vh;
   }
   
-  .table-title {
+  .form-table-container  .table-title {
     font-family: 'Arial', sans-serif;
     color: #444;
     margin-bottom: 20px;
@@ -24,13 +24,13 @@
     overflow: hidden;
   }
   
-  .form-table {
+  .form-table-container .form-table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
   }
   
-  .form-table th {
+  .form-table-container .form-table th {
     padding: 15px 20px;
     background: linear-gradient(135deg, #e0e7ff, #cbd5e1);
     color: #333;
@@ -40,52 +40,52 @@
     font-size: 16px;
   }
   
-  .form-table td {
+  .form-table-container .form-table td {
     padding: 15px 20px;
     color: #555;
     border-bottom: 1px solid #e5e7eb;
     font-size: 14px;
   }
   
-  .form-table tbody tr:nth-child(odd) {
+  .form-table-container .form-table tbody tr:nth-child(odd) {
     background-color: #f9fafb;
   }
   
-  .form-table tbody tr:nth-child(even) {
+  .form-table-container .form-table tbody tr:nth-child(even) {
     background-color: #f3f4f6;
   }
   
-  .form-table tbody tr:hover {
+  .form-table-container .form-table tbody tr:hover {
     background-color: #eef2ff;
     transition: background-color 0.3s ease-in-out;
   }
   
-  .action {
+  .form-table-container .action {
     color: #007bff;
     cursor: pointer;
     font-weight: 500;
     text-decoration: none;
   }
   
-  .action:hover {
+  .form-table-container .action:hover {
     text-decoration: underline;
   }
   
   
-  .form-table thead tr:first-child th:first-child {
+  .form-table-container .form-table thead tr:first-child th:first-child {
     border-top-left-radius: 10px;
   }
   
-  .form-table thead tr:first-child th:last-child {
+  .form-table-container .form-table thead tr:first-child th:last-child {
     border-top-right-radius: 10px;
   }
   
   
-  .form-table tbody tr:last-child td:first-child {
+  .form-table-container .form-table tbody tr:last-child td:first-child {
     border-bottom-left-radius: 10px;
   }
   
-  .form-table tbody tr:last-child td:last-child {
+  .form-table-container .form-table tbody tr:last-child td:last-child {
     border-bottom-right-radius: 10px;
   }
   
@@ -95,7 +95,7 @@
       width: 95%;
     }
   
-    .form-table th, .form-table td {
+    .form-table-container .form-table th, .form-table td {
       font-size: 12px;
       padding: 10px;
     }
