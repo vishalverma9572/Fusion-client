@@ -1,10 +1,10 @@
 import React from "react";
-import Form from "./components/FormComponent/Form";
+import { Header } from "./components/headers";
 
 export default function HR() {
   return (
     <div>
-      <Form />
+      <Header />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import "./FormTable.css";
+import "../../styles/FormTable.css";
 import { BackgroundImage } from "@mantine/core";
 
 const FormTable = ({ headers, data }) => {
