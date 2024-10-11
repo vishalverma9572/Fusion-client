@@ -1,10 +1,10 @@
-import React from 'react';
-import { Button, Group, Title } from '@mantine/core';
-import { PaperPlaneRight, CheckCircle } from '@phosphor-icons/react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from "react";
+import { Button, Group, Title } from "@mantine/core";
+import { PaperPlaneRight, CheckCircle } from "@phosphor-icons/react";
+import { useDispatch, useSelector } from "react-redux";
 import { updateForm, resetForm } from "../../../redux/formSlice";
 
-import './leaveForm.css'; 
+import "../styles/leaveForm.css";
 
 const LeaveForm = () => {
   const formData = useSelector((state) => state.form);
@@ -29,7 +29,9 @@ const LeaveForm = () => {
         {/* Row 1: Name and Designation */}
         <div className="grid-row">
           <div className="grid-col">
-            <label className="input-label" htmlFor="name">Name</label>
+            <label className="input-label" htmlFor="name">
+              Name
+            </label>
             <input
               type="text"
               id="name"
@@ -41,7 +43,9 @@ const LeaveForm = () => {
             />
           </div>
           <div className="grid-col">
-            <label className="input-label" htmlFor="designation">Designation</label>
+            <label className="input-label" htmlFor="designation">
+              Designation
+            </label>
             <input
               type="text"
               id="designation"
@@ -57,7 +61,9 @@ const LeaveForm = () => {
         {/* Row 2: PF Number and Department */}
         <div className="grid-row">
           <div className="grid-col">
-            <label className="input-label" htmlFor="pfNumber">PF Number</label>
+            <label className="input-label" htmlFor="pfNumber">
+              PF Number
+            </label>
             <input
               type="text"
               id="pfNumber"
@@ -69,7 +75,9 @@ const LeaveForm = () => {
             />
           </div>
           <div className="grid-col">
-            <label className="input-label" htmlFor="department">Department</label>
+            <label className="input-label" htmlFor="department">
+              Department
+            </label>
             <input
               type="text"
               id="department"
@@ -85,7 +93,9 @@ const LeaveForm = () => {
         {/* Row 3: Leave Start Date and End Date */}
         <div className="grid-row">
           <div className="grid-col">
-            <label className="input-label" htmlFor="startDate">Leave Start Date</label>
+            <label className="input-label" htmlFor="startDate">
+              Leave Start Date
+            </label>
             <input
               type="date"
               id="startDate"
@@ -97,7 +107,9 @@ const LeaveForm = () => {
             />
           </div>
           <div className="grid-col">
-            <label className="input-label" htmlFor="endDate">Leave End Date</label>
+            <label className="input-label" htmlFor="endDate">
+              Leave End Date
+            </label>
             <input
               type="date"
               id="endDate"
@@ -113,7 +125,9 @@ const LeaveForm = () => {
         {/* Row 4: Purpose and Nature of Leave */}
         <div className="grid-row">
           <div className="grid-col">
-            <label className="input-label" htmlFor="purpose">Purpose</label>
+            <label className="input-label" htmlFor="purpose">
+              Purpose
+            </label>
             <input
               type="text"
               id="purpose"
@@ -125,7 +139,9 @@ const LeaveForm = () => {
             />
           </div>
           <div className="grid-col">
-            <label className="input-label" htmlFor="natureOfLeave">Nature of Leave</label>
+            <label className="input-label" htmlFor="natureOfLeave">
+              Nature of Leave
+            </label>
             <select
               id="natureOfLeave"
               name="natureOfLeave"
@@ -144,7 +160,9 @@ const LeaveForm = () => {
         {/* Row 5: Academic Responsibility and Administrative Responsibility */}
         <div className="grid-row">
           <div className="grid-col">
-            <label className="input-label" htmlFor="academicResponsibility">Academic Responsibility</label>
+            <label className="input-label" htmlFor="academicResponsibility">
+              Academic Responsibility
+            </label>
             <input
               type="text"
               id="academicResponsibility"
@@ -156,7 +174,12 @@ const LeaveForm = () => {
             />
           </div>
           <div className="grid-col">
-            <label className="input-label" htmlFor="administrativeResponsibility">Administrative Responsibility</label>
+            <label
+              className="input-label"
+              htmlFor="administrativeResponsibility"
+            >
+              Administrative Responsibility
+            </label>
             <input
               type="text"
               id="administrativeResponsibility"
@@ -189,10 +212,20 @@ const LeaveForm = () => {
             className="designation-input"
             required
           />
-          <Button color="blue" leftIcon={<CheckCircle size={20} />} variant="outline" className="button-outline">
+          <Button
+            color="blue"
+            leftIcon={<CheckCircle size={20} />}
+            variant="outline"
+            className="button-outline"
+          >
             Check
           </Button>
-          <Button type="submit" color="blue" rightIcon={<PaperPlaneRight size={20} />} className="button">
+          <Button
+            type="submit"
+            color="blue"
+            rightIcon={<PaperPlaneRight size={20} />}
+            className="button"
+          >
             Submit
           </Button>
         </div>

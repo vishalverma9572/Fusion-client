@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import FormTable from "./FormTable";
 import { fetchData } from "./dataFetcher";
-import "./FormTable.css";
+import "../../styles/FormTable.css";
 
 const Form = () => {
   const [headers, setHeaders] = useState([]);

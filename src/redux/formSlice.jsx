@@ -1,22 +1,22 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  name: '',
-  designation: '',
-  pfNumber: '',
-  department: '',
-  purpose: '',
-  natureOfLeave: 'Casual',
-  startDate: '',
-  endDate: '',
-  academicResponsibility: '',
-  administrativeResponsibility: '',
-  username: '',
-  designationFooter: '',
+  name: "",
+  designation: "",
+  pfNumber: "",
+  department: "",
+  purpose: "",
+  natureOfLeave: "Casual",
+  startDate: "",
+  endDate: "",
+  academicResponsibility: "",
+  administrativeResponsibility: "",
+  username: "",
+  designationFooter: "",
 };
 
 const formSlice = createSlice({
-  name: 'form',
+  name: "form",
   initialState,
   reducers: {
     updateForm: (state, action) => {
@@ -29,5 +29,4 @@ const formSlice = createSlice({
 
 export const { updateForm, resetForm } = formSlice.actions;
 
-
-export default formSlice.reducer; 
+export default formSlice.reducer;

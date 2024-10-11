@@ -1,27 +1,34 @@
 import React from "react";
-import "./FormTable.css";
+import "../../styles/FormTable.css";
+import { BackgroundImage } from "@mantine/core";
 
 const FormTable = ({ headers, data }) => {
   return (
     <div className="form-table-container">
       <table className="form-table">
         <thead>
-          <tr>
+          <tr style={{ borderRadius: "50px" }}>
             {headers.map((header, index) => (
-              <th key={index}>{header}</th>
+              <th style={{ color: "rgb(121, 121, 180)" }} key={index}>
+                {header}
+              </th>
             ))}
           </tr>
+          <br />
         </thead>
         <tbody>
           {data.map((item, index) => (
-            <tr key={index}>
-              <td>{item.formId}</td>
-              <td>{item.user}</td>
-              <td>{item.designation}</td>
-              <td>{item.date}</td>
-              <td className="action">View</td>
-              <td className="action">Track</td>
-            </tr>
+            <>
+              <tr className="form-row" key={index}>
+                <td className="form-cell">{item.formId}</td>
+                <td className="form-cell">{item.user}</td>
+                <td className="form-cell">{item.designation}</td>
+                <td className="form-cell">{item.date}</td>
+                <td className="form-cell action view-column">View</td>
+                <td className="form-cell action">Track</td>
+              </tr>
+              <br />
+            </>
           ))}
         </tbody>
       </table>

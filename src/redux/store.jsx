@@ -8,6 +8,5 @@ export const store = configureStore({
     user: userReducer,
     module: moduleReducer,
     form: formReducer,
-    
   },
 });

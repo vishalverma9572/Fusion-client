@@ -5,8 +5,8 @@ import { CaretRight } from "@phosphor-icons/react";
 import "./headers.css";
 
 // Import components for each subtab
-import LeaveFormComponent from "./leaveForm";
-import LeaveRequestComponent from "./FormComponent/Form";
+import LeaveForm from "../pages/leaveForm";
+import Form from "./FormComponent/Form";
 // import LeaveInboxComponent from './LeaveInboxComponent';
 // import LeaveArchiveComponent from './LeaveArchiveComponent';
 
@@ -65,13 +65,13 @@ export function Header() {
   const renderSubTabContent = () => {
     switch (activeSubTab) {
       case "Leave Form":
-        return <LeaveFormComponent />;
+        return <LeaveForm />;
       case "Leave Request":
-        return <LeaveRequestComponent />;
-      // case "Leave Inbox":
-      //   return <LeaveInboxComponent />;
-      // case "Leave Archive":
-      //   return <LeaveArchiveComponent />;
+        return <Form />;
+      case "Leave Inbox":
+        return <Form />;
+      case "Leave Archive":
+        return <Form />;
       // case "LTC Form":
       //   return <LTCFormComponent />;
       // case "LTC Request":
