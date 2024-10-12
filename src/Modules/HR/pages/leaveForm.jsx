@@ -1,9 +1,8 @@
 import React from "react";
-import { Button, Group, Title } from "@mantine/core";
-import { PaperPlaneRight, CheckCircle } from "@phosphor-icons/react";
+import { Button } from "@mantine/core";
+import { PaperPlaneRight, CheckCircle, User, Tag, IdentificationCard, Building, Calendar, ClipboardText } from "@phosphor-icons/react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateForm, resetForm } from "../../../redux/formSlice";
-
 import "../styles/leaveForm.css";
 
 const LeaveForm = () => {
@@ -23,8 +22,6 @@ const LeaveForm = () => {
 
   return (
     <div className="container">
-      <Title className="title">Leave Form</Title>
-
       <form onSubmit={handleSubmit}>
         {/* Row 1: Name and Designation */}
         <div className="grid-row">
@@ -32,29 +29,37 @@ const LeaveForm = () => {
             <label className="input-label" htmlFor="name">
               Name
             </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className="input"
-              required
-            />
+            <div className="input-wrapper">
+              <User size={20} />
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                placeholder="Name"
+                onChange={handleChange}
+                className="input"
+                required
+              />
+            </div>
           </div>
           <div className="grid-col">
             <label className="input-label" htmlFor="designation">
               Designation
             </label>
-            <input
-              type="text"
-              id="designation"
-              name="designation"
-              value={formData.designation}
-              onChange={handleChange}
-              className="input"
-              required
-            />
+            <div className="input-wrapper">
+              <Tag size={20} />
+              <input
+                type="text"
+                id="designation"
+                name="designation"
+                placeholder="Designation"
+                value={formData.designation}
+                onChange={handleChange}
+                className="input"
+                required
+              />
+            </div>
           </div>
         </div>
 
@@ -64,29 +69,37 @@ const LeaveForm = () => {
             <label className="input-label" htmlFor="pfNumber">
               PF Number
             </label>
-            <input
-              type="text"
-              id="pfNumber"
-              name="pfNumber"
-              value={formData.pfNumber}
-              onChange={handleChange}
-              className="input"
-              required
-            />
+            <div className="input-wrapper">
+              <IdentificationCard size={20} />
+              <input
+                type="text"
+                id="pfNumber"
+                name="pfNumber"
+                placeholder="XXXXXXXXXXXX"
+                value={formData.pfNumber}
+                onChange={handleChange}
+                className="input"
+                required
+              />
+            </div>
           </div>
           <div className="grid-col">
             <label className="input-label" htmlFor="department">
               Department
             </label>
-            <input
-              type="text"
-              id="department"
-              name="department"
-              value={formData.department}
-              onChange={handleChange}
-              className="input"
-              required
-            />
+            <div className="input-wrapper">
+              <Building size={20} />
+              <input
+                type="text"
+                id="department"
+                name="department"
+                placeholder="Department"
+                value={formData.department}
+                onChange={handleChange}
+                className="input"
+                required
+              />
+            </div>
           </div>
         </div>
 
@@ -96,29 +109,35 @@ const LeaveForm = () => {
             <label className="input-label" htmlFor="startDate">
               Leave Start Date
             </label>
-            <input
-              type="date"
-              id="startDate"
-              name="startDate"
-              value={formData.startDate}
-              onChange={handleChange}
-              className="input"
-              required
-            />
+            <div className="input-wrapper">
+              <Calendar size={20} />
+              <input
+                type="date"
+                id="startDate"
+                name="startDate"
+                value={formData.startDate}
+                onChange={handleChange}
+                className="input"
+                required
+              />
+            </div>
           </div>
           <div className="grid-col">
             <label className="input-label" htmlFor="endDate">
               Leave End Date
             </label>
-            <input
-              type="date"
-              id="endDate"
-              name="endDate"
-              value={formData.endDate}
-              onChange={handleChange}
-              className="input"
-              required
-            />
+            <div className="input-wrapper">
+              <Calendar size={20} />
+              <input
+                type="date"
+                id="endDate"
+                name="endDate"
+                value={formData.endDate}
+                onChange={handleChange}
+                className="input"
+                required
+              />
+            </div>
           </div>
         </div>
 
@@ -128,15 +147,19 @@ const LeaveForm = () => {
             <label className="input-label" htmlFor="purpose">
               Purpose
             </label>
-            <input
-              type="text"
-              id="purpose"
-              name="purpose"
-              value={formData.purpose}
-              onChange={handleChange}
-              className="input"
-              required
-            />
+            <div className="input-wrapper">
+              <ClipboardText size={20} />
+              <input
+                type="text"
+                id="purpose"
+                name="purpose"
+                placeholder="Purpose"
+                value={formData.purpose}
+                onChange={handleChange}
+                className="input"
+                required
+              />
+            </div>
           </div>
           <div className="grid-col">
             <label className="input-label" htmlFor="natureOfLeave">
@@ -163,15 +186,19 @@ const LeaveForm = () => {
             <label className="input-label" htmlFor="academicResponsibility">
               Academic Responsibility
             </label>
-            <input
-              type="text"
-              id="academicResponsibility"
-              name="academicResponsibility"
-              value={formData.academicResponsibility}
-              onChange={handleChange}
-              className="input"
-              required
-            />
+            <div className="input-wrapper">
+              <Tag size={20} />
+              <input
+                type="text"
+                id="academicResponsibility"
+                name="academicResponsibility"
+                placeholder="Enter the name"
+                value={formData.academicResponsibility}
+                onChange={handleChange}
+                className="input"
+                required
+              />
+            </div>
           </div>
           <div className="grid-col">
             <label
@@ -180,49 +207,56 @@ const LeaveForm = () => {
             >
               Administrative Responsibility
             </label>
-            <input
-              type="text"
-              id="administrativeResponsibility"
-              name="administrativeResponsibility"
-              value={formData.administrativeResponsibility}
-              onChange={handleChange}
-              className="input"
-              required
-            />
+            <div className="input-wrapper">
+              <Tag size={20} />
+              <input
+                type="text"
+                id="administrativeResponsibility"
+                name="administrativeResponsibility"
+                placeholder="Enter the name"
+                value={formData.administrativeResponsibility}
+                onChange={handleChange}
+                className="input"
+                required
+              />
+            </div>
           </div>
         </div>
 
         {/* Footer */}
         <div className="footer-section">
-          <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            value={formData.username}
-            onChange={handleChange}
-            className="username-input"
-            required
-          />
-          <input
-            type="text"
-            name="designationFooter"
-            placeholder="Designation"
-            value={formData.designationFooter}
-            onChange={handleChange}
-            className="designation-input"
-            required
-          />
+          <div className="input-wrapper">
+           
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={formData.username}
+              onChange={handleChange}
+              className="username-input"
+              required
+            />
+          </div>
+          <div className="input-wrapper">
+           
+            <input
+              type="text"
+              name="designationFooter"
+              placeholder="Designation"
+              value={formData.designationFooter}
+              onChange={handleChange}
+              className="designation-input"
+              required
+            />
+          </div>
           <Button
-            color="blue"
             leftIcon={<CheckCircle size={20} />}
-            variant="outline"
-            className="button-outline"
+            className="button"
           >
             Check
           </Button>
           <Button
             type="submit"
-            color="blue"
             rightIcon={<PaperPlaneRight size={20} />}
             className="button"
           >
