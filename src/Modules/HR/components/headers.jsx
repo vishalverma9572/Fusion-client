@@ -7,26 +7,10 @@ import "./headers.css";
 // Import components for each subtab
 import LeaveForm from "../pages/leaveForm";
 import Form from "./FormComponent/Form";
-// import LeaveInboxComponent from './LeaveInboxComponent';
-// import LeaveArchiveComponent from './LeaveArchiveComponent';
-
-// import LTCFormComponent from './LTCFormComponent';
-// import LTCRequestComponent from './LTCRequestComponent';
-// import LTCInboxComponent from './LTCInboxComponent';
-// import LTCArchiveComponent from './LTCArchiveComponent';
-
 import CpdaForm from "../pages/cpdaForm";
-// import CPDARequestComponent from './CPDARequestComponent';
-// import CPDAInboxComponent from './CPDAInboxComponent';
 import CpdaArchive from "../pages/cpdaArchive";
 
-// import AppraisalFormComponent from './AppraisalFormComponent';
-// import AppraisalRequestComponent from './AppraisalRequestComponent';
-// import AppraisalInboxComponent from './AppraisalInboxComponent';
-// import AppraisalArchiveComponent from './AppraisalArchiveComponent';
-
 const tabs = ["Leave", "LTC", "Appraisal", "CPDA"];
-
 const subTabs = {
   Leave: ["Leave Form", "Leave Request", "Leave Inbox", "Leave Archive"],
   LTC: ["LTC Form", "LTC Request", "LTC Inbox", "LTC Archive"],
@@ -47,6 +31,7 @@ export function Header() {
     <Tabs.Tab
       value={tab}
       key={tab}
+      className={activeTab === tab ? "active-tab" : ""}
       onClick={() => {
         setActiveTab(tab);
         setActiveSubTab(subTabs[tab][0]); // Default to the first subtab when switching main tabs
@@ -57,7 +42,12 @@ export function Header() {
   ));
 
   const subItems = subTabs[activeTab]?.map((item) => (
-    <Tabs.Tab value={item} key={item} onClick={() => setActiveSubTab(item)}>
+    <Tabs.Tab
+      value={item}
+      key={item}
+      className={activeSubTab === item ? "active-tab" : ""}
+      onClick={() => setActiveSubTab(item)}
+    >
       {item}
     </Tabs.Tab>
   ));
@@ -67,37 +57,15 @@ export function Header() {
       case "Leave Form":
         return <LeaveForm />;
       case "Leave Request":
-        return <Form />;
       case "Leave Inbox":
-        return <Form />;
       case "Leave Archive":
         return <Form />;
-      // case "LTC Form":
-      //   return <LTCFormComponent />;
-      // case "LTC Request":
-      //   return <LTCRequestComponent />;
-      // case "LTC Inbox":
-      //   return <LTCInboxComponent />;
-      // case "LTC Archive":
-      //   return <LTCArchiveComponent />;
       case "CPDA Form":
         return <CpdaForm />;
-      // case "CPDA Request":
-      //   return <CPDARequestComponent />;
-      // case "CPDA Inbox":
-      //   return <CPDAInboxComponent />;
       case "CPDA Archive":
         return <CpdaArchive />;
-      // case "Appraisal Form":
-      //   return <AppraisalFormComponent />;
-      // case "Appraisal Request":
-      //   return <AppraisalRequestComponent />;
-      // case "Appraisal Inbox":
-      //   return <AppraisalInboxComponent />; s
-      // case "Appraisal Archive":
-      //   return <AppraisalArchiveComponent />;
       default:
-        return <p>Select a subtab to view its content !</p>;
+        return <p>Select a subtab to view its content!</p>;
     }
   };
 
@@ -105,7 +73,6 @@ export function Header() {
   const getBreadcrumb = () => {
     const base = "Human Resources";
     const iconStyle = { paddingTop: "3px", marginLeft: "3px" }; // Adjust the margin value as needed
-
     return (
       <span>
         {base}
@@ -114,6 +81,7 @@ export function Header() {
             <CaretRight size={20} style={iconStyle} /> {activeTab}
           </>
         )}
+
         {activeSubTab && (
           <>
             <CaretRight size={20} style={iconStyle} /> {activeSubTab}
@@ -128,7 +96,6 @@ export function Header() {
       <Container size="md" style={{ marginLeft: 0 }}>
         {/* Breadcrumb Section */}
         <div className="breadcrumb">{getBreadcrumb()}</div>
-
         <Tabs
           defaultValue={activeTab}
           variant="outline"
@@ -141,9 +108,11 @@ export function Header() {
         >
           <Tabs.List>{items}</Tabs.List>
 
+          <br />
           <Tabs.List>{subItems}</Tabs.List>
-
-          <div style={{ marginTop: "20px" }}>{renderSubTabContent()}</div>
+          <div className="subtab_content" style={{ marginTop: "20px" }}>
+            {renderSubTabContent()}
+          </div>
         </Tabs>
       </Container>
     </div>

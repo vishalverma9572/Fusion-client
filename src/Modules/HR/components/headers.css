@@ -4,3 +4,15 @@
     font-weight: normal !important;
     margin-bottom: 30px;
   }
+
+  .HR_header{
+    margin-bottom: -10px;
+    padding-bottom: 0;
+  }
+  .HR_header .active-tab {
+    color: #6c6cc5 !important;
+    border-color: #7878AB !important;
+    border-bottom: 2px solid #7878AB !important;
+  }
+  
+  
