@@ -97,7 +97,7 @@ export function Header() {
       // case "Appraisal Archive":
       //   return <AppraisalArchiveComponent />;
       default:
-        return <p>Select a subtab to view its content !</p>;
+        return <p>Select a subtab to view its content...</p>;
     }
   };
 

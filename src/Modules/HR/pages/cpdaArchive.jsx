@@ -23,7 +23,7 @@ const CpdaArchive = () => {
       {headers.length > 0 && formData.length > 0 ? (
         <FormTable headers={headers} data={formData} />
       ) : (
-        <p>Loading...</p>
+        <p>Loading..</p>
       )}
     </div>
   );
