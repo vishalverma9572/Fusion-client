@@ -7,14 +7,19 @@ const FormTable = ({ headers, data }) => {
     <div className="form-table-container">
       <table className="form-table">
         <thead>
-          <tr style={{ borderRadius: "50px" }}>
+          <tr
+            style={{
+              boxShadow: " inset 0 4px 10px rgba(0, 0, 0, 0.1)",
+              borderRadius: "50px",
+            }}
+          >
             {headers.map((header, index) => (
               <th style={{ color: "rgb(121, 121, 180)" }} key={index}>
                 {header}
               </th>
             ))}
           </tr>
-          <br />
+          {/* <br /> */}
         </thead>
         <tbody>
           {data.map((item, index) => (
@@ -27,7 +32,7 @@ const FormTable = ({ headers, data }) => {
                 <td className="form-cell action view-column">View</td>
                 <td className="form-cell action">Track</td>
               </tr>
-              <br />
+              {/* <br /> */}
             </>
           ))}
         </tbody>

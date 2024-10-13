@@ -19,7 +19,7 @@ const Form = () => {
 
   return (
     <div className="app-container">
-      <h1 className="table-title">Form </h1>
+      {/* <h1 className="table-title">Form </h1> */}
       {headers.length > 0 && formData.length > 0 ? (
         <FormTable headers={headers} data={formData} />
       ) : (
