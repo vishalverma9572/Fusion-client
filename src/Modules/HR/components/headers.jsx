@@ -18,7 +18,7 @@ import Form from "./FormComponent/Form";
 import CpdaForm from "../pages/cpdaForm";
 // import CPDARequestComponent from './CPDARequestComponent';
 // import CPDAInboxComponent from './CPDAInboxComponent';
-// import CPDAArchiveComponent from './CPDAArchiveComponent';
+import CpdaArchive from "../pages/cpdaArchive";
 
 // import AppraisalFormComponent from './AppraisalFormComponent';
 // import AppraisalRequestComponent from './AppraisalRequestComponent';
@@ -86,8 +86,8 @@ export function Header() {
       //   return <CPDARequestComponent />;
       // case "CPDA Inbox":
       //   return <CPDAInboxComponent />;
-      // case "CPDA Archive":
-      //   return <CPDAArchiveComponent />;
+      case "CPDA Archive":
+        return <CpdaArchive />;
       // case "Appraisal Form":
       //   return <AppraisalFormComponent />;
       // case "Appraisal Request":
