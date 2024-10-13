@@ -15,7 +15,7 @@ import Form from "./FormComponent/Form";
 // import LTCInboxComponent from './LTCInboxComponent';
 // import LTCArchiveComponent from './LTCArchiveComponent';
 
-// import CPDAFormComponent from './CPDAFormComponent';
+import CpdaForm from '../pages/cpdaForm';
 // import CPDARequestComponent from './CPDARequestComponent';
 // import CPDAInboxComponent from './CPDAInboxComponent';
 // import CPDAArchiveComponent from './CPDAArchiveComponent';
@@ -80,8 +80,8 @@ export function Header() {
       //   return <LTCInboxComponent />;
       // case "LTC Archive":
       //   return <LTCArchiveComponent />;
-      // case "CPDA Form":
-      //   return <CPDAFormComponent />;
+       case "CPDA Form":
+        return <CpdaForm />;
       // case "CPDA Request":
       //   return <CPDARequestComponent />;
       // case "CPDA Inbox":
