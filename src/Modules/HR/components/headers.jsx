@@ -10,7 +10,7 @@ import Form from "./FormComponent/Form";
 // import LeaveInboxComponent from './LeaveInboxComponent';
 // import LeaveArchiveComponent from './LeaveArchiveComponent';
 
-// import LTCFormComponent from './LTCFormComponent';
+import LTCForm from "../pages/LTCForm";
 // import LTCRequestComponent from './LTCRequestComponent';
 // import LTCInboxComponent from './LTCInboxComponent';
 // import LTCArchiveComponent from './LTCArchiveComponent';
@@ -72,8 +72,8 @@ export function Header() {
         return <Form />;
       case "Leave Archive":
         return <Form />;
-      // case "LTC Form":
-      //   return <LTCFormComponent />;
+      case "LTC Form":
+        return <LTCForm />;
       // case "LTC Request":
       //   return <LTCRequestComponent />;
       // case "LTC Inbox":
