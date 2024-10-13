@@ -1,9 +1,16 @@
 .Leave_container {
     width: 130%;
-    padding: 20px;
+    padding: 25px;
     box-sizing: border-box;
     padding-bottom: 0;
     margin-bottom: 0;
+    /* padding-right: 1px; */
+    /* shadow to look good
+     */
+
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+
   }
   
   .Leave_container form {
@@ -68,6 +75,7 @@
     justify-content: flex-start;
     gap: 20px;
     margin-bottom: -5px;
+    margin-right: -25px;
   }
   
   .Leave_container .username-input,
