@@ -6,7 +6,6 @@ import {
   User,
   Tag,
   IdentificationCard,
-  Building,
   Calendar,
   ClipboardText,
   CurrencyDollar,
@@ -32,7 +31,7 @@ const CpdaForm = () => {
   };
 
   return (
-    <div className="container">
+    <div className="Leave_container">
       <form onSubmit={handleSubmit}>
         {/* Row 1: Name and Designation */}
         <div className="grid-row">
@@ -74,26 +73,8 @@ const CpdaForm = () => {
           </div>
         </div>
 
-        {/* Row 2: PF Number and Amount Required */}
+        {/* Row 2: Amount Required and Date */}
         <div className="grid-row">
-          <div className="grid-col">
-            <label className="input-label" htmlFor="pfNumber">
-              PF Number
-            </label>
-            <div className="input-wrapper">
-              <IdentificationCard size={20} />
-              <input
-                type="text"
-                id="pfNumber"
-                name="pfNumber"
-                placeholder="XXXXXXXXXXXX"
-                value={formData.pfNumber}
-                onChange={handleChange}
-                className="input"
-                required
-              />
-            </div>
-          </div>
           <div className="grid-col">
             <label className="input-label" htmlFor="amountRequired">
               Amount Required
@@ -112,13 +93,9 @@ const CpdaForm = () => {
               />
             </div>
           </div>
-        </div>
-
-        {/* Row 3: Balance available as on date and Advance (PDA) due */}
-        <div className="grid-row">
           <div className="grid-col">
             <label className="input-label" htmlFor="balanceDate">
-              Balance available as on date
+              Date
             </label>
             <div className="input-wrapper">
               <Calendar size={20} />
@@ -133,26 +110,9 @@ const CpdaForm = () => {
               />
             </div>
           </div>
-          <div className="grid-col">
-            <label className="input-label" htmlFor="advanceDue">
-              Advance (PDA) due for adjustment, if any
-            </label>
-            <div className="input-wrapper">
-              <CurrencyDollar size={20} />
-              <input
-                type="text"
-                id="advanceDue"
-                name="advanceDue"
-                placeholder="Advance Due"
-                value={formData.advanceDue}
-                onChange={handleChange}
-                className="input"
-              />
-            </div>
-          </div>
         </div>
 
-        {/* Row 4: Purpose and Date */}
+        {/* Row 3: Purpose and PF Number */}
         <div className="grid-row">
           <div className="grid-col">
             <label className="input-label" htmlFor="purpose">
@@ -173,16 +133,17 @@ const CpdaForm = () => {
             </div>
           </div>
           <div className="grid-col">
-            <label className="input-label" htmlFor="date">
-              Date
+            <label className="input-label" htmlFor="pfNumber">
+              PF Number
             </label>
             <div className="input-wrapper">
-              <Calendar size={20} />
+              <IdentificationCard size={20} />
               <input
-                type="date"
-                id="date"
-                name="date"
-                value={formData.date}
+                type="text"
+                id="pfNumber"
+                name="pfNumber"
+                placeholder="XXXXXXXXXXXX"
+                value={formData.pfNumber}
                 onChange={handleChange}
                 className="input"
                 required
@@ -191,22 +152,25 @@ const CpdaForm = () => {
           </div>
         </div>
 
-        {/* Row 5: Internal Audit fields */}
+        {/* Row 4: Estt Section and Balance */}
+        <div className="grid-row">
+          <h3 className="estt-section-heading">Estt. Section</h3>
+        </div>
         <div className="grid-row">
           <div className="grid-col">
-            <label className="input-label" htmlFor="pdaRegisterEntry">
-              Entry checked in PDA Register for Rs.
+            <label className="input-label" htmlFor="balanceDate">
+              Balance available as on date
             </label>
             <div className="input-wrapper">
-              <FileText size={20} />
+              <Calendar size={20} />
               <input
-                type="text"
-                id="pdaRegisterEntry"
-                name="pdaRegisterEntry"
-                placeholder="PDA Register Entry"
-                value={formData.pdaRegisterEntry}
+                type="date"
+                id="balanceDate"
+                name="balanceDate"
+                value={formData.balanceDate}
                 onChange={handleChange}
                 className="input"
+                required
               />
             </div>
           </div>
@@ -229,9 +193,51 @@ const CpdaForm = () => {
           </div>
         </div>
 
-        {/* Footer: Username and Designation */}
+        {/* Row 5: Internal Audit */}
+        <div className="grid-row">
+          <h3 className="internal-audit-heading">Internal Audit</h3>
+        </div>
+        <div className="grid-row">
+          <div className="grid-col">
+            <label className="input-label" htmlFor="pdaRegisterEntry">
+              Entry checked in PDA Register for Rs.
+            </label>
+            <div className="input-wrapper">
+              <FileText size={20} />
+              <input
+                type="text"
+                id="pdaRegisterEntry"
+                name="pdaRegisterEntry"
+                placeholder="PDA Register Entry"
+                value={formData.pdaRegisterEntry}
+                onChange={handleChange}
+                className="input"
+              />
+            </div>
+          </div>
+          <div className="grid-col">
+            <label className="input-label" htmlFor="advanceDue">
+              Advance (PDA) due for adjustment ,if any
+            </label>
+            <div className="input-wrapper">
+              <CurrencyDollar size={20} />
+              <input
+                type="text"
+                id="advanceDue"
+                name="advanceDue"
+                placeholder="Advance Due"
+                value={formData.advanceDue}
+                onChange={handleChange}
+                className="input"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
         <div className="footer-section">
           <div className="input-wrapper">
+            <User size={20} />
             <input
               type="text"
               name="username"
@@ -243,6 +249,7 @@ const CpdaForm = () => {
             />
           </div>
           <div className="input-wrapper">
+            <Tag size={20} />
             <input
               type="text"
               name="designationFooter"
@@ -254,14 +261,14 @@ const CpdaForm = () => {
             />
           </div>
           <Button leftIcon={<CheckCircle size={20} />} className="button">
-            Check
+            <CheckCircle size={18} /> &nbsp; Check
           </Button>
           <Button
             type="submit"
             rightIcon={<PaperPlaneRight size={20} />}
             className="button"
           >
-            Submit
+            <PaperPlaneRight size={20} /> &nbsp; Submit
           </Button>
         </div>
       </form>
