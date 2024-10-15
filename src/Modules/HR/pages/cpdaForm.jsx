@@ -217,7 +217,7 @@ const CpdaForm = () => {
           </div>
           <div className="grid-col">
             <label className="input-label" htmlFor="advanceDue">
-              Advance (PDA) due for adjustment (if any)
+              Advance (PDA) due for adjustment ,if any
             </label>
             <div className="input-wrapper">
               <CurrencyDollar size={20} />
