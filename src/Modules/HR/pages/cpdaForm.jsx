@@ -72,7 +72,7 @@ const CpdaForm = () => {
             </div>
           </div>
         </div>
-
+        <br />
         {/* Row 2: Amount Required and Date */}
         <div className="grid-row">
           <div className="grid-col">
@@ -154,7 +154,12 @@ const CpdaForm = () => {
 
         {/* Row 4: Estt Section and Balance */}
         <div className="grid-row">
-          <h3 className="estt-section-heading">Estt. Section</h3>
+          <h2
+            className="estt-section-heading"
+            style={{ fontFamily: "monospace , sans-serif", fontWeight: "500" }}
+          >
+            Estt. Section
+          </h2>
         </div>
         <div className="grid-row">
           <div className="grid-col">
@@ -195,7 +200,12 @@ const CpdaForm = () => {
 
         {/* Row 5: Internal Audit */}
         <div className="grid-row">
-          <h3 className="internal-audit-heading">Internal Audit</h3>
+          <h2
+            className=" internal-audit-heading"
+            style={{ fontFamily: "monospace , sans-serif", fontWeight: "500" }}
+          >
+            Internal Audit
+          </h2>
         </div>
         <div className="grid-row">
           <div className="grid-col">
@@ -233,7 +243,6 @@ const CpdaForm = () => {
             </div>
           </div>
         </div>
-
         {/* Footer */}
         <div className="footer-section">
           <div className="input-wrapper">
@@ -266,6 +275,7 @@ const CpdaForm = () => {
           <Button
             type="submit"
             rightIcon={<PaperPlaneRight size={20} />}
+            style={{ marginLeft: "250px", width: "150px" }}
             className="button"
           >
             <PaperPlaneRight size={20} /> &nbsp; Submit

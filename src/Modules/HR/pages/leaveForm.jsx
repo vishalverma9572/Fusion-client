@@ -325,8 +325,7 @@ const LeaveForm = () => {
             style={{ marginLeft: "250px", width: "150px" }}
             className="button"
           >
-            <FloppyDisk size={20} />
-            &nbsp; Submit
+            <PaperPlaneRight size={20} /> &nbsp; Submit
           </Button>
         </div>
       </form>
