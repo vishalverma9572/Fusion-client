@@ -7,6 +7,9 @@ import "./headers.css";
 // Import components for each subtab
 import LeaveForm from "../pages/leaveForm";
 import Form from "./FormComponent/Form";
+
+import Request from "./FormComponent/request";
+
 // import LeaveInboxComponent from './LeaveInboxComponent';
 // import LeaveArchiveComponent from './LeaveArchiveComponent';
 
@@ -14,6 +17,7 @@ import Form from "./FormComponent/Form";
 // import LTCRequestComponent from './LTCRequestComponent';
 // import LTCInboxComponent from './LTCInboxComponent';
 // import LTCArchiveComponent from './LTCArchiveComponent';
+
 
 import CpdaForm from "../pages/cpdaForm";
 import CpdaArchive from "../pages/cpdaArchive";
@@ -68,6 +72,14 @@ export function Header() {
       case "Leave Inbox":
       case "Leave Archive":
         return <Form />;
+
+      case "LTC Request":
+        return <Request />;
+      case "LTC Inbox":
+        return <Form />;
+      case "LTC Archive":
+        return <Form />;
+
       // case "LTC Form":
       //   return <LTCFormComponent />;
       // case "LTC Request":
@@ -76,6 +88,7 @@ export function Header() {
       //   return <LTCInboxComponent />;
       // case "LTC Archive":
       //   return <LTCArchiveComponent />;
+
       case "CPDA Form":
         return <CpdaForm />;
       case "CPDA Archive":
