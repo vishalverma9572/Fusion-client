@@ -79,6 +79,52 @@
 .HR_header .button:hover {
   background-color: #F5F5FA;
 }
+.button-row {
+  display: flex;
+  justify-content: space-between; /* Distribute buttons evenly */
+  padding: 10px 0; /* Add some spacing between buttons and other elements */
+}
+
+.buttonapprove {
+  /* background-color: #7878AA; Light purple background */
+  background-color: #C8C8DC; /* Light purple background */
+  border: none; /* Remove border */
+  border-radius: 25px; /* Fully rounded corners */
+  padding: 10px 30px; /* Adjust padding for better proportions */
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px; /* Slightly larger font size */
+  color: #7878AB; /* Purple text color */
+  display: flex; /* Flexbox for text and icon alignment */
+  align-items: center; /* Vertically center content */
+  justify-content: center; /* Center content horizontally */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Light shadow effect */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+}
+
+.buttonapprove svg {
+  margin-left: 8px; /* Add space between the icon and text */
+}
+
+
+.buttonapprove:hover {
+  background-color: #c5c3e0; /* Darker shade on hover */
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow on hover */
+  cursor: pointer; 
+}
+
+.button svg {
+  margin-left: 8px; /* Add some space between icon and text */
+  color: #5b587d; /* Match icon color with the text color */
+}
+
+.button:focus {
+  outline: none; /* Remove the default focus outline */
+}
+
+.button:active {
+  background-color: #b0aed3; /* Darken further on click */
+}
+
 
 /* Footer */
 .HR_header .footer-section {
