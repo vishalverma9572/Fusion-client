@@ -65,7 +65,7 @@ export function Header() {
       case "CPDA Archive":
         return <CpdaArchive />;
       default:
-        return <p>Select a subtab to view its content !</p>;
+        return <p>Select a subtab to view its content!</p>;
     }
   };
 
