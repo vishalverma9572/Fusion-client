@@ -1,11 +1,18 @@
 import React from "react";
 import { Button } from "@mantine/core";
 import {
+  ArrowBendUpRight,
+  XCircle,
+  FileArchive,
+  Table,
+} from "@phosphor-icons/react";
+import {
   PaperPlaneRight,
   CheckCircle,
   User,
   Tag,
   IdentificationCard,
+  Building,
   Calendar,
   ClipboardText,
   CurrencyDollar,
@@ -15,7 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateForm, resetForm } from "../../../redux/formSlice";
 import "../styles/leaveForm.css";
 
-const CpdaForm = () => {
+const CpdaFormHod = () => {
   const formData = useSelector((state) => state.form);
   const dispatch = useDispatch();
 
@@ -31,7 +38,7 @@ const CpdaForm = () => {
   };
 
   return (
-    <div className="Leave_container">
+    <div className="container">
       <form onSubmit={handleSubmit}>
         {/* Row 1: Name and Designation */}
         <div className="grid-row">
@@ -73,8 +80,26 @@ const CpdaForm = () => {
           </div>
         </div>
 
-        {/* Row 2: Amount Required and Date */}
+        {/* Row 2: PF Number and Amount Required */}
         <div className="grid-row">
+          <div className="grid-col">
+            <label className="input-label" htmlFor="pfNumber">
+              PF Number
+            </label>
+            <div className="input-wrapper">
+              <IdentificationCard size={20} />
+              <input
+                type="text"
+                id="pfNumber"
+                name="pfNumber"
+                placeholder="XXXXXXXXXXXX"
+                value={formData.pfNumber}
+                onChange={handleChange}
+                className="input"
+                required
+              />
+            </div>
+          </div>
           <div className="grid-col">
             <label className="input-label" htmlFor="amountRequired">
               Amount Required
@@ -93,9 +118,13 @@ const CpdaForm = () => {
               />
             </div>
           </div>
+        </div>
+
+        {/* Row 3: Balance available as on date and Advance (PDA) due */}
+        <div className="grid-row">
           <div className="grid-col">
             <label className="input-label" htmlFor="balanceDate">
-              Date
+              Balance available as on date
             </label>
             <div className="input-wrapper">
               <Calendar size={20} />
@@ -110,9 +139,26 @@ const CpdaForm = () => {
               />
             </div>
           </div>
+          <div className="grid-col">
+            <label className="input-label" htmlFor="advanceDue">
+              Advance (PDA) due for adjustment, if any
+            </label>
+            <div className="input-wrapper">
+              <CurrencyDollar size={20} />
+              <input
+                type="text"
+                id="advanceDue"
+                name="advanceDue"
+                placeholder="Advance Due"
+                value={formData.advanceDue}
+                onChange={handleChange}
+                className="input"
+              />
+            </div>
+          </div>
         </div>
 
-        {/* Row 3: Purpose and PF Number */}
+        {/* Row 4: Purpose and Date */}
         <div className="grid-row">
           <div className="grid-col">
             <label className="input-label" htmlFor="purpose">
@@ -133,17 +179,16 @@ const CpdaForm = () => {
             </div>
           </div>
           <div className="grid-col">
-            <label className="input-label" htmlFor="pfNumber">
-              PF Number
+            <label className="input-label" htmlFor="date">
+              Date
             </label>
             <div className="input-wrapper">
-              <IdentificationCard size={20} />
+              <Calendar size={20} />
               <input
-                type="text"
-                id="pfNumber"
-                name="pfNumber"
-                placeholder="XXXXXXXXXXXX"
-                value={formData.pfNumber}
+                type="date"
+                id="date"
+                name="date"
+                value={formData.date}
                 onChange={handleChange}
                 className="input"
                 required
@@ -152,25 +197,22 @@ const CpdaForm = () => {
           </div>
         </div>
 
-        {/* Row 4: Estt Section and Balance */}
-        <div className="grid-row">
-          <h3 className="estt-section-heading">Estt. Section</h3>
-        </div>
+        {/* Row 5: Internal Audit fields */}
         <div className="grid-row">
           <div className="grid-col">
-            <label className="input-label" htmlFor="balanceDate">
-              Balance available as on date
+            <label className="input-label" htmlFor="pdaRegisterEntry">
+              Entry checked in PDA Register for Rs.
             </label>
             <div className="input-wrapper">
-              <Calendar size={20} />
+              <FileText size={20} />
               <input
-                type="date"
-                id="balanceDate"
-                name="balanceDate"
-                value={formData.balanceDate}
+                type="text"
+                id="pdaRegisterEntry"
+                name="pdaRegisterEntry"
+                placeholder="PDA Register Entry"
+                value={formData.pdaRegisterEntry}
                 onChange={handleChange}
                 className="input"
-                required
               />
             </div>
           </div>
@@ -192,52 +234,43 @@ const CpdaForm = () => {
             </div>
           </div>
         </div>
-
-        {/* Row 5: Internal Audit */}
-        <div className="grid-row">
-          <h3 className="internal-audit-heading">Internal Audit</h3>
+        <div className="button-row">
+          <Button
+            leftIcon={<PaperPlaneRight size={20} />}
+            className="buttonapprove"
+          >
+            Forward
+            <ArrowBendUpRight size={18} />
+          </Button>
+          <Button
+            leftIcon={<CheckCircle size={20} />}
+            className="buttonapprove"
+          >
+            Reject
+            <XCircle size={18} />
+          </Button>
+          <Button
+            leftIcon={<CheckCircle size={20} />}
+            className="buttonapprove"
+          >
+            Approve
+            <CheckCircle size={18} />
+          </Button>
+          <Button
+            leftIcon={<CheckCircle size={20} />}
+            className="buttonapprove"
+          >
+            Archive
+            <FileArchive size={18} />
+          </Button>
+          <Button leftIcon={<FileText size={20} />} className="buttonapprove">
+            Previous Forms
+            <Table size={20} />
+          </Button>
         </div>
-        <div className="grid-row">
-          <div className="grid-col">
-            <label className="input-label" htmlFor="pdaRegisterEntry">
-              Entry checked in PDA Register for Rs.
-            </label>
-            <div className="input-wrapper">
-              <FileText size={20} />
-              <input
-                type="text"
-                id="pdaRegisterEntry"
-                name="pdaRegisterEntry"
-                placeholder="PDA Register Entry"
-                value={formData.pdaRegisterEntry}
-                onChange={handleChange}
-                className="input"
-              />
-            </div>
-          </div>
-          <div className="grid-col">
-            <label className="input-label" htmlFor="advanceDue">
-              Advance (PDA) due for adjustment ,if any
-            </label>
-            <div className="input-wrapper">
-              <CurrencyDollar size={20} />
-              <input
-                type="text"
-                id="advanceDue"
-                name="advanceDue"
-                placeholder="Advance Due"
-                value={formData.advanceDue}
-                onChange={handleChange}
-                className="input"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Footer */}
+        {/* Footer: Username and Designation */}
         <div className="footer-section">
           <div className="input-wrapper">
-            <User size={20} />
             <input
               type="text"
               name="username"
@@ -249,7 +282,6 @@ const CpdaForm = () => {
             />
           </div>
           <div className="input-wrapper">
-            <Tag size={20} />
             <input
               type="text"
               name="designationFooter"
@@ -261,14 +293,14 @@ const CpdaForm = () => {
             />
           </div>
           <Button leftIcon={<CheckCircle size={20} />} className="button">
-            <CheckCircle size={18} /> &nbsp; Check
+            Check
           </Button>
           <Button
             type="submit"
             rightIcon={<PaperPlaneRight size={20} />}
             className="button"
           >
-            <PaperPlaneRight size={20} /> &nbsp; Submit
+            Submit
           </Button>
         </div>
       </form>
@@ -276,4 +308,4 @@ const CpdaForm = () => {
   );
 };
 
-export default CpdaForm;
+export default CpdaFormHod;
