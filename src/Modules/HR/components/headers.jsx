@@ -62,6 +62,8 @@ export function Header() {
         return <Form />;
       case "CPDA Form":
         return <CpdaForm />;
+      case "CPDA Inbox":
+        return <Form />;
       case "CPDA Archive":
         return <CpdaArchive />;
       default:
