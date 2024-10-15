@@ -1,15 +1,8 @@
 /* Container */
-.container {
-  padding: 20px;
-  max-width: 800px;
-  margin: 0 auto;
-  background-color: #f8f9fa;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+
 
 /* Title */
-.title {
+.HR_header .title {
   text-align: center;
   font-family: 'Roboto', sans-serif;
   color: #7878AB;
@@ -17,7 +10,7 @@
 }
 
 /* Form input */
-.input, .select {
+.HR_header .input,.HR_header .select {
   background-color: #F5F5FA;
   color: #00000067;
   font-family: 'Roboto', sans-serif; 
@@ -38,7 +31,7 @@
 }
 
 /* Input label */
-.input-label {
+.HR_header .input-label {
   font-weight: bold;
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
@@ -48,32 +41,32 @@
 }
 
 /* Grid */
-.grid-row {
+.HR_header .grid-row {
   display: flex;
   justify-content: space-between;
   gap: 20px;
   margin-bottom: 15px;
 }
 
-.grid-col {
+.HR_header .grid-col {
   flex: 1;
 }
 
 /* Icon wrapper */
-.input-wrapper {
+.HR_header .input-wrapper {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.input-wrapper svg {
+.HR_header .input-wrapper svg {
   position: absolute;
   left: 12px; 
   color: #7878AB; 
 }
 
 /* Button */
-.button {
+.HR_header .button {
   background-color: #F5F5FA80;
   border-radius: 12px;
   padding: 10px 20px;
@@ -83,12 +76,12 @@
   cursor: pointer;
 }
 
-.button:hover {
-  background-color: #5700b3;
+.HR_header .button:hover {
+  background-color: #F5F5FA;
 }
 
 /* Footer */
-.footer-section {
+.HR_header .footer-section {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -99,8 +92,8 @@
 }
 
 /* Username and Designation */
-.username-input,
-.designation-input {
+.HR_header .username-input,
+.HR_header .designation-input {
   flex: 1;
   padding: 10px;
   margin-right: 8px;
@@ -119,12 +112,4 @@
     -2px -2px 4px 0px #FFFFFF80 inset;  
 }
 
-@media (max-width: 768px) {
-  .grid-row {
-    flex-direction: column;
-  }
 
-  .footer-section {
-    flex-direction: column;
-  }
-}
