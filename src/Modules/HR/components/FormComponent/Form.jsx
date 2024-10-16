@@ -3,7 +3,7 @@ import FormTable from "./FormTable";
 import { fetchData } from "./dataFetcher";
 import "../../styles/FormTable.css";
 
-const Form = () => {
+const Form = ({ formType }) => {
   const [headers, setHeaders] = useState([]);
   const [formData, setFormData] = useState([]);
 
@@ -21,7 +21,7 @@ const Form = () => {
     <div className="app-container">
       {/* <h1 className="table-title">Form </h1> */}
       {headers.length > 0 && formData.length > 0 ? (
-        <FormTable headers={headers} data={formData} />
+        <FormTable headers={headers} data={formData} formType={formType} />
       ) : (
         <p>Loading...</p>
       )}
