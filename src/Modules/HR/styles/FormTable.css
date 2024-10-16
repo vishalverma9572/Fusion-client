@@ -1,91 +1,161 @@
-.app-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 50px;
-  /* background: linear-gradient(135deg, #f0f4f8, #e0e7ff); */
-  height: auto;
-
-  /* padding: 20px; */
-  width: 130%;
-    /* max-width: 930px; */
-    margin: 0 auto;
-    background-color: #f8f9fa;
-    border-radius: 50px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.table-title {
-  font-family: 'Arial', sans-serif;
-  color: #444;
-  margin-bottom: 20px;
-}
-
+/* Table Container */
 .form-table-container {
-  border-radius: 15px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-  background-color: #ffffff;
-  width: 90%;
-  max-width: 1000px;
-  overflow: hidden;
+  /* max-width: 1000px; */
+  margin: 20px auto;
   padding: 10px;
+  background-color: #f7f8fc;
 }
 
+/* Table */
 .form-table {
   width: 100%;
   border-collapse: separate;
-  border-spacing: 0 15px; /* Adds space between rows */
+  border-spacing: 0 15px;
+  /* Adds gap between rows */
+  background-color: #ffffff;
+  border: 1px solid #545454;
+  /* Added border for cleaner look */
+  border-radius: 12px;
+  overflow: hidden;
 }
 
-.form-table th {
+/* Table Headers */
+.table-header {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: rgb(0, 0, 0);
+  /* Darker text for readability */
+  background-color: #ffffff;
+  /* White background for header */
+  padding: 15px;
   text-align: center;
-  height: 50px;
-  padding: 15px;
-  color: rgb(121, 121, 180);
-  font-weight: 600;
+  border-bottom: 2px solid #545454;
+  /* Clean line separating header */
 }
 
-.form-table td {
-  padding: 15px;
-  /* color: #555;*/
-  color: #00000067;
-  font-weight: 600;
+/* Table Row */
+.table-row {
+  font-family: 'Roboto', sans-serif;
   font-size: 14px;
-  text-align: center;
+  background-color: #ffffff;
+  color: #333;
+  transition: background-color 0.3s ease;
+  /* Row hover effect */
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  border: 1px solid #545454;
+  /* Add a slight shadow between rows */
 }
 
-.form-row {
-  border-radius: 15px;
-  box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 50px;
+/* Row Hover Effect */
+.table-row:hover {
+  background-color: #f1f3f6;
+  /* Light background change on hover */
 }
 
-.form-cell {
-  border-right: 2px solid black;
+/* Data Cells */
+.table-row td {
+  padding: 12px 20px;
+  text-align: left;
+  font-weight: 500;
+  color: #333;
+  border-top: none;
+  position: relative;
+  border-radius: 0;
+  border-right: 1px solid #545454;
+  /* Subtle column divider */
 }
 
-.form-cell:last-child {
+/* Remove border from last column */
+.table-row td:last-child {
   border-right: none;
 }
 
-.action {
+/* Action Links - View and Track */
+.text-link {
+  color: #333;
+  /* Default color matches row text */
+  margin-left: 5px;
   cursor: pointer;
-  font-weight: 500;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 12px;
+  /* Reduced font size for action links */
+  display: flex;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+/* Adding space between icon and text */
+.text-link svg {
+  margin-right: 8px;
+  fill: #333;
+  /* Default icon color matches text color */
+  transition: fill 0.3s ease;
+  /* Smooth transition for icon color */
+}
+
+/* Hover Effects for Action Links */
+.text-link:hover {
+  color: #15abff;
+  /* Text turns blue on hover */
+}
+
+.text-link:hover svg {
+  fill: #15abff;
+  /* Icon turns blue on hover */
+}
+
+/* Links */
+a {
+  color: #15abff;
   text-decoration: none;
 }
 
-.action:hover {
+a:hover {
   text-decoration: underline;
 }
 
-@media (max-width: 768px) {
-  .form-table-container {
-    padding: 10px;
-    width: 95%;
-  }
-
-  .form-table th, .form-table td {
-    font-size: 12px;
-    padding: 10px;
-  }
+/* Table Header Background */
+.form-table thead {
+  background-color: #ffffff;
+  /* White background for header */
 }
+
+.table-header {
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* Rounded Corners for Table Header */
+.form-table thead th:first-child {
+  border-top-left-radius: 12px;
+}
+
+.form-table thead th:last-child {
+  border-top-right-radius: 12px;
+}
+
+/* Rounding for Each Row */
+.table-row td:first-child {
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
+.table-row td:last-child {
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+/* Special Case for Last Row */
+.table-row:last-child td:first-child {
+  border-bottom-left-radius: 12px;
+}
+
+.table-row:last-child td:last-child {
+  border-bottom-right-radius: 12px;
+}
+/*15abff*/
