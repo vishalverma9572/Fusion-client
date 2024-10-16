@@ -1,335 +1,239 @@
-import React from "react";
-import { Button, Select } from "@mantine/core";
+import React, { useState } from "react";
 import {
-  PaperPlaneRight,
-  CheckCircle,
+  TextInput,
+  Select,
+  NumberInput,
+  DateInput,
+  Button,
+  Group,
+  Container,
+  Stack,
+} from "@mantine/core";
+import { showNotification } from "@mantine/notifications"; // Import notifications
+import {
   User,
-  Tag,
-  IdentificationCard,
-  Building,
+  Briefcase,
   Calendar,
+  IdentificationBadge,
+  Building,
   ClipboardText,
-  FloppyDisk,
+  CalendarBlank,
+  Clipboard,
+  UserCircle,
+  ArrowRight,
 } from "@phosphor-icons/react";
-import { useDispatch, useSelector } from "react-redux";
-import { updateForm, resetForm } from "../../../redux/formSlice";
-import "./leaveForm.css";
+import "./LeaveForm.css"; // Ensure this is the correct path
 
 const LeaveForm = () => {
-  const formData = useSelector((state) => state.form);
-  const dispatch = useDispatch();
+  const [formValues, setFormValues] = useState({
+    name: "",
+    designation: "",
+    applicationDate: null,
+    pfNumber: "",
+    department: "",
+    natureOfLeave: "",
+    leaveStartDate: null,
+    leaveEndDate: null,
+    purpose: "",
+    academicResponsibility: "",
+    administrativeResponsibility: "",
+    forwardToUsername: "",
+    forwardToDesignation: "",
+  });
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    dispatch(updateForm({ name, value }));
+  const [errors, setErrors] = useState({});
+
+  const handleInputChange = (field, value) => {
+    setFormValues({ ...formValues, [field]: value });
   };
 
-  const handleSelectChange = (value) => {
-    dispatch(updateForm({ name: "natureOfLeave", value }));
+  const validate = () => {
+    let newErrors = {};
+    if (!formValues.name) newErrors.name = "Name is required";
+    if (!formValues.designation)
+      newErrors.designation = "Designation is required";
+    if (!formValues.applicationDate)
+      newErrors.applicationDate = "Application date is required";
+    if (!formValues.pfNumber) newErrors.pfNumber = "PF number is required";
+    if (!formValues.department) newErrors.department = "Department is required";
+    if (!formValues.natureOfLeave)
+      newErrors.natureOfLeave = "Nature of leave is required";
+    if (!formValues.leaveStartDate)
+      newErrors.leaveStartDate = "Leave start date is required";
+    if (!formValues.leaveEndDate)
+      newErrors.leaveEndDate = "Leave end date is required";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(formData);
-    dispatch(resetForm());
+
+    if (validate()) {
+      console.log(formValues);
+      showNotification({
+        title: "Form Submitted",
+        message: "Your leave application has been submitted successfully!",
+        color: "green",
+      });
+    }
   };
 
   return (
-    <div className="Leave_container">
+    <Container className="leave-form-container">
       <form onSubmit={handleSubmit}>
-        {/* Section 1: Name, Designation (Left), Application Date (Right) */}
-        <div className="grid-row">
-          <div className="grid-col left-side">
-            <label className="input-label" htmlFor="name">
-              Name
-            </label>
-            <div className="input-wrapper">
-              <User size={20} />
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                placeholder="Name"
-                onChange={handleChange}
-                className="input"
-                required
-              />
-            </div>
-            <label className="input-label" htmlFor="designation">
-              Designation
-            </label>
-            <div className="input-wrapper">
-              <Tag size={20} />
-              <input
-                type="text"
-                id="designation"
-                name="designation"
-                placeholder="Designation"
-                value={formData.designation}
-                onChange={handleChange}
-                className="input"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="grid-col right-side">
-            <label className="input-label" htmlFor="applicationDate">
-              Application Date
-            </label>
-            <div className="input-wrapper center" style={{ width: "300px" }}>
-              <Calendar size={20} />
-              <input
-                type="date"
-                id="applicationDate"
-                name="applicationDate"
-                value={formData.applicationDate}
-                onChange={handleChange}
-                className="input center"
-                required
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Section 2: Discipline/Department (Left), PF Number (Right) */}
-        <div className="grid-row">
-          <div className="grid-col">
-            <label className="input-label" htmlFor="department">
-              Department
-            </label>
-            <div className="input-wrapper">
-              <Building size={20} />
-              <input
-                type="text"
-                id="department"
-                name="department"
-                placeholder="Department"
-                value={formData.department}
-                onChange={handleChange}
-                className="input"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="grid-col">
-            <label className="input-label" htmlFor="pfNumber">
-              PF Number
-            </label>
-            <div className="input-wrapper">
-              <IdentificationCard size={20} />
-              <input
-                type="number"
-                id="pfNumber"
-                name="pfNumber"
-                placeholder="XXXXXXXXXXXX"
-                value={formData.pfNumber}
-                onChange={handleChange}
-                className="input"
-                required
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Section 3: Nature of Leave, Leave Start Date, Leave End Date */}
-        <div className="grid-row three-columns">
-          <div className="grid-col">
-            <label className="input-label" htmlFor="natureOfLeave">
-              Nature of Leave
-            </label>
-            <div className="input-wrapper">
-              <Select
-                className="select"
-                placeholder="Select a leave type"
-                data={[
-                  { value: "Casual", label: "Casual" },
-
-                  { value: "Vacation", label: "Vacation" },
-                  { value: "Earned", label: "Earned" },
-                  { value: "Commuted Leave", label: "Commuted Leave" },
-                  {
-                    value: "Special Casual Leave",
-                    label: "Special Casual Leave",
-                  },
-                  { value: "Restricted Holiday", label: "Restricted Holiday" },
-                  { value: "Station Leave", label: "Station Leave" },
-                ]}
-                value={formData.natureOfLeave}
-                onChange={handleSelectChange}
-                required
-                styles={{
-                  input: {
-                    border: "none",
-                    backgroundColor: "transparent",
-                    color: "#000",
-                    fontSize: "14px",
-                    margin: "-8px 0px 0px -40px",
-                    fontFamily: "Roboto, sans-serif",
-                  },
-                  dropdown: {
-                    backgroundColor: "#fff",
-                    border: "1px solid #ccc",
-                    borderRadius: "4px",
-                    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-                  },
-                  item: {
-                    padding: "10px",
-                    fontSize: "14px",
-                    color: "#2d3b45",
-                    ":hover": { backgroundColor: "#e2e8f0", color: "#1a2a33" },
-                  },
-                }}
-              />
-            </div>
-          </div>
-
-          <div className="grid-col">
-            <label className="input-label" htmlFor="startDate">
-              Leave Start Date
-            </label>
-            <div className="input-wrapper">
-              <Calendar size={20} />
-              <input
-                type="date"
-                id="startDate"
-                name="startDate"
-                value={formData.startDate}
-                onChange={handleChange}
-                className="input"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="grid-col">
-            <label className="input-label" htmlFor="endDate">
-              Leave End Date
-            </label>
-            <div className="input-wrapper">
-              <Calendar size={20} />
-              <input
-                type="date"
-                id="endDate"
-                name="endDate"
-                value={formData.endDate}
-                onChange={handleChange}
-                className="input"
-                required
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Section 4: Purpose of Leave */}
-        <div className="grid-row">
-          <div className="grid-col full-width">
-            <label className="input-label" htmlFor="purpose">
-              Purpose
-            </label>
-            <div className="input-wrapper">
-              <ClipboardText size={20} />
-              <input
-                type="text"
-                id="purpose"
-                name="purpose"
-                placeholder="Purpose"
-                value={formData.purpose}
-                onChange={handleChange}
-                className="input"
-                aria-rowcount={2}
-                required
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Section 5: Academic and Administrative Responsibility */}
-        <div className="grid-row">
-          <div className="grid-col">
-            <label className="input-label" htmlFor="academicResponsibility">
-              Academic Responsibility
-            </label>
-            <div className="input-wrapper">
-              <Tag size={20} />
-              <input
-                type="text"
-                id="academicResponsibility"
-                name="academicResponsibility"
-                placeholder="Enter the name"
-                value={formData.academicResponsibility}
-                onChange={handleChange}
-                className="input"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="grid-col">
-            <label
-              className="input-label"
-              htmlFor="administrativeResponsibility"
+        <Stack spacing="md">
+          <Group grow>
+            <TextInput
+              label="Name"
+              placeholder="Enter your name"
+              icon={<User />}
+              value={formValues.name}
+              onChange={(event) =>
+                handleInputChange("name", event.currentTarget.value)
+              }
+              error={errors.name}
+            />
+            <TextInput
+              label="Designation"
+              placeholder="Enter your designation"
+              icon={<Briefcase />}
+              value={formValues.designation}
+              onChange={(event) =>
+                handleInputChange("designation", event.currentTarget.value)
+              }
+              error={errors.designation}
+            />
+            <DateInput
+              label="Application Date"
+              placeholder="Pick date"
+              icon={<Calendar />}
+              value={formValues.applicationDate}
+              onChange={(value) => handleInputChange("applicationDate", value)}
+              error={errors.applicationDate}
+            />
+          </Group>
+          <Group grow>
+            <NumberInput
+              label="PF Number"
+              placeholder="Enter your PF number"
+              icon={<IdentificationBadge />}
+              value={formValues.pfNumber}
+              onChange={(value) => handleInputChange("pfNumber", value)}
+              error={errors.pfNumber}
+            />
+            <TextInput
+              label="Department"
+              placeholder="Enter your department"
+              icon={<Building />}
+              value={formValues.department}
+              onChange={(event) =>
+                handleInputChange("department", event.currentTarget.value)
+              }
+              error={errors.department}
+            />
+          </Group>
+          <Group grow>
+            <Select
+              label="Nature of Leave"
+              placeholder="Select leave type"
+              icon={<ClipboardText />}
+              data={["Sick Leave", "Casual Leave", "Earned Leave"]}
+              value={formValues.natureOfLeave}
+              onChange={(value) => handleInputChange("natureOfLeave", value)}
+              error={errors.natureOfLeave}
+            />
+            <DateInput
+              label="Leave Start Date"
+              placeholder="Pick start date"
+              icon={<CalendarBlank />}
+              value={formValues.leaveStartDate}
+              onChange={(value) => handleInputChange("leaveStartDate", value)}
+              error={errors.leaveStartDate}
+            />
+            <DateInput
+              label="Leave End Date"
+              placeholder="Pick end date"
+              icon={<CalendarBlank />}
+              value={formValues.leaveEndDate}
+              onChange={(value) => handleInputChange("leaveEndDate", value)}
+              error={errors.leaveEndDate}
+            />
+          </Group>
+          <TextInput
+            label="Purpose"
+            placeholder="Enter the purpose of leave"
+            icon={<Clipboard />}
+            value={formValues.purpose}
+            onChange={(event) =>
+              handleInputChange("purpose", event.currentTarget.value)
+            }
+          />
+          <Group grow>
+            <TextInput
+              label="Academic Responsibility Assigned To"
+              placeholder="Enter name"
+              icon={<UserCircle />}
+              value={formValues.academicResponsibility}
+              onChange={(event) =>
+                handleInputChange(
+                  "academicResponsibility",
+                  event.currentTarget.value,
+                )
+              }
+            />
+            <TextInput
+              label="Administrative Responsibility Assigned To"
+              placeholder="Enter name"
+              icon={<UserCircle />}
+              value={formValues.administrativeResponsibility}
+              onChange={(event) =>
+                handleInputChange(
+                  "administrativeResponsibility",
+                  event.currentTarget.value,
+                )
+              }
+            />
+          </Group>
+          <Group grow>
+            <TextInput
+              label="Forward To (Username)"
+              placeholder="Enter username"
+              icon={<User />}
+              value={formValues.forwardToUsername}
+              onChange={(event) =>
+                handleInputChange(
+                  "forwardToUsername",
+                  event.currentTarget.value,
+                )
+              }
+            />
+            <TextInput
+              label="Forward To (Designation)"
+              placeholder="Enter designation"
+              icon={<Briefcase />}
+              value={formValues.forwardToDesignation}
+              onChange={(event) =>
+                handleInputChange(
+                  "forwardToDesignation",
+                  event.currentTarget.value,
+                )
+              }
+            />
+          </Group>
+          <Group position="apart">
+            <Button
+              type="submit"
+              className="submit-button"
+              rightIcon={<ArrowRight />}
             >
-              Administrative Responsibility
-            </label>
-            <div className="input-wrapper">
-              <Tag size={20} />
-              <input
-                type="text"
-                id="administrativeResponsibility"
-                name="administrativeResponsibility"
-                placeholder="Enter the name"
-                value={formData.administrativeResponsibility}
-                onChange={handleChange}
-                className="input"
-                required
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="footer-section">
-          <div className="input-wrapper">
-            <User size={20} />
-            <input
-              type="text"
-              name="username"
-              placeholder="Username"
-              value={formData.username}
-              onChange={handleChange}
-              className="username-input"
-              required
-            />
-          </div>
-          <div className="input-wrapper">
-            <Tag size={20} />
-            <input
-              type="text"
-              name="designationFooter"
-              placeholder="Designation"
-              value={formData.designationFooter}
-              onChange={handleChange}
-              className="designation-input"
-              required
-            />
-          </div>
-          <Button leftIcon={<CheckCircle size={20} />} className="button">
-            <CheckCircle size={18} /> &nbsp; Check
-          </Button>
-          <Button
-            type="submit"
-            rightIcon={<PaperPlaneRight size={20} />}
-            style={{ marginLeft: "250px", width: "150px" }}
-            className="button"
-          >
-            <PaperPlaneRight size={20} /> &nbsp; Submit
-          </Button>
-        </div>
+              Submit
+            </Button>
+          </Group>
+        </Stack>
       </form>
-    </div>
+    </Container>
   );
 };
 
