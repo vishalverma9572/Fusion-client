@@ -11,6 +11,7 @@ import {
 import { CaretCircleLeft, CaretCircleRight } from "@phosphor-icons/react";
 import CustomBreadcrumbs from "../../../components/Breadcrumbs"; // Import your breadcrumbs component here
 import classes from "./LeavePage.module.css"; // Add your styles here
+import LeaveForm from "./LeavePageComp/LeaveForm";
 import LeaveArchive from "./LeavePageComp/LeaveArchive";
 import LeaveInbox from "./LeavePageComp/LeaveInbox";
 import LeaveRequests from "./LeavePageComp/LeaveRequests";
@@ -115,7 +116,7 @@ function Leave() {
         </Container>
       ) : (
         <div className="fullWidthGrid">
-          {activeTab === "0" && <div>Leave Form</div>}
+          {activeTab === "0" && <LeaveForm />}
           {activeTab === "1" && <LeaveRequests />}
           {activeTab === "2" && <LeaveInbox />}
           {activeTab === "3" && <LeaveArchive />}
