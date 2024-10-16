@@ -9,25 +9,25 @@ import {
   Grid,
 } from "@mantine/core";
 import { CaretCircleLeft, CaretCircleRight } from "@phosphor-icons/react";
-import CustomBreadcrumbs from "../../../components/Breadcrumbs"; // Import your breadcrumbs component here
-import classes from "./LeavePage.module.css"; // Add your styles here
-import LeaveArchive from "./LeavePageComp/LeaveArchive";
-import LeaveInbox from "./LeavePageComp/LeaveInbox";
-import LeaveRequests from "./LeavePageComp/LeaveRequests";
+import CustomBreadcrumbs from "../../../components/Breadcrumbs";
+import classes from "./CPDA_ClaimPage.module.css";
+import CPDA_ClaimForm from "./CPDA_ClaimPageComp/CPDA_ClaimForm";
+import CPDA_ClaimRequests from "./CPDA_ClaimPageComp/CPDA_ClaimRequests";
+import CPDA_ClaimInbox from "./CPDA_ClaimPageComp/CPDA_ClaimInbox";
+import CPDA_ClaimArchive from "./CPDA_ClaimPageComp/CPDA_ClaimArchive";
 
 const tabItems = [
-  { title: "Leave Form" },
-  { title: "Leave Requests" },
-  { title: "Leave Inbox" },
-  { title: "Leave Archive" },
+  { title: "CPDA claim Form" },
+  { title: "CPDA claim Requests" },
+  { title: "CPDA claim Inbox" },
+  { title: "CPDA claim Archive" },
 ];
 
-function Leave() {
+function CPDA_Claim() {
   const [activeTab, setActiveTab] = useState("0");
   const [loading, setLoading] = useState(false);
   const tabsListRef = useRef(null);
 
-  // Function to handle tab change
   const handleTabChange = (direction) => {
     const newIndex =
       direction === "next"
@@ -40,19 +40,18 @@ function Leave() {
     });
   };
 
-  // Fetch any necessary leave data
   useEffect(() => {
-    const fetchLeaveData = async () => {
+    const fetchCPDA_ClaimData = async () => {
       setLoading(true);
       try {
-        // Fetch leave data here if needed
+        // Fetch CPDA_Claim data here if needed
       } catch (error) {
-        console.error("Error fetching leave data:", error);
+        console.error("Error fetching CPDA_Claim data:", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchLeaveData();
+    fetchCPDA_ClaimData();
   }, []);
 
   return (
@@ -60,7 +59,7 @@ function Leave() {
       <CustomBreadcrumbs
         items={[
           { title: "Home", href: "/" },
-          { title: "Leave Management", href: "/leave" },
+          { title: "CPDA_Claim Management", href: "/CPDA_Claim" },
         ]}
       />
       <Flex justify="flex-start" align="center" mt="lg">
@@ -98,7 +97,7 @@ function Leave() {
           </Tabs>
         </div>
         <Button
-          style={{ marginLeft: "220px" }}
+          style={{ marginLeft: "385px" }}
           onClick={() => handleTabChange("next")}
           variant="default"
           p={0}
@@ -115,14 +114,14 @@ function Leave() {
         </Container>
       ) : (
         <div className="fullWidthGrid">
-          {activeTab === "0" && <div>Leave Form</div>}
-          {activeTab === "1" && <LeaveRequests />}
-          {activeTab === "2" && <LeaveInbox />}
-          {activeTab === "3" && <LeaveArchive />}
+          {activeTab === "0" && <CPDA_ClaimForm />}
+          {activeTab === "1" && <CPDA_ClaimRequests />}
+          {activeTab === "2" && <CPDA_ClaimInbox />}
+          {activeTab === "3" && <CPDA_ClaimArchive />}
         </div>
       )}
     </>
   );
 }
 
-export default Leave;
+export default CPDA_Claim;

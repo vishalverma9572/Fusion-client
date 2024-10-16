@@ -9,25 +9,25 @@ import {
   Grid,
 } from "@mantine/core";
 import { CaretCircleLeft, CaretCircleRight } from "@phosphor-icons/react";
-import CustomBreadcrumbs from "../../../components/Breadcrumbs"; // Import your breadcrumbs component here
-import classes from "./LeavePage.module.css"; // Add your styles here
-import LeaveArchive from "./LeavePageComp/LeaveArchive";
-import LeaveInbox from "./LeavePageComp/LeaveInbox";
-import LeaveRequests from "./LeavePageComp/LeaveRequests";
+import CustomBreadcrumbs from "../../../components/Breadcrumbs";
+import classes from "./AppraisalPage.module.css";
+import AppraisalForm from "./AppraisalPageComp/AppraisalForm";
+import AppraisalRequests from "./AppraisalPageComp/AppraisalRequests";
+import AppraisalInbox from "./AppraisalPageComp/AppraisalInbox";
+import AppraisalArchive from "./AppraisalPageComp/AppraisalArchive";
 
 const tabItems = [
-  { title: "Leave Form" },
-  { title: "Leave Requests" },
-  { title: "Leave Inbox" },
-  { title: "Leave Archive" },
+  { title: "Appraisal Form" },
+  { title: "Appraisal Requests" },
+  { title: "Appraisal Inbox" },
+  { title: "Appraisal Archive" },
 ];
 
-function Leave() {
+function Appraisal() {
   const [activeTab, setActiveTab] = useState("0");
   const [loading, setLoading] = useState(false);
   const tabsListRef = useRef(null);
 
-  // Function to handle tab change
   const handleTabChange = (direction) => {
     const newIndex =
       direction === "next"
@@ -40,19 +40,18 @@ function Leave() {
     });
   };
 
-  // Fetch any necessary leave data
   useEffect(() => {
-    const fetchLeaveData = async () => {
+    const fetchAppraisalData = async () => {
       setLoading(true);
       try {
-        // Fetch leave data here if needed
+        // Fetch Appraisal data here if needed
       } catch (error) {
-        console.error("Error fetching leave data:", error);
+        console.error("Error fetching Appraisal data:", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchLeaveData();
+    fetchAppraisalData();
   }, []);
 
   return (
@@ -60,7 +59,7 @@ function Leave() {
       <CustomBreadcrumbs
         items={[
           { title: "Home", href: "/" },
-          { title: "Leave Management", href: "/leave" },
+          { title: "Appraisal Management", href: "/Appraisal" },
         ]}
       />
       <Flex justify="flex-start" align="center" mt="lg">
@@ -98,7 +97,7 @@ function Leave() {
           </Tabs>
         </div>
         <Button
-          style={{ marginLeft: "220px" }}
+          style={{ marginLeft: "320px" }}
           onClick={() => handleTabChange("next")}
           variant="default"
           p={0}
@@ -115,14 +114,14 @@ function Leave() {
         </Container>
       ) : (
         <div className="fullWidthGrid">
-          {activeTab === "0" && <div>Leave Form</div>}
-          {activeTab === "1" && <LeaveRequests />}
-          {activeTab === "2" && <LeaveInbox />}
-          {activeTab === "3" && <LeaveArchive />}
+          {activeTab === "0" && <AppraisalForm />}
+          {activeTab === "1" && <AppraisalRequests />}
+          {activeTab === "2" && <AppraisalInbox />}
+          {activeTab === "3" && <AppraisalArchive />}
         </div>
       )}
     </>
   );
 }
 
-export default Leave;
+export default Appraisal;

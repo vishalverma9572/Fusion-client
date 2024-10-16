@@ -50,7 +50,7 @@ export default function App() {
           }
         />
         <Route
-          path="/hr"
+          path="/hr/*"
           element={
             <Layout>
               <HR />

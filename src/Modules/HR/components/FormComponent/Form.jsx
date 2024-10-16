@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { Title } from "@mantine/core";
 import FormTable from "./FormTable";
 import { fetchData } from "./dataFetcher";
 import "../../styles/FormTable.css";
 
-const Form = ({ formType }) => {
+const Form = ({ title, data }) => {
+  // Accepting data prop
   const [headers, setHeaders] = useState([]);
-  const [formData, setFormData] = useState([]);
 
   useEffect(() => {
     const loadData = async () => {
-      const { headers, formData } = await fetchData();
+      const { headers } = await fetchData(); // Just fetch headers here
       setHeaders(headers);
-      setFormData(formData);
     };
 
     loadData();
@@ -19,11 +19,16 @@ const Form = ({ formType }) => {
 
   return (
     <div className="app-container">
-      {/* <h1 className="table-title">Form </h1> */}
-      {headers.length > 0 && formData.length > 0 ? (
-        <FormTable headers={headers} data={formData} formType={formType} />
+      <Title
+        order={2}
+        style={{ fontWeight: "500", marginTop: "40px", marginLeft: "15px" }}
+      >
+        {title}
+      </Title>
+      {headers.length > 0 && data.length > 0 ? (
+        <FormTable headers={headers} data={data} />
       ) : (
-        <p>Loading...</p>
+        <div className="loading-spinner"></div>
       )}
     </div>
   );

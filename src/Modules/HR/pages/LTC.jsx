@@ -9,25 +9,25 @@ import {
   Grid,
 } from "@mantine/core";
 import { CaretCircleLeft, CaretCircleRight } from "@phosphor-icons/react";
-import CustomBreadcrumbs from "../../../components/Breadcrumbs"; // Import your breadcrumbs component here
-import classes from "./LeavePage.module.css"; // Add your styles here
-import LeaveArchive from "./LeavePageComp/LeaveArchive";
-import LeaveInbox from "./LeavePageComp/LeaveInbox";
-import LeaveRequests from "./LeavePageComp/LeaveRequests";
+import CustomBreadcrumbs from "../../../components/Breadcrumbs";
+import classes from "./LTCPage.module.css";
+import LTCForm from "./LTCPageComp/LTCForm";
+import LTCRequests from "./LTCPageComp/LTCRequests";
+import LTCInbox from "./LTCPageComp/LTCInbox";
+import LTCArchive from "./LTCPageComp/LTCArchive";
 
 const tabItems = [
-  { title: "Leave Form" },
-  { title: "Leave Requests" },
-  { title: "Leave Inbox" },
-  { title: "Leave Archive" },
+  { title: "LTC Form" },
+  { title: "LTC Requests" },
+  { title: "LTC Inbox" },
+  { title: "LTC Archive" },
 ];
 
-function Leave() {
+function LTC() {
   const [activeTab, setActiveTab] = useState("0");
   const [loading, setLoading] = useState(false);
   const tabsListRef = useRef(null);
 
-  // Function to handle tab change
   const handleTabChange = (direction) => {
     const newIndex =
       direction === "next"
@@ -40,19 +40,18 @@ function Leave() {
     });
   };
 
-  // Fetch any necessary leave data
   useEffect(() => {
-    const fetchLeaveData = async () => {
+    const fetchLTCData = async () => {
       setLoading(true);
       try {
-        // Fetch leave data here if needed
+        // Fetch LTC data here if needed
       } catch (error) {
-        console.error("Error fetching leave data:", error);
+        console.error("Error fetching LTC data:", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchLeaveData();
+    fetchLTCData();
   }, []);
 
   return (
@@ -60,7 +59,7 @@ function Leave() {
       <CustomBreadcrumbs
         items={[
           { title: "Home", href: "/" },
-          { title: "Leave Management", href: "/leave" },
+          { title: "LTC Management", href: "/LTC" },
         ]}
       />
       <Flex justify="flex-start" align="center" mt="lg">
@@ -98,7 +97,7 @@ function Leave() {
           </Tabs>
         </div>
         <Button
-          style={{ marginLeft: "220px" }}
+          style={{ marginLeft: "150px" }}
           onClick={() => handleTabChange("next")}
           variant="default"
           p={0}
@@ -115,14 +114,14 @@ function Leave() {
         </Container>
       ) : (
         <div className="fullWidthGrid">
-          {activeTab === "0" && <div>Leave Form</div>}
-          {activeTab === "1" && <LeaveRequests />}
-          {activeTab === "2" && <LeaveInbox />}
-          {activeTab === "3" && <LeaveArchive />}
+          {activeTab === "0" && <LTCForm />}
+          {activeTab === "1" && <LTCRequests />}
+          {activeTab === "2" && <LTCInbox />}
+          {activeTab === "3" && <LTCArchive />}
         </div>
       )}
     </>
   );
 }
 
-export default Leave;
+export default LTC;
