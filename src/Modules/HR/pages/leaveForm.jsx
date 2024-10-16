@@ -12,8 +12,8 @@ import {
   FloppyDisk,
 } from "@phosphor-icons/react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateForm, resetForm } from "../../../../redux/formSlice";
-import "./LeaveForm.css";
+import { updateForm, resetForm } from "../../../redux/formSlice";
+import "./leaveForm.css";
 
 const LeaveForm = () => {
   const formData = useSelector((state) => state.form);
