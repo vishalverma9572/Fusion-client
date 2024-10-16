@@ -225,7 +225,7 @@ const LeaveForm = () => {
 
         {/* Section 4: Purpose of Leave */}
         <div className="grid-row">
-          <div className="grid-col full-width">
+          <div className="purpose">
             <label className="input-label" htmlFor="purpose">
               Purpose
             </label>
@@ -316,16 +316,26 @@ const LeaveForm = () => {
               required
             />
           </div>
-          <Button leftIcon={<CheckCircle size={20} />} className="button">
+          <Button
+            leftIcon={<CheckCircle size={20} />}
+            style={{ marginLeft: "50px" }}
+            className="button"
+          >
             <CheckCircle size={18} /> &nbsp; Check
           </Button>
           <Button
             type="submit"
             rightIcon={<PaperPlaneRight size={20} />}
-            style={{ marginLeft: "250px", width: "150px" }}
+            style={{
+              marginLeft: "200px",
+              width: "150px",
+              paddingRight: "15px",
+              borderRadius: "5px",
+            }}
             className="button"
           >
-            <PaperPlaneRight size={20} /> &nbsp; Submit
+            <FloppyDisk size={20} />
+            &nbsp; Submit
           </Button>
         </div>
       </form>
