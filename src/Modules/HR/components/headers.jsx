@@ -70,12 +70,12 @@ export function Header() {
       case "Leave Request":
       case "Leave Inbox":
       case "Leave Archive":
-        return <Form />;
+        return <Form formType={activeTab} />;
 
       case "LTC Request":
         return <Request />;
       case "LTC Inbox":
-        return <Form />;
+        return <Form formType={activeTab} />;
       case "LTC Archive":
         return <Form />;
 
@@ -91,7 +91,7 @@ export function Header() {
       case "CPDA Form":
         return <CpdaForm />;
       case "CPDA Inbox":
-        return <Form />;
+        return <Form formType={activeTab} />;
       case "CPDA Archive":
         return <CpdaArchive />;
       default:

@@ -50,23 +50,43 @@
 import React, { useState } from "react";
 import "../../styles/FormTable.css";
 import CpdaFormHod from "../../pages/cpdaFormHod"; // Import the component you want to render
+import LeaveFormHod from "../../pages/leaveFormHod";
+import LTCFormHod from "../../pages/LTCFormHod";
 import { BackgroundImage } from "@mantine/core";
 
-const FormTable = ({ headers, data }) => {
-  const [showCpdaFormHod, setShowCpdaFormHod] = useState(false);
-  const [selectedFormId, setSelectedFormId] = useState(null); // To track which form was clicked
+const FormTable = ({ headers, data, formType }) => {
+  const [showForm, setShowForm] = useState(null); // To track which form component to show
+  const [selectedFormId, setSelectedFormId] = useState(null);
 
   // Function to handle View click
   const handleViewClick = (formId) => {
-    setSelectedFormId(formId); // Set the selected form
-    setShowCpdaFormHod(true); // Show the form
+    setSelectedFormId(formId);
+    setShowForm(true);
+  };
+
+  // Function to render the appropriate form component based on form type
+  const renderFormComponent = () => {
+    console.log(headers);
+    console.log(formType);
+    switch (formType) {
+      case "Leave":
+        return <LeaveFormHod formId={selectedFormId} />;
+      case "CPDA":
+        return <CpdaFormHod formId={selectedFormId} />;
+      case "LTC":
+        return <LTCFormHod formId={selectedFormId} />;
+      case "Appraisal":
+        return <AppraisalFormHod formId={selectedFormId} />;
+      default:
+        return null;
+    }
   };
 
   return (
     <div className="form-table-container">
-      {showCpdaFormHod ? (
-        // Conditionally render the CpdaFormHod component when the "View" button is clicked
-        <CpdaFormHod formId={selectedFormId} /> // Pass any props you want to the CpdaFormHod
+      {showForm ? (
+        // Conditionally render the appropriate form component when the "View" button is clicked
+        renderFormComponent() // Render the appropriate form component
       ) : (
         <table className="form-table">
           <thead>
@@ -92,8 +112,8 @@ const FormTable = ({ headers, data }) => {
                 <td className="form-cell">{item.date}</td>
                 <td
                   className="form-cell action view-column"
-                  onClick={() => handleViewClick(item.formId)}
-                  // style={{ cursor: "pointer", color: "blue" }}
+                  onClick={() => handleViewClick(item.formId, item.formType)}
+                  style={{ cursor: "pointer", color: "blue" }}
                 >
                   View
                 </td>
