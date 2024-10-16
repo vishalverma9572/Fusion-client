@@ -8,6 +8,16 @@ import {
   Tag,
   Building,
   Calendar,
+  IdentificationCard,
+  CurrencyDollar,
+  House,
+  ClipboardText,
+  UsersThree,
+  Phone,
+  UserCircle,
+  AirplaneTilt,
+  Bed,
+  MapPin,
 } from "@phosphor-icons/react";
 import { updateForm, resetForm } from "../../../redux/formSlice";
 import "../styles/ltcForm.css";
@@ -28,7 +38,7 @@ const LTCForm = () => {
   };
 
   return (
-    <div className="container">
+    <div className="Leave_container">
       <form onSubmit={handleSubmit}>
         {/* Row 1: Block Year and Provident Fund No */}
         <div className="grid-row">
@@ -36,31 +46,37 @@ const LTCForm = () => {
             <label className="input-label" htmlFor="blockYear">
               Block Year
             </label>
-            <input
-              type="text"
-              id="blockYear"
-              name="blockYear"
-              value={formData.blockYear}
-              onChange={handleChange}
-              className="input"
-              placeholder="Block Year"
-              required
-            />
+            <div className="input-wrapper">
+              <Calendar size={20} />
+              <input
+                type="text"
+                id="blockYear"
+                name="blockYear"
+                value={formData.blockYear}
+                onChange={handleChange}
+                className="input"
+                placeholder="Block Year"
+                required
+              />
+            </div>
           </div>
           <div className="grid-col">
             <label className="input-label" htmlFor="providentFundNumber">
               Provident Fund No.
             </label>
-            <input
-              type="text"
-              id="providentFundNumber"
-              name="providentFundNumber"
-              value={formData.providentFundNumber}
-              onChange={handleChange}
-              className="input"
-              placeholder="XXXXXXXX"
-              required
-            />
+            <div className="input-wrapper">
+              <IdentificationCard size={20} />
+              <input
+                type="text"
+                id="providentFundNumber"
+                name="providentFundNumber"
+                value={formData.providentFundNumber}
+                onChange={handleChange}
+                className="input"
+                placeholder="XXXXXXXX"
+                required
+              />
+            </div>
           </div>
         </div>
 
@@ -106,16 +122,19 @@ const LTCForm = () => {
             <label className="input-label" htmlFor="basicPay">
               Basic Pay
             </label>
-            <input
-              type="text"
-              id="basicPay"
-              name="basicPay"
-              value={formData.basicPay}
-              onChange={handleChange}
-              className="input"
-              placeholder="Basic Pay"
-              required
-            />
+            <div className="input-wrapper">
+              <CurrencyDollar size={20} />
+              <input
+                type="text"
+                id="basicPay"
+                name="basicPay"
+                value={formData.basicPay}
+                onChange={handleChange}
+                className="input"
+                placeholder="Basic Pay"
+                required
+              />
+            </div>
           </div>
         </div>
 
@@ -202,16 +221,19 @@ const LTCForm = () => {
             <label className="input-label" htmlFor="purpose">
               Purpose
             </label>
-            <input
-              type="text"
-              id="purpose"
-              name="purpose"
-              value={formData.purpose}
-              onChange={handleChange}
-              className="input"
-              placeholder="Purpose"
-              required
-            />
+            <div className="input-wrapper">
+              <ClipboardText size={20} />
+              <input
+                type="text"
+                id="purpose"
+                name="purpose"
+                value={formData.purpose}
+                onChange={handleChange}
+                className="input"
+                placeholder="Purpose"
+                required
+              />
+            </div>
           </div>
         </div>
 
@@ -221,16 +243,19 @@ const LTCForm = () => {
             <label className="input-label" htmlFor="addressDuringLeave">
               Address During Leave
             </label>
-            <input
-              type="text"
-              id="addressDuringLeave"
-              name="addressDuringLeave"
-              value={formData.addressDuringLeave}
-              onChange={handleChange}
-              className="input"
-              placeholder="Enter Address"
-              required
-            />
+            <div className="input-wrapper">
+              <House size={20} />
+              <input
+                type="text"
+                id="addressDuringLeave"
+                name="addressDuringLeave"
+                value={formData.addressDuringLeave}
+                onChange={handleChange}
+                className="input"
+                placeholder="Enter Address"
+                required
+              />
+            </div>
           </div>
         </div>
 
@@ -280,15 +305,18 @@ const LTCForm = () => {
             <label className="input-label" htmlFor="ltcFamilyMembers">
               Details of Family Members (already availed)
             </label>
-            <input
-              type="text"
-              id="ltcFamilyMembers"
-              name="ltcFamilyMembers"
-              value={formData.ltcFamilyMembers}
-              onChange={handleChange}
-              className="input"
-              placeholder="Family Members"
-            />
+            <div className="input-wrapper">
+              <UsersThree size={20} />
+              <input
+                type="text"
+                id="ltcFamilyMembers"
+                name="ltcFamilyMembers"
+                value={formData.ltcFamilyMembers}
+                onChange={handleChange}
+                className="input"
+                placeholder="Family Members"
+              />
+            </div>
           </div>
         </div>
 
@@ -298,30 +326,36 @@ const LTCForm = () => {
             <label className="input-label" htmlFor="contactNumber">
               Contact Number
             </label>
-            <input
-              type="text"
-              id="contactNumber"
-              name="contactNumber"
-              value={formData.contactNumber}
-              onChange={handleChange}
-              className="input"
-              placeholder="Contact Number"
-              required
-            />
+            <div className="input-wrapper">
+              <Phone size={20} />
+              <input
+                type="text"
+                id="contactNumber"
+                name="contactNumber"
+                value={formData.contactNumber}
+                onChange={handleChange}
+                className="input"
+                placeholder="Contact Number"
+                required
+              />
+            </div>
           </div>
           <div className="grid-col">
             <label className="input-label" htmlFor="advanceAmount">
               Amount of Advance Required (if any)
             </label>
-            <input
-              type="text"
-              id="advanceAmount"
-              name="advanceAmount"
-              value={formData.advanceAmount}
-              onChange={handleChange}
-              className="input"
-              placeholder="Advance Amount"
-            />
+            <div className="input-wrapper">
+              <CurrencyDollar size={20} />
+              <input
+                type="text"
+                id="advanceAmount"
+                name="advanceAmount"
+                value={formData.advanceAmount}
+                onChange={handleChange}
+                className="input"
+                placeholder="Advance Amount"
+              />
+            </div>
           </div>
         </div>
 
@@ -332,31 +366,37 @@ const LTCForm = () => {
               Name of the family member(s) for whom L.T.C. is proposed to be
               availed
             </label>
-            <input
-              type="text"
-              id="ltcFamilyMembersName"
-              name="ltcFamilyMembersName"
-              value={formData.ltcFamilyMembersName}
-              onChange={handleChange}
-              className="input"
-              placeholder="Family Member Name(s)"
-              required
-            />
+            <div className="input-wrapper">
+              <UserCircle size={20} />
+              <input
+                type="text"
+                id="ltcFamilyMembersName"
+                name="ltcFamilyMembersName"
+                value={formData.ltcFamilyMembersName}
+                onChange={handleChange}
+                className="input"
+                placeholder="Family Member Name(s)"
+                required
+              />
+            </div>
           </div>
           <div className="grid-col">
             <label className="input-label" htmlFor="ltcFamilyRelationship">
               Relationship of the family member(s) with the government servant
             </label>
-            <input
-              type="text"
-              id="ltcFamilyRelationship"
-              name="ltcFamilyRelationship"
-              value={formData.ltcFamilyRelationship}
-              onChange={handleChange}
-              className="input"
-              placeholder="Relationship"
-              required
-            />
+            <div className="input-wrapper">
+              <UserCircle size={20} />
+              <input
+                type="text"
+                id="ltcFamilyRelationship"
+                name="ltcFamilyRelationship"
+                value={formData.ltcFamilyRelationship}
+                onChange={handleChange}
+                className="input"
+                placeholder="Relationship"
+                required
+              />
+            </div>
           </div>
         </div>
 
@@ -366,29 +406,35 @@ const LTCForm = () => {
             <label className="input-label" htmlFor="onwardJourneyDate">
               Date of onward journey
             </label>
-            <input
-              type="date"
-              id="onwardJourneyDate"
-              name="onwardJourneyDate"
-              value={formData.onwardJourneyDate}
-              onChange={handleChange}
-              className="input"
-              required
-            />
+            <div className="input-wrapper">
+              <Calendar size={20} />
+              <input
+                type="date"
+                id="onwardJourneyDate"
+                name="onwardJourneyDate"
+                value={formData.onwardJourneyDate}
+                onChange={handleChange}
+                className="input"
+                required
+              />
+            </div>
           </div>
           <div className="grid-col">
             <label className="input-label" htmlFor="returnJourneyDate">
               Date of return journey
             </label>
-            <input
-              type="date"
-              id="returnJourneyDate"
-              name="returnJourneyDate"
-              value={formData.returnJourneyDate}
-              onChange={handleChange}
-              className="input"
-              required
-            />
+            <div className="input-wrapper">
+              <Calendar size={20} />
+              <input
+                type="date"
+                id="returnJourneyDate"
+                name="returnJourneyDate"
+                value={formData.returnJourneyDate}
+                onChange={handleChange}
+                className="input"
+                required
+              />
+            </div>
           </div>
         </div>
 
@@ -398,18 +444,21 @@ const LTCForm = () => {
             <label className="input-label" htmlFor="modeOfJourney">
               Whether Air/Train/Bus journey?
             </label>
-            <select
-              id="modeOfJourney"
-              name="modeOfJourney"
-              value={formData.modeOfJourney}
-              onChange={handleChange}
-              className="select"
-              required
-            >
-              <option value="Air">Air</option>
-              <option value="Train">Train</option>
-              <option value="Bus">Bus</option>
-            </select>
+            <div className="input-wrapper">
+              <AirplaneTilt size={20} />
+              <select
+                id="modeOfJourney"
+                name="modeOfJourney"
+                value={formData.modeOfJourney}
+                onChange={handleChange}
+                className="select"
+                required
+              >
+                <option value="Air">Air</option>
+                <option value="Train">Train</option>
+                <option value="Bus">Bus</option>
+              </select>
+            </div>
           </div>
           <div className="grid-col">
             <label className="input-label" htmlFor="classOfAccommodation">
@@ -434,22 +483,26 @@ const LTCForm = () => {
             <label className="input-label" htmlFor="placeToVisit">
               Place to be visited
             </label>
-            <input
-              type="text"
-              id="placeToVisit"
-              name="placeToVisit"
-              value={formData.placeToVisit}
-              onChange={handleChange}
-              className="input"
-              placeholder="Place to Visit"
-              required
-            />
+            <div className="input-wrapper">
+              <MapPin size={20} />
+              <input
+                type="text"
+                id="placeToVisit"
+                name="placeToVisit"
+                value={formData.placeToVisit}
+                onChange={handleChange}
+                className="input"
+                placeholder="Place to Visit"
+                required
+              />
+            </div>
           </div>
         </div>
 
         {/* Footer */}
         <div className="footer-section">
           <div className="input-wrapper">
+            <User size={20} />
             <input
               type="text"
               name="username"
@@ -461,6 +514,7 @@ const LTCForm = () => {
             />
           </div>
           <div className="input-wrapper">
+            <Tag size={20} />
             <input
               type="text"
               name="designationFooter"
@@ -472,14 +526,15 @@ const LTCForm = () => {
             />
           </div>
           <Button leftIcon={<CheckCircle size={20} />} className="button">
-            Check
+            <CheckCircle size={18} /> &nbsp; Check
           </Button>
           <Button
             type="submit"
             rightIcon={<PaperPlaneRight size={20} />}
+            style={{ marginLeft: "250px", width: "150px" }}
             className="button"
           >
-            Submit
+            <PaperPlaneRight size={20} /> &nbsp; Submit
           </Button>
         </div>
       </form>
