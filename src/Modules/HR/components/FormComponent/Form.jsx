@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Title } from "@mantine/core";
 import FormTable from "./FormTable";
 import { fetchData } from "./dataFetcher";
-import "../../styles/FormTable.css";
 
 const Form = ({ title, data }) => {
   // Accepting data prop

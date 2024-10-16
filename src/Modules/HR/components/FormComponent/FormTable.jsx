@@ -1,5 +1,5 @@
 import React from "react";
-import "../../styles/FormTable.css";
+import "./FormTable.css";
 import { Eye, MapPin } from "@phosphor-icons/react"; // Importing the icons
 
 const FormTable = ({ headers, data }) => {
