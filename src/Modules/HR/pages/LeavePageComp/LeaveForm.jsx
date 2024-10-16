@@ -317,8 +317,8 @@ const LeaveForm = () => {
             />
           </div>
           <Button
-            leftIcon={<CheckCircle size={20} />}
-            style={{ marginLeft: "50px" }}
+            leftIcon={<CheckCircle size={25} />}
+            style={{ marginLeft: "50px", paddingRight: "15px" }}
             className="button"
           >
             <CheckCircle size={18} /> &nbsp; Check
@@ -327,7 +327,7 @@ const LeaveForm = () => {
             type="submit"
             rightIcon={<PaperPlaneRight size={20} />}
             style={{
-              marginLeft: "200px",
+              marginLeft: "350px",
               width: "150px",
               paddingRight: "15px",
               borderRadius: "5px",
