@@ -1,7 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import LeavePage from "./pages/LeavePage"; // Adjust the import path if necessary
-import LeaveFormView from "./pages/LeavePageComp/LeaveFormView"; // Adjust the import path if necessary
 import LeaveArchive from "./pages/LeavePageComp/LeaveArchive";
 import CPDA_ADVANCE from "./pages/CPDA_ADVANCE";
 import LTC from "./pages/LTC";
@@ -17,7 +16,6 @@ export default function HR() {
 
       {/* Render LeavePage at /hr/leave */}
       <Route path="leave" element={<LeavePage />} />
-      <Route path="LeaveFromView" element={<LeaveFormView />} />
       <Route path="cpda_adv" element={<CPDA_ADVANCE />} />
       <Route path="ltc" element={<LTC />} />
       <Route path="appraisal" element={<Appraisal />} />
