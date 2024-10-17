@@ -1,8 +1,17 @@
+// src/Modules/HR/components/FormComponent/FormTable.jsx
 import React from "react";
+import { useNavigate } from "react-router-dom"; // Use for navigation
 import "./FormTable.css";
-import { Eye, MapPin } from "@phosphor-icons/react"; // Importing the icons
+import { Eye, MapPin } from "@phosphor-icons/react";
 
 const FormTable = ({ headers, data }) => {
+  const navigate = useNavigate(); // React Router navigation hook
+
+  const handleViewClick = (formId) => {
+    // navigate(`/leave-form-view/${formId}`);  // Redirect to the form view
+    navigate(`/hr/LeaveFromView`); // Redirect to the form view
+  };
+
   return (
     <div className="form-table-container">
       <table className="form-table">
@@ -23,7 +32,10 @@ const FormTable = ({ headers, data }) => {
               <td>{item.designation}</td>
               <td>{item.date}</td>
               <td>
-                <span className="text-link">
+                <span
+                  className="text-link"
+                  onClick={() => handleViewClick(item.formId)}
+                >
                   <Eye size={20} />
                   View
                 </span>
