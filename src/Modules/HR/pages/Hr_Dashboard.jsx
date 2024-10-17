@@ -17,6 +17,7 @@ import {
 } from "@phosphor-icons/react";
 import PerformanceCard from "../components/FormComponent/PerformanceCard";
 import classes from "./Hr_Dashboard.module.css";
+import { HeroBanner } from "../components/HeroBanner";
 
 const mockdata = [
   {
@@ -32,12 +33,6 @@ const mockdata = [
     link: "/hr/cpda_adv",
   },
   {
-    title: "CPDA Claim",
-    description: "Submit and track CPDA claims.",
-    icon: FilePlus,
-    link: "/hr/cpda_claim",
-  },
-  {
     title: "LTC",
     description: "Manage LTC claims and requests seamlessly.",
     icon: Buildings,
@@ -48,6 +43,12 @@ const mockdata = [
     description: "Performance appraisal management.",
     icon: User,
     link: "/hr/appraisal",
+  },
+  {
+    title: "CPDA Claim",
+    description: "Submit and track CPDA claims.",
+    icon: FilePlus,
+    link: "/hr/cpda_claim",
   },
 ];
 
@@ -63,11 +64,17 @@ const Hr_Dashboard = () => {
   ));
 
   return (
-    <Container size="lg" py="xl">
-      <SimpleGrid cols={{ base: 1, md: 3 }} spacing="xl" mt={10}>
+    <div size="lg" py="xl" className={classes.hrdashboardContainer}>
+      <HeroBanner />
+      <SimpleGrid
+        cols={{ base: 1, md: 3 }}
+        spacing="xl"
+        mt={10}
+        className={classes.simpleGrid}
+      >
         {features}
       </SimpleGrid>
-    </Container>
+    </div>
   );
 };
 

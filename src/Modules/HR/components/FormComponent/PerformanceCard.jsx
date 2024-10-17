@@ -1,22 +1,12 @@
 import React from "react";
 import { Card, Text, Group, Divider, Button } from "@mantine/core";
 import { Link } from "react-router-dom";
+import { ArrowRight, CaretRight } from "@phosphor-icons/react";
+import classes from "./PerformanceCard.module.css";
 
 const PerformanceCard = ({ IconComponent, title, description, link }) => {
   return (
-    <Card
-      shadow="lg"
-      p="lg"
-      style={{
-        backgroundColor: "#fff",
-        borderRadius: "10px",
-        color: "#333",
-        width: "300px",
-        margin: "0px auto",
-        border: "1px solid #e0e0e0",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-      }}
-    >
+    <Card shadow="lg" p="lg" className={classes.card}>
       <Group position="apart">
         <IconComponent size={32} color="#4E9EFC" />
       </Group>
@@ -37,12 +27,12 @@ const PerformanceCard = ({ IconComponent, title, description, link }) => {
       </Text>
       <Button
         variant="outline"
-        color="#4E9EFC"
+        className={classes.button}
         component={Link}
         to={link}
-        style={{ marginTop: "10px" }}
+        rightIcon={<ArrowRight size={16} weight="bold" />}
       >
-        Go to {title}
+        Go to {title} <CaretRight size={20} />
       </Button>
     </Card>
   );
