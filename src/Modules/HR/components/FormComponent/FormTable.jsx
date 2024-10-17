@@ -7,9 +7,9 @@ import { Eye, MapPin } from "@phosphor-icons/react";
 const FormTable = ({ headers, data }) => {
   const navigate = useNavigate(); // React Router navigation hook
 
-  const handleViewClick = (formId) => {
+  const handleViewClick = (view) => {
     // navigate(`/leave-form-view/${formId}`);  // Redirect to the form view
-    navigate(`/hr/LeaveFromView`); // Redirect to the form view
+    navigate(view); // Redirect to the form view
   };
 
   return (
@@ -34,7 +34,7 @@ const FormTable = ({ headers, data }) => {
               <td>
                 <span
                   className="text-link"
-                  onClick={() => handleViewClick(item.formId)}
+                  onClick={() => handleViewClick(item.view)}
                 >
                   <Eye size={20} />
                   View

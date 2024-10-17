@@ -10,12 +10,16 @@ function LeaveArchive() {
       user: "Suresh Yadav",
       designation: "Professor",
       date: "01 October 2024",
+      view: "/hr/FormView/leaveform",
+      track: "/hr/TrackForm/leaveform",
     },
     {
       formId: "101207",
       user: "Amit Sharma",
       designation: "Professor",
       date: "05 October 2024",
+      view: "/hr/FormView/leaveform",
+      track: "/hr/TrackForm/leaveform",
     },
   ];
   return <Form title="Leave Archive" data={archiveData} />;
