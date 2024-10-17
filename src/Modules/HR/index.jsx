@@ -14,6 +14,7 @@ export default function HR() {
       <Route path="/" element={<Hr_Dashboard />} />
       {/* Render LeavePage at /hr/leave */}
       <Route path="leave/*" element={<LeavePage />} />
+      <Route path="leave/*" element={<LeavePage />} />
       <Route path="cpda_adv/*" element={<CPDA_ADVANCE />} />
       <Route path="ltc/*" element={<LTC />} />
       <Route path="appraisal/*" element={<Appraisal />} />

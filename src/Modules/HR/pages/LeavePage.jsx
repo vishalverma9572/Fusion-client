@@ -1,15 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
-import {
-  Tabs,
-  Button,
-  Flex,
-  Text,
-  Loader,
-  Container,
-  Grid,
-} from "@mantine/core";
+import { Tabs, Button, Flex, Text, Loader, Container } from "@mantine/core";
 import { CaretCircleLeft, CaretCircleRight } from "@phosphor-icons/react";
-import CustomBreadcrumbs from "../../../components/Breadcrumbs"; // Import your breadcrumbs component here
+import { useNavigate, useLocation } from "react-router-dom";
+import CustomBreadcrumbs from "../../../components/Breadcrumbs"; // Your breadcrumbs component
 import classes from "./LeavePage.module.css"; // Add your styles here
 import LeaveForm from "./LeavePageComp/LeaveForm";
 import LeaveArchive from "./LeavePageComp/LeaveArchive";
@@ -17,45 +10,40 @@ import LeaveInbox from "./LeavePageComp/LeaveInbox";
 import LeaveRequests from "./LeavePageComp/LeaveRequests";
 
 const tabItems = [
-  { title: "Leave Form" },
-  { title: "Leave Requests" },
-  { title: "Leave Inbox" },
-  { title: "Leave Archive" },
+  { title: "Leave Form", path: "/hr/leave/leaveform" },
+  { title: "Leave Requests", path: "/hr/leave/leaverequests" },
+  { title: "Leave Inbox", path: "/hr/leave/leaveinbox" },
+  { title: "Leave Archive", path: "/hr/leave/leavearchive" },
 ];
 
 function Leave() {
   const [activeTab, setActiveTab] = useState("0");
   const [loading, setLoading] = useState(false);
   const tabsListRef = useRef(null);
-  //url =/hr/leave/leaveform
-  const url = window.location.href;
-  console.log(url);
-  useEffect(() => {
-    //url =/hr/leave/leaveform
-    if (url.includes("form")) {
-      setActiveTab("0");
-    }
-    //url =/hr/leave/leaverequests
-    else if (url.includes("requests")) {
-      setActiveTab("1");
-    }
-    //url =/hr/leave/leaveinbox
-    else if (url.includes("inbox")) {
-      setActiveTab("2");
-    }
-    //url =/hr/leave/leavearchive
-    else if (url.includes("archive")) {
-      setActiveTab("3");
-    }
-  }, [url]);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  // Function to handle tab change
-  const handleTabChange = (direction) => {
+  // Set active tab based on the current URL
+  useEffect(() => {
+    const currentPath = location.pathname;
+    const matchingTab = tabItems.findIndex((tab) =>
+      currentPath.includes(tab.path.split("/").pop()),
+    );
+    setActiveTab(matchingTab !== -1 ? String(matchingTab) : "0");
+  }, [location.pathname]);
+
+  // Function to handle tab change by clicking on a tab
+  const handleTabChange = (index) => {
+    setActiveTab(index);
+    navigate(tabItems[index].path); // Update the URL when the tab changes
+  };
+
+  const handleButtonChange = (direction) => {
     const newIndex =
       direction === "next"
         ? Math.min(+activeTab + 1, tabItems.length - 1)
         : Math.max(+activeTab - 1, 0);
-    setActiveTab(String(newIndex));
+    handleTabChange(String(newIndex));
     tabsListRef.current.scrollBy({
       left: direction === "next" ? 50 : -50,
       behavior: "smooth",
@@ -88,7 +76,7 @@ function Leave() {
       <Flex justify="flex-start" align="center" mt="lg">
         <Button
           style={{ marginRight: "20px" }}
-          onClick={() => handleTabChange("prev")}
+          onClick={() => handleButtonChange("prev")}
           variant="default"
           p={0}
         >
@@ -101,7 +89,7 @@ function Leave() {
           className={`${classes.fusionTabsContainer} ${classes.limitedWidthTabs}`}
           ref={tabsListRef}
         >
-          <Tabs value={activeTab} onChange={setActiveTab}>
+          <Tabs value={activeTab} onTabChange={handleTabChange}>
             <Tabs.List style={{ display: "flex", flexWrap: "nowrap" }}>
               {tabItems.map((item, index) => (
                 <Tabs.Tab
@@ -112,6 +100,7 @@ function Leave() {
                       ? classes.fusionActiveRecentTab
                       : ""
                   }
+                  onClick={() => handleTabChange(String(index))} // Trigger navigation on click
                 >
                   <Text>{item.title}</Text>
                 </Tabs.Tab>
@@ -121,7 +110,7 @@ function Leave() {
         </div>
         <Button
           style={{ marginLeft: "220px" }}
-          onClick={() => handleTabChange("next")}
+          onClick={() => handleButtonChange("next")}
           variant="default"
           p={0}
         >
