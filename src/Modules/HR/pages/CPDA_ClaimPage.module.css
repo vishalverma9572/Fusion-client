@@ -6,6 +6,7 @@
     padding: 0;
     padding-top: 50px;       /* Reset padding */
     box-sizing: border-box;  /* Ensure padding and border are included in the element's width/height */
+    background-color: white;
   }
   
   .fusionTabsContainer {

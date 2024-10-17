@@ -23,6 +23,11 @@ function Leave() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  //scroll to top on page load
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // Set active tab based on the current URL
   useEffect(() => {
     const currentPath = location.pathname;

@@ -24,6 +24,11 @@ function CPDA_Claim() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  //scroll to top on page load
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // Update active tab based on current URL
   useEffect(() => {
     const currentPath = location.pathname;

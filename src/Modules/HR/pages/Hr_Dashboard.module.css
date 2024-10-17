@@ -4,6 +4,7 @@
     width: 80%;
     margin: 0 auto; /* Center the grid */
     /* margin-top: 20px; */
+    
     margin-left: 20px;
     @media (max-width: $mantine-breakpoint-md) {
       width: 100%; /* Full width for smaller screens */

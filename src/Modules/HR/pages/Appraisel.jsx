@@ -24,6 +24,11 @@ function Appraisal() {
   const navigate = useNavigate(); // Initialize navigate
   const location = useLocation(); // Initialize location
 
+  //scroll to top on page load
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // Update active tab based on current URL
   useEffect(() => {
     const currentPath = location.pathname;
