@@ -27,6 +27,27 @@ function Leave() {
   const [activeTab, setActiveTab] = useState("0");
   const [loading, setLoading] = useState(false);
   const tabsListRef = useRef(null);
+  //url =/hr/leave/leaveform
+  const url = window.location.href;
+  console.log(url);
+  useEffect(() => {
+    //url =/hr/leave/leaveform
+    if (url.includes("form")) {
+      setActiveTab("0");
+    }
+    //url =/hr/leave/leaverequests
+    else if (url.includes("requests")) {
+      setActiveTab("1");
+    }
+    //url =/hr/leave/leaveinbox
+    else if (url.includes("inbox")) {
+      setActiveTab("2");
+    }
+    //url =/hr/leave/leavearchive
+    else if (url.includes("archive")) {
+      setActiveTab("3");
+    }
+  }, [url]);
 
   // Function to handle tab change
   const handleTabChange = (direction) => {
