@@ -1,514 +1,398 @@
+// create a similar AppraisalForm in which
+// in first section NAme and Designation and Descipline will be there
+// in next section there will be inputs for "Specific field of knowledge" "Current Research Interests"
+
+// in next section there will be title of that decription "Please give information pertaining to the period of appraisal as per the format given below :-"
+// below that there will be a table title named 1. INSTRUCTION ELEMENT
+// in 1.1 there is 1.1 Teaching
+// in 1.1.1 there is Courses taught at UG/PG level
+
+// which gives a table of input "Semester"	"Course Name and Number"	"Lecture Hrs/wk"	"Tutorial Hrs/wk"	"Lab Hrs/wk"	"No of Registererd Students"	"Co-Instructor/ Instructor In charge(if any)" make this table number of rows dynamic and he can add number of rows.
+
+// in 1.1.2 "New Courses/ laboratory experiments introduced and taught" there is again a table of input with columns "Course Name and Numbe" "UG/PG"  "	Year and Semester of first offering"
+
+// 1.1.3 New course material developed/instructional software developed (should be made available on the web / public domain and may be under GIAN/NPTEL/SWAYAM etc)
 import React, { useState } from "react";
-import { Button, Grid, TextInput,NumberInput, Stack, Select } from "@mantine/core";
-import { User, Tag, Building } from "@phosphor-icons/react";
-import { useDispatch, useSelector } from "react-redux";
-import { updateForm, resetForm } from "../../../../redux/formSlice";
-import "./AppraisalForm.css";
+import { Button } from "@mantine/core";
+import {
+  User,
+  Tag,
+  IdentificationCard,
+  Calendar,
+  ClipboardText,
+} from "@phosphor-icons/react";
+import "./AppraisalForm.module.css";
 
-const AppraisalForm = () => {
-  const formData = useSelector((state) => state.form);
-  const dispatch = useDispatch();
-
-  const [taughtCourses, setTaughtCourses] = useState([]);
-  const [newCourses, setNewCourses] = useState([]);
-  const [courseMaterials, setCourseMaterials] = useState([]);
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    dispatch(updateForm({ name, value }));
+function AppraisalForm() {
+  const [rows, setRows] = useState([
+    {
+      semester: "",
+      courseNameNumber: "",
+      lectureHrs: "",
+      tutorialHrs: "",
+      labHrs: "",
+      registeredStudents: "",
+      coInstructor: "",
+    },
+  ]);
+  const handleChange = (index, event) => {
+    const newRows = [...rows];
+    newRows[index][event.target.name] = event.target.value;
+    setRows(newRows);
   };
-
-  const handleTaughtCourseChange = (index, event) => {
-    const { name, value } = event.target;
-    const newTaughtCourses = [...taughtCourses];
-    newTaughtCourses[index][name] = value;
-    setTaughtCourses(newTaughtCourses);
-  };
-
-  const handleNewCourseChange = (index, event) => {
-    const { name, value } = event.target;
-    const newNewCourses = [...newCourses];
-    newNewCourses[index][name] = value;
-    setNewCourses(newNewCourses);
-  };
-
-  const handleCourseMaterialChange = (index, field, value) => {
-    const newCourseMaterials = [...courseMaterials];
-    newCourseMaterials[index][field] = value;
-    setCourseMaterials(newCourseMaterials);
-  };
-
-  const addTaughtCourse = () => {
-    setTaughtCourses([
-      ...taughtCourses,
+  const handleAddRow = () => {
+    setRows([
+      ...rows,
       {
         semester: "",
-        coursename: "",
-        lecHrs: "",
-        tutHrs: "",
+        courseNameNumber: "",
+        lectureHrs: "",
+        tutorialHrs: "",
         labHrs: "",
-        regCount: "",
-        instructorInfo: "",
+        registeredStudents: "",
+        coInstructor: "",
       },
     ]);
   };
-
-  const addNewCourse = () => {
-    setNewCourses([
-      ...newCourses,
-      {  newCourseName: "",
-        newCourseNumber:"",
-        semesterOfOffering: "",
-        yearOfOffering:"",
-        newCourseType:"",
-      
-      
-       
-      },
-    ]);
-  };
-
-  const addCourseMaterial = () => {
-    setCourseMaterials([
-      ...courseMaterials,
-      {
-        courseMaterialName: "",
-        courseMaterialNumber: "",
-        courseMaterialType: "",
-        activityType: "",
-        platform: "",
-      },
-    ]);
-  };
-  const [thesisSupervisions, setThesisSupervisions] = useState([
-  { studentName: "", thesisTitle: "", registrationYear: "", status: "", coSupervisors: "" }
-]);
-
-const handleThesisSupervisionChange = (index, event) => {
-  const updatedSupervisions = [...thesisSupervisions];
-  updatedSupervisions[index][event.target.name] = event.target.value;
-  setThesisSupervisions(updatedSupervisions);
-};
-
-const addThesisSupervision = () => {
-  setThesisSupervisions([...thesisSupervisions, { studentName: "", thesisTitle: "", registrationYear: "", status: "", coSupervisors: "" }]);
-};
-
-const [researchElements, setResearchElements] = useState([
-  { description: "", type: "", status: "", transferTechnology: "" }
-]);
-
-const handleResearchElementChange = (index, event) => {
-  const updatedElements = [...researchElements];
-  updatedElements[index][event.target.name] = event.target.value;
-  setResearchElements(updatedElements);
-};
-
-const addResearchElement = () => {
-  setResearchElements([...researchElements, { description: "", type: "", status: "", transferTechnology: "" }]);
-};
-
-
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Form Data:", formData);
-    console.log("Taught Courses:", taughtCourses);
-    console.log("New Courses:", newCourses);
-    console.log("Course Materials:", courseMaterials);
-    dispatch(resetForm());
-    setTaughtCourses([]);
-    setNewCourses([]);
-    setCourseMaterials([]);
+    console.log("Form submitted:", rows);
   };
 
-
   return (
-    <div className="Appraisal_container">
+    <div className="AppraisalForm_container">
       <form onSubmit={handleSubmit}>
-        <Stack>
-          {/* Section 1: Name, Designation */}
-          <Grid>
-            <Grid.Col span={6}>
-              <TextInput
-                label="Name"
-                placeholder="Name"
-                icon={<User size={20} />}
-                value={formData.name}
+        {/* Section 1: Name, Designation, Discipline */}
+        <div className="grid-row">
+          <div className="grid-col">
+            <label className="input-label" htmlFor="name">
+              Name
+            </label>
+            <div className="input-wrapper">
+              <User size={20} />
+              <input
+                type="text"
+                id="name"
                 name="name"
-                onChange={handleChange}
+                placeholder="Name"
+                className="input"
                 required
               />
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <TextInput
-                label="Designation"
-                placeholder="Designation"
-                icon={<Tag size={20} />}
-                value={formData.designation}
+            </div>
+          </div>
+          <div className="grid-col">
+            <label className="input-label" htmlFor="designation">
+              Designation
+            </label>
+            <div className="input-wrapper">
+              <Tag size={20} />
+              <input
+                type="text"
+                id="designation"
                 name="designation"
-                onChange={handleChange}
+                placeholder="Designation"
+                className="input"
                 required
               />
-            </Grid.Col>
-          </Grid>
-
-          {/* Section 2: Department */}
-          <Grid>
-            <Grid.Col span={12}>
-              <TextInput
-                label="Department"
-                placeholder="Discipline"
-                icon={<Building size={20} />}
-                value={formData.discipline}
+            </div>
+          </div>
+          <div className="grid-col">
+            <label className="input-label" htmlFor="discipline">
+              Discipline
+            </label>
+            <div className="input-wrapper">
+              <Tag size={20} />
+              <input
+                type="text"
+                id="discipline"
                 name="discipline"
-                onChange={handleChange}
+                placeholder="Discipline"
+                className="input"
                 required
               />
-            </Grid.Col>
-          </Grid>
-
-         {/* Courses taught at UG/PG level */}
-<label>Courses taught at UG/PG level:</label>
-<Button onClick={addTaughtCourse}>Add Course</Button>
-<table>
-  <thead>
-    <tr>
-      <th>Semester</th>
-      <th>Course Name</th>
-      <th>Lecture Hours</th>
-      <th>Tutorial Hours</th>
-      <th>Lab Hours</th>
-      <th>Registered Students</th>
-      <th>Instructor Info</th>
-    </tr>
-  </thead>
-  <tbody>
-    {taughtCourses.map((course, index) => (
-      <tr key={index}>
-        <td>
-          <TextInput
-            placeholder="Semester"
-            value={course.semester}
-            name="semester"
-            onChange={(e) => handleTaughtCourseChange(index, e)}
-            required
-          />
-        </td>
-        <td>
-          <TextInput
-            placeholder="Course Name"
-            value={course.coursename}
-            name="coursename"
-            onChange={(e) => handleTaughtCourseChange(index, e)}
-            required
-          />
-        </td>
-        <td>
-          <NumberInput
-            placeholder="Lecture Hours"
-            value={course.lecHrs}
-            name="lecHrs"
-            onChange={(value) => handleTaughtCourseChange(index, { target: { name: "lecHrs", value } })}
-            required
-          />
-        </td>
-        <td>
-          <NumberInput
-            placeholder="Tutorial Hours"
-            value={course.tutHrs}
-            name="tutHrs"
-            onChange={(value) => handleTaughtCourseChange(index, { target: { name: "tutHrs", value } })}
-            required
-          />
-        </td>
-        <td>
-          <NumberInput
-            placeholder="Lab Hours"
-            value={course.labHrs}
-            name="labHrs"
-            onChange={(value) => handleTaughtCourseChange(index, { target: { name: "labHrs", value } })}
-            required
-          />
-        </td>
-        <td>
-          <NumberInput
-            placeholder="Number of Students"
-            value={course.regCount}
-            name="regCount"
-            onChange={(value) => handleTaughtCourseChange(index, { target: { name: "regCount", value } })}
-            required
-          />
-        </td>
-        <td>
-          <TextInput
-            placeholder="Instructor Info"
-            value={course.instructorInfo}
-            name="instructorInfo"
-            onChange={(e) => handleTaughtCourseChange(index, e)}
-            required
-          />
-        </td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-
-
-         {/* New Courses/labs introduced and taught */}
-<label>New Courses/labs introduced and taught:</label>
-<Button onClick={addNewCourse}>Add New Course</Button>
-<table>
-  <thead>
-    <tr>
-      <th>Course Name</th>
-      <th>Course Number</th>
-      <th>UG/PG</th>
-      <th>Year of Offering</th>
-      <th>Semester</th>
-    </tr>
-  </thead>
-  <tbody>
-    {newCourses.map((course, index) => (
-      <tr key={index}>
-        <td>
-          <TextInput
-            placeholder="Course Name"
-            value={course.newCourseName}
-            name="newCourseName"
-            onChange={(e) => handleNewCourseChange(index, e)}
-            required
-          />
-        </td>
-        <td>
-          <TextInput
-            placeholder="Course Number"
-            value={course.newCourseNumber}
-            name="newCourseNumber"
-            onChange={(e) => handleNewCourseChange(index, e)}
-            required
-          />
-        </td>
-        <td>
-          <Select
-            data={["UG", "PG"]}
-            placeholder="UG/PG"
-            value={course.newCourseType}
-            onChange={(value) => handleCourseMaterialChange(index, "newCourseType", value)}
-            required
-          />
-        </td>
-        <td>
-          <TextInput
-            placeholder="Year"
-            value={course.yearOfOffering}
-            name="yearOfOffering"
-            onChange={(e) => handleNewCourseChange(index, e)}
-            required
-          />
-        </td>
-        <td>
-          <TextInput
-            placeholder="Semester"
-            value={course.semesterOfOffering}
-            name="semesterOfOffering"
-            onChange={(e) => handleNewCourseChange(index, e)}
-            required
-          />
-        </td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-
-
-         {/* New Course Material Developed/instructional software developed */}
-<label>New Course Material Developed/instructional software developed:</label>
-<Button onClick={addCourseMaterial}>Add Course Material</Button>
-<table>
-  <thead>
-    <tr>
-      <th>Course Name</th>
-      <th>Course Number</th>
-      <th>UG/PG</th>
-      <th>Type of Activity</th>
-      <th>Platform</th>
-    </tr>
-  </thead>
-  <tbody>
-    {courseMaterials.map((coursematerial, index) => (
-      <tr key={index}>
-        <td>
-          <TextInput
-            placeholder="Course Name"
-            value={coursematerial.courseMaterialName}
-            onChange={(e) => handleCourseMaterialChange(index, "courseName", e.target.value)}
-            required
-          />
-        </td>
-        <td>
-          <TextInput
-            placeholder="Course Number"
-            value={coursematerial.courseMaterialNumber}
-            onChange={(e) => handleCourseMaterialChange(index, "courseMaterialNumber", e.target.value)}
-            required
-          />
-        </td>
-        <td>
-          <Select
-            data={["UG", "PG"]}
-            placeholder="UG/PG"
-            value={coursematerial.courseMaterialType}
-            onChange={(value) => handleCourseMaterialChange(index, "courseMaterialType", value)}
-            required
-          />
-        </td>
-        <td>
-          <TextInput
-            placeholder="Activity Type"
-            value={coursematerial.activityType}
-            onChange={(e) => handleCourseMaterialChange(index, "activityType", e.target.value)}
-            required
-          />
-        </td>
-        <td>
-          <Select
-            data={["Web", "Public"]}
-            placeholder="Platform"
-            value={coursematerial.platform}
-            onChange={(value) => handleCourseMaterialChange(index, "platform", value)}
-            required
-          />
-        </td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-          
-
-         {/* Thesis/Research Supervision */}
-<label>Thesis/Research Supervision:</label>
-<Button onClick={addThesisSupervision}>Add Supervision</Button>
-<table>
-  <thead>
-    <tr>
-      <th>Name of Student (M.Tech/PhD)</th>
-      <th>Title of Thesis/Topic</th>
-      <th>Year and Semester of First Registration</th>
-      <th>Completed/Submitted/In Progress</th>
-      <th>Co-Supervisors (if any)</th>
-    </tr>
-  </thead>
-  <tbody>
-    {thesisSupervisions.map((supervision, index) => (
-      <tr key={index}>
-        <td>
-          <TextInput
-            placeholder="Name of Student"
-            value={supervision.studentName}
-            name="studentName"
-            onChange={(e) => handleThesisSupervisionChange(index, e)}
-            required
-          />
-        </td>
-        <td>
-          <TextInput
-            placeholder="Thesis Title"
-            value={supervision.thesisTitle}
-            name="thesisTitle"
-            onChange={(e) => handleThesisSupervisionChange(index, e)}
-            required
-          />
-        </td>
-        <td>
-          <TextInput
-            placeholder="Year and Semester"
-            value={supervision.registrationYear}
-            name="registrationYear"
-            onChange={(e) => handleThesisSupervisionChange(index, e)}
-            required
-          />
-        </td>
-        <td>
-          <Select
-            data={["Completed", "Submitted", "In Progress"]}
-            value={supervision.status}
-            onChange={(value) => handleThesisSupervisionChange(index, { target: { name: "status", value } })}
-            required
-          />
-        </td>
-        <td>
-          <TextInput
-            placeholder="Co-Supervisors"
-            value={supervision.coSupervisors}
-            name="coSupervisors"
-            onChange={(e) => handleThesisSupervisionChange(index, e)}
-          />
-        </td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-{/* Other Research Elements */}
-<label>Other Research Elements (such as development of research facilities, patents, etc.):</label>
-<Button onClick={addResearchElement}>Add Research Element</Button>
-<table>
-  <thead>
-    <tr>
-      <th>Description of Element</th>
-      <th>Type (Patent/Research Facility)</th>
-      <th>Status (Applied/Granted)</th>
-      <th>Transfer of Technology</th>
-    </tr>
-  </thead>
-  <tbody>
-    {researchElements.map((element, index) => (
-      <tr key={index}>
-        <td>
-          <TextInput
-            placeholder="Description"
-            value={element.description}
-            name="description"
-            onChange={(e) => handleResearchElementChange(index, e)}
-            required
-          />
-        </td>
-        <td>
-          <Select
-            data={["Patent", "Research Facility"]}
-            value={element.type}
-            onChange={(value) => handleResearchElementChange(index, { target: { name: "type", value } })}
-            required
-          />
-        </td>
-        <td>
-          <Select
-            data={["Applied", "Granted"]}
-            value={element.status}
-            onChange={(value) => handleResearchElementChange(index, { target: { name: "status", value } })}
-            required
-          />
-        </td>
-        <td>
-          <TextInput
-            placeholder="Transfer of Technology"
-            value={element.transferTechnology}
-            name="transferTechnology"
-            onChange={(e) => handleResearchElementChange(index, e)}
-          />
-        </td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-
-          
-
-          {/* Submit Button */}
-          <Button type="submit">Submit</Button>
-        </Stack>
+            </div>
+          </div>
+        </div>
+        {/* Section 2: Specific field of knowledge, Current Research Interests */}
+        <div className="grid-row">
+          <div className="grid-col">
+            <label className="input-label" htmlFor="knowledge">
+              Specific field of knowledge
+            </label>
+            <div className="input-wrapper">
+              <ClipboardText size={20} />
+              <input
+                type="text"
+                id="knowledge"
+                name="knowledge"
+                placeholder="Specific field of knowledge"
+                className="input"
+                required
+              />
+            </div>
+          </div>
+          <div className="grid-col">
+            <label className="input-label" htmlFor="researchInterests">
+              Current Research Interests
+            </label>
+            <div className="input-wrapper">
+              <ClipboardText size={20} />
+              <input
+                type="text"
+                id="researchInterests"
+                name="researchInterests"
+                placeholder="Current Research Interests"
+                className="input"
+                required
+              />
+            </div>
+          </div>
+        </div>
+        {/* Section 3: Instruction Element */}
+        <div className="section-divider">
+          <hr className="divider-line" />
+          <h3 className="section-heading">Instruction Element</h3>
+        </div>
+        <div className="section-title">
+          <h4 className="section-title">
+            Please give information pertaining to the period of appraisal as per
+            the format given below:
+          </h4>
+        </div>
+        <div className="section-subtitle">
+          <h5 className="section-subtitle">1. Teaching</h5>
+        </div>
+        <div className="section-subsubtitle">
+          <h6 className="section-subsubtitle">
+            1.1 Courses taught at UG/PG level
+          </h6>
+        </div>
+        {rows.map((row, index) => (
+          <div key={index} className="grid-row">
+            <div className="grid-col">
+              <label className="input-label" htmlFor={`semester_${index}`}>
+                Semester
+              </label>
+              <div className="input-wrapper">
+                <input
+                  type="text"
+                  id={`semester_${index}`}
+                  name="semester"
+                  placeholder="Semester"
+                  value={row.semester}
+                  onChange={(e) => handleChange(index, e)}
+                  className="input"
+                  required
+                />
+              </div>
+            </div>
+            <div className="grid-col">
+              <label
+                className="input-label"
+                htmlFor={`courseNameNumber_${index}`}
+              >
+                Course Name and Number
+              </label>
+              <div className="input-wrapper">
+                <input
+                  type="text"
+                  id={`courseNameNumber_${index}`}
+                  name="courseNameNumber"
+                  placeholder="Course Name and Number"
+                  value={row.courseNameNumber}
+                  onChange={(e) => handleChange(index, e)}
+                  className="input"
+                  required
+                />
+              </div>
+            </div>
+            <div className="grid-col">
+              <label className="input-label" htmlFor={`lectureHrs_${index}`}>
+                Lecture Hrs/wk
+              </label>
+              <div className="input-wrapper">
+                <input
+                  type="text"
+                  id={`lectureHrs_${index}`}
+                  name="lectureHrs"
+                  placeholder="Lecture Hrs/wk"
+                  value={row.lectureHrs}
+                  onChange={(e) => handleChange(index, e)}
+                  className="input"
+                  required
+                />
+              </div>
+            </div>
+            <div className="grid-col">
+              <label className="input-label" htmlFor={`tutorialHrs_${index}`}>
+                Tutorial Hrs/wk
+              </label>
+              <div className="input-wrapper">
+                <input
+                  type="text"
+                  id={`tutorialHrs_${index}`}
+                  name="tutorialHrs"
+                  placeholder="Tutorial Hrs/wk"
+                  value={row.tutorialHrs}
+                  onChange={(e) => handleChange(index, e)}
+                  className="input"
+                  required
+                />
+              </div>
+            </div>
+            <div className="grid-col">
+              <label className="input-label" htmlFor={`labHrs_${index}`}>
+                Lab Hrs/wk
+              </label>
+              <div className="input-wrapper">
+                <input
+                  type="text"
+                  id={`labHrs_${index}`}
+                  name="labHrs"
+                  placeholder="Lab Hrs/wk"
+                  value={row.labHrs}
+                  onChange={(e) => handleChange(index, e)}
+                  className="input"
+                  required
+                />
+              </div>
+            </div>
+            <div className="grid-col">
+              <label
+                className="input-label"
+                htmlFor={`registeredStudents_${index}`}
+              >
+                No of Registered Students
+              </label>
+              <div className="input-wrapper">
+                <input
+                  type="text"
+                  id={`registeredStudents_${index}`}
+                  name="registeredStudents"
+                  placeholder="No of Registered Students"
+                  value={row.registeredStudents}
+                  onChange={(e) => handleChange(index, e)}
+                  className="input"
+                  required
+                />
+              </div>
+            </div>
+            <div className="grid-col">
+              <label className="input-label" htmlFor={`coInstructor_${index}`}>
+                Co-Instructor/ Instructor In charge (if any)
+              </label>
+              <div className="input-wrapper">
+                <input
+                  type="text"
+                  id={`coInstructor_${index}`}
+                  name="coInstructor"
+                  placeholder="Co-Instructor/ Instructor In charge (if any)"
+                  value={row.coInstructor}
+                  onChange={(e) => handleChange(index, e)}
+                  className="input"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        ))}
+        <Button onClick={handleAddRow} style={{ marginTop: "20px" }}>
+          Add Row
+        </Button>
+        <div className="section-subsubtitle">
+          <h6 className="section-subsubtitle">
+            1.2 New Courses/ laboratory experiments introduced and taught
+          </h6>
+        </div>
+        <div className="grid-row">
+          <div className="grid-col">
+            <label className="input-label" htmlFor="newCourseName">
+              Course Name and Number
+            </label>
+            <div className="input-wrapper">
+              <input
+                type="text"
+                id="newCourseName"
+                name="newCourseName"
+                placeholder="Course Name and Number"
+                className="input"
+                required
+              />
+            </div>
+          </div>
+          <div className="grid-col">
+            <label className="input-label" htmlFor="courseLevel">
+              UG/PG
+            </label>
+            <div className="input-wrapper">
+              <input
+                type="text"
+                id="courseLevel"
+                name="courseLevel"
+                placeholder="UG/PG"
+                className="input"
+                required
+              />
+            </div>
+          </div>
+          <div className="grid-col">
+            <label className="input-label" htmlFor="firstOffering">
+              Year and Semester of first offering
+            </label>
+            <div className="input-wrapper">
+              <input
+                type="text"
+                id="firstOffering"
+                name="firstOffering"
+                placeholder="Year and Semester of first offering"
+                className="input"
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <div className="section-subsubtitle">
+          <h6 className="section-subsubtitle">
+            1.3 New course material developed/instructional software developed
+            (should be made available on the web / public domain and may be
+            under GIAN/NPTEL/SWAYAM etc)
+          </h6>
+        </div>
+        <div className="grid-row">
+          <div className="grid-col">
+            <label className="input-label" htmlFor="courseMaterial">
+              Course Material
+            </label>
+            <div className="input-wrapper">
+              <input
+                type="text"
+                id="courseMaterial"
+                name="courseMaterial"
+                placeholder="Course Material"
+                className="input"
+                required
+              />
+            </div>
+          </div>
+          <div className="grid-col">
+            <label className="input-label" htmlFor="softwareDeveloped">
+              Instructional Software Developed
+            </label>
+            <div className="input-wrapper">
+              <input
+                type="text"
+                id="softwareDeveloped"
+                name="softwareDeveloped"
+                placeholder="Instructional Software Developed"
+                className="input"
+                required
+              />
+            </div>
+          </div>
+        </div>
       </form>
     </div>
   );
-};
+}
 
 export default AppraisalForm;
