@@ -18,7 +18,7 @@ import {
 } from "@phosphor-icons/react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateForm, resetForm } from "../../../../redux/formSlice";
-import "./LeaveForm.css";
+import "./LeaveFormView.css";
 
 const LeaveForm = () => {
   const formData = useSelector((state) => state.form);
