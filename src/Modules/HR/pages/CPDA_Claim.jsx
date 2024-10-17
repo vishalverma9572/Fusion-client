@@ -8,6 +8,7 @@ import CPDA_ClaimForm from "./CPDA_ClaimPageComp/CPDA_ClaimForm";
 import CPDA_ClaimRequests from "./CPDA_ClaimPageComp/CPDA_ClaimRequests";
 import CPDA_ClaimInbox from "./CPDA_ClaimPageComp/CPDA_ClaimInbox";
 import CPDA_ClaimArchive from "./CPDA_ClaimPageComp/CPDA_ClaimArchive";
+import HrBreadcrumbs from "../components/HrBreadcrumbs";
 
 // Define paths for each tab
 const tabItems = [
@@ -70,15 +71,15 @@ function CPDA_Claim() {
     };
     fetchCPDA_ClaimData();
   }, []);
+  const exampleItems = [
+    { title: "Home", path: "/" },
+    { title: "Human Resources", path: "/hr" },
+    { title: "CPDA Claim Management", path: "/hr/cpda_claim" },
+  ];
 
   return (
     <>
-      <CustomBreadcrumbs
-        items={[
-          { title: "Home", href: "/" },
-          { title: "CPDA_Claim Management", href: "/CPDA_Claim" },
-        ]}
-      />
+      <HrBreadcrumbs items={exampleItems} />
       <Flex justify="flex-start" align="center" mt="lg">
         <Button
           style={{ marginRight: "20px" }}

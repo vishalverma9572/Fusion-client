@@ -8,6 +8,7 @@ import AppraisalForm from "./AppraisalPageComp/AppraisalForm";
 import AppraisalRequests from "./AppraisalPageComp/AppraisalRequests";
 import AppraisalInbox from "./AppraisalPageComp/AppraisalInbox";
 import AppraisalArchive from "./AppraisalPageComp/AppraisalArchive";
+import HrBreadcrumbs from "../components/HrBreadcrumbs";
 
 // Define paths for each tab
 const tabItems = [
@@ -28,6 +29,11 @@ function Appraisal() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  const exampleItems = [
+    { title: "Home", path: "/" },
+    { title: "Human Resources", path: "/hr" },
+    { title: "Appraisal Management", path: "/hr/appraisal" },
+  ];
 
   // Update active tab based on current URL
   useEffect(() => {
@@ -73,12 +79,7 @@ function Appraisal() {
 
   return (
     <>
-      <CustomBreadcrumbs
-        items={[
-          { title: "Home", href: "/" },
-          { title: "Appraisal Management", href: "/Appraisal" },
-        ]}
-      />
+      <HrBreadcrumbs items={exampleItems} />
       <Flex justify="flex-start" align="center" mt="lg">
         <Button
           style={{ marginRight: "20px" }}

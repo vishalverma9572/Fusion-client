@@ -172,6 +172,7 @@ function CPDA_ClaimForm() {
                 value={formData.purpose}
                 onChange={handleChange}
                 className="input"
+                style={{ width: "60%" }}
                 required
               />
             </div>

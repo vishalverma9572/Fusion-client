@@ -8,6 +8,7 @@ import LeaveForm from "./LeavePageComp/LeaveForm";
 import LeaveArchive from "./LeavePageComp/LeaveArchive";
 import LeaveInbox from "./LeavePageComp/LeaveInbox";
 import LeaveRequests from "./LeavePageComp/LeaveRequests";
+import HrBreadcrumbs from "../components/HrBreadcrumbs";
 
 const tabItems = [
   { title: "Leave Form", path: "/hr/leave/leaveform" },
@@ -27,7 +28,11 @@ function Leave() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
+  const exampleItems = [
+    { title: "Home", path: "/" },
+    { title: "Human Resources", path: "/hr" },
+    { title: "Leave Management", path: "/hr/leave" },
+  ];
   // Set active tab based on the current URL
   useEffect(() => {
     const currentPath = location.pathname;
@@ -72,12 +77,7 @@ function Leave() {
 
   return (
     <>
-      <CustomBreadcrumbs
-        items={[
-          { title: "Home", href: "/" },
-          { title: "Leave Management", href: "/leave" },
-        ]}
-      />
+      <HrBreadcrumbs items={exampleItems} />
       <Flex justify="flex-start" align="center" mt="lg">
         <Button
           style={{ marginRight: "20px" }}

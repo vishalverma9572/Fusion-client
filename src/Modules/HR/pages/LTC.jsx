@@ -2,12 +2,13 @@ import React, { useEffect, useState, useRef } from "react";
 import { Tabs, Button, Flex, Text, Loader, Container } from "@mantine/core";
 import { CaretCircleLeft, CaretCircleRight } from "@phosphor-icons/react";
 import { useNavigate, useLocation } from "react-router-dom"; // Import these hooks
-import CustomBreadcrumbs from "../../../components/Breadcrumbs";
+
 import classes from "./LTCPage.module.css";
 import LTCForm from "./LTCPageComp/LTCForm";
 import LTCRequests from "./LTCPageComp/LTCRequests";
 import LTCInbox from "./LTCPageComp/LTCInbox";
 import LTCArchive from "./LTCPageComp/LTCArchive";
+import HrBreadcrumbs from "../components/HrBreadcrumbs";
 
 // Define paths for each tab
 const tabItems = [
@@ -28,6 +29,12 @@ function LTC() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const exampleItems = [
+    { title: "Home", path: "/" },
+    { title: "Human Resources", path: "/hr" },
+    { title: "LTC", path: "/hr/ltc" },
+  ];
 
   // Update active tab based on current URL
   useEffect(() => {
@@ -73,12 +80,7 @@ function LTC() {
 
   return (
     <>
-      <CustomBreadcrumbs
-        items={[
-          { title: "Home", href: "/" },
-          { title: "LTC Management", href: "/LTC" },
-        ]}
-      />
+      <HrBreadcrumbs items={exampleItems} />
       <Flex justify="flex-start" align="center" mt="lg">
         <Button
           style={{ marginRight: "20px" }}

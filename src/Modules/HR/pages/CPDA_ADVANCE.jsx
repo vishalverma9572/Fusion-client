@@ -8,6 +8,7 @@ import Cpda_ADVANCEForm from "./CPDA_ADVANCEPageComp/CPDA_ADVANCEForm";
 import Cpda_ADVANCERequests from "./CPDA_ADVANCEPageComp/Cpda_ADVANCERequests";
 import Cpda_ADVANCEInbox from "./CPDA_ADVANCEPageComp/Cpda_ADVANCEInbox";
 import Cpda_ADVANCEArchive from "./CPDA_ADVANCEPageComp/Cpda_ADVANCEArchive";
+import HrBreadcrumbs from "../components/HrBreadcrumbs";
 
 // Define paths for each tab
 const tabItems = [
@@ -29,6 +30,11 @@ function CPDA_ADVANCE() {
     window.scrollTo(0, 0);
   }, []);
 
+  const exampleItems = [
+    { title: "Home", path: "/" },
+    { title: "Human Resources", path: "/hr" },
+    { title: "CPDA Adv Management", path: "/hr/cpda_adv" },
+  ];
   // Update active tab based on current URL
   useEffect(() => {
     const currentPath = location.pathname;
@@ -74,12 +80,8 @@ function CPDA_ADVANCE() {
 
   return (
     <>
-      <CustomBreadcrumbs
-        items={[
-          { title: "Home", href: "/" },
-          { title: "CPDA_ADVANCE Management", href: "/cpda_advance" },
-        ]}
-      />
+      <HrBreadcrumbs items={exampleItems} />
+
       <Flex justify="flex-start" align="center" mt="lg">
         <Button
           style={{ marginRight: "20px" }}

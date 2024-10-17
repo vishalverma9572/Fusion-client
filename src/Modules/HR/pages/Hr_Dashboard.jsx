@@ -18,6 +18,7 @@ import {
 import PerformanceCard from "../components/FormComponent/PerformanceCard";
 import classes from "./Hr_Dashboard.module.css";
 import { HeroBanner } from "../components/HeroBanner";
+import HrBreadcrumbs from "../components/HrBreadcrumbs";
 
 const mockdata = [
   {
@@ -51,7 +52,10 @@ const mockdata = [
     link: "/hr/cpda_claim",
   },
 ];
-
+const exampleItems = [
+  { title: "Home", path: "/" },
+  { title: "Human Resources", path: "/hr" },
+];
 const Hr_Dashboard = () => {
   const features = mockdata.map((feature) => (
     <PerformanceCard
@@ -65,6 +69,7 @@ const Hr_Dashboard = () => {
 
   return (
     <div size="lg" py="xl" className={classes.hrdashboardContainer}>
+      <HrBreadcrumbs items={exampleItems} />
       <HeroBanner />
       <SimpleGrid
         cols={{ base: 1, md: 3 }}
