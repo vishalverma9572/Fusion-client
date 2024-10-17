@@ -1,14 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
-import {
-  Tabs,
-  Button,
-  Flex,
-  Text,
-  Loader,
-  Container,
-  Grid,
-} from "@mantine/core";
+import { Tabs, Button, Flex, Text, Loader, Container } from "@mantine/core";
 import { CaretCircleLeft, CaretCircleRight } from "@phosphor-icons/react";
+import { useNavigate, useLocation } from "react-router-dom"; // Import these hooks
 import CustomBreadcrumbs from "../../../components/Breadcrumbs";
 import classes from "./LTCPage.module.css";
 import LTCForm from "./LTCPageComp/LTCForm";
@@ -16,30 +9,49 @@ import LTCRequests from "./LTCPageComp/LTCRequests";
 import LTCInbox from "./LTCPageComp/LTCInbox";
 import LTCArchive from "./LTCPageComp/LTCArchive";
 
+// Define paths for each tab
 const tabItems = [
-  { title: "LTC Form" },
-  { title: "LTC Requests" },
-  { title: "LTC Inbox" },
-  { title: "LTC Archive" },
+  { title: "LTC Form", path: "/hr/ltc/ltcform" },
+  { title: "LTC Requests", path: "/hr/ltc/ltcrequests" },
+  { title: "LTC Inbox", path: "/hr/ltc/ltcinbox" },
+  { title: "LTC Archive", path: "/hr/ltc/ltcarchive" },
 ];
 
 function LTC() {
   const [activeTab, setActiveTab] = useState("0");
   const [loading, setLoading] = useState(false);
   const tabsListRef = useRef(null);
+  const navigate = useNavigate(); // Initialize navigate
+  const location = useLocation(); // Initialize location
 
-  const handleTabChange = (direction) => {
+  // Update active tab based on current URL
+  useEffect(() => {
+    const currentPath = location.pathname;
+    const matchingTab = tabItems.findIndex((tab) =>
+      currentPath.includes(tab.path.split("/").pop()),
+    );
+    setActiveTab(matchingTab !== -1 ? String(matchingTab) : "0");
+  }, [location.pathname]);
+
+  // Function to handle tab change by clicking on a tab
+  const handleTabChange = (index) => {
+    setActiveTab(index);
+    navigate(tabItems[index].path); // Update the URL when the tab changes
+  };
+
+  const handleButtonChange = (direction) => {
     const newIndex =
       direction === "next"
         ? Math.min(+activeTab + 1, tabItems.length - 1)
         : Math.max(+activeTab - 1, 0);
-    setActiveTab(String(newIndex));
+    handleTabChange(String(newIndex)); // Use handleTabChange to update tab and URL
     tabsListRef.current.scrollBy({
       left: direction === "next" ? 50 : -50,
       behavior: "smooth",
     });
   };
 
+  // Fetch any necessary LTC data
   useEffect(() => {
     const fetchLTCData = async () => {
       setLoading(true);
@@ -65,7 +77,7 @@ function LTC() {
       <Flex justify="flex-start" align="center" mt="lg">
         <Button
           style={{ marginRight: "20px" }}
-          onClick={() => handleTabChange("prev")}
+          onClick={() => handleButtonChange("prev")}
           variant="default"
           p={0}
         >
@@ -89,6 +101,7 @@ function LTC() {
                       ? classes.fusionActiveRecentTab
                       : ""
                   }
+                  onClick={() => handleTabChange(String(index))} // Update onClick to change tab and URL
                 >
                   <Text>{item.title}</Text>
                 </Tabs.Tab>
@@ -98,7 +111,7 @@ function LTC() {
         </div>
         <Button
           style={{ marginLeft: "150px" }}
-          onClick={() => handleTabChange("next")}
+          onClick={() => handleButtonChange("next")}
           variant="default"
           p={0}
         >

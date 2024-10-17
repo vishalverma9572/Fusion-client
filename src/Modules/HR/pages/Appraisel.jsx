@@ -1,14 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
-import {
-  Tabs,
-  Button,
-  Flex,
-  Text,
-  Loader,
-  Container,
-  Grid,
-} from "@mantine/core";
+import { Tabs, Button, Flex, Text, Loader, Container } from "@mantine/core";
 import { CaretCircleLeft, CaretCircleRight } from "@phosphor-icons/react";
+import { useNavigate, useLocation } from "react-router-dom"; // Import these hooks
 import CustomBreadcrumbs from "../../../components/Breadcrumbs";
 import classes from "./AppraisalPage.module.css";
 import AppraisalForm from "./AppraisalPageComp/AppraisalForm";
@@ -16,30 +9,49 @@ import AppraisalRequests from "./AppraisalPageComp/AppraisalRequests";
 import AppraisalInbox from "./AppraisalPageComp/AppraisalInbox";
 import AppraisalArchive from "./AppraisalPageComp/AppraisalArchive";
 
+// Define paths for each tab
 const tabItems = [
-  { title: "Appraisal Form" },
-  { title: "Appraisal Requests" },
-  { title: "Appraisal Inbox" },
-  { title: "Appraisal Archive" },
+  { title: "Appraisal Form", path: "/hr/appraisal/appraisal_form" },
+  { title: "Appraisal Requests", path: "/hr/appraisal/appraisal_requests" },
+  { title: "Appraisal Inbox", path: "/hr/appraisal/appraisal_inbox" },
+  { title: "Appraisal Archive", path: "/hr/appraisal/appraisal_archive" },
 ];
 
 function Appraisal() {
   const [activeTab, setActiveTab] = useState("0");
   const [loading, setLoading] = useState(false);
   const tabsListRef = useRef(null);
+  const navigate = useNavigate(); // Initialize navigate
+  const location = useLocation(); // Initialize location
 
-  const handleTabChange = (direction) => {
+  // Update active tab based on current URL
+  useEffect(() => {
+    const currentPath = location.pathname;
+    const matchingTab = tabItems.findIndex((tab) =>
+      currentPath.includes(tab.path.split("/").pop()),
+    );
+    setActiveTab(matchingTab !== -1 ? String(matchingTab) : "0");
+  }, [location.pathname]);
+
+  // Function to handle tab change by clicking on a tab
+  const handleTabChange = (index) => {
+    setActiveTab(index);
+    navigate(tabItems[index].path); // Update the URL when the tab changes
+  };
+
+  const handleButtonChange = (direction) => {
     const newIndex =
       direction === "next"
         ? Math.min(+activeTab + 1, tabItems.length - 1)
         : Math.max(+activeTab - 1, 0);
-    setActiveTab(String(newIndex));
+    handleTabChange(String(newIndex)); // Use handleTabChange to update tab and URL
     tabsListRef.current.scrollBy({
       left: direction === "next" ? 50 : -50,
       behavior: "smooth",
     });
   };
 
+  // Fetch any necessary Appraisal data
   useEffect(() => {
     const fetchAppraisalData = async () => {
       setLoading(true);
@@ -65,7 +77,7 @@ function Appraisal() {
       <Flex justify="flex-start" align="center" mt="lg">
         <Button
           style={{ marginRight: "20px" }}
-          onClick={() => handleTabChange("prev")}
+          onClick={() => handleButtonChange("prev")}
           variant="default"
           p={0}
         >
@@ -89,6 +101,7 @@ function Appraisal() {
                       ? classes.fusionActiveRecentTab
                       : ""
                   }
+                  onClick={() => handleTabChange(String(index))} // Update onClick to change tab and URL
                 >
                   <Text>{item.title}</Text>
                 </Tabs.Tab>
@@ -98,7 +111,7 @@ function Appraisal() {
         </div>
         <Button
           style={{ marginLeft: "320px" }}
-          onClick={() => handleTabChange("next")}
+          onClick={() => handleButtonChange("next")}
           variant="default"
           p={0}
         >
