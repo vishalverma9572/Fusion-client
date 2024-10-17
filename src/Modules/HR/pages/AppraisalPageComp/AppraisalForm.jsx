@@ -20,8 +20,12 @@ import {
   IdentificationCard,
   Calendar,
   ClipboardText,
+  CurrencyDollar,
+  FileText,
+  CheckCircle,
+  PaperPlaneRight,
 } from "@phosphor-icons/react";
-import "./AppraisalForm.module.css";
+import classes from "./AppraisalForm.module.css";
 
 function AppraisalForm() {
   const [rows, setRows] = useState([
@@ -60,7 +64,7 @@ function AppraisalForm() {
   };
 
   return (
-    <div className="AppraisalForm_container">
+    <div className={classes.AppraisalForm_container}>
       <form onSubmit={handleSubmit}>
         {/* Section 1: Name, Designation, Discipline */}
         <div className="grid-row">
@@ -390,6 +394,53 @@ function AppraisalForm() {
             </div>
           </div>
         </div>
+        {/* Footer */}
+        {/* <div className="footer-section">
+          <div className="input-wrapper">
+            <User size={20} />
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={formData.username}
+              onChange={handleChange}
+              className="username-input"
+              required
+            />
+          </div>
+          <div className="input-wrapper">
+            <Tag size={20} />
+            <input
+              type="text"
+              name="designationFooter"
+              placeholder="Designation"
+              value={formData.designationFooter}
+              onChange={handleChange}
+              className="designation-input"
+              required
+            />
+          </div>
+          <Button
+            leftIcon={<CheckCircle size={25} />}
+            style={{ marginLeft: "50px", paddingRight: "15px" }}
+            className="button"
+          >
+            <CheckCircle size={18} /> &nbsp; Check
+          </Button>
+          <Button
+            type="submit"
+            rightIcon={<PaperPlaneRight size={20} />}
+            style={{
+              marginLeft: "350px",
+              width: "150px",
+              paddingRight: "15px",
+              borderRadius: "5px",
+            }}
+            className="button"
+          >
+            <PaperPlaneRight size={20} /> &nbsp; Submit
+          </Button>
+        </div> */}
       </form>
     </div>
   );

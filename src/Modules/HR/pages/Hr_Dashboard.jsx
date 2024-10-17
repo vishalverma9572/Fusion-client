@@ -40,16 +40,16 @@ const mockdata = [
     link: "/hr/ltc",
   },
   {
-    title: "Appraisal",
-    description: "Performance appraisal management.",
-    icon: User,
-    link: "/hr/appraisal",
-  },
-  {
     title: "CPDA Claim",
     description: "Submit and track CPDA claims.",
     icon: FilePlus,
     link: "/hr/cpda_claim",
+  },
+  {
+    title: "Appraisal",
+    description: "Performance appraisal management.",
+    icon: User,
+    link: "/hr/appraisal",
   },
 ];
 const exampleItems = [
