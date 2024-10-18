@@ -189,10 +189,12 @@
 .leave_button-row {
     display: flex;
     justify-content: space-between;
-    border-radius: 12px;
-    padding: 10px 10px;
+    /* border-radius: 12px; */
+    border-radius: 32px 0px 0px 0px;
+    padding: 20px 20px;
     background-color: #9fa7bb20;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
+    margin-right: -25px;
 }
 
 .leave_buttonapprove {
