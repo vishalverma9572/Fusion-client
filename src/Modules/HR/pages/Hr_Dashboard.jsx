@@ -53,7 +53,7 @@ const mockdata = [
   },
 ];
 const exampleItems = [
-  { title: "Home", path: "/" },
+  { title: "Home", path: "/dashboard" },
   { title: "Human Resources", path: "/hr" },
 ];
 const Hr_Dashboard = () => {

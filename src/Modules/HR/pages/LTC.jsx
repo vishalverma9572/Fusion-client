@@ -31,7 +31,7 @@ function LTC() {
   }, []);
 
   const exampleItems = [
-    { title: "Home", path: "/" },
+    { title: "Home", path: "/dashboard" },
     { title: "Human Resources", path: "/hr" },
     { title: "LTC", path: "/hr/ltc" },
   ];

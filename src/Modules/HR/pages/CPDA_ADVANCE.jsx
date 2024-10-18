@@ -31,7 +31,7 @@ function CPDA_ADVANCE() {
   }, []);
 
   const exampleItems = [
-    { title: "Home", path: "/" },
+    { title: "Home", path: "/dashboard" },
     { title: "Human Resources", path: "/hr" },
     { title: "CPDA Adv Management", path: "/hr/cpda_adv" },
   ];

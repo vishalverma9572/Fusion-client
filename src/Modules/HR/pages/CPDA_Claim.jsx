@@ -72,7 +72,7 @@ function CPDA_Claim() {
     fetchCPDA_ClaimData();
   }, []);
   const exampleItems = [
-    { title: "Home", path: "/" },
+    { title: "Home", path: "/dashboard" },
     { title: "Human Resources", path: "/hr" },
     { title: "CPDA Claim Management", path: "/hr/cpda_claim" },
   ];
