@@ -41,7 +41,7 @@ const LeaveFormView = () => {
     dispatch(resetForm());
   };
   const exampleItems = [
-    { title: "Home", path: "/" },
+    { title: "Home", path: "/dashboard" },
     { title: "Human Resources", path: "/hr" },
     { title: "Leave Management", path: "/hr/leave" },
     { title: "Leave Inbox", path: "/hr/leave/leaveinbox" },

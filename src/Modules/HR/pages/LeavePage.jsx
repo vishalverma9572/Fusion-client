@@ -29,7 +29,7 @@ function Leave() {
     window.scrollTo(0, 0);
   }, []);
   const exampleItems = [
-    { title: "Home", path: "/" },
+    { title: "Home", path: "/dashboard" },
     { title: "Human Resources", path: "/hr" },
     { title: "Leave Management", path: "/hr/leave" },
   ];

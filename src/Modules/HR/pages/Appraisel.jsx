@@ -30,7 +30,7 @@ function Appraisal() {
     window.scrollTo(0, 0);
   }, []);
   const exampleItems = [
-    { title: "Home", path: "/" },
+    { title: "Home", path: "/dashboard" },
     { title: "Human Resources", path: "/hr" },
     { title: "Appraisal Management", path: "/hr/appraisal" },
   ];
