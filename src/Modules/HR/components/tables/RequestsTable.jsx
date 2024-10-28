@@ -9,14 +9,7 @@ import { EmptyTable } from "./EmptyTable";
 const RequestsTable = ({ title, data }) => {
   const navigate = useNavigate();
   // header contains the column names id name designation submissionDate view track
-  const headers = [
-    "ID",
-    "Name",
-    "Designation",
-    "Submission Date",
-    "View",
-    "Track",
-  ];
+  const headers = ["ID", "Name", "Designation", "Submission Date", "View"];
 
   const handleViewClick = (view) => {
     navigate(view); // Redirect to the form view
@@ -62,12 +55,6 @@ const RequestsTable = ({ title, data }) => {
                     >
                       <Eye size={20} />
                       View
-                    </span>
-                  </td>
-                  <td>
-                    <span className="text-link">
-                      <MapPin size={20} />
-                      Track
                     </span>
                   </td>
                 </tr>
