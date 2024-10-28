@@ -1,52 +1,34 @@
-// src/Modules/HR/components/LeaveInbox.js
-import React from "react";
-
-import Form from "../../components/FormComponent/Form"; // Adjust the import as needed
+import React, { useEffect, useState } from "react";
+import InboxTable from "../../components/tables/InboxTable";
+import { get_leave_inbox } from "../../../../routes/hr/index"; // Ensure this is the correct import path
 
 function LeaveInbox() {
-  const inboxData = [
-    {
-      formId: "101205",
-      user: "Rajesh Kumar",
-      designation: "Professor",
-      date: "07 November 2024",
-      view: "/hr/FormView/leaveform",
-      track: "/hr/TrackForm/leaveform",
-    },
-    {
-      formId: "101204",
-      user: "Vishal Kumar",
-      designation: "Asst. Professor",
-      date: "07 November 2024",
-      view: "/hr/FormView/leaveform",
-      track: "/hr/TrackForm/leaveform",
-    },
-    {
-      formId: "101206",
-      user: "Suresh Yadav",
-      designation: "Professor",
-      date: "01 October 2024",
-      view: "/hr/FormView/leaveform",
-      track: "/hr/TrackForm/leaveform",
-    },
-    {
-      formId: "101207",
-      user: "Amit Sharma",
-      designation: "Professor",
-      date: "05 October 2024",
-      view: "/hr/FormView/leaveform",
-      track: "/hr/TrackForm/leaveform",
-    },
-    {
-      formId: "101208",
-      user: "Mithilesh Lal Das",
-      designation: "Asst. Professor",
-      date: "09 November 2023",
-      view: "/hr/FormView/leaveform",
-      track: "/hr/TrackForm/leaveform",
-    },
-  ];
-  return <Form title="Leave Inbox" data={inboxData} />;
+  const [inboxData, setInboxData] = useState([]); // Correct useState syntax
+
+  useEffect(() => {
+    const fetchLeaveInbox = async () => {
+      console.log("Fetching leave inbox...");
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        console.error("No authentication token found!");
+        return;
+      }
+
+      try {
+        const response = await fetch(get_leave_inbox, {
+          headers: { Authorization: `Token ${token}` },
+        });
+        const data = await response.json();
+        setInboxData(data.leave_inbox); // Set fetched data
+        console.log(data);
+      } catch (error) {
+        console.error("Failed to fetch leave inbox:", error);
+      }
+    };
+    fetchLeaveInbox(); // Ensure function is called
+  }, []); // Adding empty dependency array to run only once
+
+  return <InboxTable title="Leave Inbox" data={inboxData} />;
 }
 
 export default LeaveInbox;
