@@ -7,7 +7,7 @@
   }
   
   /* Table */
-  .form-table {
+  .form-table-container .form-table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 15px;
@@ -20,7 +20,7 @@
   }
   
   /* Table Headers */
-  .table-header {
+  .form-table-container .table-header {
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
     font-weight: 700;
@@ -35,7 +35,7 @@
   }
   
   /* Table Row */
-  .table-row {
+  .form-table-container .table-row {
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
     background-color: #ffffff;
@@ -50,15 +50,15 @@
   }
   
   /* Row Hover Effect */
-  .table-row:hover {
+  .form-table-container .table-row:hover {
     background-color: #f1f3f6;
     /* Light background change on hover */
   }
   
   /* Data Cells */
-  .table-row td {
+  .form-table-container .table-row td {
     padding: 12px 20px;
-    text-align: left;
+    text-align: center;
     font-weight: 500;
     color: #333;
     border-top: none;
@@ -69,12 +69,12 @@
   }
   
   /* Remove border from last column */
-  .table-row td:last-child {
+  .form-table-container .table-row td:last-child {
     border-right: none;
   }
   
   /* Action Links - View and Track */
-  .text-link {
+  .form-table-container .text-link {
     color: #333;
     /* Default color matches row text */
     margin-left: 5px;
@@ -89,7 +89,7 @@
   }
   
   /* Adding space between icon and text */
-  .text-link svg {
+  .form-table-container .text-link svg {
     margin-right: 8px;
     fill: #333;
     /* Default icon color matches text color */
@@ -98,64 +98,64 @@
   }
   
   /* Hover Effects for Action Links */
-  .text-link:hover {
+  .form-table-container .text-link:hover {
     color: #15abff;
     /* Text turns blue on hover */
   }
   
-  .text-link:hover svg {
+  .form-table-container .text-link:hover svg {
     fill: #15abff;
     /* Icon turns blue on hover */
   }
   
   /* Links */
-  a {
+  .form-table-container a {
     color: #15abff;
     text-decoration: none;
   }
   
-  a:hover {
+  .form-table-container a:hover {
     text-decoration: underline;
   }
   
   /* Table Header Background */
-  .form-table thead {
+  .form-table-container .form-table thead {
     background-color: #ffffff;
     /* White background for header */
   }
   
-  .table-header {
+  .form-table-container .table-header {
     padding: 12px 20px;
     font-size: 16px;
     font-weight: 700;
   }
   
   /* Rounded Corners for Table Header */
-  .form-table thead th:first-child {
+  .form-table-container .form-table thead th:first-child {
     border-top-left-radius: 12px;
   }
   
-  .form-table thead th:last-child {
+  .form-table-container .form-table thead th:last-child {
     border-top-right-radius: 12px;
   }
   
   /* Rounding for Each Row */
-  .table-row td:first-child {
+  .form-table-container .table-row td:first-child {
     border-top-left-radius: 12px;
     border-bottom-left-radius: 12px;
   }
   
-  .table-row td:last-child {
+  .form-table-container .table-row td:last-child {
     border-top-right-radius: 12px;
     border-bottom-right-radius: 12px;
   }
   
   /* Special Case for Last Row */
-  .table-row:last-child td:first-child {
+  .form-table-container .table-row:last-child td:first-child {
     border-bottom-left-radius: 12px;
   }
   
-  .table-row:last-child td:last-child {
+  .form-table-container .table-row:last-child td:last-child {
     border-bottom-right-radius: 12px;
   }
   /*15abff*/

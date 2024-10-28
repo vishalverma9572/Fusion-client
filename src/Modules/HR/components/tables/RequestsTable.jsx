@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"; // Use for navigation
 import { Eye, MapPin } from "@phosphor-icons/react";
 
 import "./Table.css"; // Ensure this path is correct
+import { EmptyTable } from "./EmptyTable";
 
 const RequestsTable = ({ title, data }) => {
   const navigate = useNavigate();
@@ -29,6 +30,12 @@ const RequestsTable = ({ title, data }) => {
       >
         {title}
       </Title>
+      {data.length == 0 && (
+        <EmptyTable
+          title="No new requests found!"
+          message="There is no new request available. Please check back later."
+        />
+      )}
       {headers.length > 0 && data.length > 0 ? (
         <div className="form-table-container">
           <table className="form-table">
