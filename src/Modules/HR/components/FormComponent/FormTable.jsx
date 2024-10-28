@@ -27,10 +27,10 @@ const FormTable = ({ headers, data }) => {
         <tbody>
           {data.map((item, index) => (
             <tr className="table-row" key={index}>
-              <td>{item.formId}</td>
-              <td>{item.user}</td>
+              <td>{item.id}</td>
+              <td>{item.name}</td>
               <td>{item.designation}</td>
-              <td>{item.date}</td>
+              <td>{item.submissionDate}</td>
               <td>
                 <span
                   className="text-link"

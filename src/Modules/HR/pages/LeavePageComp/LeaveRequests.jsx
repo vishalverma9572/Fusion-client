@@ -1,59 +1,41 @@
-// src/Modules/HR/components/LeaveRequests.js
-import React from "react";
-import Form from "../../components/FormComponent/Form"; // Adjust the import as needed
+import React, { useEffect, useState } from "react";
+import RequestsTable from "../../components/tables/RequestsTable";
+import { get_leave_requests } from "../../../../routes/hr/index"; // Ensure this is the correct import path
+import LoadingComponent from "../../components/Loading"; // Ensure this is the correct import path
 
 function LeaveRequests() {
-  const requestData = [
-    {
-      formId: "101205",
-      user: "Rajesh Kumar",
-      designation: "Professor",
-      date: "07 November 2024",
-      view: "/hr/FormView/leaveform",
-      track: "/hr/TrackForm/leaveform",
-    },
-    {
-      formId: "101204",
-      user: "Vishal Kumar",
-      designation: "Asst. Professor",
-      date: "07 November 2024",
-      view: "/hr/FormView/leaveform",
-      track: "/hr/TrackForm/leaveform",
-    },
-    {
-      formId: "101206",
-      user: "Suresh Yadav",
-      designation: "Professor",
-      date: "01 October 2024",
-      view: "/hr/FormView/leaveform",
-      track: "/hr/TrackForm/leaveform",
-    },
-    {
-      formId: "101207",
-      user: "Amit Sharma",
-      designation: "Professor",
-      date: "05 October 2024",
-      view: "/hr/FormView/leaveform",
-      track: "/hr/TrackForm/leaveform",
-    },
-    {
-      formId: "101208",
-      user: "Mithilesh Lal Das",
-      designation: "Asst. Professor",
-      date: "09 November 2023",
-      view: "/hr/FormView/leaveform",
-      track: "/hr/TrackForm/leaveform",
-    },
-    {
-      formId: "101207",
-      user: "Amit Sharma",
-      designation: "Professor",
-      date: "05 October 2024",
-      view: "/hr/FormView/leaveform",
-      track: "/hr/TrackForm/leaveform",
-    },
-  ];
-  return <Form title="Leave Requests" data={requestData} />;
+  const [requestData, setRequestData] = useState([]); // Correct useState syntax
+  const [loading, setLoading] = useState(true); // Add loading state
+
+  useEffect(() => {
+    const fetchLeaveRequests = async () => {
+      console.log("Fetching leave requests...");
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        console.error("No authentication token found!");
+        return;
+      }
+      try {
+        const response = await fetch(get_leave_requests, {
+          headers: { Authorization: `Token ${token}` },
+        });
+        const data = await response.json();
+        setRequestData(data.leave_requests); // Set fetched data
+        setLoading(false); // Set loading to false once data is fetched
+        console.log(data);
+      } catch (error) {
+        console.error("Failed to fetch leave requests:", error);
+        setLoading(false); // Set loading to false if there’s an error
+      }
+    };
+    fetchLeaveRequests(); // Ensure function is called
+  }, []); // Adding empty dependency array to run only once
+
+  if (loading) {
+    return <LoadingComponent loadingMsg="Fetching Leave Requests..." />;
+  }
+
+  return <RequestsTable title="Leave Requests" data={requestData} />;
 }
 
 export default LeaveRequests;
