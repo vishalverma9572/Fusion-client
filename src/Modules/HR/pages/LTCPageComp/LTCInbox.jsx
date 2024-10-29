@@ -1,43 +1,42 @@
-// src/Modules/HR/components/LTCInbox.js
-import React from "react";
-
-import Form from "../../components/FormComponent/Form"; // Adjust the import as needed
+import React, { useEffect, useState } from "react";
+import InboxTable from "../../components/tables/InboxTable";
+import { get_ltc_inbox } from "../../../../routes/hr/index"; // Ensure this is the correct import path
+import LoadingComponent from "../../components/Loading"; // Ensure this is the correct import path
 
 function LTCInbox() {
-  const inboxData = [
-    {
-      formId: "101206",
-      user: "Suresh Yadav",
-      designation: "Professor",
-      date: "01 October 2024",
-    },
-    {
-      formId: "101205",
-      user: "Rajesh Kumar",
-      designation: "Professor",
-      date: "07 November 2024",
-    },
-    {
-      formId: "101204",
-      user: "Vishal Kumar",
-      designation: "Asst. Professor",
-      date: "07 November 2024",
-    },
-    {
-      formId: "101206",
-      user: "Suresh Yadav",
-      designation: "Professor",
-      date: "01 October 2024",
-    },
+  const [inboxData, setInboxData] = useState([]); // Correct useState syntax
+  const [loading, setLoading] = useState(true); // Add loading state
 
-    {
-      formId: "101208",
-      user: "Mithilesh Lal Das",
-      designation: "Asst. Professor",
-      date: "09 November 2023",
-    },
-  ];
-  return <Form title="LTC Inbox" data={inboxData} />;
+  useEffect(() => {
+    const fetchLTCInbox = async () => {
+      console.log("Fetching LTC inbox...");
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        console.error("No authentication token found!");
+        setLoading(false);
+        return;
+      }
+      try {
+        const response = await fetch(get_ltc_inbox, {
+          headers: { Authorization: `Token ${token}` },
+        });
+        const data = await response.json();
+        setInboxData(data.ltc_inbox); // Set fetched data
+        setLoading(false); // Set loading to false once data is fetched
+        console.log(data);
+      } catch (error) {
+        console.error("Failed to fetch LTC inbox:", error);
+        setLoading(false); // Set loading to false if there’s an error
+      }
+    };
+    fetchLTCInbox(); // Ensure function is called
+  }, []); // Adding empty dependency array to run only once
+
+  if (loading) {
+    return <LoadingComponent />;
+  }
+
+  return <InboxTable title="LTC Inbox" data={inboxData} />;
 }
 
 export default LTCInbox;

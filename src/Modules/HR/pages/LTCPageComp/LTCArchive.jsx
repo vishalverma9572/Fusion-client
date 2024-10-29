@@ -1,42 +1,42 @@
-// src/Modules/HR/components/LTCArchive.js
-import React from "react";
-
-import Form from "../../components/FormComponent/Form"; // Adjust the import as needed
+import React, { useEffect, useState } from "react";
+import { get_ltc_archive } from "../../../../routes/hr"; // Ensure the import path is correct
+import ArchiveTable from "../../components/tables/ArchiveTable"; // Ensure the import path is correct
+import LoadingComponent from "../../components/Loading"; // Ensure the import path is correct
 
 function LTCArchive() {
-  const archiveData = [
-    {
-      formId: "101205",
-      user: "Rajesh Kumar",
-      designation: "Professor",
-      date: "07 November 2024",
-    },
-    {
-      formId: "101204",
-      user: "Vishal Kumar",
-      designation: "Asst. Professor",
-      date: "07 November 2024",
-    },
-    {
-      formId: "101206",
-      user: "Suresh Yadav",
-      designation: "Professor",
-      date: "01 October 2024",
-    },
-    {
-      formId: "101207",
-      user: "Amit Sharma",
-      designation: "Professor",
-      date: "05 October 2024",
-    },
-    {
-      formId: "101208",
-      user: "Mithilesh Lal Das",
-      designation: "Asst. Professor",
-      date: "09 November 2023",
-    },
-  ];
-  return <Form title="LTC Archive" data={archiveData} />;
+  const [archiveData, setArchiveData] = useState([]); // Correct useState syntax
+  const [loading, setLoading] = useState(true); // Add loading state
+
+  useEffect(() => {
+    const fetchLTCArchive = async () => {
+      console.log("Fetching LTC archive...");
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        console.error("No authentication token found!");
+        setLoading(false); // Set loading to false if no token
+        return;
+      }
+      try {
+        const response = await fetch(get_ltc_archive, {
+          headers: { Authorization: `Token ${token}` },
+        });
+        const data = await response.json();
+        setArchiveData(data.ltc_archive); // Set fetched data
+        setLoading(false); // Set loading to false once data is fetched
+        console.log(data);
+      } catch (error) {
+        console.error("Failed to fetch LTC archive:", error);
+        setLoading(false); // Set loading to false if there’s an error
+      }
+    };
+    fetchLTCArchive(); // Ensure function is called
+  }, []); // Add dependency array to run only once
+
+  if (loading) {
+    return <LoadingComponent />;
+  }
+
+  return <ArchiveTable title="LTC Archive" data={archiveData} />;
 }
 
 export default LTCArchive;
