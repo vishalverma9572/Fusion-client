@@ -68,7 +68,7 @@ const ArchiveTable = ({ title, data }) => {
           </table>
         </div>
       ) : (
-        <div className="loading-spinner">Loading</div>
+        <></>
       )}
     </div>
   );

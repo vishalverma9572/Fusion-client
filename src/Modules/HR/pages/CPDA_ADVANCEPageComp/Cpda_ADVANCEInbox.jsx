@@ -1,41 +1,42 @@
-import React from "react";
-
-import Form from "../../components/FormComponent/Form"; // Adjust the import as needed
+import React, { useEffect, useState } from "react";
+import InboxTable from "../../components/tables/InboxTable";
+import { get_cpda_adv_inbox } from "../../../../routes/hr/index"; // Ensure this is the correct import path
+import LoadingComponent from "../../components/Loading"; // Ensure this is the correct import path
 
 function Cpda_ADVANCEInbox() {
-  const inboxData = [
-    {
-      formId: "101205",
-      user: "Rajesh Kumar",
-      designation: "Professor",
-      date: "07 November 2024",
-    },
-    {
-      formId: "101204",
-      user: "Vishal Kumar",
-      designation: "Asst. Professor",
-      date: "07 November 2024",
-    },
-    {
-      formId: "101206",
-      user: "Suresh Yadav",
-      designation: "Professor",
-      date: "01 October 2024",
-    },
-    {
-      formId: "101207",
-      user: "Amit Sharma",
-      designation: "Professor",
-      date: "05 October 2024",
-    },
-    {
-      formId: "101208",
-      user: "Mithilesh Lal Das",
-      designation: "Asst. Professor",
-      date: "09 November 2023",
-    },
-  ];
-  return <Form title="CPDA Adv Inbox" data={inboxData} />;
+  const [inboxData, setInboxData] = useState([]); // Correct useState syntax
+  const [loading, setLoading] = useState(true); // Add loading state
+
+  useEffect(() => {
+    const fetchCPDAInbox = async () => {
+      console.log("Fetching CPDA Advance inbox...");
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        console.error("No authentication token found!");
+        setLoading(false);
+        return;
+      }
+      try {
+        const response = await fetch(get_cpda_adv_inbox, {
+          headers: { Authorization: `Token ${token}` },
+        });
+        const data = await response.json();
+        setInboxData(data.cpda_adv_inbox); // Set fetched data
+        setLoading(false); // Set loading to false once data is fetched
+        console.log(data);
+      } catch (error) {
+        console.error("Failed to fetch CPDA Advance inbox:", error);
+        setLoading(false); // Set loading to false if there’s an error
+      }
+    };
+    fetchCPDAInbox(); // Ensure function is called
+  }, []); // Adding empty dependency array to run only once
+
+  if (loading) {
+    return <LoadingComponent />;
+  }
+
+  return <InboxTable title="CPDA Adv Inbox" data={inboxData} />;
 }
 
 export default Cpda_ADVANCEInbox;
