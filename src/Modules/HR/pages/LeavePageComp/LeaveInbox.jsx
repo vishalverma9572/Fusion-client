@@ -36,7 +36,7 @@ function LeaveInbox() {
     return <LoadingComponent loadingMsg="Fetching Leave Inbox..." />;
   }
 
-  return <InboxTable title="Leave Inbox" data={inboxData} />;
+  return <InboxTable title="Leave Inbox" data={inboxData} formType="leave" />;
 }
 
 export default LeaveInbox;

@@ -4,14 +4,36 @@ import { useNavigate } from "react-router-dom"; // Use for navigation
 import { Eye, MapPin } from "@phosphor-icons/react";
 import "./Table.css"; // Ensure this path is correct
 import { EmptyTable } from "./EmptyTable";
+import LeaveTrackView from "../../pages/LeavePageComp/LeaveTrack";
 
-const InboxTable = ({ title, data }) => {
+const InboxTable = ({ title, data, formType }) => {
   const navigate = useNavigate();
 
   const headers = ["FormID", "User", "Designation", "Date", "View", "Track"];
 
   const handleViewClick = (view) => {
-    navigate(view); // Redirect to the form view
+    const viewUrlMap = {
+      leave: `/hr/FormView/leaveform`,
+      cpda_adv: `/hr/FormView/cpda_adv`,
+      ltc: `/hr/FormView/ltc`,
+      cpda_claim: `/hr/FormView/cpda_claim`,
+      appraisal: `/hr/FormView/appraisal`,
+    };
+
+    navigate(viewUrlMap[formType]); // Default to leaveform if formType is not matched
+  };
+  const handleTrackClick = (id) => {
+    console.log(formType);
+
+    const trackUrlMap = {
+      leave: `/hr/FormView/leaveform_track/${id}`,
+      cpda_adv: `/hr/FormView/cpda_adv_track/${id}`,
+      ltc: `/hr/FormView/ltc_track/${id}`,
+      cpda_claim: `/hr/FormView/cpda_claim_track/${id}`,
+      appraisal: `/hr/FormView/appraisal_track/${id}`,
+    };
+
+    navigate(trackUrlMap[formType]); // Default to leaveform_track if formType is not matched
   };
 
   return (
@@ -50,14 +72,18 @@ const InboxTable = ({ title, data }) => {
                   <td>
                     <span
                       className="text-link"
-                      onClick={() => handleViewClick(`/inbox/${item.id}`)}
+                      // onClick={() => handleViewClick(`/hr/FormView/leaveform`)}
+                      onClick={handleViewClick}
                     >
                       <Eye size={20} />
                       View
                     </span>
                   </td>
                   <td>
-                    <span className="text-link">
+                    <span
+                      className="text-link"
+                      onClick={() => handleTrackClick(item.id)}
+                    >
                       <MapPin size={20} />
                       Track
                     </span>

@@ -36,7 +36,9 @@ function AppraisalInbox() {
     return <LoadingComponent />;
   }
 
-  return <InboxTable title="Appraisal Inbox" data={inboxData} />;
+  return (
+    <InboxTable title="Appraisal Inbox" data={inboxData} formType="appraisal" />
+  );
 }
 
 export default AppraisalInbox;

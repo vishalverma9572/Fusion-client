@@ -36,7 +36,13 @@ function CPDA_ClaimInbox() {
     return <LoadingComponent />;
   }
 
-  return <InboxTable title="CPDA Claim Inbox" data={inboxData} />;
+  return (
+    <InboxTable
+      title="CPDA Claim Inbox"
+      data={inboxData}
+      formType="cpda_claim"
+    />
+  );
 }
 
 export default CPDA_ClaimInbox;
