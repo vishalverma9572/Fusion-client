@@ -25,11 +25,31 @@ function CPDA_ClaimForm() {
     dispatch(updateForm({ name, value }));
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(formData);
-    dispatch(resetForm());
-  };
+ const handleSubmit = async (event) => {
+  event.preventDefault();
+   const authToken = localStorage.getItem("authToken");
+
+  try {
+    const response = await fetch("http://127.0.0.1:8000/hr2/api/submit_cpda_reimbursement_form/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${authToken}`,  
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      console.log("Form submitted successfully:", result);
+      dispatch(resetForm());
+    } else {
+      console.error("Error submitting form:", response.statusText);
+    }
+  } catch (error) {
+    console.error("Error submitting form:", error);
+  }
+};
 
   return (
     <div className="CPDA_ClaimForm_container">
@@ -85,10 +105,10 @@ function CPDA_ClaimForm() {
               <CurrencyDollar size={20} />
               <input
                 type="text"
-                id="amountRequired"
-                name="amountRequired"
+                id="adjustmentSubmitted"
+                name="adjustmentSubmitted"
                 placeholder="Amount Required"
-                value={formData.amountRequired}
+                value={formData.adjustmentSubmitted}
                 onChange={handleChange}
                 className="input"
                 required
@@ -125,10 +145,10 @@ function CPDA_ClaimForm() {
               <CurrencyDollar size={20} />
               <input
                 type="text"
-                id="amountRequired"
-                name="amountRequired"
+                id="advanceTaken"
+                name="advanceTaken"
                 placeholder="Amount Required"
-                value={formData.amountRequired}
+                value={formData. advanceTaken}
                 onChange={handleChange}
                 className="input"
                 required
@@ -144,10 +164,10 @@ function CPDA_ClaimForm() {
               <IdentificationCard size={20} />
               <input
                 type="text"
-                id="pfNumber"
-                name="pfNumber"
+                id="pfNo"
+                name="pfNo"
                 placeholder="XXXXXXXXXXXX"
-                value={formData.pfNumber}
+                value={formData.pfNo}
                 onChange={handleChange}
                 className="input"
                 required
@@ -193,10 +213,10 @@ function CPDA_ClaimForm() {
               <FileText size={20} />
               <input
                 type="text"
-                id="pdaRegisterEntry"
-                name="pdaRegisterEntry"
+                id="amountCheckedInPDA"
+                name="amountCheckedInPDA"
                 placeholder="Audit Entry"
-                value={formData.pdaRegisterEntry}
+                value={formData.amountCheckedInPDA}
                 onChange={handleChange}
                 className="input"
               />
@@ -235,10 +255,10 @@ function CPDA_ClaimForm() {
               <FileText size={20} />
               <input
                 type="text"
-                id="pdaPageNumber"
-                name="pdaPageNumber"
-                placeholder="Page Number"
-                value={formData.pdaPageNumber}
+                id=" advanceAmountPDA"
+                name=" advanceAmountPDA"
+                placeholder=" advanceAmountPDA"
+                value={formData. advanceAmountPDA}
                 onChange={handleChange}
                 className="input"
               />
