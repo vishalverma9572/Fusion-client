@@ -1,5 +1,8 @@
 import { host } from "../globalRoutes";
 
+export const search_employee = `${host}/hr2/api/search_employee`;
+export const get_my_details = `${host}/hr2/api/get_my_details`;
+
 // Leave routes
 export const get_leave_requests = `${host}/hr2/api/get_leave_requests`;
 export const get_leave_inbox = `${host}/hr2/api/get_leave_inbox`;
@@ -14,6 +17,7 @@ export const get_ltc_archive = `${host}/hr2/api/get_ltc_archive`;
 export const get_cpda_adv_requests = `${host}/hr2/api/get_cpda_adv_requests`;
 export const get_cpda_adv_inbox = `${host}/hr2/api/get_cpda_adv_inbox`;
 export const get_cpda_adv_archive = `${host}/hr2/api/get_cpda_adv_archive`;
+export const submit_cpda_adv_form = `${host}/hr2/api/submit_cpda_adv_form`;
 
 // CPDA Claim routes
 export const get_cpda_claim_requests = `${host}/hr2/api/get_cpda_claim_requests`;
