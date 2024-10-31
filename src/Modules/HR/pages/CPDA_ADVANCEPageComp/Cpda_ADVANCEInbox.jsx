@@ -36,7 +36,9 @@ function Cpda_ADVANCEInbox() {
     return <LoadingComponent />;
   }
 
-  return <InboxTable title="CPDA Adv Inbox" data={inboxData} />;
+  return (
+    <InboxTable title="CPDA Adv Inbox" data={inboxData} formType="cpda_adv" />
+  );
 }
 
 export default Cpda_ADVANCEInbox;
