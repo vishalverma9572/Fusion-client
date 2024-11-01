@@ -23,7 +23,7 @@ const CpdaAdvForm = () => {
     { title: "Home", path: "/dashboard" },
     { title: "Human Resources", path: "/hr" },
     { title: "CPDA Adv", path: "/hr/cpda_adv" },
-    { title: "View Form", path: `/hr/cpda_adv/${id}` },
+    { title: "View Form", path: `/hr/cpda_adv/view/${id}` },
   ];
 
   useEffect(() => {
@@ -72,7 +72,35 @@ const CpdaAdvForm = () => {
   return (
     <>
       <HrBreadcrumbs items={exampleItems} />
+      <Title
+        order={2}
+        style={{ fontWeight: "500", marginTop: "40px", marginLeft: "15px" }}
+      >
+        CPDA Advance Form Details
+      </Title>
       <div className="CPDA_ADVANCEForm_container">
+        {/* add button to track status */}
+        <Link
+          to={`/hr/FormView/cpda_adv_track/${fetchedformData.file_id}`}
+          style={{
+            display: "inline-block",
+            padding: "10px 20px",
+            backgroundColor: "#007bffcc", // Blue background, adjust color as needed
+            color: "#fff",
+            textDecoration: "none",
+            borderRadius: "4px",
+            textAlign: "center",
+            fontWeight: "bold",
+            cursor: "pointer",
+            marginBottom: "20px",
+          }}
+          // Add hover effect
+          // Add hover effect
+          onMouseEnter={(e) => (e.target.style.backgroundColor = "#007bff")}
+          onMouseLeave={(e) => (e.target.style.backgroundColor = "#007bffcc")}
+        >
+          Track Status
+        </Link>
         <form>
           {/* Row 1: Name and Designation */}
           <div className="grid-row">
@@ -263,24 +291,6 @@ const CpdaAdvForm = () => {
             </div>
           </div>
         </form>
-        {/* add button to track status */}
-        <Link
-          to={`/hr/FormView/cpda_adv_track/${fetchedformData.file_id}`}
-          style={{
-            display: "inline-block",
-            padding: "10px 20px",
-            backgroundColor: "#007bff", // Blue background, adjust color as needed
-            color: "#fff",
-            textDecoration: "none",
-            borderRadius: "4px",
-            textAlign: "center",
-            fontWeight: "bold",
-            cursor: "pointer",
-            marginBottom: "20px",
-          }}
-        >
-          Track Status
-        </Link>
       </div>
     </>
   );

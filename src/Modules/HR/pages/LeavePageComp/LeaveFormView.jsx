@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect, useState } from "react";
 import { Button, Select, Title } from "@mantine/core";
 import {
   PaperPlaneRight,
@@ -15,38 +16,72 @@ import {
   Calendar,
   ClipboardText,
   FloppyDisk,
+  UserList,
 } from "@phosphor-icons/react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateForm, resetForm } from "../../../../redux/formSlice";
 import "./LeaveFormView.css";
 import HrBreadcrumbs from "../../components/HrBreadcrumbs";
-// import HrBreadcrumbs from "../../components/HrBreadcrumbs";
+import { Link, useParams } from "react-router-dom";
+import LoadingComponent from "../../components/Loading";
+import { EmptyTable } from "../../components/tables/EmptyTable";
+import { view_leave_form } from "../../../../routes/hr";
 
 const LeaveFormView = () => {
-  const formData = useSelector((state) => state.form);
-  const dispatch = useDispatch();
+  const { id } = useParams();
+  const [fetchedformData, setfetchedformData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    dispatch(updateForm({ name, value }));
-  };
-
-  const handleSelectChange = (value) => {
-    dispatch(updateForm({ name: "natureOfLeave", value }));
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(formData);
-    dispatch(resetForm());
-  };
   const exampleItems = [
     { title: "Home", path: "/dashboard" },
     { title: "Human Resources", path: "/hr" },
-    { title: "Leave Management", path: "/hr/leave" },
-    { title: "Leave Inbox", path: "/hr/leave/leaveinbox" },
-    { title: "View", path: "/hr/FormView/leaveform" },
+    { title: "Leave", path: "/hr/leave" },
+    { title: "View Form", path: `/hr/leave/view/${id}` },
   ];
+
+  useEffect(() => {
+    const fetchfetchedformData = async () => {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        console.error("No authentication token found!");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const response = await fetch(`${view_leave_form}/${id}`, {
+          headers: { Authorization: `Token ${token}` },
+        });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+        console.log(data);
+        setfetchedformData(data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to fetch form data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchfetchedformData();
+  }, [id]);
+
+  if (loading) {
+    return <LoadingComponent />;
+  }
+
+  if (!fetchedformData) {
+    return (
+      <>
+        <HrBreadcrumbs items={exampleItems} />
+        <EmptyTable message="No view data found." />
+      </>
+    );
+  }
 
   return (
     <>
@@ -60,101 +95,124 @@ const LeaveFormView = () => {
       </Title>
 
       <div className="leave_container">
-        <form onSubmit={handleSubmit}>
+        <Link
+          to={`/hr/FormView/leaveform_track/${fetchedformData.file_id}`}
+          style={{
+            display: "inline-block",
+            padding: "10px 20px",
+            backgroundColor: "#007bffcc", // Blue background, adjust color as needed
+            color: "#fff",
+            textDecoration: "none",
+            borderRadius: "4px",
+            textAlign: "center",
+            fontWeight: "bold",
+            cursor: "pointer",
+            marginBottom: "20px",
+          }}
+          // Add hover effect
+          onMouseEnter={(e) => (e.target.style.backgroundColor = "#007bff")}
+          onMouseLeave={(e) => (e.target.style.backgroundColor = "#007bffcc")}
+        >
+          Track Status
+        </Link>
+        <form>
           {/* Section 1: Name, Designation (Left), Application Date (Right) */}
-          <div className="leave_grid-row">
-            <div className="leave_grid-col leave_left-side">
-              <label className="leave_input-label" htmlFor="name">
+          <div className="grid-row">
+            <div className="grid-col left-side">
+              <label className="input-label" htmlFor="name">
                 Name
               </label>
-              <div className="leave_input-wrapper">
+              <div className="input-wrapper">
                 <User size={20} />
                 <input
                   type="text"
                   id="name"
                   name="name"
-                  value={formData.name}
+                  value={fetchedformData.name}
                   placeholder="Name"
-                  onChange={handleChange}
-                  className="leave_input"
-                  required
+                  className="input"
+                  disabled
                 />
               </div>
-              <label className="leave_input-label" htmlFor="designation">
+              <label
+                className="input-label"
+                style={{ marginTop: "20px" }}
+                htmlFor="designation"
+              >
                 Designation
               </label>
-              <div className="leave_input-wrapper">
+              <div className="input-wrapper">
                 <Tag size={20} />
                 <input
                   type="text"
                   id="designation"
                   name="designation"
                   placeholder="Designation"
-                  value={formData.designation}
-                  onChange={handleChange}
-                  className="leave_input"
-                  required
+                  value={fetchedformData.designation}
+                  className="input"
+                  disabled
                 />
               </div>
             </div>
 
-            <div className="leave_grid-col leave_right-side">
-              <label className="leave_input-label" htmlFor="applicationDate">
+            <div className="grid-col right-side">
+              <label
+                className="input-label"
+                style={{ textAlign: "center", marginTop: "50px" }}
+                htmlFor="submissionDate"
+              >
                 Application Date
               </label>
               <div
-                className="leave_input-wrapper leave_center"
-                style={{ width: "300px" }}
+                className="input-wrapper center"
+                style={{ width: "300px", margin: "auto" }}
               >
                 <Calendar size={20} />
                 <input
                   type="date"
-                  id="applicationDate"
-                  name="applicationDate"
-                  value={formData.applicationDate}
-                  onChange={handleChange}
-                  className="leave_input leave_center"
-                  required
+                  id="submissionDate"
+                  name="submissionDate"
+                  value={fetchedformData.submissionDate}
+                  className="input center"
+                  disabled
                 />
               </div>
             </div>
           </div>
 
           {/* Section 2: Discipline/Department (Left), PF Number (Right) */}
-          <div className="leave_grid-row">
-            <div className="leave_grid-col">
-              <label className="leave_input-label" htmlFor="department">
+          <div className="grid-row">
+            <div className="grid-col">
+              <label className="input-label" htmlFor="departmentInfo">
                 Department
               </label>
-              <div className="leave_input-wrapper">
+              <div className="input-wrapper">
                 <Building size={20} />
                 <input
                   type="text"
-                  id="department"
-                  name="department"
-                  placeholder="Department"
-                  value={formData.department}
-                  onChange={handleChange}
-                  className="leave_input"
-                  required
+                  id="departmentInfo"
+                  name="departmentInfo"
+                  placeholder="Department Name"
+                  value={fetchedformData.departmentInfo}
+                  className="input"
+                  disabled
                 />
               </div>
             </div>
 
-            <div className="leave_grid-col">
-              <label className="leave_input-label" htmlFor="pfNumber">
+            <div className="grid-col">
+              <label className="input-label" htmlFor="pfNo">
                 PF Number
               </label>
-              <div className="leave_input-wrapper">
+              <div className="input-wrapper">
                 <IdentificationCard size={20} />
                 <input
                   type="number"
-                  id="pfNumber"
-                  name="pfNumber"
+                  id="pfNo"
+                  name="pfNo"
                   placeholder="XXXXXXXXXXXX"
-                  value={formData.pfNumber}
-                  onChange={handleChange}
-                  className="leave_input"
+                  value={fetchedformData.pfNo}
+                  className="input"
                   required
                 />
               </div>
@@ -162,93 +220,54 @@ const LeaveFormView = () => {
           </div>
 
           {/* Section 3: Nature of Leave, Leave Start Date, Leave End Date */}
-          <div className="leave_grid-row leave_three-columns">
-            <div className="leave_grid-col">
-              <label className="leave_input-label" htmlFor="natureOfLeave">
+          <div className="grid-row three-columns">
+            <div className="grid-col">
+              <label className="input-label" htmlFor="natureOfLeave">
                 Nature of Leave
               </label>
-              <div className="leave_input-wrapper">
-                <Select
-                  className="leave_select"
-                  placeholder="Select a leave type"
-                  data={[
-                    { value: "Casual", label: "Casual" },
-                    { value: "Vacation", label: "Vacation" },
-                    { value: "Earned", label: "Earned" },
-                    { value: "Commuted Leave", label: "Commuted Leave" },
-                    {
-                      value: "Special Casual Leave",
-                      label: "Special Casual Leave",
-                    },
-                    {
-                      value: "Restricted Holiday",
-                      label: "Restricted Holiday",
-                    },
-                    { value: "Station Leave", label: "Station Leave" },
-                  ]}
-                  value={formData.natureOfLeave}
-                  onChange={handleSelectChange}
-                  required
-                  styles={{
-                    input: {
-                      border: "none",
-                      backgroundColor: "transparent",
-                      color: "#000",
-                      fontSize: "14px",
-                      margin: "-8px 0px 0px -40px",
-                      fontFamily: "Roboto, sans-serif",
-                    },
-                    dropdown: {
-                      backgroundColor: "#fff",
-                      border: "1px solid #ccc",
-                      borderRadius: "4px",
-                      boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-                    },
-                    item: {
-                      padding: "10px",
-                      fontSize: "14px",
-                      color: "#2d3b45",
-                      ":hover": {
-                        backgroundColor: "#e2e8f0",
-                        color: "#1a2a33",
-                      },
-                    },
-                  }}
+              <div className="input-wrapper">
+                <Building size={20} />
+                <input
+                  type="text"
+                  id="natureOfLeave"
+                  name="natureOfLeave"
+                  value={fetchedformData.natureOfLeave}
+                  className="input"
+                  disabled
                 />
               </div>
             </div>
 
-            <div className="leave_grid-col">
-              <label className="leave_input-label" htmlFor="startDate">
+            <div className="grid-col">
+              <label className="input-label" htmlFor="leaveStartDate">
                 Leave Start Date
               </label>
-              <div className="leave_input-wrapper">
+              <div className="input-wrapper">
                 <Calendar size={20} />
                 <input
                   type="date"
-                  id="startDate"
-                  name="startDate"
-                  value={formData.startDate}
-                  onChange={handleChange}
-                  className="leave_input"
-                  required
+                  id="leaveStartDate"
+                  name="leaveStartDate"
+                  value={fetchedformData.leaveStartDate}
+                  className="input"
+                  disabled
                 />
               </div>
             </div>
 
-            <div className="leave_grid-col">
-              <label className="leave_input-label" htmlFor="endDate">
+            <div className="grid-col">
+              <label className="input-label" htmlFor="leaveEndDate">
                 Leave End Date
               </label>
-              <div className="leave_input-wrapper">
+              <div className="input-wrapper">
                 <Calendar size={20} />
                 <input
                   type="date"
-                  id="endDate"
-                  name="endDate"
-                  value={formData.endDate}
-                  onChange={handleChange}
-                  className="leave_input"
+                  id="leaveEndDate"
+                  name="leaveEndDate"
+                  value={fetchedformData.leaveEndDate}
+                  disabled
+                  className="input"
                   required
                 />
               </div>
@@ -256,175 +275,84 @@ const LeaveFormView = () => {
           </div>
 
           {/* Section 4: Purpose of Leave */}
-          <div className="leave_grid-row">
-            <div className="leave_purpose">
-              <label className="leave_input-label" htmlFor="purpose">
+          <div className="grid-row">
+            <div className="purpose">
+              <label className="input-label" htmlFor="purposeOfLeave">
                 Purpose
               </label>
-              <div className="leave_input-wrapper">
+              <div className="input-wrapper">
                 <ClipboardText size={20} />
                 <input
                   type="text"
-                  id="purpose"
-                  name="purpose"
-                  placeholder="Purpose"
-                  value={formData.purpose}
-                  onChange={handleChange}
-                  className="leave_input"
+                  id="purposeOfLeave"
+                  name="purposeOfLeave"
+                  placeholder="purpose Of Leave"
+                  value={fetchedformData.purposeOfLeave}
+                  className="input"
                   aria-rowcount={2}
-                  required
+                  disabled
+                />
+              </div>
+            </div>
+            <div className="grid-col">
+              <label className="input-label" htmlFor="addressDuringLeave">
+                Adress during Leave
+              </label>
+              <div className="input-wrapper">
+                <UserList size={20} />
+                <input
+                  type="text"
+                  id="addressDuringLeave"
+                  name="addressDuringLeave"
+                  placeholder="Full Address"
+                  value={fetchedformData.addressDuringLeave}
+                  className="input"
+                  disabled
                 />
               </div>
             </div>
           </div>
 
           {/* Section 5: Academic and Administrative Responsibility */}
-          <div className="leave_grid-row">
-            <div className="leave_grid-col">
-              <label
-                className="leave_input-label"
-                htmlFor="academicResponsibility"
-              >
+          <div className="grid-row">
+            <div className="grid-col">
+              <label className="input-label" htmlFor="academicResponsibility">
                 Academic Responsibility
               </label>
-              <div className="leave_input-wrapper">
+              <div className="input-wrapper">
                 <Tag size={20} />
                 <input
                   type="text"
                   id="academicResponsibility"
                   name="academicResponsibility"
                   placeholder="Enter the name"
-                  value={formData.academicResponsibility}
-                  onChange={handleChange}
-                  className="leave_input"
-                  required
+                  value={fetchedformData.academicResponsibility}
+                  className="input"
+                  disabled
                 />
               </div>
             </div>
 
-            <div className="leave_grid-col">
+            <div className="grid-col">
               <label
-                className="leave_input-label"
-                htmlFor="administrativeResponsibility"
+                className="input-label"
+                htmlFor="addministrativeResponsibiltyAssigned"
               >
                 Administrative Responsibility
               </label>
-              <div className="leave_input-wrapper">
+              <div className="input-wrapper">
                 <Tag size={20} />
                 <input
                   type="text"
-                  id="administrativeResponsibility"
-                  name="administrativeResponsibility"
+                  id="addministrativeResponsibiltyAssigned"
+                  name="addministrativeResponsibiltyAssigned"
                   placeholder="Enter the name"
-                  value={formData.administrativeResponsibility}
-                  onChange={handleChange}
-                  className="leave_input"
-                  required
+                  value={fetchedformData.addministrativeResponsibiltyAssigned}
+                  className="input"
+                  disabled
                 />
               </div>
             </div>
-          </div>
-
-          <div className="leave_section-divider">
-            <hr className="leave_divider-line" />
-          </div>
-
-          <div className="leave_grid-col">
-            <label className="leave_input-label" htmlFor="remark">
-              Remark
-            </label>
-            <div className="leave_input-wrapper">
-              <ClipboardText size={20} />
-              <input
-                type="text"
-                id="remark"
-                name="remark"
-                placeholder="Enter any remark"
-                value={formData.remark}
-                onChange={handleChange}
-                className="leave_input"
-                required
-              />
-            </div>
-          </div>
-
-          {/* <div className="leave_button-wrapper">
-          <Button className="leave_submit-btn" type="submit" leftIcon={<FloppyDisk size={20} />}>
-            Submit
-          </Button>
-        </div> */}
-
-          {/* Footer */}
-          <div className="leave_footer-section">
-            <div className="leave_input-wrapper">
-              <User size={20} />
-              <input
-                type="text"
-                name="username"
-                placeholder="Username"
-                value={formData.username}
-                onChange={handleChange}
-                className="leave_username-input"
-                required
-              />
-            </div>
-            <div className="leave_input-wrapper">
-              <Tag size={20} />
-              <input
-                type="text"
-                name="designationFooter"
-                placeholder="Designation"
-                value={formData.designationFooter}
-                onChange={handleChange}
-                className="leave_designation-input"
-                required
-              />
-            </div>
-            <Button
-              leftIcon={<CheckCircle size={25} />}
-              style={{ marginLeft: "50px", paddingRight: "15px" }}
-              className="leave_button"
-            >
-              <CheckCircle size={18} /> &nbsp; Check
-            </Button>
-          </div>
-
-          <div className="leave_button-row">
-            <Button
-              leftIcon={<PaperPlaneRight size={20} />}
-              className="leave_buttonapprove"
-            >
-              Forward
-              <ArrowBendUpRight size={18} />
-            </Button>
-            <Button
-              leftIcon={<CheckCircle size={20} />}
-              className="leave_buttonapprove"
-            >
-              Reject
-              <XCircle size={18} />
-            </Button>
-            <Button
-              leftIcon={<CheckCircle size={20} />}
-              className="leave_buttonapprove"
-            >
-              Approve
-              <CheckCircle size={18} />
-            </Button>
-            <Button
-              leftIcon={<CheckCircle size={20} />}
-              className="leave_buttonapprove"
-            >
-              Archive
-              <FileArchive size={18} />
-            </Button>
-            <Button
-              leftIcon={<FileText size={20} />}
-              className="leave_buttonapprove"
-            >
-              Previous Forms
-              <Table size={20} />
-            </Button>
           </div>
         </form>
       </div>

@@ -10,6 +10,7 @@ export const get_leave_requests = `${host}/hr2/api/get_leave_requests`;
 export const get_leave_inbox = `${host}/hr2/api/get_leave_inbox`;
 export const get_leave_archive = `${host}/hr2/api/get_leave_archive`;
 export const submit_leave_form = `${host}/hr2/api/submit_leave_form`;
+export const view_leave_form = `${host}/hr2/api/view_leave_form_data`;
 
 // LTC routes
 export const get_ltc_requests = `${host}/hr2/api/get_ltc_requests`;
@@ -21,7 +22,7 @@ export const get_cpda_adv_requests = `${host}/hr2/api/get_cpda_adv_requests`;
 export const get_cpda_adv_inbox = `${host}/hr2/api/get_cpda_adv_inbox`;
 export const get_cpda_adv_archive = `${host}/hr2/api/get_cpda_adv_archive`;
 export const submit_cpda_adv_form = `${host}/hr2/api/submit_cpda_adv_form`;
-export const view_cpda_adv_form = `${host}/hr2/api/view_cpda_adv_form`;
+export const view_cpda_adv_form = `${host}/hr2/api/view_cpda_adv_form_data`;
 
 // CPDA Claim routes
 export const get_cpda_claim_requests = `${host}/hr2/api/get_cpda_claim_requests`;
