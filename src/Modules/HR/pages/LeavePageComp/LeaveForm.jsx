@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect, useState } from "react";
 import { Button, Select } from "@mantine/core";
 import {
   PaperPlaneRight,
@@ -10,14 +11,93 @@ import {
   Calendar,
   ClipboardText,
   FloppyDisk,
+  UserList,
 } from "@phosphor-icons/react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateForm, resetForm } from "../../../../redux/formSlice";
+import {
+  search_employee,
+  get_my_details,
+  submit_leave_form,
+} from "../../../../routes/hr";
 import "./LeaveForm.css";
 
 const LeaveForm = () => {
   const formData = useSelector((state) => state.form);
   const dispatch = useDispatch();
+  const [verifiedReceiver, setVerifiedReceiver] = useState(false);
+
+  // set formData to initial state
+  useEffect(() => {
+    const fetchMyDetails = async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          console.error("No authentication token found!");
+          return;
+        }
+
+        const response = await fetch(get_my_details, {
+          headers: { Authorization: `Token ${token}` },
+        });
+
+        if (!response.ok) {
+          alert("Failed to fetch user details. Please try again later.");
+          throw new Error("Network response was not ok");
+        }
+
+        const fetchedData = await response.json();
+        dispatch(updateForm({ name: "name", value: fetchedData.username }));
+        dispatch(
+          updateForm({ name: "designation", value: fetchedData.designation }),
+        );
+      } catch (error) {
+        console.error("Failed to fetch user details:", error);
+      }
+    };
+    fetchMyDetails();
+  }, []);
+
+  const handleCheck = async (username_reciever) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        console.error("No authentication token found!");
+        return;
+      }
+
+      const response = await fetch(
+        `${search_employee}?search=${formData.username_reciever}`,
+        {
+          headers: { Authorization: `Token ${token}` },
+        },
+      );
+
+      if (!response.ok) {
+        alert("Receiver not found. Please check the username and try again.");
+        throw new Error("Network response was not ok");
+      }
+
+      const fetchedReceiverData = await response.json();
+
+      dispatch(
+        updateForm({
+          name: "username_reciever",
+          value: formData.username_reciever,
+        }),
+      );
+      dispatch(
+        updateForm({
+          name: "designation_reciever",
+          value: fetchedReceiverData.designation,
+        }),
+      );
+      setVerifiedReceiver(true);
+      alert("Receiver verified successfully!");
+    } catch (error) {
+      console.error("Failed to fetch receiver data:", error);
+    }
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -29,9 +109,58 @@ const LeaveForm = () => {
   };
 
   const handleSubmit = (event) => {
+    // Prevent page refresh
     event.preventDefault();
-    console.log(formData);
-    dispatch(resetForm());
+
+    //  create a submission object
+    const submission = {
+      name: formData.name,
+      designation: formData.designation,
+      submissionDate: formData.submissionDate,
+      departmentInfo: formData.departmentInfo,
+      pfNo: formData.pfNo,
+      natureOfLeave: formData.natureOfLeave,
+      leaveStartDate: formData.leaveStartDate,
+      leaveEndDate: formData.leaveEndDate,
+      purposeOfLeave: formData.purposeOfLeave,
+      addressDuringLeave: formData.addressDuringLeave,
+      academicResponsibility: formData.academicResponsibility,
+      addministrativeResponsibiltyAssigned:
+        formData.addministrativeResponsibiltyAssigned,
+      username_reciever: formData.username_reciever,
+      designation_reciever: formData.designation_reciever,
+    };
+
+    // Submit the form
+    const submitForm = async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          console.error("No authentication token found!");
+          return;
+        }
+
+        const response = await fetch(submit_leave_form, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Token ${token}`,
+          },
+          body: JSON.stringify(submission),
+        });
+
+        if (!response.ok) {
+          alert("Failed to submit form. Please try again later.");
+          throw new Error("Network response was not ok");
+        }
+
+        alert("Form submitted successfully!");
+        dispatch(resetForm());
+      } catch (error) {
+        console.error("Failed to submit form:", error);
+      }
+    };
+    submitForm();
   };
 
   return (
@@ -54,6 +183,7 @@ const LeaveForm = () => {
                 onChange={handleChange}
                 className="input"
                 required
+                disabled
               />
             </div>
             <label className="input-label" htmlFor="designation">
@@ -70,21 +200,22 @@ const LeaveForm = () => {
                 onChange={handleChange}
                 className="input"
                 required
+                disabled
               />
             </div>
           </div>
 
           <div className="grid-col right-side">
-            <label className="input-label" htmlFor="applicationDate">
+            <label className="input-label" htmlFor="submissionDate">
               Application Date
             </label>
             <div className="input-wrapper center" style={{ width: "300px" }}>
               <Calendar size={20} />
               <input
                 type="date"
-                id="applicationDate"
-                name="applicationDate"
-                value={formData.applicationDate}
+                id="submissionDate"
+                name="submissionDate"
+                value={formData.submissionDate}
                 onChange={handleChange}
                 className="input center"
                 required
@@ -96,17 +227,17 @@ const LeaveForm = () => {
         {/* Section 2: Discipline/Department (Left), PF Number (Right) */}
         <div className="grid-row">
           <div className="grid-col">
-            <label className="input-label" htmlFor="department">
+            <label className="input-label" htmlFor="departmentInfo">
               Department
             </label>
             <div className="input-wrapper">
               <Building size={20} />
               <input
                 type="text"
-                id="department"
-                name="department"
-                placeholder="Department"
-                value={formData.department}
+                id="departmentInfo"
+                name="departmentInfo"
+                placeholder="Department Name"
+                value={formData.departmentInfo}
                 onChange={handleChange}
                 className="input"
                 required
@@ -115,17 +246,17 @@ const LeaveForm = () => {
           </div>
 
           <div className="grid-col">
-            <label className="input-label" htmlFor="pfNumber">
+            <label className="input-label" htmlFor="pfNo">
               PF Number
             </label>
             <div className="input-wrapper">
               <IdentificationCard size={20} />
               <input
                 type="number"
-                id="pfNumber"
-                name="pfNumber"
+                id="pfNo"
+                name="pfNo"
                 placeholder="XXXXXXXXXXXX"
-                value={formData.pfNumber}
+                value={formData.pfNo}
                 onChange={handleChange}
                 className="input"
                 required
@@ -187,16 +318,16 @@ const LeaveForm = () => {
           </div>
 
           <div className="grid-col">
-            <label className="input-label" htmlFor="startDate">
+            <label className="input-label" htmlFor="leaveStartDate">
               Leave Start Date
             </label>
             <div className="input-wrapper">
               <Calendar size={20} />
               <input
                 type="date"
-                id="startDate"
-                name="startDate"
-                value={formData.startDate}
+                id="leaveStartDate"
+                name="leaveStartDate"
+                value={formData.leaveStartDate}
                 onChange={handleChange}
                 className="input"
                 required
@@ -205,16 +336,16 @@ const LeaveForm = () => {
           </div>
 
           <div className="grid-col">
-            <label className="input-label" htmlFor="endDate">
+            <label className="input-label" htmlFor="leaveEndDate">
               Leave End Date
             </label>
             <div className="input-wrapper">
               <Calendar size={20} />
               <input
                 type="date"
-                id="endDate"
-                name="endDate"
-                value={formData.endDate}
+                id="leaveEndDate"
+                name="leaveEndDate"
+                value={formData.leaveEndDate}
                 onChange={handleChange}
                 className="input"
                 required
@@ -226,20 +357,38 @@ const LeaveForm = () => {
         {/* Section 4: Purpose of Leave */}
         <div className="grid-row">
           <div className="purpose">
-            <label className="input-label" htmlFor="purpose">
+            <label className="input-label" htmlFor="purposeOfLeave">
               Purpose
             </label>
             <div className="input-wrapper">
               <ClipboardText size={20} />
               <input
                 type="text"
-                id="purpose"
-                name="purpose"
-                placeholder="Purpose"
-                value={formData.purpose}
+                id="purposeOfLeave"
+                name="purposeOfLeave"
+                placeholder="purpose Of Leave"
+                value={formData.purposeOfLeave}
                 onChange={handleChange}
                 className="input"
                 aria-rowcount={2}
+                required
+              />
+            </div>
+          </div>
+          <div className="grid-col">
+            <label className="input-label" htmlFor="addressDuringLeave">
+              Adress during Leave
+            </label>
+            <div className="input-wrapper">
+              <UserList size={20} />
+              <input
+                type="text"
+                id="addressDuringLeave"
+                name="addressDuringLeave"
+                placeholder="Full Address"
+                value={formData.addressDuringLeave}
+                onChange={handleChange}
+                className="input"
                 required
               />
             </div>
@@ -270,7 +419,7 @@ const LeaveForm = () => {
           <div className="grid-col">
             <label
               className="input-label"
-              htmlFor="administrativeResponsibility"
+              htmlFor="addministrativeResponsibiltyAssigned"
             >
               Administrative Responsibility
             </label>
@@ -278,10 +427,10 @@ const LeaveForm = () => {
               <Tag size={20} />
               <input
                 type="text"
-                id="administrativeResponsibility"
-                name="administrativeResponsibility"
+                id="addministrativeResponsibiltyAssigned"
+                name="addministrativeResponsibiltyAssigned"
                 placeholder="Enter the name"
-                value={formData.administrativeResponsibility}
+                value={formData.addministrativeResponsibiltyAssigned}
                 onChange={handleChange}
                 className="input"
                 required
@@ -296,9 +445,9 @@ const LeaveForm = () => {
             <User size={20} />
             <input
               type="text"
-              name="username"
-              placeholder="Username"
-              value={formData.username}
+              name="username_reciever"
+              placeholder="Receiver's Username"
+              value={formData.username_reciever}
               onChange={handleChange}
               className="username-input"
               required
@@ -308,18 +457,19 @@ const LeaveForm = () => {
             <Tag size={20} />
             <input
               type="text"
-              name="designationFooter"
+              name="designation_reciever"
               placeholder="Designation"
-              value={formData.designationFooter}
-              onChange={handleChange}
+              value={formData.designation_reciever}
               className="designation-input"
               required
+              disabled
             />
           </div>
           <Button
             leftIcon={<CheckCircle size={25} />}
             style={{ marginLeft: "50px", paddingRight: "15px" }}
             className="button"
+            onClick={handleCheck}
           >
             <CheckCircle size={18} /> &nbsp; Check
           </Button>
@@ -333,9 +483,9 @@ const LeaveForm = () => {
               borderRadius: "5px",
             }}
             className="button"
+            disabled={!verifiedReceiver}
           >
-            <FloppyDisk size={20} />
-            &nbsp; Submit
+            <PaperPlaneRight size={20} /> &nbsp; Submit
           </Button>
         </div>
       </form>

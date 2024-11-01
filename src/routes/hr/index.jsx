@@ -9,6 +9,7 @@ export const get_form_track = (formId) =>
 export const get_leave_requests = `${host}/hr2/api/get_leave_requests`;
 export const get_leave_inbox = `${host}/hr2/api/get_leave_inbox`;
 export const get_leave_archive = `${host}/hr2/api/get_leave_archive`;
+export const submit_leave_form = `${host}/hr2/api/submit_leave_form`;
 
 // LTC routes
 export const get_ltc_requests = `${host}/hr2/api/get_ltc_requests`;
