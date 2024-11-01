@@ -12,7 +12,7 @@ const RequestsTable = ({ title, data }) => {
   const headers = ["ID", "Name", "Designation", "Submission Date", "View"];
 
   const handleViewClick = (view) => {
-    navigate(view); // Redirect to the form view
+    navigate(`./view/${view}`);
   };
 
   return (
@@ -51,7 +51,7 @@ const RequestsTable = ({ title, data }) => {
                   <td>
                     <span
                       className="text-link"
-                      onClick={() => handleViewClick(item.view)}
+                      onClick={() => handleViewClick(item.id)}
                     >
                       <Eye size={20} />
                       View

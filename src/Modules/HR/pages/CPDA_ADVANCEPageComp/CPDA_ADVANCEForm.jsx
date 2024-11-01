@@ -386,6 +386,7 @@ const CPDA_ADVANCEForm = () => {
                 value={formData.amountCheckedInPDA}
                 onChange={handleChange}
                 className="input"
+                style={{ maxWidth: "50%" }}
               />
             </div>
           </div>
