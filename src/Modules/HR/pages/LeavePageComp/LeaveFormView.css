@@ -9,6 +9,8 @@
     border-radius: 10px;
 }
 
+
+
 .leave_container form {
     display: flex;
     flex-direction: column;
@@ -247,6 +249,10 @@
     border: 1px solid #ced4da;
     width: 100%;
     height: 50px;
+}
+
+.leave_container input{
+    color:black
 }
 
 /* For responsiveness */

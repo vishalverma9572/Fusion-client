@@ -36,7 +36,7 @@ function LTCInbox() {
     return <LoadingComponent />;
   }
 
-  return <InboxTable title="LTC Inbox" data={inboxData} formType="formType" />;
+  return <InboxTable title="LTC Inbox" data={inboxData} formType="ltc" />;
 }
 
 export default LTCInbox;

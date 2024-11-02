@@ -36,7 +36,13 @@ function CPDA_ClaimArchive() {
     return <LoadingComponent />;
   }
 
-  return <ArchiveTable title="CPDA Claim Archive" data={archiveData} />;
+  return (
+    <ArchiveTable
+      title="CPDA Claim Archive"
+      data={archiveData}
+      formType="cpda_claim"
+    />
+  );
 }
 
 export default CPDA_ClaimArchive;

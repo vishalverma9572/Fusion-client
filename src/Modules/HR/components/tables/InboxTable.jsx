@@ -9,17 +9,18 @@ import LeaveTrackView from "../../pages/LeavePageComp/LeaveTrack";
 const InboxTable = ({ title, data, formType }) => {
   const navigate = useNavigate();
 
-  const headers = ["FormID", "User", "Designation", "Date", "View", "Track"];
+  const headers = ["FileID", "User", "Designation", "Date", "View", "Track"];
 
-  const handleViewClick = (view) => {
+  const handleViewClick = (id) => {
     const viewUrlMap = {
-      leave: `/hr/FormView/leaveform`,
-      cpda_adv: `/hr/FormView/cpda_adv`,
-      ltc: `/hr/FormView/ltc`,
-      cpda_claim: `/hr/FormView/cpda_claim`,
-      appraisal: `/hr/FormView/appraisal`,
+      leave: `/hr/leave/file_handler/${id}`,
+      cpda_adv: `/hr/cpda_adv/file_handler/${id}`,
+      ltc: `/hr/ltc/file_handler/${id}`,
+      cpda_claim: `/hr/cpda_claim/file_handler/${id}`,
+      appraisal: `/hr/appraisal/file_handler/${id}`,
     };
 
+    console.log(formType);
     navigate(viewUrlMap[formType]); // Default to leaveform if formType is not matched
   };
   const handleTrackClick = (id) => {
@@ -73,7 +74,7 @@ const InboxTable = ({ title, data, formType }) => {
                     <span
                       className="text-link"
                       // onClick={() => handleViewClick(`/hr/FormView/leaveform`)}
-                      onClick={handleViewClick}
+                      onClick={() => handleViewClick(item.id)}
                     >
                       <Eye size={20} />
                       View

@@ -21,11 +21,13 @@ import {
   submit_leave_form,
 } from "../../../../routes/hr";
 import "./LeaveForm.css";
+import { useNavigate } from "react-router-dom";
 
 const LeaveForm = () => {
   const formData = useSelector((state) => state.form);
   const dispatch = useDispatch();
   const [verifiedReceiver, setVerifiedReceiver] = useState(false);
+  const navigate = useNavigate();
 
   // set formData to initial state
   useEffect(() => {
@@ -111,7 +113,10 @@ const LeaveForm = () => {
   const handleSubmit = (event) => {
     // Prevent page refresh
     event.preventDefault();
-
+    if (!verifiedReceiver) {
+      alert("Please verify the receiver before submitting the form.");
+      return;
+    }
     //  create a submission object
     const submission = {
       name: formData.name,
@@ -156,6 +161,7 @@ const LeaveForm = () => {
 
         alert("Form submitted successfully!");
         dispatch(resetForm());
+        Navigate("/hr/leave/leaverequests");
       } catch (error) {
         console.error("Failed to submit form:", error);
       }
@@ -483,7 +489,7 @@ const LeaveForm = () => {
               borderRadius: "5px",
             }}
             className="button"
-            disabled={!verifiedReceiver}
+            // disabled={!verifiedReceiver}
           >
             <PaperPlaneRight size={20} /> &nbsp; Submit
           </Button>

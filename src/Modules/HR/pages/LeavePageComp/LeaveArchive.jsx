@@ -36,7 +36,9 @@ function LeaveArchive() {
     return <LoadingComponent loadingMsg="Fetching Leave Archive..." />;
   }
 
-  return <ArchiveTable title="Leave Archive" data={archiveData} />;
+  return (
+    <ArchiveTable title="Leave Archive" data={archiveData} formType="leave" />
+  );
 }
 
 export default LeaveArchive;

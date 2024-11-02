@@ -36,7 +36,13 @@ function Cpda_ADVANCEArchive() {
     return <LoadingComponent />;
   }
 
-  return <ArchiveTable title="CPDA Adv Archive" data={archiveData} />;
+  return (
+    <ArchiveTable
+      title="CPDA Adv Archive"
+      data={archiveData}
+      formType="cpda_adv"
+    />
+  );
 }
 
 export default Cpda_ADVANCEArchive;

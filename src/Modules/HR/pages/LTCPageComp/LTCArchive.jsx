@@ -36,7 +36,7 @@ function LTCArchive() {
     return <LoadingComponent />;
   }
 
-  return <ArchiveTable title="LTC Archive" data={archiveData} />;
+  return <ArchiveTable title="LTC Archive" data={archiveData} formType="ltc" />;
 }
 
 export default LTCArchive;

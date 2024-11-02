@@ -5,13 +5,36 @@ import { Eye, MapPin } from "@phosphor-icons/react";
 import "./Table.css"; // Ensure this path is correct
 import { EmptyTable } from "./EmptyTable";
 
-const ArchiveTable = ({ title, data }) => {
+const ArchiveTable = ({ title, data, formType = undefined }) => {
   const navigate = useNavigate();
 
-  const headers = ["FormID", "User", "Designation", "Date", "View", "Track"];
+  const headers = ["FileID", "User", "Designation", "Date", "View", "Track"];
 
-  const handleViewClick = (view) => {
-    navigate(view); // Redirect to the form view
+  const handleViewClick = (id) => {
+    const viewUrlMap = {
+      leave: `/hr/leave/file_handler/${id}?archive=true`,
+      cpda_adv: `/hr/cpda_adv/file_handler/${id}?archive=true`,
+      ltc: `/hr/ltc/file_handler/${id}?archive=true`,
+      cpda_claim: `/hr/cpda_claim/file_handler/${id}?archive=true`,
+      appraisal: `/hr/appraisal/file_handler/${id}?archive=true`,
+    };
+
+    console.log(viewUrlMap[formType]);
+    navigate(viewUrlMap[formType]); // Default to leaveform if formType is not matched
+  };
+  const handleTrackClick = (id) => {
+    console.log(formType);
+
+    const trackUrlMap = {
+      leave: `/hr/FormView/leaveform_track/${id}`,
+      cpda_adv: `/hr/FormView/cpda_adv_track/${id}`,
+      ltc: `/hr/FormView/ltc_track/${id}`,
+      cpda_claim: `/hr/FormView/cpda_claim_track/${id}`,
+      appraisal: `/hr/FormView/appraisal_track/${id}`,
+    };
+
+    console.log(trackUrlMap[formType]);
+    navigate(trackUrlMap[formType]); // Default to leaveform_track if formType is not matched
   };
 
   return (
@@ -43,6 +66,7 @@ const ArchiveTable = ({ title, data }) => {
             <tbody>
               {data.map((item, index) => (
                 <tr className="table-row" key={index}>
+                  {console.log(item.id)}
                   <td>{item.id}</td>
                   <td>{item.uploader}</td>
                   <td>{item.designation}</td>
@@ -50,14 +74,17 @@ const ArchiveTable = ({ title, data }) => {
                   <td>
                     <span
                       className="text-link"
-                      onClick={() => handleViewClick(`/archive/${item.id}`)}
+                      onClick={() => handleViewClick(item.id)}
                     >
                       <Eye size={20} />
                       View
                     </span>
                   </td>
                   <td>
-                    <span className="text-link">
+                    <span
+                      className="text-link"
+                      onClick={() => handleTrackClick(item.id)}
+                    >
                       <MapPin size={20} />
                       Track
                     </span>

@@ -9,6 +9,7 @@ import CPDA_Claim from "./pages/CPDA_Claim";
 import FormView from "./pages/FormView";
 import CPDA_ADVANCEView from "./pages/CPDA_ADVANCEPageComp/CPDA_ADVANCEView";
 import LeaveFormView from "./pages/LeavePageComp/LeaveFormView";
+import LeaveFilehandle from "./pages/LeavePageComp/Leave_file_handle";
 
 export default function HR() {
   return (
@@ -16,6 +17,7 @@ export default function HR() {
       {/* Show welcome message at /hr */}
       <Route path="/" element={<Hr_Dashboard />} />
       {/* Render LeavePage at /hr/leave */}
+      <Route path="leave/file_handler/:id" element={<LeaveFilehandle />} />
       <Route path="leave/view/:id" element={<LeaveFormView />} />
       <Route path="leave/*" element={<LeavePage />} />
 

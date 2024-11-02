@@ -36,7 +36,13 @@ function AppraisalArchive() {
     return <LoadingComponent />;
   }
 
-  return <ArchiveTable title="Appraisal Archive" data={archiveData} />;
+  return (
+    <ArchiveTable
+      title="Appraisal Archive"
+      data={archiveData}
+      formType="appraisal"
+    />
+  );
 }
 
 export default AppraisalArchive;
