@@ -160,8 +160,10 @@ const LeaveFilehandle = () => {
     e.preventDefault();
 
     if (!verifiedReceiver) {
-      alert("Please verify the receiver before proceeding.");
-      return;
+      if (action === "0" || action === "1") {
+        alert("Please verify the receiver before proceeding.");
+        return;
+      }
     }
 
     //
