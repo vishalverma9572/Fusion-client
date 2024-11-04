@@ -10,6 +10,7 @@ import FormView from "./pages/FormView";
 import CPDA_ADVANCEView from "./pages/CPDA_ADVANCEPageComp/CPDA_ADVANCEView";
 import LeaveFormView from "./pages/LeavePageComp/LeaveFormView";
 import LeaveFilehandle from "./pages/LeavePageComp/Leave_file_handle";
+import Cpda_advFilehandle from "./pages/CPDA_ADVANCEPageComp/Cpda_ADVANCE_file_handle";
 
 export default function HR() {
   return (
@@ -22,8 +23,13 @@ export default function HR() {
       <Route path="leave/*" element={<LeavePage />} />
 
       {/* Route for the CPDA Advance View page */}
+      <Route
+        path="cpda_adv/file_handler/:id"
+        element={<Cpda_advFilehandle />}
+      />
       <Route path="cpda_adv/view/:id" element={<CPDA_ADVANCEView />} />
       <Route path="cpda_adv/*" element={<CPDA_ADVANCE />} />
+
       <Route path="ltc/*" element={<LTC />} />
       <Route path="appraisal/*" element={<Appraisal />} />
       <Route path="cpda_claim/*" element={<CPDA_Claim />} />

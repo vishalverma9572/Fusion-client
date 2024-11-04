@@ -25,6 +25,8 @@ export const get_cpda_adv_inbox = `${host}/hr2/api/get_cpda_adv_inbox`;
 export const get_cpda_adv_archive = `${host}/hr2/api/get_cpda_adv_archive`;
 export const submit_cpda_adv_form = `${host}/hr2/api/submit_cpda_adv_form`;
 export const view_cpda_adv_form = `${host}/hr2/api/view_cpda_adv_form_data`;
+export const cpda_adv_edit_handle = `${host}/hr2/api/cpda_adv_edit_handle`;
+export const cpda_adv_file_handle = `${host}/hr2/api/cpda_adv_file_handle`;
 
 // CPDA Claim routes
 export const get_cpda_claim_requests = `${host}/hr2/api/get_cpda_claim_requests`;
