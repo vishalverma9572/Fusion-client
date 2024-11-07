@@ -24,11 +24,16 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { updateForm, resetForm } from "../../../../redux/formSlice";
 import "./LtcForm.css";
-import { get_my_details } from "../../../../routes/hr";
+import {
+  search_employee,
+  get_my_details,
+  submit_ltc_form,
+} from "../../../../routes/hr";
 
 const LtcForm = () => {
   const formData = useSelector((state) => state.form);
   const dispatch = useDispatch();
+  const [verifiedReceiver, setVerifiedReceiver] = useState(false);
   const Divider = ({
     thickness = "3px",
     color = "#ccc",
@@ -74,24 +79,65 @@ const LtcForm = () => {
   }, []);
 
   // State variables for family member details
-  const [numChildren, setNumChildren] = useState(1);
+  const [numFamilyMenbers, setNumFamilyMenbers] = useState(1);
   const [childrenFields, setChildrenFields] = useState([{ name: "", age: "" }]);
   const [numDependents, setNumDependents] = useState(1);
   const [dependentsFields, setDependentsFields] = useState([
     { fullName: "", age: "", reason: "" },
   ]);
   const [selectedPlace, setSelectedPlace] = useState("HomeTown"); // Default is "HomeTown"
-  const [visitingPlace, setVisitingPlace] = useState("");
+  const [placeOfVisit, setPlaceOfVisit] = useState("");
 
   const handlePlaceChange = (value) => {
     setSelectedPlace(value); // Update the selected place value
     if (value === "HomeTown") {
-      setVisitingPlace(""); // Reset the visiting place when "HomeTown" is selected
+      setPlaceOfVisit(""); // Reset the visiting place when "HomeTown" is selected
     }
   };
 
   const handleVisitingPlaceChange = (event) => {
-    setVisitingPlace(event.target.value);
+    setPlaceOfVisit(event.target.value);
+  };
+
+  const handleCheck = async (username_reciever) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        console.error("No authentication token found!");
+        return;
+      }
+
+      const response = await fetch(
+        `${search_employee}?search=${formData.username_reciever}`,
+        {
+          headers: { Authorization: `Token ${token}` },
+        },
+      );
+
+      if (!response.ok) {
+        alert("Receiver not found. Please check the username and try again.");
+        throw new Error("Network response was not ok");
+      }
+
+      const fetchedReceiverData = await response.json();
+
+      dispatch(
+        updateForm({
+          name: "username_reciever",
+          value: formData.username_reciever,
+        }),
+      );
+      dispatch(
+        updateForm({
+          name: "designation_reciever",
+          value: fetchedReceiverData.designation,
+        }),
+      );
+      setVerifiedReceiver(true);
+      alert("Receiver verified successfully!");
+    } catch (error) {
+      console.error("Failed to fetch receiver data:", error);
+    }
   };
 
   const handleChange = (event) => {
@@ -103,16 +149,10 @@ const LtcForm = () => {
     dispatch(updateForm({ name, value }));
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(formData);
-    dispatch(resetForm());
-  };
-
   // Handle changes for number of children
   const handleChildrenChange = (value) => {
     const count = parseInt(value, 10);
-    setNumChildren(count);
+    setNumFamilyMenbers(count);
     setChildrenFields(new Array(count).fill({ name: "", age: "" })); // Reset fields based on selected number
   };
 
@@ -170,6 +210,91 @@ const LtcForm = () => {
     },
   };
 
+  const handleSubmit = (event) => {
+    // Prevent page refresh
+    event.preventDefault();
+    if (!verifiedReceiver) {
+      alert("Please verify the receiver before submitting the form.");
+      return;
+    }
+
+    const adjustedMonth = "";
+    // Create a submission object with main form data and additional fields for children and dependents
+    const submission = {
+      name: formData.name,
+      blockYear: formData.blockYear,
+      pfNo: formData.pfNo,
+      basicPaySalary: formData.basicPaySalary,
+      designation: formData.designation,
+      departmentInfo: formData.departmentInfo,
+      leaveRequired: formData.leaveRequired,
+      leaveStartDate: formData.leaveStartDate,
+      leaveEndDate: formData.leaveEndDate,
+      dateOfDepartureForFamily: formData.dateOfDepartureForFamily,
+      natureOfLeave: formData.natureOfLeave,
+      purposeOfLeave: formData.purposeOfLeave,
+      hometownOrNot: selectedPlace,
+      placeOfVisit: placeOfVisit,
+      addressDuringLeave: formData.addressDuringLeave,
+      modeOfTravel: formData.modeOfTravel,
+      detailsOfFamilyMembersAlreadyDone: [
+        formData.selfName,
+        formData.wifeName,
+        formData.children,
+      ],
+      detailsOfFamilyMembersAboutToAvail: childrenFields,
+      detailsOfDependents: dependentsFields,
+      amountOfAdvanceRequired: formData.amountOfAdvanceRequired,
+
+      //numFamilyMenbers: numFamilyMenbers,
+      //children: childrenFields,
+      //numDependents: numDependents,
+      // detailsOfDependents: [],
+
+      adjustedMonth: adjustedMonth,
+      certifiedThatFamilyDependents: formData.certificationDetails,
+      submissionDate: formData.date,
+      certifiedThatAdvanceTakenOn: formData.previousLTCDate,
+      phoneNumberForContact: formData.phoneNumber,
+      username_reciever: formData.username_reciever,
+      designation_reciever: formData.designation_reciever,
+    };
+
+    console.log(submission);
+
+    // Submit the form
+    const submitForm = async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          console.error("No authentication token found!");
+          return;
+        }
+
+        const response = await fetch(submit_ltc_form, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Token ${token}`,
+          },
+          body: JSON.stringify(submission),
+        });
+
+        if (!response.ok) {
+          alert("Failed to submit form. Please try again later.");
+          throw new Error("Network response was not ok");
+        }
+
+        alert("Form submitted successfully!");
+        dispatch(resetForm());
+        Navigate("/hr/ltc/ltcrequests"); // this path is not navigable, same error occuring in leave form as well
+      } catch (error) {
+        console.error("Failed to submit form:", error);
+      }
+    };
+    submitForm();
+  };
+
   return (
     <div className="Ltc_container">
       <form onSubmit={handleSubmit}>
@@ -215,15 +340,15 @@ const LtcForm = () => {
         {/* Row 2: Provident Fund No. and Basic Pay */}
         <div className="grid-row">
           <div className="grid-col">
-            <label className="input-label" htmlFor="blockyear">
+            <label className="input-label" htmlFor="blockYear">
               Block year
             </label>
             <div className="input-wrapper">
               <IdentificationCard size={20} />
               <input
                 type="number"
-                id="Blockyear"
-                name="Blockyear"
+                id="blockYear" // updated to match the key in formData
+                name="blockYear" // updated to match the key in formData
                 value={formData.blockYear}
                 placeholder="Block year"
                 onChange={handleChange}
@@ -233,16 +358,16 @@ const LtcForm = () => {
             </div>
           </div>
           <div className="grid-col">
-            <label className="input-label" htmlFor="providentFundNo">
+            <label className="input-label" htmlFor="pfNo">
               Provident Fund No.
             </label>
             <div className="input-wrapper">
               <IdentificationCard size={20} />
               <input
                 type="number"
-                id="providentFundNo"
-                name="providentFundNo"
-                value={formData.providentFundNo}
+                id="pfNo"
+                name="pfNo"
+                value={formData.pfNo}
                 placeholder="Provident Fund Number"
                 onChange={handleChange}
                 className="input"
@@ -251,16 +376,16 @@ const LtcForm = () => {
             </div>
           </div>
           <div className="grid-col">
-            <label className="input-label" htmlFor="basicPay">
+            <label className="input-label" htmlFor="basicPaySalary">
               Basic Pay
             </label>
             <div className="input-wrapper">
               <Money size={20} />
               <input
                 type="number"
-                id="basicPay"
-                name="basicPay"
-                value={formData.basicPay}
+                id="basicPaySalary"
+                name="basicPaySalary"
+                value={formData.basicPaySalary}
                 placeholder="Enter Basic Pay"
                 onChange={handleChange}
                 className="input"
@@ -273,14 +398,14 @@ const LtcForm = () => {
         {/* Row 3: Department and Nature of Leave */}
         <div className="grid-row">
           <div className="grid-col">
-            <label className="input-label" htmlFor="departmentSection">
+            <label className="input-label" htmlFor="departmentInfo">
               Department / Section
             </label>
             <div className="input-wrapper">
               <Building size={20} />
               <Select
-                id="departmentSection"
-                name="departmentSection"
+                id="departmentInfo"
+                name="departmentInfo"
                 data={[
                   {
                     value: "Computer Science Engineering",
@@ -300,9 +425,9 @@ const LtcForm = () => {
                   },
                   { value: "Design", label: "Design" },
                 ]}
-                value={formData.departmentSection}
+                value={formData.departmentInfo}
                 onChange={(value) =>
-                  handleSelectChange(value, "departmentSection")
+                  handleSelectChange(value, "departmentInfo")
                 }
                 className="input"
                 styles={selectStyles}
@@ -314,20 +439,20 @@ const LtcForm = () => {
 
         <Divider />
         <div className="grid-col">
-          <label className="input-label" htmlFor="ltcAvailability">
+          <label className="input-label" htmlFor="leaveRequired">
             (a) Whether leave is required for availing L.T.C.?
           </label>
           <div className="input-wrapper">
             <Question size={20} />
             <Select
-              id="ltcAvailability"
-              name="ltcAvailability"
+              id="leaveRequired"
+              name="leaveRequired"
               data={[
                 { value: "Yes", label: "Yes" },
                 { value: "No", label: "No" },
               ]}
-              value={formData.ltcAvailability}
-              onChange={(value) => handleSelectChange(value, "ltcAvailability")}
+              value={formData.leaveRequired}
+              onChange={(value) => handleSelectChange(value, "leaveRequired")}
               className="input"
               styles={selectStyles}
               required
@@ -337,50 +462,52 @@ const LtcForm = () => {
 
         <div className="grid-row">
           <div className="grid-col">
-            <label className="input-label" htmlFor="date">
+            <label className="input-label" htmlFor="leaveStartDate">
               (b) (i) If so, duration of leave applied for From:
             </label>
             <div className="input-wrapper">
               <Calendar size={20} />
               <input
                 type="date"
-                id="date"
-                name="date"
-                value={formData.leaveStartDate} // changed
+                id="leaveStartDate"
+                name="leaveStartDate" // changed to match the key in formData
+                value={formData.leaveStartDate}
                 onChange={handleChange}
                 className="input"
                 required
               />
             </div>
           </div>
+
           <div className="grid-col">
-            <label className="input-label" htmlFor="date">
+            <label className="input-label" htmlFor="leaveEndDate">
               To:
             </label>
             <div className="input-wrapper">
               <Calendar size={20} />
               <input
                 type="date"
-                id="date"
-                name="date"
-                value={formData.leaveEndDate} // changed
+                id="leaveEndDate"
+                name="leaveEndDate" // changed to match the key in formData
+                value={formData.leaveEndDate}
                 onChange={handleChange}
                 className="input"
                 required
               />
             </div>
           </div>
+
           <div className="grid-col">
-            <label className="input-label" htmlFor="date">
+            <label className="input-label" htmlFor="dateOfDepartureForFamily">
               (ii) Date of departure of family, if not availing himself
             </label>
             <div className="input-wrapper">
               <Calendar size={20} />
               <input
                 type="date"
-                id="date"
-                name="date"
-                value={formData.dateOfDepartureForFamily} // changed
+                id="dateOfDepartureForFamily"
+                name="dateOfDepartureForFamily" // changed to match the key in formData
+                value={formData.dateOfDepartureForFamily}
                 onChange={handleChange}
                 className="input"
                 required
@@ -388,6 +515,7 @@ const LtcForm = () => {
             </div>
           </div>
         </div>
+
         {/* Row 4: LTC Availability and Purpose */}
         <div className="grid-row">
           {" "}
@@ -421,16 +549,16 @@ const LtcForm = () => {
             </div>
           </div>
           <div className="grid-col">
-            <label className="input-label" htmlFor="purpose">
+            <label className="input-label" htmlFor="purposeOfLeave">
               (d) Purpose
             </label>
             <div className="input-wrapper">
               <Tag size={20} />
               <input
                 type="text"
-                id="purpose"
-                name="purpose"
-                value={formData.purpose}
+                id="purposeOfLeave"
+                name="purposeOfLeave"
+                value={formData.purposeOfLeave}
                 placeholder="Enter Purpose of Travel"
                 onChange={handleChange}
                 className="input"
@@ -466,15 +594,15 @@ const LtcForm = () => {
           {/* Input field for entering the place if "Elsewhere" is selected */}
           {selectedPlace === "ElseWhere" && (
             <div className="grid-col">
-              <label className="input-label" htmlFor="visitingPlace">
+              <label className="input-label" htmlFor="placeOfVisit">
                 Place where you are visiting:
               </label>
               <div className="input-wrapper">
                 <input
                   type="text"
-                  id="visitingPlace"
-                  name="visitingPlace"
-                  value={visitingPlace}
+                  id="placeOfVisit"
+                  name="placeOfVisit"
+                  value={placeOfVisit}
                   onChange={handleVisitingPlaceChange}
                   placeholder="Enter the place"
                   className="input"
@@ -574,15 +702,15 @@ const LtcForm = () => {
           </div>
 
           <div className="grid-col">
-            <label className="input-label" htmlFor="Children">
+            <label className="input-label" htmlFor="children">
               (c) Children
             </label>
             <div className="input-wrapper">
               <User size={20} />
               <input
                 type="text"
-                id="Children"
-                name="Children"
+                id="children"
+                name="children"
                 placeholder="Children"
                 onChange={handleChange}
                 className="input"
@@ -593,15 +721,15 @@ const LtcForm = () => {
         </div>
 
         <div className="grid-col">
-          <label className="input-label" htmlFor="numChildren">
+          <label className="input-label" htmlFor="numFamilyMenbers">
             (c) Number of Family Members
           </label>
           <div className="input-wrapper">
             <Users size={20} />
             <div className="input-wrapper">
               <Select
-                id="numChildren"
-                name="numChildren"
+                id="numFamilyMenbers"
+                name="numFamilyMenbers"
                 data={[
                   { value: "0", label: "0" },
                   { value: "1", label: "1" },
@@ -610,7 +738,7 @@ const LtcForm = () => {
                   { value: "4", label: "4" },
                   { value: "5", label: "5" },
                 ]}
-                value={numChildren.toString()}
+                value={numFamilyMenbers.toString()}
                 onChange={handleChildrenChange}
                 className="input"
                 styles={selectStyles}
@@ -619,7 +747,7 @@ const LtcForm = () => {
           </div>
         </div>
 
-        {numChildren > 0 && (
+        {numFamilyMenbers > 0 && (
           <div>
             <h4
               style={{
@@ -808,16 +936,16 @@ const LtcForm = () => {
         <div className="grid-row">
           {/* Amount of advance required */}
           <div className="grid-col amount-advance">
-            <label className="input-label" htmlFor="amount">
+            <label className="input-label" htmlFor="amountOfAdvanceRequired">
               Amount of advance required, if any:
             </label>
             <div className="input-wrapper">
               <Money size={20} />
               <input
                 type="number"
-                id="amount"
-                name="amount"
-                value={formData.amount}
+                id="amountOfAdvanceRequired"
+                name="amountOfAdvanceRequired"
+                value={formData.amountOfAdvanceRequired}
                 onChange={handleChange}
                 className="input"
                 required
@@ -906,9 +1034,9 @@ const LtcForm = () => {
             <User size={20} />
             <input
               type="text"
-              name="username"
-              placeholder="Username"
-              value={formData.username}
+              name="username_reciever"
+              placeholder="Receiver's Username"
+              value={formData.username_reciever}
               onChange={handleChange}
               className="username-input"
               required
@@ -918,18 +1046,19 @@ const LtcForm = () => {
             <Tag size={20} />
             <input
               type="text"
-              name="designationFooter"
+              name="designation_reciever"
               placeholder="Designation"
-              value={formData.designationFooter}
-              onChange={handleChange}
+              value={formData.designation_reciever}
               className="designation-input"
               required
+              disabled
             />
           </div>
           <Button
             leftIcon={<CheckCircle size={25} />}
             style={{ marginLeft: "50px", paddingRight: "15px" }}
             className="button"
+            onClick={handleCheck}
           >
             <CheckCircle size={18} /> &nbsp; Check
           </Button>
