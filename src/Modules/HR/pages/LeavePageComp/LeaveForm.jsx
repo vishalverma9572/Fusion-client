@@ -68,6 +68,8 @@ const LeaveForm = () => {
         return;
       }
 
+      console.log(formData);
+
       const response = await fetch(
         `${search_employee}?search=${formData.username_reciever}`,
         {
@@ -472,7 +474,7 @@ const LeaveForm = () => {
             />
           </div>
           <Button
-            leftIcon={<CheckCircle size={25} />}
+            lefticon={<CheckCircle size={25} />}
             style={{ marginLeft: "50px", paddingRight: "15px" }}
             className="button"
             onClick={handleCheck}

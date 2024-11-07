@@ -185,7 +185,7 @@ const LeaveFilehandle = () => {
       academicResponsibility: fetchedformData.academicResponsibility,
       addministrativeResponsibiltyAssigned:
         fetchedformData.addministrativeResponsibiltyAssigned,
-      username_receiver: username_reciever,
+      // username_receiver: username_reciever,
       designation_reciever: designation_reciever,
     };
 

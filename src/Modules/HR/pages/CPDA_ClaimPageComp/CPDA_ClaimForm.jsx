@@ -1,5 +1,5 @@
 // src/Modules/HR/components/CPDA_ClaimForm.js
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@mantine/core";
 import {
   PaperPlaneRight,
@@ -15,41 +15,192 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { updateForm, resetForm } from "../../../../redux/formSlice";
 import "./CPDA_ClaimForm.css";
+import { useNavigate } from "react-router-dom";
+import {
+  get_my_details,
+  search_employee,
+  submit_cpda_claim_form,
+} from "../../../../routes/hr";
 
-function CPDA_ClaimForm() {
+const CPDA_ClaimForm = () => {
   const formData = useSelector((state) => state.form);
+  // console.log(formData)
   const dispatch = useDispatch();
+
+  const [verifiedReceiver, setVerifiedReceiver] = useState(false);
+  const navigate = useNavigate();
+
+  // set formData to initial state
+  useEffect(() => {
+    const fetchMyDetails = async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          console.error("No authentication token found!");
+          return;
+        }
+
+        const response = await fetch(get_my_details, {
+          headers: { Authorization: `Token ${token}` },
+        });
+
+        if (!response.ok) {
+          alert("Failed to fetch user details. Please try again later.");
+          throw new Error("Network response was not ok");
+        }
+
+        const fetchedData = await response.json();
+        // console.log(fetchedData);
+        dispatch(updateForm({ name: "name", value: fetchedData.username }));
+        dispatch(
+          updateForm({ name: "designation", value: fetchedData.designation }),
+        );
+      } catch (error) {
+        console.error("Failed to fetch user details:", error);
+      }
+    };
+    fetchMyDetails();
+  }, []);
+  // console.log(formData);
+
+  const handleCheck = async (username_reciever) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        console.error("No authentication token found!");
+        return;
+      }
+      console.log(formData);
+
+      const response = await fetch(
+        `${search_employee}?search=${formData.username_reciever}`,
+        {
+          headers: { Authorization: `Token ${token}` },
+        },
+      );
+
+      if (!response.ok) {
+        alert("Receiver not found. Please check the username and try again.");
+        throw new Error("Network response was not ok");
+      }
+
+      const fetchedReceiverData = await response.json();
+
+      dispatch(
+        updateForm({
+          name: "username_reciever",
+          value: formData.username_reciever,
+        }),
+      );
+      dispatch(
+        updateForm({
+          name: "designation_reciever",
+          value: fetchedReceiverData.designation,
+        }),
+      );
+      setVerifiedReceiver(true);
+      alert("Receiver verified successfully!");
+    } catch (error) {
+      console.error("Failed to fetch receiver data:", error);
+    }
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     dispatch(updateForm({ name, value }));
   };
 
- const handleSubmit = async (event) => {
-  event.preventDefault();
-   const authToken = localStorage.getItem("authToken");
+  const handleSubmit = (event) => {
+    event.preventDefault();
 
-  try {
-    const response = await fetch("http://127.0.0.1:8000/hr2/api/submit_cpda_reimbursement_form/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Token ${authToken}`,  
-      },
-      body: JSON.stringify(formData),
-    });
-
-    if (response.ok) {
-      const result = await response.json();
-      console.log("Form submitted successfully:", result);
-      dispatch(resetForm());
-    } else {
-      console.error("Error submitting form:", response.statusText);
+    // Ensure receiver is verified
+    if (!verifiedReceiver) {
+      alert("Please verify the receiver's designation before submitting.");
+      return;
     }
-  } catch (error) {
-    console.error("Error submitting form:", error);
-  }
-};
+
+    // Check required fields and alert if any are blank
+    const requiredFields = [
+      { name: "name", label: "Name" },
+      { name: "designation", label: "Designation" },
+      { name: "pfNo", label: "PF Number" },
+      { name: "purpose", label: "Purpose" },
+      {
+        name: "adjustmentSubmitted",
+        label: "Adjustment/Reimbursement Submitted for Rs.",
+      },
+      { name: "submissionDate", label: "Date" },
+      { name: "advanceTaken", label: "Advance Taken" },
+    ];
+
+    for (let field of requiredFields) {
+      if (!formData[field.name] || formData[field.name] === "") {
+        alert(`${field.label} is required.`);
+        return;
+      }
+    }
+
+    // Convert string fields to numbers if necessary and create processed data
+    const processedData = {
+      name: formData.name,
+      designation: formData.designation,
+      pfNo: parseInt(formData.pfNo, 10),
+      purpose: formData.purpose,
+      adjustmentSubmitted: parseInt(formData.adjustmentSubmitted, 10),
+      submissionDate: formData.submissionDate,
+      advanceTaken: formData.advanceTaken
+        ? parseFloat(formData.advanceTaken)
+        : null,
+      amountCheckedInPDA: formData.amountCheckedInPDA
+        ? parseFloat(formData.amountCheckedInPDA)
+        : null,
+      balanceAvailable: formData.balanceAvailable
+        ? parseFloat(formData.balanceAvailable)
+        : null,
+      advanceAmountPDA: formData.advanceAmountPDA
+        ? parseFloat(formData.advanceAmountPDA)
+        : null,
+    };
+
+    console.log(processedData);
+
+    // Submit form data
+    const submitForm = async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          console.error("No authentication token found!");
+          return;
+        }
+
+        const response = await fetch(
+          `${submit_cpda_claim_form}/?username_reciever=${formData.username_reciever}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Token ${token}`,
+            },
+            body: JSON.stringify(processedData),
+          },
+        );
+        console.log(response);
+
+        if (!response.ok) {
+          alert("Failed to submit form. Please try again later.");
+          throw new Error("Network response was not ok");
+        }
+
+        alert("Form submitted successfully!");
+        dispatch(resetForm());
+        navigate("/hr/cpda_claim/cpdaform");
+      } catch (error) {
+        console.error("Failed to submit form:", error);
+      }
+    };
+
+    submitForm();
+  };
 
   return (
     <div className="CPDA_ClaimForm_container">
@@ -117,16 +268,16 @@ function CPDA_ClaimForm() {
           </div>
 
           <div className="grid-col">
-            <label className="input-label" htmlFor="balanceDate">
+            <label className="input-label" htmlFor="submissionDate">
               Date
             </label>
             <div className="input-wrapper">
               <Calendar size={20} />
               <input
                 type="date"
-                id="balanceDate"
-                name="balanceDate"
-                value={formData.balanceDate}
+                id="submissionDate"
+                name="submissionDate"
+                value={formData.submissionDate}
                 onChange={handleChange}
                 className="input"
                 required
@@ -148,7 +299,7 @@ function CPDA_ClaimForm() {
                 id="advanceTaken"
                 name="advanceTaken"
                 placeholder="Amount Required"
-                value={formData. advanceTaken}
+                value={formData.advanceTaken}
                 onChange={handleChange}
                 className="input"
                 required
@@ -235,12 +386,13 @@ function CPDA_ClaimForm() {
               Balance available as on date
             </label>
             <div className="input-wrapper">
-              <Calendar size={20} />
+              <CurrencyDollar size={20} />
               <input
-                type="date"
-                id="balanceDate"
-                name="balanceDate"
-                value={formData.balanceDate}
+                type="number"
+                id="balanceAvailable"
+                name="balanceAvailable"
+                placeholder="Enter balanceAvailable"
+                value={formData.balanceAvailable}
                 onChange={handleChange}
                 className="input"
                 required
@@ -255,10 +407,10 @@ function CPDA_ClaimForm() {
               <FileText size={20} />
               <input
                 type="text"
-                id=" advanceAmountPDA"
-                name=" advanceAmountPDA"
-                placeholder=" advanceAmountPDA"
-                value={formData. advanceAmountPDA}
+                id="advanceAmountPDA"
+                name="advanceAmountPDA"
+                placeholder="advanceAmountPDA"
+                value={formData.advanceAmountPDA}
                 onChange={handleChange}
                 className="input"
               />
@@ -272,9 +424,9 @@ function CPDA_ClaimForm() {
             <User size={20} />
             <input
               type="text"
-              name="username"
-              placeholder="Username"
-              value={formData.username}
+              name="username_reciever"
+              placeholder="Receiver's Username"
+              value={formData.username_reciever}
               onChange={handleChange}
               className="username-input"
               required
@@ -284,24 +436,25 @@ function CPDA_ClaimForm() {
             <Tag size={20} />
             <input
               type="text"
-              name="designationFooter"
+              name="designation_reciever"
               placeholder="Designation"
-              value={formData.designationFooter}
-              onChange={handleChange}
+              value={formData.designation_reciever}
               className="designation-input"
               required
+              disabled
             />
           </div>
           <Button
-            leftIcon={<CheckCircle size={25} />}
+            lefticon={<CheckCircle size={25} />}
             style={{ marginLeft: "50px", paddingRight: "15px" }}
             className="button"
+            onClick={handleCheck}
           >
             <CheckCircle size={18} /> &nbsp; Check
           </Button>
           <Button
             type="submit"
-            rightIcon={<PaperPlaneRight size={20} />}
+            righticon={<PaperPlaneRight size={20} />}
             style={{
               marginLeft: "350px",
               width: "150px",
@@ -316,6 +469,6 @@ function CPDA_ClaimForm() {
       </form>
     </div>
   );
-}
+};
 
 export default CPDA_ClaimForm;
