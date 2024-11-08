@@ -19,6 +19,7 @@ export const get_ltc_requests = `${host}/hr2/api/get_ltc_requests`;
 export const get_ltc_inbox = `${host}/hr2/api/get_ltc_inbox`;
 export const get_ltc_archive = `${host}/hr2/api/get_ltc_archive`;
 export const submit_ltc_form = `${host}/hr2/api/submit_ltc_form`;
+export const view_ltc_form = `${host}/hr2/api/view_ltc_form_data`;
 
 // CPDA Advance routes
 export const get_cpda_adv_requests = `${host}/hr2/api/get_cpda_adv_requests`;
