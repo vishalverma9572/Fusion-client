@@ -85,20 +85,22 @@ const LtcForm = () => {
   const [dependentsFields, setDependentsFields] = useState([
     { fullName: "", age: "", reason: "" },
   ]);
-  const [selectedPlace, setSelectedPlace] = useState("HomeTown"); // Default is "HomeTown"
-  const [placeOfVisit, setPlaceOfVisit] = useState("");
+  const [selectedPlace, setSelectedPlace] = useState("HomeTown"); // Defaults to "HomeTown"
 
-  const handlePlaceChange = (value) => {
-    setSelectedPlace(value); // Update the selected place value
-    if (value === "HomeTown") {
-      setPlaceOfVisit(""); // Reset the visiting place when "HomeTown" is selected
-    }
-  };
+const [placeOfVisit, setPlaceOfVisit] = useState("");
+const handlePlaceChange = (value) => {
+setSelectedPlace(value); 
+if (value === "HomeTown") {
+setPlaceOfVisit("HomeTown");
+} else {
+setPlaceOfVisit(""); 
+}
+};
+const handleVisitingPlaceChange = (event) => {
+setPlaceOfVisit(event.target.value);
+};
 
-  const handleVisitingPlaceChange = (event) => {
-    setPlaceOfVisit(event.target.value);
-  };
-
+ 
   const handleCheck = async (username_reciever) => {
     try {
       const token = localStorage.getItem("authToken");
@@ -210,59 +212,58 @@ const LtcForm = () => {
     },
   };
 
-  const handleSubmit = (event) => {
-    // Prevent page refresh
-    event.preventDefault();
-    if (!verifiedReceiver) {
-      alert("Please verify the receiver before submitting the form.");
-      return;
-    }
+ const handleSubmit = (event) => {
+// Prevent page refresh
+event.preventDefault();
+if (!verifiedReceiver) {
+alert("Please verify the receiver before submitting the form.");
+return;
+}
 
-    const adjustedMonth = "";
-    // Create a submission object with main form data and additional fields for children and dependents
-    const submission = {
-      name: formData.name,
-      blockYear: formData.blockYear,
-      pfNo: formData.pfNo,
-      basicPaySalary: formData.basicPaySalary,
-      designation: formData.designation,
-      departmentInfo: formData.departmentInfo,
-      leaveRequired: formData.leaveRequired,
-      leaveStartDate: formData.leaveStartDate,
-      leaveEndDate: formData.leaveEndDate,
-      dateOfDepartureForFamily: formData.dateOfDepartureForFamily,
-      natureOfLeave: formData.natureOfLeave,
-      purposeOfLeave: formData.purposeOfLeave,
-      hometownOrNot: selectedPlace,
-      placeOfVisit: placeOfVisit,
-      addressDuringLeave: formData.addressDuringLeave,
-      modeOfTravel: formData.modeOfTravel,
-      detailsOfFamilyMembersAlreadyDone: [
-        formData.selfName,
-        formData.wifeName,
-        formData.children,
-      ],
-      detailsOfFamilyMembersAboutToAvail: childrenFields,
+const adjustedMonth = "";
+// Create a submission object with main form data and additional fields for children and dependents
+const submission = {
+name: formData.name,
+blockYear: formData.blockYear,
+pfNo: formData.pfNo,
+basicPaySalary: formData.basicPaySalary,
+designation: formData.designation,
+departmentInfo: formData.departmentInfo,
+leaveRequired: formData.leaveRequired,
+leaveStartDate: formData.leaveStartDate,
+leaveEndDate: formData.leaveEndDate,
+dateOfDepartureForFamily: formData.dateOfDepartureForFamily,
+natureOfLeave: formData.natureOfLeave,
+purposeOfLeave: formData.purposeOfLeave,
+hometownOrNot: true,
+placeOfVisit: selectedPlace === "HomeTown" ? "HomeTown" : placeOfVisit,
+addressDuringLeave: formData.addressDuringLeave,
+modeOfTravel: formData.modeOfTravel,
+detailsOfFamilyMembersAlreadyDone: [
+formData.selfName,
+formData.wifeName,
+formData.children,
+],
+detailsOfFamilyMembersAboutToAvail: childrenFields,
 
-      detailsOfDependents: dependentsFields,
-      amountOfAdvanceRequired: formData.amountOfAdvanceRequired,
+detailsOfDependents: dependentsFields,
+amountOfAdvanceRequired: formData.amountOfAdvanceRequired,
 
-      //numFamilyMenbers: numFamilyMenbers,
-      //children: childrenFields,
-      //numDependents: numDependents,
-      // detailsOfDependents: [],
+//numFamilyMenbers: numFamilyMenbers,
+//children: childrenFields,
+//numDependents: numDependents,
+// detailsOfDependents: [],
 
-      adjustedMonth: adjustedMonth,
-      certifiedThatFamilyDependents: formData.certificationDetails,
-      submissionDate: formData.date,
-      certifiedThatAdvanceTakenOn: formData.previousLTCDate,
-      phoneNumberForContact: formData.phoneNumber,
-      username_reciever: formData.username_reciever,
-      designation_reciever: formData.designation_reciever,
-    };
+adjustedMonth: adjustedMonth,
+certifiedThatFamilyDependents: formData.certificationDetails,
+submissionDate: formData.date,
+certifiedThatAdvanceTakenOn: formData.previousLTCDate,
+phoneNumberForContact: formData.phoneNumber,
+username_reciever: formData.username_reciever,
+designation_reciever: formData.designation_reciever,
+};
 
-    console.log(submission);
-
+console.log(submission);
     // Submit the form
     const submitForm = async () => {
       try {
@@ -570,49 +571,49 @@ const LtcForm = () => {
         </div>
 
         <div className="grid-row">
-          {/* Whether L.T.C. is desired for going to hometown or elsewhere */}
-          <div className="grid-col">
-            <label className="input-label" htmlFor="placeSelection">
-              Whether L.T.C. is desired for going to home town or elsewhere?
-              Select Place:
-            </label>
-            <div className="input-wrapper">
-              <Select
-                id="placeSelection"
-                name="placeSelection"
-                data={[
-                  { value: "HomeTown", label: "HomeTown" },
-                  { value: "ElseWhere", label: "ElseWhere" },
-                ]}
-                value={selectedPlace}
-                onChange={handlePlaceChange}
-                className="input"
-                styles={selectStyles}
-              />
-            </div>
-          </div>
+{/* Whether L.T.C. is desired for going to hometown or elsewhere */}
+<div className="grid-col">
+<label className="input-label" htmlFor="placeSelection">
+Whether L.T.C. is desired for going to home town or elsewhere? Select
+Place:
+</label>
+<div className="input-wrapper">
+<Select
+id="placeSelection"
+name="placeSelection"
+data={[
+{ value: "HomeTown", label: "HomeTown" },
+{ value: "ElseWhere", label: "ElseWhere" },
+]}
+value={formData.placeOfVisit}
+onChange={(value) => handlePlaceChange(value, "placeOfVisit")}
+className="input"
+/>
+</div>
+</div>
 
-          {/* Input field for entering the place if "Elsewhere" is selected */}
-          {selectedPlace === "ElseWhere" && (
-            <div className="grid-col">
-              <label className="input-label" htmlFor="placeOfVisit">
-                Place where you are visiting:
-              </label>
-              <div className="input-wrapper">
-                <input
-                  type="text"
-                  id="placeOfVisit"
-                  name="placeOfVisit"
-                  value={placeOfVisit}
-                  onChange={handleVisitingPlaceChange}
-                  placeholder="Enter the place"
-                  className="input"
-                  required={selectedPlace === "ElseWhere"} // Mark field as required when Elsewhere is selected
-                />
-              </div>
-            </div>
-          )}
-        </div>
+{/* Input field for entering the place if "Elsewhere" is selected */}
+{selectedPlace === "ElseWhere" && (
+<div className="grid-col">
+<label className="input-label" htmlFor="placeOfVisit">
+Place where you are visiting:
+</label>
+<div className="input-wrapper">
+<input
+type="text"
+id="placeOfVisit"
+name="placeOfVisit"
+value={formData.placeOfVisit}
+onChange={handleVisitingPlaceChange}
+placeholder="Enter the place"
+className="input"
+required
+/>
+</div>
+</div>
+)}
+</div>
+
 
         {/* Row 5: Mode of Travel and Address During Leave */}
         <div className="grid-row">

@@ -469,29 +469,22 @@ const LTCFormView = () => {
             </div>
           </div>
 
-          <div className="grid-row">
-            {/* Whether L.T.C. is desired for going to hometown or elsewhere */}
-            <div className="grid-col">
-              <label className="input-label" htmlFor="placeSelection">
-                Whether L.T.C. is desired for going to home town or elsewhere?
-                Select Place:
-              </label>
-              <div className="input-wrapper">
-                <Select
-                  id="placeSelection"
-                  name="placeSelection"
-                  data={[
-                    { value: "HomeTown", label: "HomeTown" },
-                    { value: "ElseWhere", label: "ElseWhere" },
-                  ]}
-                  value={fetchedformData.selectedPlace}
-                  //onChange={handlePlaceChange}
-                  className="input"
-                  //styles={selectStyles}
-                />
-              </div>
-            </div>
-          </div>
+         <div className="grid-row">
+{/* Whether L.T.C. is desired for going to hometown or elsewhere */}
+<div className="grid-col">
+<label className="input-label" htmlFor="placeOfVisit">
+Whether L.T.C. is desired for going to home town or elsewhere?
+Select Place:
+</label>
+<div className="input-wrapper">
+<input
+value={fetchedformData.placeOfVisit}
+onChange={(value) => handlePlaceChange(value, "placeOfVisit")}
+className="input"
+/>
+</div>
+</div>
+</div>
 
           {/* Row 5: Mode of Travel and Address During Leave */}
           <div className="grid-row">
@@ -558,7 +551,8 @@ const LTCFormView = () => {
                   placeholder="Enter Your Name"
                   //onChange={handleChange}
                   className="input"
-                  value={fetchedformData.detailsOfFamilyMembersAlreadyDone[0]}
+                  value={ fetchedformData?.detailsOfFamilyMembersAlreadyDone?.[0] || '' // Safe access with fallback}
+                }
                   disabled
                   required
                 />
@@ -578,7 +572,8 @@ const LTCFormView = () => {
                   placeholder="Enter Wife's Name"
                   //onChange={handleChange}
                   className="input"
-                  value={fetchedformData.detailsOfFamilyMembersAlreadyDone[1]}
+                  value={ fetchedformData?.detailsOfFamilyMembersAlreadyDone?.[1] || '' // Safe access with fallback}
+              }
                   disabled
                   required
                 />
@@ -598,8 +593,9 @@ const LTCFormView = () => {
                   placeholder="Children"
                   //onChange={handleChange}
                   className="input"
-                  value={fetchedformData.detailsOfFamilyMembersAlreadyDone[2]}
-                  disabled
+                  value={ fetchedformData?.detailsOfFamilyMembersAlreadyDone?.[2] || '' // Safe access with fallback}
+            }
+            disabled
                   required
                 />
               </div>

@@ -13,7 +13,6 @@ import LeaveFilehandle from "./pages/LeavePageComp/Leave_file_handle";
 import Cpda_advFilehandle from "./pages/CPDA_ADVANCEPageComp/Cpda_ADVANCE_file_handle";
 
 import LTCFormView from "./pages/LTCPageComp/LTCFormView";
-
 import CPDA_ClaimFormView from "./pages/CPDA_ClaimPageComp/CPDA_ClaimFormView";
 import CPDA_ClaimFilehandle from "./pages/CPDA_ClaimPageComp/CPDA_Claim_file_handle";
 
@@ -37,6 +36,11 @@ export default function HR() {
       <Route path="cpda_adv/*" element={<CPDA_ADVANCE />} />
 
       <Route path="ltc/*" element={<LTC />} />
+     
+
+      <Route path="ltc/view/:id" element={<LTCFormView />} />
+
+
 
       <Route path="ltc/view/:id" element={<LTCFormView />} />
 
