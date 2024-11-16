@@ -246,6 +246,7 @@ const LtcForm = () => {
         formData.children,
       ],
       detailsOfFamilyMembersAboutToAvail: childrenFields,
+
       detailsOfDependents: dependentsFields,
       amountOfAdvanceRequired: formData.amountOfAdvanceRequired,
 
@@ -687,7 +688,7 @@ const LtcForm = () => {
 
           <div className="grid-col">
             <label className="input-label" htmlFor="wifeName">
-              (b) Wife
+              (b) Spouse
             </label>
             <div className="input-wrapper">
               <User size={20} />
@@ -698,7 +699,7 @@ const LtcForm = () => {
                 placeholder="Enter Wife's Name"
                 onChange={handleChange}
                 className="input"
-                required
+                // required
               />
             </div>
           </div>
@@ -711,12 +712,12 @@ const LtcForm = () => {
               <User size={20} />
               <input
                 type="text"
-                id="children"
+                id="childrenName"
                 name="children"
                 placeholder="Children"
                 onChange={handleChange}
                 className="input"
-                required
+                // required
               />
             </div>
           </div>
@@ -962,13 +963,20 @@ const LtcForm = () => {
               are residing with me and are wholly dependent upon me.
             </label>
             <div className="input-wrapper">
-              <input
-                type="text"
+              <Question size={20} />
+              <Select
                 id="certificationDetails"
                 name="certificationDetails"
+                data={[
+                  { value: "Yes", label: "Yes" },
+                  { value: "No", label: "No" },
+                ]}
                 value={formData.certificationDetails}
-                onChange={handleChange}
+                onChange={(value) =>
+                  handleSelectChange(value, "certificationDetails")
+                }
                 className="input"
+                styles={selectStyles}
                 required
               />
             </div>
