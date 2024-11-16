@@ -121,12 +121,14 @@ const LTCFormView = () => {
     if (fetchedformData?.detailsOfDependents) {
       const dependents = fetchedformData.detailsOfDependents;
       setNumDependents(dependents.length);
+      // console.log(numDependents)
       setDependentsFields(dependents);
     }
   }, [fetchedformData]);
 
   const handleDependentsChange = (value) => {
     const count = parseInt(value, 10);
+    console.log(`num dependent ${count}`);
     setNumDependents(count);
     setDependentsFields(
       new Array(count).fill({ fullName: "", age: "", reason: "" }),
@@ -510,7 +512,6 @@ const LTCFormView = () => {
                   value={fetchedformData.modeofTravel}
                   //onChange={(value) => handleSelectChange(value, "modeOfTravel")}
                   className="input"
-                  //styles={selectStyles}
                   disabled
                 />
               </div>
@@ -531,6 +532,7 @@ const LTCFormView = () => {
                   //onChange={handleChange}
                   className="input"
                   required
+                  disabled
                 />
               </div>
             </div>
@@ -556,6 +558,8 @@ const LTCFormView = () => {
                   placeholder="Enter Your Name"
                   //onChange={handleChange}
                   className="input"
+                  value={fetchedformData.detailsOfFamilyMembersAlreadyDone[0]}
+                  disabled
                   required
                 />
               </div>
@@ -563,7 +567,7 @@ const LTCFormView = () => {
 
             <div className="grid-col">
               <label className="input-label" htmlFor="wifeName">
-                (b) Wife
+                (b) Spouse
               </label>
               <div className="input-wrapper">
                 <User size={20} />
@@ -574,6 +578,8 @@ const LTCFormView = () => {
                   placeholder="Enter Wife's Name"
                   //onChange={handleChange}
                   className="input"
+                  value={fetchedformData.detailsOfFamilyMembersAlreadyDone[1]}
+                  disabled
                   required
                 />
               </div>
@@ -592,6 +598,8 @@ const LTCFormView = () => {
                   placeholder="Children"
                   //onChange={handleChange}
                   className="input"
+                  value={fetchedformData.detailsOfFamilyMembersAlreadyDone[2]}
+                  disabled
                   required
                 />
               </div>
@@ -605,22 +613,17 @@ const LTCFormView = () => {
             <div className="input-wrapper">
               <Users size={20} />
               <div className="input-wrapper">
-                <Select
-                  id="numFamilyMenbers"
-                  name="numFamilyMenbers"
-                  data={[
-                    { value: "0", label: "0" },
-                    { value: "1", label: "1" },
-                    { value: "2", label: "2" },
-                    { value: "3", label: "3" },
-                    { value: "4", label: "4" },
-                    { value: "5", label: "5" },
-                  ]}
-                  value={numFamilyMenbers.toString()}
-                  onChange={handleChildrenChange}
+                <div
                   className="input"
-                  //styles={selectStyles}
-                />
+                  style={{
+                    padding: "10px 80px",
+                    border: "1px solid #ccc",
+                    borderRadius: "4px",
+                    textAlign: "center",
+                  }}
+                >
+                  {numDependents}
+                </div>
               </div>
             </div>
           </div>
@@ -662,14 +665,6 @@ const LTCFormView = () => {
                           type="text"
                           id={`childName${index}`}
                           value={child.name}
-                          onChange={(e) =>
-                            handleChildInputChange(
-                              index,
-                              "name",
-                              e.target.value,
-                            )
-                          }
-                          placeholder="Enter Name"
                           disabled
                         />
                       </td>
@@ -680,10 +675,6 @@ const LTCFormView = () => {
                           type="number"
                           id={`childAge${index}`}
                           value={child.age}
-                          onChange={(e) =>
-                            handleChildInputChange(index, "age", e.target.value)
-                          }
-                          placeholder="Enter Age"
                           disabled
                         />
                       </td>
@@ -696,21 +687,25 @@ const LTCFormView = () => {
 
           {/* Section for Dependent Family Members */}
           <div>
-            <h3>Dependent Family Members</h3>
             <div className="grid-row">
               <div className="grid-col">
                 <label className="input-label" htmlFor="numDependents">
                   Number of Dependents
                 </label>
                 <div className="input-wrapper">
+                  <Users size={20} />
                   <div className="input-wrapper">
-                    <Select
-                      id="numDependents"
-                      name="numDependents"
+                    <div
                       className="input"
-                      value={dependentsFields.length}
-                      onChange={(e) => handleDependentsChange(e.target.value)}
-                    />
+                      style={{
+                        padding: "10px 80px",
+                        border: "1px solid #ccc",
+                        borderRadius: "4px",
+                        textAlign: "center",
+                      }}
+                    >
+                      {numDependents}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -746,6 +741,7 @@ const LTCFormView = () => {
                             value={index + 1}
                             className="input"
                             readOnly
+                            disabled
                           />
                         </td>
                         <td>
@@ -753,16 +749,7 @@ const LTCFormView = () => {
                             type="text"
                             id={`dependentFullName${index}`}
                             value={dependent.fullName}
-                            onChange={(e) =>
-                              handleDependentInputChange(
-                                index,
-                                "fullName",
-                                e.target.value,
-                              )
-                            }
-                            className="input"
-                            placeholder="Enter Name"
-                            required
+                            disabled
                           />
                         </td>
                         <td>
@@ -770,18 +757,7 @@ const LTCFormView = () => {
                             type="number"
                             id={`dependentAge${index}`}
                             value={dependent.age}
-                            onChange={(e) => {
-                              const ageValue = Math.max(0, e.target.value);
-                              handleDependentInputChange(
-                                index,
-                                "age",
-                                ageValue,
-                              );
-                            }}
-                            className="input"
-                            placeholder="Enter Age"
-                            required
-                            min="0"
+                            disabled
                           />
                         </td>
                         <td>
@@ -789,16 +765,7 @@ const LTCFormView = () => {
                             type="text"
                             id={`dependentReason${index}`}
                             value={dependent.reason}
-                            onChange={(e) =>
-                              handleDependentInputChange(
-                                index,
-                                "reason",
-                                e.target.value,
-                              )
-                            }
-                            className="input"
-                            placeholder="Enter Reason"
-                            required
+                            disabled
                           />
                         </td>
                       </tr>
