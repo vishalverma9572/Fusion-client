@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Title } from "@mantine/core";
-import { useNavigate } from "react-router-dom"; // Use for navigation
+import React from "react";
+import { Title, Container, Paper, Button, Flex, Table } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
 import { Eye, MapPin } from "@phosphor-icons/react";
 import "./Table.css"; // Ensure this path is correct
 import { EmptyTable } from "./EmptyTable";
-import LeaveTrackView from "../../pages/LeavePageComp/LeaveTrack";
 
 const InboxTable = ({ title, data, formType }) => {
   const navigate = useNavigate();
@@ -19,13 +18,10 @@ const InboxTable = ({ title, data, formType }) => {
       cpda_claim: `/hr/cpda_claim/file_handler/${id}`,
       appraisal: `/hr/appraisal/file_handler/${id}`,
     };
-
-    console.log(formType);
-    navigate(viewUrlMap[formType]); // Default to leaveform if formType is not matched
+    navigate(viewUrlMap[formType]);
   };
-  const handleTrackClick = (id) => {
-    console.log(formType);
 
+  const handleTrackClick = (id) => {
     const trackUrlMap = {
       leave: `/hr/FormView/leaveform_track/${id}`,
       cpda_adv: `/hr/FormView/cpda_adv_track/${id}`,
@@ -33,71 +29,74 @@ const InboxTable = ({ title, data, formType }) => {
       cpda_claim: `/hr/FormView/cpda_claim_track/${id}`,
       appraisal: `/hr/FormView/appraisal_track/${id}`,
     };
-
-    navigate(trackUrlMap[formType]); // Default to leaveform_track if formType is not matched
+    navigate(trackUrlMap[formType]);
   };
 
+  // Render table rows
+  const renderRows = () =>
+    data.map((item, index) => (
+      <Table.Tr key={index}>
+        <Table.Td align="center">{item.id}</Table.Td>
+        <Table.Td align="center">{item.sent_by_user}</Table.Td>
+        <Table.Td align="center">{item.sent_by_designation}</Table.Td>
+        <Table.Td align="center">{item.upload_date}</Table.Td>
+        <Table.Td align="center">
+          <Button
+            onClick={() => handleViewClick(item.id)}
+            variant="outline"
+            color="blue"
+            size="xs"
+            leftIcon={<Eye size={16} />}
+          >
+            View
+          </Button>
+        </Table.Td>
+        <Table.Td align="center">
+          <Button
+            onClick={() => handleTrackClick(item.id)}
+            variant="outline"
+            color="teal"
+            size="xs"
+            leftIcon={<MapPin size={16} />}
+          >
+            Track
+          </Button>
+        </Table.Td>
+      </Table.Tr>
+    ));
+
+  // Render table headers
+  const renderHeaders = () =>
+    headers.map((header, index) => (
+      <Table.Th key={index}>
+        <Flex align="center" justify="center">
+          {header}
+        </Flex>
+      </Table.Th>
+    ));
+
   return (
-    <div className="app-container">
-      <Title
-        order={2}
-        style={{ fontWeight: "500", marginTop: "40px", marginLeft: "15px" }}
-      >
-        {title}
-      </Title>
-      {data.length == 0 && (
-        <EmptyTable
-          title="No new Inbox requests found!"
-          message="There is no new Inbox request available. Please check back later."
-        />
-      )}
-      {headers.length > 0 && data.length > 0 ? (
-        <div className="form-table-container">
-          <table className="form-table">
-            <thead>
-              <tr>
-                {headers.map((header, index) => (
-                  <th key={index} className="table-header">
-                    {header}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((item, index) => (
-                <tr className="table-row" key={index}>
-                  <td>{item.id}</td>
-                  <td>{item.sent_by_user}</td>
-                  <td>{item.sent_by_designation}</td>
-                  <td>{item.upload_date}</td>
-                  <td>
-                    <span
-                      className="text-link"
-                      // onClick={() => handleViewClick(`/hr/FormView/leaveform`)}
-                      onClick={() => handleViewClick(item.id)}
-                    >
-                      <Eye size={20} />
-                      View
-                    </span>
-                  </td>
-                  <td>
-                    <span
-                      className="text-link"
-                      onClick={() => handleTrackClick(item.id)}
-                    >
-                      <MapPin size={20} />
-                      Track
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <div className="loading-spinner"></div>
-      )}
-    </div>
+    <Container size="lg" mt={30} miw="80rem">
+      <Paper shadow="md" radius="md" p="lg" withBorder>
+        <Title order={2} align="center" mb="lg" c="#1c7ed6">
+          {title}
+        </Title>
+
+        {data.length === 0 ? (
+          <EmptyTable
+            title="No new Inbox requests found!"
+            message="There is no new Inbox request available. Please check back later."
+          />
+        ) : (
+          <Table striped highlightOnHover withBorder withColumnBorders>
+            <Table.Thead>
+              <Table.Tr>{renderHeaders()}</Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>{renderRows()}</Table.Tbody>
+          </Table>
+        )}
+      </Paper>
+    </Container>
   );
 };
 
