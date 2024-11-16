@@ -85,16 +85,19 @@ const LtcForm = () => {
   const [dependentsFields, setDependentsFields] = useState([
     { fullName: "", age: "", reason: "" },
   ]);
-  const [selectedPlace, setSelectedPlace] = useState("HomeTown"); // Default is "HomeTown"
+  const [selectedPlace, setSelectedPlace] = useState("HomeTown"); // Defaults to "HomeTown"
+
+
   const [placeOfVisit, setPlaceOfVisit] = useState("");
 
-  const handlePlaceChange = (value) => {
+ const handlePlaceChange = (value) => {
     setSelectedPlace(value); // Update the selected place value
     if (value === "HomeTown") {
-      setPlaceOfVisit(""); // Reset the visiting place when "HomeTown" is selected
+      setPlaceOfVisit("HomeTown"); // Set to "HomeTown" if HomeTown is selected
+    } else {
+      setPlaceOfVisit(""); // Reset if "ElseWhere" is selected
     }
   };
-
   const handleVisitingPlaceChange = (event) => {
     setPlaceOfVisit(event.target.value);
   };
@@ -233,8 +236,8 @@ const LtcForm = () => {
       dateOfDepartureForFamily: formData.dateOfDepartureForFamily,
       natureOfLeave: formData.natureOfLeave,
       purposeOfLeave: formData.purposeOfLeave,
-      hometownOrNot: selectedPlace,
-      placeOfVisit: placeOfVisit,
+      hometownOrNot: true,
+     placeOfVisit: selectedPlace === "HomeTown" ? "HomeTown" : placeOfVisit,
       addressDuringLeave: formData.addressDuringLeave,
       modeOfTravel: formData.modeOfTravel,
       detailsOfFamilyMembersAlreadyDone: [
@@ -569,49 +572,48 @@ const LtcForm = () => {
         </div>
 
         <div className="grid-row">
-          {/* Whether L.T.C. is desired for going to hometown or elsewhere */}
-          <div className="grid-col">
-            <label className="input-label" htmlFor="placeSelection">
-              Whether L.T.C. is desired for going to home town or elsewhere?
-              Select Place:
-            </label>
-            <div className="input-wrapper">
-              <Select
-                id="placeSelection"
-                name="placeSelection"
-                data={[
-                  { value: "HomeTown", label: "HomeTown" },
-                  { value: "ElseWhere", label: "ElseWhere" },
-                ]}
-                value={selectedPlace}
-                onChange={handlePlaceChange}
-                className="input"
-                styles={selectStyles}
-              />
-            </div>
-          </div>
-
-          {/* Input field for entering the place if "Elsewhere" is selected */}
-          {selectedPlace === "ElseWhere" && (
-            <div className="grid-col">
-              <label className="input-label" htmlFor="placeOfVisit">
-                Place where you are visiting:
-              </label>
-              <div className="input-wrapper">
-                <input
-                  type="text"
-                  id="placeOfVisit"
-                  name="placeOfVisit"
-                  value={placeOfVisit}
-                  onChange={handleVisitingPlaceChange}
-                  placeholder="Enter the place"
-                  className="input"
-                  required={selectedPlace === "ElseWhere"} // Mark field as required when Elsewhere is selected
-                />
-              </div>
-            </div>
-          )}
+      {/* Whether L.T.C. is desired for going to hometown or elsewhere */}
+      <div className="grid-col">
+        <label className="input-label" htmlFor="placeSelection">
+          Whether L.T.C. is desired for going to home town or elsewhere? Select
+          Place:
+        </label>
+        <div className="input-wrapper">
+          <Select
+            id="placeSelection"
+            name="placeSelection"
+            data={[
+              { value: "HomeTown", label: "HomeTown" },
+              { value: "ElseWhere", label: "ElseWhere" },
+            ]}
+            value={formData.placeOfVisit}
+             onChange={(value) => handlePlaceChange(value, "placeOfVisit")}
+            className="input"
+          />
         </div>
+      </div>
+
+      {/* Input field for entering the place if "Elsewhere" is selected */}
+      {selectedPlace === "ElseWhere" && (
+        <div className="grid-col">
+          <label className="input-label" htmlFor="placeOfVisit">
+            Place where you are visiting:
+          </label>
+          <div className="input-wrapper">
+            <input
+              type="text"
+              id="placeOfVisit"
+              name="placeOfVisit"
+              value={formData.placeOfVisit}
+              onChange={handleVisitingPlaceChange}
+              placeholder="Enter the place"
+              className="input"
+              required
+            />
+          </div>
+        </div>
+      )}
+    </div>
 
         {/* Row 5: Mode of Travel and Address During Leave */}
         <div className="grid-row">
