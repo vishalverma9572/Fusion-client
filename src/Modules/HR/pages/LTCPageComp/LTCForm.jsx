@@ -290,7 +290,7 @@ const LtcForm = () => {
 
         alert("Form submitted successfully!");
         dispatch(resetForm());
-        Navigate("/hr/ltc/ltcrequests"); // this path is not navigable, same error occuring in leave form as well
+        Navigate("/hr/ltc/ltcrequests"); //
       } catch (error) {
         console.error("Failed to submit form:", error);
       }
