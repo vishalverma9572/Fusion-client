@@ -961,20 +961,13 @@ const LtcForm = () => {
               are residing with me and are wholly dependent upon me.
             </label>
             <div className="input-wrapper">
-              <Question size={20} />
-              <Select
+              <input
+                type="text"
                 id="certificationDetails"
                 name="certificationDetails"
-                data={[
-                  { value: "Yes", label: "Yes" },
-                  { value: "No", label: "No" },
-                ]}
                 value={formData.certificationDetails}
-                onChange={(value) =>
-                  handleSelectChange(value, "certificationDetails")
-                }
+                onChange={handleChange}
                 className="input"
-                styles={selectStyles}
                 required
               />
             </div>
