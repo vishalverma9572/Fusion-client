@@ -549,10 +549,7 @@ const LTCFormView = () => {
                   type="text"
                   id="selfName"
                   name="selfName"
-<<<<<<< HEAD
                    value={fetchedformData.selfName}
-=======
->>>>>>> 7cb609fa9540de65b1a4554f67c368af5d8b34b6
                   placeholder="Enter Your Name"
                   //onChange={handleChange}
                   className="input"
@@ -571,10 +568,7 @@ const LTCFormView = () => {
                   type="text"
                   id="wifeName"
                   name="wifeName"
-<<<<<<< HEAD
                    value={fetchedformData.wifeName}
-=======
->>>>>>> 7cb609fa9540de65b1a4554f67c368af5d8b34b6
                   placeholder="Enter Wife's Name"
                   //onChange={handleChange}
                   className="input"
@@ -593,10 +587,7 @@ const LTCFormView = () => {
                   type="text"
                   id="children"
                   name="children"
-<<<<<<< HEAD
                    value={fetchedformData.children}
-=======
->>>>>>> 7cb609fa9540de65b1a4554f67c368af5d8b34b6
                   placeholder="Children"
                   //onChange={handleChange}
                   className="input"
@@ -926,8 +917,4 @@ const LTCFormView = () => {
   );
 };
 
-<<<<<<< HEAD
 export default LTCFormView;
-=======
-export default LTCFormView;
->>>>>>> 7cb609fa9540de65b1a4554f67c368af5d8b34b6
