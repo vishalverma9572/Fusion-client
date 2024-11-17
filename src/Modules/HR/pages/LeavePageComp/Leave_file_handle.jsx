@@ -314,8 +314,8 @@ const LeaveFilehandle = () => {
         )}
 
         <form>
-          <div className="grid-row">
-            <div className="grid-col left-side">
+          <div className="grid-row two-columns">
+            <div className="grid-col">
               <label className="input-label" htmlFor="name">
                 Name
               </label>
@@ -326,15 +326,14 @@ const LeaveFilehandle = () => {
                   id="name"
                   name="name"
                   value={fetchedformData.name}
+                  placeholder="Name"
                   className="input"
                   disabled
                 />
               </div>
-              <label
-                className="input-label"
-                style={{ marginTop: "20px" }}
-                htmlFor="designation"
-              >
+            </div>
+            <div className="grid-col">
+              <label className="input-label" htmlFor="designation">
                 Designation
               </label>
               <div className="input-wrapper">
@@ -343,25 +342,56 @@ const LeaveFilehandle = () => {
                   type="text"
                   id="designation"
                   name="designation"
+                  placeholder="Designation"
                   value={fetchedformData.designation}
                   className="input"
                   disabled
                 />
               </div>
             </div>
+          </div>
 
-            <div className="grid-col right-side">
-              <label
-                className="input-label"
-                style={{ textAlign: "center", marginTop: "50px" }}
-                htmlFor="submissionDate"
-              >
+          {/* Section 2: Department, PF Number, Application Date */}
+          <div className="grid-row three-columns">
+            <div className="grid-col">
+              <label className="input-label" htmlFor="departmentInfo">
+                Department
+              </label>
+              <div className="input-wrapper">
+                <Building size={20} />
+                <input
+                  type="text"
+                  id="departmentInfo"
+                  name="departmentInfo"
+                  placeholder="Department Name"
+                  value={fetchedformData.departmentInfo}
+                  className="input"
+                  disabled
+                />
+              </div>
+            </div>
+            <div className="grid-col">
+              <label className="input-label" htmlFor="pfNo">
+                PF Number
+              </label>
+              <div className="input-wrapper">
+                <IdentificationCard size={20} />
+                <input
+                  type="number"
+                  id="pfNo"
+                  name="pfNo"
+                  placeholder="XXXXXXXXXXXX"
+                  value={fetchedformData.pfNo}
+                  className="input"
+                  required
+                />
+              </div>
+            </div>
+            <div className="grid-col">
+              <label className="input-label" htmlFor="submissionDate">
                 Application Date
               </label>
-              <div
-                className="input-wrapper center"
-                style={{ width: "300px", margin: "auto" }}
-              >
+              <div className="input-wrapper center">
                 <Calendar size={20} />
                 <input
                   type="date"
@@ -375,44 +405,7 @@ const LeaveFilehandle = () => {
             </div>
           </div>
 
-          <div className="grid-row">
-            <div className="grid-col">
-              <label className="input-label" htmlFor="departmentInfo">
-                Department
-              </label>
-              <div className="input-wrapper">
-                <Building size={20} />
-                <input
-                  type="text"
-                  id="departmentInfo"
-                  name="departmentInfo"
-                  value={fetchedformData.departmentInfo}
-                  onChange={handleChange}
-                  className="input"
-                  disabled={!isEditing}
-                />
-              </div>
-            </div>
-
-            <div className="grid-col">
-              <label className="input-label" htmlFor="pfNo">
-                PF Number
-              </label>
-              <div className="input-wrapper">
-                <IdentificationCard size={20} />
-                <input
-                  type="number"
-                  id="pfNo"
-                  name="pfNo"
-                  value={fetchedformData.pfNo}
-                  onChange={handleChange}
-                  className="input"
-                  disabled={!isEditing}
-                />
-              </div>
-            </div>
-          </div>
-
+          {/* Section 3: Nature of Leave, Leave Start Date, Leave End Date */}
           <div className="grid-row three-columns">
             <div className="grid-col">
               <label className="input-label" htmlFor="natureOfLeave">
@@ -425,13 +418,11 @@ const LeaveFilehandle = () => {
                   id="natureOfLeave"
                   name="natureOfLeave"
                   value={fetchedformData.natureOfLeave}
-                  onChange={handleChange}
                   className="input"
-                  disabled={!isEditing}
+                  disabled
                 />
               </div>
             </div>
-
             <div className="grid-col">
               <label className="input-label" htmlFor="leaveStartDate">
                 Leave Start Date
@@ -443,13 +434,11 @@ const LeaveFilehandle = () => {
                   id="leaveStartDate"
                   name="leaveStartDate"
                   value={fetchedformData.leaveStartDate}
-                  onChange={handleChange}
                   className="input"
-                  disabled={!isEditing}
+                  disabled
                 />
               </div>
             </div>
-
             <div className="grid-col">
               <label className="input-label" htmlFor="leaveEndDate">
                 Leave End Date
@@ -461,16 +450,17 @@ const LeaveFilehandle = () => {
                   id="leaveEndDate"
                   name="leaveEndDate"
                   value={fetchedformData.leaveEndDate}
-                  onChange={handleChange}
                   className="input"
-                  disabled={!isEditing}
+                  disabled
+                  required
                 />
               </div>
             </div>
           </div>
 
-          <div className="grid-row">
-            <div className="purpose">
+          {/* Section 4: Purpose of Leave, Address during Leave */}
+          <div className="grid-row two-columns">
+            <div className="grid-col">
               <label className="input-label" htmlFor="purposeOfLeave">
                 Purpose
               </label>
@@ -480,10 +470,10 @@ const LeaveFilehandle = () => {
                   type="text"
                   id="purposeOfLeave"
                   name="purposeOfLeave"
+                  placeholder="Purpose of Leave"
                   value={fetchedformData.purposeOfLeave}
-                  onChange={handleChange}
                   className="input"
-                  disabled={!isEditing}
+                  disabled
                 />
               </div>
             </div>
@@ -497,16 +487,17 @@ const LeaveFilehandle = () => {
                   type="text"
                   id="addressDuringLeave"
                   name="addressDuringLeave"
+                  placeholder="Full Address"
                   value={fetchedformData.addressDuringLeave}
-                  onChange={handleChange}
                   className="input"
-                  disabled={!isEditing}
+                  disabled
                 />
               </div>
             </div>
           </div>
 
-          <div className="grid-row">
+          {/* Section 5: Academic and Administrative Responsibility */}
+          <div className="grid-row two-columns">
             <div className="grid-col">
               <label className="input-label" htmlFor="academicResponsibility">
                 Academic Responsibility
@@ -520,12 +511,10 @@ const LeaveFilehandle = () => {
                   placeholder="Enter the name"
                   value={fetchedformData.academicResponsibility}
                   className="input"
-                  disabled={!isEditing}
-                  onChange={handleChange}
+                  disabled
                 />
               </div>
             </div>
-
             <div className="grid-col">
               <label
                 className="input-label"
@@ -542,8 +531,7 @@ const LeaveFilehandle = () => {
                   placeholder="Enter the name"
                   value={fetchedformData.addministrativeResponsibiltyAssigned}
                   className="input"
-                  disabled={!isEditing}
-                  onChange={handleChange}
+                  disabled
                 />
               </div>
             </div>
@@ -598,7 +586,7 @@ const LeaveFilehandle = () => {
                   placeholder="Enter Remark"
                   onChange={handleremark}
                   required
-                  style={{ width: "60%" }}
+                  style={{ width: "100%" }}
                 />
               </div>
             </div>

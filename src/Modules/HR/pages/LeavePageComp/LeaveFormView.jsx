@@ -115,10 +115,11 @@ const LeaveFormView = () => {
         >
           Track Status
         </Link>
+
         <form>
-          {/* Section 1: Name, Designation (Left), Application Date (Right) */}
-          <div className="grid-row">
-            <div className="grid-col left-side">
+          {/* Section 1: Name and Designation */}
+          <div className="grid-row two-columns">
+            <div className="grid-col">
               <label className="input-label" htmlFor="name">
                 Name
               </label>
@@ -134,11 +135,9 @@ const LeaveFormView = () => {
                   disabled
                 />
               </div>
-              <label
-                className="input-label"
-                style={{ marginTop: "20px" }}
-                htmlFor="designation"
-              >
+            </div>
+            <div className="grid-col">
+              <label className="input-label" htmlFor="designation">
                 Designation
               </label>
               <div className="input-wrapper">
@@ -154,34 +153,10 @@ const LeaveFormView = () => {
                 />
               </div>
             </div>
-
-            <div className="grid-col right-side">
-              <label
-                className="input-label"
-                style={{ textAlign: "center", marginTop: "50px" }}
-                htmlFor="submissionDate"
-              >
-                Application Date
-              </label>
-              <div
-                className="input-wrapper center"
-                style={{ width: "300px", margin: "auto" }}
-              >
-                <Calendar size={20} />
-                <input
-                  type="date"
-                  id="submissionDate"
-                  name="submissionDate"
-                  value={fetchedformData.submissionDate}
-                  className="input center"
-                  disabled
-                />
-              </div>
-            </div>
           </div>
 
-          {/* Section 2: Discipline/Department (Left), PF Number (Right) */}
-          <div className="grid-row">
+          {/* Section 2: Department, PF Number, Application Date */}
+          <div className="grid-row three-columns">
             <div className="grid-col">
               <label className="input-label" htmlFor="departmentInfo">
                 Department
@@ -199,7 +174,6 @@ const LeaveFormView = () => {
                 />
               </div>
             </div>
-
             <div className="grid-col">
               <label className="input-label" htmlFor="pfNo">
                 PF Number
@@ -214,6 +188,22 @@ const LeaveFormView = () => {
                   value={fetchedformData.pfNo}
                   className="input"
                   required
+                />
+              </div>
+            </div>
+            <div className="grid-col">
+              <label className="input-label" htmlFor="submissionDate">
+                Application Date
+              </label>
+              <div className="input-wrapper center">
+                <Calendar size={20} />
+                <input
+                  type="date"
+                  id="submissionDate"
+                  name="submissionDate"
+                  value={fetchedformData.submissionDate}
+                  className="input center"
+                  disabled
                 />
               </div>
             </div>
@@ -237,7 +227,6 @@ const LeaveFormView = () => {
                 />
               </div>
             </div>
-
             <div className="grid-col">
               <label className="input-label" htmlFor="leaveStartDate">
                 Leave Start Date
@@ -254,7 +243,6 @@ const LeaveFormView = () => {
                 />
               </div>
             </div>
-
             <div className="grid-col">
               <label className="input-label" htmlFor="leaveEndDate">
                 Leave End Date
@@ -266,17 +254,17 @@ const LeaveFormView = () => {
                   id="leaveEndDate"
                   name="leaveEndDate"
                   value={fetchedformData.leaveEndDate}
-                  disabled
                   className="input"
+                  disabled
                   required
                 />
               </div>
             </div>
           </div>
 
-          {/* Section 4: Purpose of Leave */}
-          <div className="grid-row">
-            <div className="purpose">
+          {/* Section 4: Purpose of Leave, Address during Leave */}
+          <div className="grid-row two-columns">
+            <div className="grid-col">
               <label className="input-label" htmlFor="purposeOfLeave">
                 Purpose
               </label>
@@ -286,17 +274,16 @@ const LeaveFormView = () => {
                   type="text"
                   id="purposeOfLeave"
                   name="purposeOfLeave"
-                  placeholder="purpose Of Leave"
+                  placeholder="Purpose of Leave"
                   value={fetchedformData.purposeOfLeave}
                   className="input"
-                  aria-rowcount={2}
                   disabled
                 />
               </div>
             </div>
             <div className="grid-col">
               <label className="input-label" htmlFor="addressDuringLeave">
-                Adress during Leave
+                Address during Leave
               </label>
               <div className="input-wrapper">
                 <UserList size={20} />
@@ -314,7 +301,7 @@ const LeaveFormView = () => {
           </div>
 
           {/* Section 5: Academic and Administrative Responsibility */}
-          <div className="grid-row">
+          <div className="grid-row two-columns">
             <div className="grid-col">
               <label className="input-label" htmlFor="academicResponsibility">
                 Academic Responsibility
@@ -332,7 +319,6 @@ const LeaveFormView = () => {
                 />
               </div>
             </div>
-
             <div className="grid-col">
               <label
                 className="input-label"
