@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Title,
-  Container,
-  Paper,
-  Table,
-  Button,
-  Flex,
-  Text,
-} from "@mantine/core";
+import { Title, Container, Paper, Table, Button, Flex } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { Eye, MapPin } from "@phosphor-icons/react";
 import "./Table.css";
@@ -42,7 +34,6 @@ const ArchiveTable = ({ title, data, formType = undefined }) => {
     navigate(trackUrlMap[formType]);
   };
 
-  // Render table rows
   const renderRows = () =>
     data.map((item, index) => (
       <Table.Tr key={index}>
@@ -75,7 +66,6 @@ const ArchiveTable = ({ title, data, formType = undefined }) => {
       </Table.Tr>
     ));
 
-  // Render table headers
   const renderHeaders = () =>
     headers.map((header, index) => (
       <Table.Th key={index}>
@@ -86,7 +76,7 @@ const ArchiveTable = ({ title, data, formType = undefined }) => {
     ));
 
   return (
-    <Container size="lg" mt={30} miw="80rem">
+    <Container size="lg" mt={30} style={{ maxWidth: "90rem" }} miw="80rem">
       <Paper shadow="md" radius="md" p="lg" withBorder>
         <Title order={2} align="center" mb="lg" c="#1c7ed6">
           {title}
@@ -98,7 +88,13 @@ const ArchiveTable = ({ title, data, formType = undefined }) => {
             message="There is no new Archive request available. Please check back later."
           />
         ) : (
-          <Table striped highlightOnHover withBorder withColumnBorders>
+          <Table
+            striped
+            highlightOnHover
+            withBorder
+            withColumnBorders
+            style={{ width: "100%" }}
+          >
             <Table.Thead>
               <Table.Tr>{renderHeaders()}</Table.Tr>
             </Table.Thead>
