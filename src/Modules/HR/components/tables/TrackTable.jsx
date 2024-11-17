@@ -14,7 +14,6 @@ const TrackTable = ({ title, data, exampleItems }) => {
     "Receive Designation",
   ];
 
-  // Render table rows
   const renderRows = () =>
     data.map((item, index) => (
       <Table.Tr key={index}>
@@ -45,7 +44,6 @@ const TrackTable = ({ title, data, exampleItems }) => {
       </Table.Tr>
     ));
 
-  // Render table headers
   const renderHeaders = () =>
     headers.map((header, index) => (
       <Table.Th key={index}>
@@ -56,7 +54,7 @@ const TrackTable = ({ title, data, exampleItems }) => {
     ));
 
   return (
-    <Container size="lg" mt={30} miw="80rem">
+    <Container size="lg" mt={30} style={{ maxWidth: "90rem" }} miw="80rem">
       <Paper shadow="md" radius="md" p="lg" withBorder>
         <Title order={2} align="center" mb="lg" c="#1c7ed6">
           {title}
@@ -68,7 +66,13 @@ const TrackTable = ({ title, data, exampleItems }) => {
             message="There is no new request available. Please check back later."
           />
         ) : (
-          <Table striped highlightOnHover withBorder withColumnBorders>
+          <Table
+            striped
+            highlightOnHover
+            withBorder
+            withColumnBorders
+            style={{ width: "100%" }}
+          >
             <Table.Thead>
               <Table.Tr>{renderHeaders()}</Table.Tr>
             </Table.Thead>
