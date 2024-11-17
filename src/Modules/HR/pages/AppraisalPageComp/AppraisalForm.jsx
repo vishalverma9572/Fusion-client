@@ -195,7 +195,7 @@ function AppraisalForm() {
                 className="input-label"
                 htmlFor={`courseNameNumber_${index}`}
               >
-                Course Name and Number
+                Course Name & No.
               </label>
               <div className="input-wrapper">
                 <input
@@ -266,7 +266,7 @@ function AppraisalForm() {
                 className="input-label"
                 htmlFor={`registeredStudents_${index}`}
               >
-                No of Registered Students
+                No. of Reg. Students
               </label>
               <div className="input-wrapper">
                 <input
@@ -283,7 +283,7 @@ function AppraisalForm() {
             </div>
             <div className="grid-col">
               <label className="input-label" htmlFor={`coInstructor_${index}`}>
-                Co-Instructor/ Instructor In charge (if any)
+                Instructor In charge
               </label>
               <div className="input-wrapper">
                 <input

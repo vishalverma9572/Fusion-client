@@ -29,7 +29,7 @@ const LeaveForm = () => {
   const [verifiedReceiver, setVerifiedReceiver] = useState(false);
   const navigate = useNavigate();
 
-  // set formData to initial state
+  // Fetch user details
   useEffect(() => {
     const fetchMyDetails = async () => {
       try {
@@ -60,15 +60,13 @@ const LeaveForm = () => {
     fetchMyDetails();
   }, []);
 
-  const handleCheck = async (username_reciever) => {
+  const handleCheck = async () => {
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
         console.error("No authentication token found!");
         return;
       }
-
-      console.log(formData);
 
       const response = await fetch(
         `${search_employee}?search=${formData.username_reciever}`,
@@ -83,13 +81,6 @@ const LeaveForm = () => {
       }
 
       const fetchedReceiverData = await response.json();
-
-      dispatch(
-        updateForm({
-          name: "username_reciever",
-          value: formData.username_reciever,
-        }),
-      );
       dispatch(
         updateForm({
           name: "designation_reciever",
@@ -112,71 +103,52 @@ const LeaveForm = () => {
     dispatch(updateForm({ name: "natureOfLeave", value }));
   };
 
-  const handleSubmit = (event) => {
-    // Prevent page refresh
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (!verifiedReceiver) {
       alert("Please verify the receiver before submitting the form.");
       return;
     }
-    //  create a submission object
+
     const submission = {
-      name: formData.name,
-      designation: formData.designation,
-      submissionDate: formData.submissionDate,
-      departmentInfo: formData.departmentInfo,
-      pfNo: formData.pfNo,
-      natureOfLeave: formData.natureOfLeave,
-      leaveStartDate: formData.leaveStartDate,
-      leaveEndDate: formData.leaveEndDate,
-      purposeOfLeave: formData.purposeOfLeave,
-      addressDuringLeave: formData.addressDuringLeave,
-      academicResponsibility: formData.academicResponsibility,
-      addministrativeResponsibiltyAssigned:
-        formData.addministrativeResponsibiltyAssigned,
-      username_reciever: formData.username_reciever,
-      designation_reciever: formData.designation_reciever,
+      ...formData,
     };
 
-    // Submit the form
-    const submitForm = async () => {
-      try {
-        const token = localStorage.getItem("authToken");
-        if (!token) {
-          console.error("No authentication token found!");
-          return;
-        }
-
-        const response = await fetch(submit_leave_form, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Token ${token}`,
-          },
-          body: JSON.stringify(submission),
-        });
-
-        if (!response.ok) {
-          alert("Failed to submit form. Please try again later.");
-          throw new Error("Network response was not ok");
-        }
-
-        alert("Form submitted successfully!");
-        dispatch(resetForm());
-        Navigate("/hr/leave/leaverequests");
-      } catch (error) {
-        console.error("Failed to submit form:", error);
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        console.error("No authentication token found!");
+        return;
       }
-    };
-    submitForm();
+
+      const response = await fetch(submit_leave_form, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${token}`,
+        },
+        body: JSON.stringify(submission),
+      });
+
+      if (!response.ok) {
+        alert("Failed to submit form. Please try again later.");
+        throw new Error("Network response was not ok");
+      }
+
+      alert("Form submitted successfully!");
+      dispatch(resetForm());
+      navigate("/hr/leave/leaverequests");
+    } catch (error) {
+      console.error("Failed to submit form:", error);
+    }
   };
 
   return (
     <div className="Leave_container">
       <form onSubmit={handleSubmit}>
-        {/* Section 1: Name, Designation (Left), Application Date (Right) */}
-        <div className="grid-row">
-          <div className="grid-col left-side">
+        {/* Section 1: Name and Designation */}
+        <div className="grid-row two-columns">
+          <div className="grid-col">
             <label className="input-label" htmlFor="name">
               Name
             </label>
@@ -194,6 +166,8 @@ const LeaveForm = () => {
                 disabled
               />
             </div>
+          </div>
+          <div className="grid-col">
             <label className="input-label" htmlFor="designation">
               Designation
             </label>
@@ -212,28 +186,10 @@ const LeaveForm = () => {
               />
             </div>
           </div>
-
-          <div className="grid-col right-side">
-            <label className="input-label" htmlFor="submissionDate">
-              Application Date
-            </label>
-            <div className="input-wrapper center" style={{ width: "300px" }}>
-              <Calendar size={20} />
-              <input
-                type="date"
-                id="submissionDate"
-                name="submissionDate"
-                value={formData.submissionDate}
-                onChange={handleChange}
-                className="input center"
-                required
-              />
-            </div>
-          </div>
         </div>
 
-        {/* Section 2: Discipline/Department (Left), PF Number (Right) */}
-        <div className="grid-row">
+        {/* Section 2: Department, PF Number, Application Date */}
+        <div className="grid-row three-columns">
           <div className="grid-col">
             <label className="input-label" htmlFor="departmentInfo">
               Department
@@ -252,7 +208,6 @@ const LeaveForm = () => {
               />
             </div>
           </div>
-
           <div className="grid-col">
             <label className="input-label" htmlFor="pfNo">
               PF Number
@@ -271,9 +226,24 @@ const LeaveForm = () => {
               />
             </div>
           </div>
+          <div className="grid-col">
+            <label className="input-label" htmlFor="submissionDate">
+              Application Date
+            </label>
+            <div className="input-wrapper center">
+              <Calendar size={20} />
+              <input
+                type="date"
+                id="submissionDate"
+                name="submissionDate"
+                value={formData.submissionDate}
+                onChange={handleChange}
+                className="input center"
+                required
+              />
+            </div>
+          </div>
         </div>
-
-        {/* Section 3: Nature of Leave, Leave Start Date, Leave End Date */}
         <div className="grid-row three-columns">
           <div className="grid-col">
             <label className="input-label" htmlFor="natureOfLeave">

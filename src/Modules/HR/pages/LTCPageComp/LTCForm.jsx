@@ -85,22 +85,29 @@ const LtcForm = () => {
   const [dependentsFields, setDependentsFields] = useState([
     { fullName: "", age: "", reason: "" },
   ]);
-  const [selectedPlace, setSelectedPlace] = useState("HomeTown"); // Defaults to "HomeTown"
+  const [selectedPlace, setSelectedPlace] = useState("HomeTown"); // Default is "HomeTown"
+  const [placeOfVisit, setPlaceOfVisit] = useState("");
 
-const [placeOfVisit, setPlaceOfVisit] = useState("");
-const handlePlaceChange = (value) => {
-setSelectedPlace(value); 
-if (value === "HomeTown") {
-setPlaceOfVisit("HomeTown");
-} else {
-setPlaceOfVisit(""); 
-}
-};
-const handleVisitingPlaceChange = (event) => {
-setPlaceOfVisit(event.target.value);
-};
+  const handlePlaceChange = (value) => {
+    setSelectedPlace(value); // Update the selected place value
+    if (value === "HomeTown") {
+      setPlaceOfVisit(""); // Reset the visiting place when "HomeTown" is selected
+    }
+  };
+  const [numberOfChildren, setNumberOfChildren] = useState(0); // To track the number of children
+  const [childrenNames, setChildrenNames] = useState([]); // To store the names of children
 
- 
+  // Function to handle dynamic changes in children's names
+  const handleChildrenNameChange = (e, index) => {
+    const newNames = [...childrenNames];
+    newNames[index] = e.target.value;
+    setChildrenNames(newNames);
+  };
+
+  const handleVisitingPlaceChange = (event) => {
+    setPlaceOfVisit(event.target.value);
+  };
+
   const handleCheck = async (username_reciever) => {
     try {
       const token = localStorage.getItem("authToken");
@@ -212,58 +219,58 @@ setPlaceOfVisit(event.target.value);
     },
   };
 
- const handleSubmit = (event) => {
-// Prevent page refresh
-event.preventDefault();
-if (!verifiedReceiver) {
-alert("Please verify the receiver before submitting the form.");
-return;
-}
+  const handleSubmit = (event) => {
+    // Prevent page refresh
+    event.preventDefault();
+    if (!verifiedReceiver) {
+      alert("Please verify the receiver before submitting the form.");
+      return;
+    }
 
-const adjustedMonth = "";
-// Create a submission object with main form data and additional fields for children and dependents
-const submission = {
-name: formData.name,
-blockYear: formData.blockYear,
-pfNo: formData.pfNo,
-basicPaySalary: formData.basicPaySalary,
-designation: formData.designation,
-departmentInfo: formData.departmentInfo,
-leaveRequired: formData.leaveRequired,
-leaveStartDate: formData.leaveStartDate,
-leaveEndDate: formData.leaveEndDate,
-dateOfDepartureForFamily: formData.dateOfDepartureForFamily,
-natureOfLeave: formData.natureOfLeave,
-purposeOfLeave: formData.purposeOfLeave,
-hometownOrNot: true,
-placeOfVisit: selectedPlace === "HomeTown" ? "HomeTown" : placeOfVisit,
-addressDuringLeave: formData.addressDuringLeave,
-modeOfTravel: formData.modeOfTravel,
-detailsOfFamilyMembersAlreadyDone: [
-formData.selfName,
-formData.wifeName,
-formData.children,
-],
-detailsOfFamilyMembersAboutToAvail: childrenFields,
+    const adjustedMonth = "";
+    // Create a submission object with main form data and additional fields for children and dependents
+    const submission = {
+      name: formData.name,
+      blockYear: formData.blockYear,
+      pfNo: formData.pfNo,
+      basicPaySalary: formData.basicPaySalary,
+      designation: formData.designation,
+      departmentInfo: formData.departmentInfo,
+      leaveRequired: formData.leaveRequired,
+      leaveStartDate: formData.leaveStartDate,
+      leaveEndDate: formData.leaveEndDate,
+      dateOfDepartureForFamily: formData.dateOfDepartureForFamily,
+      natureOfLeave: formData.natureOfLeave,
+      purposeOfLeave: formData.purposeOfLeave,
+      hometownOrNot: selectedPlace,
+      placeOfVisit: placeOfVisit,
+      addressDuringLeave: formData.addressDuringLeave,
+      modeOfTravel: formData.modeOfTravel,
+      detailsOfFamilyMembersAlreadyDone: [
+        formData.selfName,
+        formData.wifeName,
+        formData.children,
+      ],
+      detailsOfFamilyMembersAboutToAvail: childrenFields,
+      detailsOfDependents: dependentsFields,
+      amountOfAdvanceRequired: formData.amountOfAdvanceRequired,
 
-detailsOfDependents: dependentsFields,
-amountOfAdvanceRequired: formData.amountOfAdvanceRequired,
+      //numFamilyMenbers: numFamilyMenbers,
+      //children: childrenFields,
+      //numDependents: numDependents,
+      // detailsOfDependents: [],
 
-//numFamilyMenbers: numFamilyMenbers,
-//children: childrenFields,
-//numDependents: numDependents,
-// detailsOfDependents: [],
+      adjustedMonth: adjustedMonth,
+      certifiedThatFamilyDependents: formData.certificationDetails,
+      submissionDate: formData.date,
+      certifiedThatAdvanceTakenOn: formData.previousLTCDate,
+      phoneNumberForContact: formData.phoneNumber,
+      username_reciever: formData.username_reciever,
+      designation_reciever: formData.designation_reciever,
+    };
 
-adjustedMonth: adjustedMonth,
-certifiedThatFamilyDependents: formData.certificationDetails,
-submissionDate: formData.date,
-certifiedThatAdvanceTakenOn: formData.previousLTCDate,
-phoneNumberForContact: formData.phoneNumber,
-username_reciever: formData.username_reciever,
-designation_reciever: formData.designation_reciever,
-};
+    console.log(submission);
 
-console.log(submission);
     // Submit the form
     const submitForm = async () => {
       try {
@@ -289,7 +296,7 @@ console.log(submission);
 
         alert("Form submitted successfully!");
         dispatch(resetForm());
-        Navigate("/hr/ltc/ltcrequests"); //
+        Navigate("/hr/ltc/ltcrequests"); // this path is not navigable, same error occuring in leave form as well
       } catch (error) {
         console.error("Failed to submit form:", error);
       }
@@ -300,46 +307,7 @@ console.log(submission);
   return (
     <div className="Ltc_container">
       <form onSubmit={handleSubmit}>
-        {/* Row 1: Name and Designation */}
-        <div className="grid-row">
-          <div className="grid-col">
-            <label className="input-label" htmlFor="name">
-              Name
-            </label>
-            <div className="input-wrapper">
-              <User size={20} />
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                placeholder="Enter Your Full Name"
-                onChange={handleChange}
-                className="input"
-                required
-              />
-            </div>
-          </div>
-          <div className="grid-col">
-            <label className="input-label" htmlFor="designation">
-              Designation
-            </label>
-            <div className="input-wrapper">
-              <Tag size={20} />
-              <input
-                type="text"
-                id="designation"
-                name="designation"
-                value={formData.designation}
-                placeholder="Enter Your Designation"
-                onChange={handleChange}
-                className="input"
-                required
-              />
-            </div>
-          </div>
-        </div>
-        {/* Row 2: Provident Fund No. and Basic Pay */}
+        {/* Row 1: Provident Fund No. and Basic Pay */}
         <div className="grid-row">
           <div className="grid-col">
             <label className="input-label" htmlFor="blockYear">
@@ -397,11 +365,49 @@ console.log(submission);
           </div>
         </div>
 
-        {/* Row 3: Department and Nature of Leave */}
+        <Divider />
+
+        {/* Row 2: Name and Designation and Department */}
         <div className="grid-row">
           <div className="grid-col">
+            <label className="input-label" htmlFor="name">
+              1. Name
+            </label>
+            <div className="input-wrapper">
+              <User size={20} />
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                placeholder="Enter Your Full Name"
+                onChange={handleChange}
+                className="input"
+                required
+              />
+            </div>
+          </div>
+          <div className="grid-col">
+            <label className="input-label" htmlFor="designation">
+              2. Designation
+            </label>
+            <div className="input-wrapper">
+              <Tag size={20} />
+              <input
+                type="text"
+                id="designation"
+                name="designation"
+                value={formData.designation}
+                placeholder="Enter Your Designation"
+                onChange={handleChange}
+                className="input"
+                required
+              />
+            </div>
+          </div>
+          <div className="grid-col">
             <label className="input-label" htmlFor="departmentInfo">
-              Department / Section
+              3. Department / Section
             </label>
             <div className="input-wrapper">
               <Building size={20} />
@@ -440,87 +446,86 @@ console.log(submission);
         </div>
 
         <Divider />
-        <div className="grid-col">
-          <label className="input-label" htmlFor="leaveRequired">
-            (a) Whether leave is required for availing L.T.C.?
+
+        {/* Row 3: Leave Requirement */}
+        <div className="grid-row">
+          <div className="grid-col">
+            <label className="input-label" htmlFor="leaveRequired">
+              4. (a) Whether leave is required for availing L.T.C.?
+            </label>
+            <div className="input-wrapper">
+              <Question size={20} />
+              <Select
+                id="leaveRequired"
+                name="leaveRequired"
+                data={[
+                  { value: "Yes", label: "Yes" },
+                  { value: "No", label: "No" },
+                ]}
+                value={formData.leaveRequired}
+                onChange={(value) => handleSelectChange(value, "leaveRequired")}
+                className="input"
+                styles={selectStyles}
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Row 4: Leave Duration */}
+        <div className="grid-row align-center">
+          <label className="input-label" htmlFor="leaveStartDate">
+            (b) (i) If so, duration of leave applied for:
+          </label>
+          <span style={{ margin: "0 1rem" }}>From:</span>
+          <div className="input-wrapper">
+            <Calendar size={20} />
+            <input
+              type="date"
+              id="leaveStartDate"
+              name="leaveStartDate"
+              value={formData.leaveStartDate}
+              onChange={handleChange}
+              className="input"
+              required
+            />
+          </div>
+          <span style={{ margin: "0 1rem" }}>To:</span>
+          <div className="input-wrapper">
+            <Calendar size={20} />
+            <input
+              type="date"
+              id="leaveEndDate"
+              name="leaveEndDate"
+              value={formData.leaveEndDate}
+              onChange={handleChange}
+              className="input"
+              required
+            />
+          </div>
+          <label
+            className="input-label"
+            htmlFor="dateOfDepartureForFamily"
+            style={{ marginLeft: "2rem" }}
+          >
+            (ii) Date of departure of family, if not availing himself:
           </label>
           <div className="input-wrapper">
-            <Question size={20} />
-            <Select
-              id="leaveRequired"
-              name="leaveRequired"
-              data={[
-                { value: "Yes", label: "Yes" },
-                { value: "No", label: "No" },
-              ]}
-              value={formData.leaveRequired}
-              onChange={(value) => handleSelectChange(value, "leaveRequired")}
+            <Calendar size={20} />
+            <input
+              type="date"
+              id="dateOfDepartureForFamily"
+              name="dateOfDepartureForFamily"
+              value={formData.dateOfDepartureForFamily}
+              onChange={handleChange}
               className="input"
-              styles={selectStyles}
               required
             />
           </div>
         </div>
 
+        {/* Row 5: Nature and Purpose of Leave */}
         <div className="grid-row">
-          <div className="grid-col">
-            <label className="input-label" htmlFor="leaveStartDate">
-              (b) (i) If so, duration of leave applied for From:
-            </label>
-            <div className="input-wrapper">
-              <Calendar size={20} />
-              <input
-                type="date"
-                id="leaveStartDate"
-                name="leaveStartDate" // changed to match the key in formData
-                value={formData.leaveStartDate}
-                onChange={handleChange}
-                className="input"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="grid-col">
-            <label className="input-label" htmlFor="leaveEndDate">
-              To:
-            </label>
-            <div className="input-wrapper">
-              <Calendar size={20} />
-              <input
-                type="date"
-                id="leaveEndDate"
-                name="leaveEndDate" // changed to match the key in formData
-                value={formData.leaveEndDate}
-                onChange={handleChange}
-                className="input"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="grid-col">
-            <label className="input-label" htmlFor="dateOfDepartureForFamily">
-              (ii) Date of departure of family, if not availing himself
-            </label>
-            <div className="input-wrapper">
-              <Calendar size={20} />
-              <input
-                type="date"
-                id="dateOfDepartureForFamily"
-                name="dateOfDepartureForFamily" // changed to match the key in formData
-                value={formData.dateOfDepartureForFamily}
-                onChange={handleChange}
-                className="input"
-                required
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Row 4: LTC Availability and Purpose */}
-        <div className="grid-row">
-          {" "}
           <div className="grid-col">
             <label className="input-label" htmlFor="natureOfLeave">
               (c) Nature of Leave
@@ -569,57 +574,61 @@ console.log(submission);
             </div>
           </div>
         </div>
+        <Divider />
 
+        {/* Row 6: Whether L.T.C. is desired for going to hometown or elsewhere */}
         <div className="grid-row">
-{/* Whether L.T.C. is desired for going to hometown or elsewhere */}
-<div className="grid-col">
-<label className="input-label" htmlFor="placeSelection">
-Whether L.T.C. is desired for going to home town or elsewhere? Select
-Place:
-</label>
-<div className="input-wrapper">
-<Select
-id="placeSelection"
-name="placeSelection"
-data={[
-{ value: "HomeTown", label: "HomeTown" },
-{ value: "ElseWhere", label: "ElseWhere" },
-]}
-value={formData.placeOfVisit}
-onChange={(value) => handlePlaceChange(value, "placeOfVisit")}
-className="input"
-/>
-</div>
-</div>
+          {/* Main Field for Place Selection */}
+          <div className="grid-col">
+            <label className="input-label" htmlFor="placeSelection">
+              5. Whether L.T.C. is desired for going to home town or elsewhere?
+              Select Place:
+            </label>
+            <div className="input-wrapper">
+              <MapPin size={20} />
+              <Select
+                id="placeSelection"
+                name="placeSelection"
+                data={[
+                  { value: "HomeTown", label: "HomeTown" },
+                  { value: "ElseWhere", label: "ElseWhere" },
+                ]}
+                value={selectedPlace}
+                onChange={handlePlaceChange}
+                className="input"
+                styles={selectStyles}
+              />
+            </div>
+          </div>
 
-{/* Input field for entering the place if "Elsewhere" is selected */}
-{selectedPlace === "ElseWhere" && (
-<div className="grid-col">
-<label className="input-label" htmlFor="placeOfVisit">
-Place where you are visiting:
-</label>
-<div className="input-wrapper">
-<input
-type="text"
-id="placeOfVisit"
-name="placeOfVisit"
-value={formData.placeOfVisit}
-onChange={handleVisitingPlaceChange}
-placeholder="Enter the place"
-className="input"
-required
-/>
-</div>
-</div>
-)}
-</div>
+          {/* Conditional Input for "ElseWhere" */}
+          {selectedPlace === "ElseWhere" && (
+            <div className="grid-col">
+              <label className="input-label" htmlFor="placeOfVisit">
+                Place where you are visiting:
+              </label>
+              <div className="input-wrapper">
+                <MapPin size={20} />
+                <input
+                  type="text"
+                  id="placeOfVisit"
+                  name="placeOfVisit"
+                  value={formData.placeOfVisit}
+                  onChange={handleVisitingPlaceChange}
+                  placeholder="Enter the place"
+                  className="input"
+                  required
+                />
+              </div>
+            </div>
+          )}
+        </div>
 
-
-        {/* Row 5: Mode of Travel and Address During Leave */}
+        {/* Row 7: Mode of Travel and Address During Leave */}
         <div className="grid-row">
           <div className="grid-col">
             <label className="input-label" htmlFor="modeOfTravel">
-              Mode of Travel
+              6. Mode of Travel
             </label>
             <div className="input-wrapper">
               <Airplane size={20} />
@@ -642,7 +651,7 @@ required
 
           <div className="grid-col">
             <label className="input-label" htmlFor="addressDuringLeave">
-              Address During Leave
+              7. Address During Leave
             </label>
             <div className="input-wrapper">
               <MapPin size={20} />
@@ -660,13 +669,20 @@ required
           </div>
         </div>
 
+        <Divider />
+
         {/* Section 6: Details of Family Members */}
         {/* Section 6: Details of Family Members Who Will Avail LTC */}
-        <h3>
-          (i) Details of family members for whom L.T.C. for this block has
+
+        {/* Label for Family Members */}
+        <label className="input-label" htmlFor="family_members_availing_LTC">
+          8. (i) Details of family members for whom L.T.C. for this block has
           already been availed:
-        </h3>
+        </label>
+
+        {/* First Row: Self, Spouse, and Number of Children */}
         <div className="grid-row">
+          {/* Self Field */}
           <div className="grid-col">
             <label className="input-label" htmlFor="selfName">
               (a) Self
@@ -685,50 +701,90 @@ required
             </div>
           </div>
 
+          {/* Spouse Field */}
           <div className="grid-col">
-            <label className="input-label" htmlFor="wifeName">
-              (b) Spouse
+            <label className="input-label" htmlFor="spouseName">
+              (b) Spouse (if any)
             </label>
             <div className="input-wrapper">
               <User size={20} />
               <input
                 type="text"
-                id="wifeName"
-                name="wifeName"
-                placeholder="Enter Wife's Name"
+                id="spouseName"
+                name="spouseName"
+                placeholder="Enter Spouse's Name"
                 onChange={handleChange}
                 className="input"
-                // required
               />
             </div>
           </div>
 
+          {/* Number of Children Field */}
           <div className="grid-col">
-            <label className="input-label" htmlFor="children">
-              (c) Children
+            <label className="input-label" htmlFor="numberOfChildren">
+              (c) Number of Children (if any)
             </label>
             <div className="input-wrapper">
               <User size={20} />
               <input
-                type="text"
-                id="childrenName"
-                name="children"
-                placeholder="Children"
-                onChange={handleChange}
+                type="number"
+                id="numberOfChildren"
+                name="numberOfChildren"
+                placeholder="Enter Number of Children"
+                value={numberOfChildren}
+                onChange={(e) => setNumberOfChildren(Number(e.target.value))}
                 className="input"
-                // required
+                min="0"
               />
             </div>
           </div>
         </div>
 
-        <div className="grid-col">
-          <label className="input-label" htmlFor="numFamilyMenbers">
-            (c) Number of Family Members
-          </label>
-          <div className="input-wrapper">
-            <Users size={20} />
+        {/* Dynamic Children Fields */}
+        {numberOfChildren > 0 && (
+          <div className="grid-row">
+            {Array.from({ length: numberOfChildren }, (_, index) => (
+              <div className="grid-col" key={index}>
+                <label className="input-label" htmlFor={`child${index + 1}`}>
+                  Child Name {index + 1}
+                </label>
+                <div className="input-wrapper">
+                  <User size={20} />
+                  <input
+                    type="text"
+                    id={`child${index + 1}`}
+                    name={`child${index + 1}`}
+                    placeholder={`Enter Name of Child ${index + 1}`}
+                    value={childrenNames[index] || ""}
+                    onChange={(e) => handleChildrenNameChange(e, index)}
+                    className="input"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Section for Family Members */}
+        {/* Section for Family Members */}
+        <label
+          className="input-label"
+          htmlFor="family_members_availing_LTC_in_future"
+        >
+          (ii) Details of family members who will avail L.T.C.
+        </label>
+
+        <div
+          className="grid-row"
+          style={{ display: "flex", alignItems: "flex-start" }}
+        >
+          {/* Number of Family Members Field with 25% width */}
+          <div className="grid-col" style={{ flex: "0 0 25%" }}>
+            <label className="input-label" htmlFor="numFamilyMenbers">
+              Number of Family Members
+            </label>
             <div className="input-wrapper">
+              <Users size={20} />
               <Select
                 id="numFamilyMenbers"
                 name="numFamilyMenbers"
@@ -747,199 +803,214 @@ required
               />
             </div>
           </div>
-        </div>
 
-        {numFamilyMenbers > 0 && (
-          <div>
-            <h4
-              style={{
-                marginBottom: "20px",
-                fontSize: "1.2rem",
-                color: "#2d3748",
-              }}
+          {/* Family Members Table with 70% width and equal spacing */}
+          {numFamilyMenbers > 0 && (
+            <div
+              className="grid-col"
+              style={{ flex: "0 0 70%", paddingLeft: "15px" }}
             >
-              (ii) Details of family members who will avail L.T.C.
-            </h4>
-            <table className="family-details-table">
-              <thead>
-                <tr>
-                  <th>Index</th>
-                  <th>Name</th>
-                  <th>Age</th>
-                </tr>
-              </thead>
-              <tbody>
-                {childrenFields.map((child, index) => (
-                  <tr key={index}>
-                    {/* Index Column */}
-                    <td>
-                      <input
-                        type="text"
-                        value={index + 1} // Displaying index starting from 1
-                        readOnly // The index is readonly since it's just for display
-                      />
-                    </td>
-
-                    {/* Name Column */}
-                    <td>
-                      <input
-                        type="text"
-                        id={`childName${index}`}
-                        value={child.name}
-                        onChange={(e) =>
-                          handleChildInputChange(index, "name", e.target.value)
-                        }
-                        placeholder="Enter Name"
-                        required
-                      />
-                    </td>
-
-                    {/* Age Column */}
-                    <td>
-                      <input
-                        type="number"
-                        id={`childAge${index}`}
-                        value={child.age}
-                        onChange={(e) =>
-                          handleChildInputChange(index, "age", e.target.value)
-                        }
-                        placeholder="Enter Age"
-                        required
-                      />
-                    </td>
+              <table className="family-details-table" style={{ width: "100%" }}>
+                <thead>
+                  <tr>
+                    <th style={{ width: "15%" }}>Index</th>{" "}
+                    {/* Increased width for Index column */}
+                    <th style={{ width: "40%" }}>Full Name</th>{" "}
+                    {/* Equal width for Full Name */}
+                    <th style={{ width: "15%" }}>Age</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+                </thead>
+                <tbody>
+                  {childrenFields.map((child, index) => (
+                    <tr key={index}>
+                      {/* Index Column */}
+                      <td>
+                        <input
+                          type="text"
+                          value={index + 1} // Displaying index starting from 1
+                          readOnly
+                          className="input"
+                        />
+                      </td>
 
+                      {/* Full Name Column */}
+                      <td>
+                        <input
+                          type="text"
+                          id={`childName${index}`}
+                          value={child.name}
+                          onChange={(e) =>
+                            handleChildInputChange(
+                              index,
+                              "name",
+                              e.target.value,
+                            )
+                          }
+                          placeholder="Enter Name"
+                          required
+                          className="input"
+                        />
+                      </td>
+
+                      {/* Age Column */}
+                      <td>
+                        <input
+                          type="number"
+                          id={`childAge${index}`}
+                          value={child.age}
+                          onChange={(e) =>
+                            handleChildInputChange(index, "age", e.target.value)
+                          }
+                          placeholder="Enter Age"
+                          required
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
         {/* Section for Dependent Family Members */}
-        <h3>Dependent Family Members</h3>
-        <div className="grid-row">
-          <div className="grid-col">
+        <label
+          className="input-label"
+          htmlFor="dependent_family_members_availing_LTC_in_future"
+        >
+          (iii) Dependent parents, minor brothers, and sisters residing with the
+          applicant:
+        </label>
+
+        <div
+          className="grid-row"
+          style={{ display: "flex", alignItems: "flex-start" }}
+        >
+          {/* Number of Dependents Field with 25% width */}
+          <div className="grid-col" style={{ flex: "0 0 25%" }}>
             <label className="input-label" htmlFor="numDependents">
               Number of Dependents
             </label>
             <div className="input-wrapper">
               <Users size={20} />
-              <div className="input-wrapper">
-                <Select
-                  id="numDependents"
-                  name="numDependents"
-                  data={[
-                    { value: "0", label: "0" },
-                    { value: "1", label: "1" },
-                    { value: "2", label: "2" },
-                    { value: "3", label: "3" },
-                    { value: "4", label: "4" },
-                    { value: "5", label: "5" },
-                  ]}
-                  value={numDependents.toString()}
-                  onChange={handleDependentsChange}
-                  className="input"
-                  styles={selectStyles}
-                />
-              </div>
+              <Select
+                id="numDependents"
+                name="numDependents"
+                data={[
+                  { value: "0", label: "0" },
+                  { value: "1", label: "1" },
+                  { value: "2", label: "2" },
+                  { value: "3", label: "3" },
+                  { value: "4", label: "4" },
+                  { value: "5", label: "5" },
+                ]}
+                value={numDependents.toString()}
+                onChange={handleDependentsChange}
+                className="input"
+                styles={selectStyles}
+              />
             </div>
           </div>
+
+          {/* Dependents Table with 70% width and equal spacing */}
+          {numDependents > 0 && (
+            <div
+              className="grid-col"
+              style={{ flex: "0 0 70%", paddingLeft: "15px" }}
+            >
+              <table className="family-details-table" style={{ width: "100%" }}>
+                <thead>
+                  <tr>
+                    <th style={{ width: "15%" }}>Index</th>{" "}
+                    {/* Increased width for Index column */}
+                    <th style={{ width: "40%" }}>Full Name</th>{" "}
+                    {/* Equal width for Full Name and Reason for Dependency */}
+                    <th style={{ width: "15%" }}>Age</th>
+                    <th style={{ width: "40%" }}>Reason for Dependency</th>{" "}
+                    {/* Equal width for Reason for Dependency */}
+                  </tr>
+                </thead>
+                <tbody>
+                  {dependentsFields.map((dependent, index) => (
+                    <tr key={index}>
+                      {/* Index Column */}
+                      <td>
+                        <input
+                          type="text"
+                          value={index + 1} // Displaying index starting from 1
+                          readOnly
+                          className="input"
+                        />
+                      </td>
+
+                      {/* Full Name Column */}
+                      <td>
+                        <input
+                          type="text"
+                          id={`dependentFullName${index}`}
+                          value={dependent.fullName}
+                          onChange={(e) =>
+                            handleDependentInputChange(
+                              index,
+                              "fullName",
+                              e.target.value,
+                            )
+                          }
+                          placeholder="Enter Name"
+                          required
+                          className="input"
+                        />
+                      </td>
+
+                      {/* Age Column */}
+                      <td>
+                        <input
+                          type="number"
+                          id={`dependentAge${index}`}
+                          value={dependent.age}
+                          onChange={(e) => {
+                            const ageValue = Math.max(0, e.target.value); // Prevent negative values
+                            handleDependentInputChange(index, "age", ageValue);
+                          }}
+                          className="input"
+                          placeholder="Enter Age"
+                          required
+                          min="0"
+                        />
+                      </td>
+
+                      {/* Reason for Dependency Column */}
+                      <td>
+                        <input
+                          type="text"
+                          id={`dependentReason${index}`}
+                          value={dependent.reason}
+                          onChange={(e) =>
+                            handleDependentInputChange(
+                              index,
+                              "reason",
+                              e.target.value,
+                            )
+                          }
+                          className="input"
+                          placeholder="Enter Reason"
+                          required
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
 
-        {numDependents > 0 && (
-          <div>
-            <h4
-              style={{
-                marginBottom: "20px",
-                fontSize: "1.2rem",
-                color: "#2d3748",
-              }}
-            >
-              (d)Dependent parents, minor brothers, and sisters residing with
-              the applicant:
-            </h4>
-
-            <table className="family-details-table">
-              <thead>
-                <tr>
-                  <th>Index</th>
-                  <th>Full Name</th>
-                  <th>Age</th>
-                  <th>Reason for Dependency</th>
-                </tr>
-              </thead>
-              <tbody>
-                {dependentsFields.map((dependent, index) => (
-                  <tr key={index}>
-                    <td>
-                      <input
-                        type="text"
-                        value={index + 1} // Read-only index
-                        className="input"
-                        readOnly
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        id={`dependentFullName${index}`}
-                        value={dependent.fullName}
-                        onChange={(e) =>
-                          handleDependentInputChange(
-                            index,
-                            "fullName",
-                            e.target.value,
-                          )
-                        }
-                        className="input"
-                        placeholder="Enter Name" // Placeholder added
-                        required
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        id={`dependentAge${index}`}
-                        value={dependent.age}
-                        onChange={(e) => {
-                          const ageValue = Math.max(0, e.target.value); // Prevent negative values
-                          handleDependentInputChange(index, "age", ageValue);
-                        }}
-                        className="input"
-                        placeholder="Enter Age"
-                        required
-                        min="0" // Add a minimum value
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        id={`dependentReason${index}`}
-                        value={dependent.reason}
-                        onChange={(e) =>
-                          handleDependentInputChange(
-                            index,
-                            "reason",
-                            e.target.value,
-                          )
-                        }
-                        className="input"
-                        placeholder="Enter Reason"
-                        required
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
         <Divider />
 
-        <div className="grid-row">
-          {/* Amount of advance required */}
-          <div className="grid-col amount-advance">
+        <div className="grid-row" style={{ paddingRight: "20px" }}>
+          {/* Amount of advance required and Date in one horizontal line */}
+          <div className="grid-col" style={{ flex: "0 0 50%" }}>
             <label className="input-label" htmlFor="amountOfAdvanceRequired">
-              Amount of advance required, if any:
+              9. Amount of advance required, if any:
             </label>
             <div className="input-wrapper">
               <Money size={20} />
@@ -955,38 +1026,9 @@ required
             </div>
           </div>
 
-          {/* Certified Details */}
-          <div className="grid-col">
-            <label className="input-label" htmlFor="certificationDetails">
-              (i) Certified that family members for whom the L.T.C. is claimed
-              are residing with me and are wholly dependent upon me.
-            </label>
-            <div className="input-wrapper">
-              <Question size={20} />
-              <Select
-                id="certificationDetails"
-                name="certificationDetails"
-                data={[
-                  { value: "Yes", label: "Yes" },
-                  { value: "No", label: "No" },
-                ]}
-                value={formData.certificationDetails}
-                onChange={(value) =>
-                  handleSelectChange(value, "certificationDetails")
-                }
-                className="input"
-                styles={selectStyles}
-                required
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Date Fields */}
-        <div className="grid-row">
-          <div className="grid-col">
+          <div className="grid-col" style={{ flex: "0 0 50%" }}>
             <label className="input-label" htmlFor="date">
-              Date:
+              Taken on the Date:
             </label>
             <div className="input-wrapper">
               <Calendar size={20} />
@@ -1001,9 +1043,35 @@ required
               />
             </div>
           </div>
+        </div>
+
+        {/* Certified Details - (i) part with Yes/No Answer */}
+        <div className="grid-row" style={{ paddingRight: "20px" }}>
           <div className="grid-col">
+            <label className="input-label" htmlFor="certificationDetails">
+              (i) Certified that family members for whom the L.T.C. is claimed
+              are residing with me and are wholly dependent upon me.
+            </label>
+            <div className="input-wrapper">
+              <input
+                type="text"
+                id="certificationDetails"
+                name="certificationDetails"
+                value={formData.certificationDetails}
+                onChange={handleChange}
+                className="input"
+                required
+                placeholder="Enter the certification"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Certified Details - (ii) with Previous LTC Date and Adjusted Month */}
+        <div className="grid-row" style={{ paddingRight: "20px" }}>
+          <div className="grid-col" style={{ flex: "0 0 50%" }}>
             <label className="input-label" htmlFor="previousLTCDate">
-              Certified that the previous L.T.C. advance drawn by me on:
+              (ii) Certified that the previous L.T.C. advance drawn by me on:
             </label>
             <div className="input-wrapper">
               <Calendar size={20} />
@@ -1015,12 +1083,53 @@ required
                 onChange={handleChange}
                 className="input"
                 required
-              />{" "}
+              />
             </div>
           </div>
-          <div className="grid-col">
+
+          <div className="grid-col" style={{ flex: "0 0 50%" }}>
+            <label className="input-label" htmlFor="adjustmentMonth">
+              has been adjusted in the month of:
+            </label>
+            <div className="input-wrapper" style={{ position: "relative" }}>
+              {/* Month Dropdown */}
+              <select
+                id="adjustmentMonth"
+                name="adjustmentMonth"
+                value={formData.adjustmentMonth}
+                onChange={handleChange}
+                className="input"
+                required
+                style={{
+                  color: "black", // Set the text color in the dropdown to black
+                  paddingLeft: "30px", // Provide enough space for the icon
+                }}
+              >
+                <option value="">Select Month</option>
+                <option value="January">January</option>
+                <option value="February">February</option>
+                <option value="March">March</option>
+                <option value="April">April</option>
+                <option value="May">May</option>
+                <option value="June">June</option>
+                <option value="July">July</option>
+                <option value="August">August</option>
+                <option value="September">September</option>
+                <option value="October">October</option>
+                <option value="November">November</option>
+                <option value="December">December</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <Divider />
+
+        {/* Phone Number and Specific Recommendation in another horizontal line */}
+        <div className="grid-row" style={{ paddingRight: "20px" }}>
+          <div className="grid-col" style={{ flex: "0 0 50%" }}>
             <label className="input-label" htmlFor="phoneNumber">
-              Phone Number for contact:
+              10. Phone Number for contact:
             </label>
             <div className="input-wrapper">
               <Phone size={20} />
@@ -1029,6 +1138,23 @@ required
                 id="phoneNumber"
                 name="phoneNumber"
                 value={formData.phoneNumber}
+                onChange={handleChange}
+                className="input"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="grid-col" style={{ flex: "0 0 50%" }}>
+            <label className="input-label" htmlFor="specificRecommendation">
+              11. Specific recommendation of the Head of Department/Section:
+            </label>
+            <div className="input-wrapper">
+              <input
+                type="text"
+                id="specificRecommendation"
+                name="specificRecommendation"
+                value={formData.specificRecommendation}
                 onChange={handleChange}
                 className="input"
                 required
