@@ -1,12 +1,4 @@
 import React from "react";
-import {
-  Container,
-  SimpleGrid,
-  Group,
-  Badge,
-  Title,
-  Text,
-} from "@mantine/core";
 import { Link } from "react-router-dom";
 import {
   Briefcase,
@@ -15,17 +7,16 @@ import {
   User,
   FilePlus,
 } from "@phosphor-icons/react";
-import PerformanceCard from "../components/FormComponent/PerformanceCard";
-import classes from "./Hr_Dashboard.module.css";
-import { HeroBanner } from "../components/HeroBanner";
 import HrBreadcrumbs from "../components/HrBreadcrumbs";
+import classes from "./Hr_Dashboard.module.css";
+import LeaveForm from "./LeavePageComp/LeaveForm"; // Import LeaveForm
 
-const mockdata = [
+const navItems = [
   {
     title: "Leave Management",
     description: "Manage and apply for leaves effortlessly.",
     icon: Briefcase,
-    link: "/hr/leave",
+    link: "/hr/leave", // Link to Leave Management
   },
   {
     title: "CPDA Advance",
@@ -52,33 +43,35 @@ const mockdata = [
     link: "/hr/appraisal",
   },
 ];
+
 const exampleItems = [
   { title: "Home", path: "/dashboard" },
   { title: "Human Resources", path: "/hr" },
 ];
-const Hr_Dashboard = () => {
-  const features = mockdata.map((feature) => (
-    <PerformanceCard
-      key={feature.title}
-      IconComponent={feature.icon}
-      title={feature.title}
-      description={feature.description}
-      link={feature.link}
-    />
-  ));
 
+const Hr_Dashboard = () => {
   return (
-    <div size="lg" py="xl" className={classes.hrdashboardContainer}>
+    <div className={classes.hrdashboardContainer}>
       <HrBreadcrumbs items={exampleItems} />
-      <HeroBanner />
-      <SimpleGrid
-        cols={{ base: 1, md: 3 }}
-        spacing="xl"
-        mt={10}
-        className={classes.simpleGrid}
-      >
-        {features}
-      </SimpleGrid>
+
+      {/* Main Navbar */}
+      <div className={classes.navbar}>
+        <div className={classes.navLinks}>
+          {navItems.map((item) => (
+            <Link key={item.title} to={item.link} className={classes.navLink}>
+              <item.icon size={20} className={classes.navIcon} />
+              {item.title}
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* LeaveForm Section with Heading */}
+      <div className={classes.leaveFormSection}>
+        <h2 className={classes.leaveFormHeading}>Apply for Leave</h2>{" "}
+        {/* Added heading */}
+        <LeaveForm /> {/* This will show the LeaveForm below the navbar */}
+      </div>
     </div>
   );
 };

@@ -2,7 +2,7 @@ import React from "react";
 import { Title, Container, Paper, Button, Flex, Table } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { Eye, MapPin } from "@phosphor-icons/react";
-import "./Table.css"; // Ensure this path is correct
+import "./Table.css";
 import { EmptyTable } from "./EmptyTable";
 
 const InboxTable = ({ title, data, formType }) => {
@@ -32,7 +32,6 @@ const InboxTable = ({ title, data, formType }) => {
     navigate(trackUrlMap[formType]);
   };
 
-  // Render table rows
   const renderRows = () =>
     data.map((item, index) => (
       <Table.Tr key={index}>
@@ -65,7 +64,6 @@ const InboxTable = ({ title, data, formType }) => {
       </Table.Tr>
     ));
 
-  // Render table headers
   const renderHeaders = () =>
     headers.map((header, index) => (
       <Table.Th key={index}>
@@ -76,7 +74,7 @@ const InboxTable = ({ title, data, formType }) => {
     ));
 
   return (
-    <Container size="lg" mt={30} miw="80rem">
+    <Container size="lg" mt={30} style={{ maxWidth: "90rem" }} miw="80rem">
       <Paper shadow="md" radius="md" p="lg" withBorder>
         <Title order={2} align="center" mb="lg" c="#1c7ed6">
           {title}
@@ -88,7 +86,13 @@ const InboxTable = ({ title, data, formType }) => {
             message="There is no new Inbox request available. Please check back later."
           />
         ) : (
-          <Table striped highlightOnHover withBorder withColumnBorders>
+          <Table
+            striped
+            highlightOnHover
+            withBorder
+            withColumnBorders
+            style={{ width: "100%" }}
+          >
             <Table.Thead>
               <Table.Tr>{renderHeaders()}</Table.Tr>
             </Table.Thead>
