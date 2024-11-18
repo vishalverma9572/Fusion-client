@@ -85,6 +85,7 @@ const LtcForm = () => {
   const [dependentsFields, setDependentsFields] = useState([
     { fullName: "", age: "", reason: "" },
   ]);
+
   const [selectedPlace, setSelectedPlace] = useState("HomeTown"); // Defaults to "HomeTown"
 
   const [placeOfVisit, setPlaceOfVisit] = useState("");
@@ -96,6 +97,7 @@ const LtcForm = () => {
       setPlaceOfVisit("");
     }
   };
+
   const [numberOfChildren, setNumberOfChildren] = useState(0); // To track the number of children
   const [childrenNames, setChildrenNames] = useState([]); // To store the names of children
 
@@ -1067,7 +1069,9 @@ const LtcForm = () => {
                 id="adjustedMonth"
                 name="adjustedMonth"
                 value={formData.adjustedMonth}
-                onChange={handleChange}
+                onChange={(e) =>
+                  setFormData({ ...formData, adjustedMonth: e.target.value })
+                } // Use e.target.value for native <select>
                 className="input"
                 required
                 style={{

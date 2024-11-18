@@ -927,31 +927,31 @@ const LTCFormView = () => {
                 has been adjusted in the month of:
               </label>
               <div className="input-wrapper" style={{ position: "relative" }}>
-                <Select
+                <select
                   id="adjustedMonth"
                   name="adjustedMonth"
-                  value={fetchedformData.adjustedMonth}
-                  data={[
-                    { value: "January", label: "January" },
-                    { value: "February", label: "February" },
-                    { value: "March", label: "March" },
-                    { value: "April", label: "April" },
-                    { value: "May", label: "May" },
-                    { value: "June", label: "June" },
-                    { value: "July", label: "July" },
-                    { value: "August", label: "August" },
-                    { value: "September", label: "September" },
-                    { value: "October", label: "October" },
-                    { value: "November", label: "November" },
-                    { value: "December", label: "December" },
-                  ]}
+                  value={fetchedformData.adjustedMonth || ""}
                   className="input"
+                  disabled // Keep it disabled for the view form
                   style={{
                     color: "black",
                     paddingLeft: "30px",
                   }}
-                  isDisabled={true} // Disables the dropdown
-                />
+                >
+                  <option value="">Select Month</option>
+                  <option value="January">January</option>
+                  <option value="February">February</option>
+                  <option value="March">March</option>
+                  <option value="April">April</option>
+                  <option value="May">May</option>
+                  <option value="June">June</option>
+                  <option value="July">July</option>
+                  <option value="August">August</option>
+                  <option value="September">September</option>
+                  <option value="October">October</option>
+                  <option value="November">November</option>
+                  <option value="December">December</option>
+                </select>
               </div>
             </div>
 
