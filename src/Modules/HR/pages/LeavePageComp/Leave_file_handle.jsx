@@ -366,7 +366,13 @@ const LeaveFilehandle = () => {
                   placeholder="Department Name"
                   value={fetchedformData.departmentInfo}
                   className="input"
-                  disabled
+                  disabled={!isEditing}
+                  onChange={(e) =>
+                    setfetchedformData((prev) => ({
+                      ...prev,
+                      departmentInfo: e.target.value,
+                    }))
+                  }
                 />
               </div>
             </div>
@@ -384,6 +390,13 @@ const LeaveFilehandle = () => {
                   value={fetchedformData.pfNo}
                   className="input"
                   required
+                  disabled={!isEditing}
+                  onChange={(e) =>
+                    setfetchedformData((prev) => ({
+                      ...prev,
+                      pfNo: e.target.value,
+                    }))
+                  }
                 />
               </div>
             </div>
@@ -399,7 +412,13 @@ const LeaveFilehandle = () => {
                   name="submissionDate"
                   value={fetchedformData.submissionDate}
                   className="input center"
-                  disabled
+                  disabled={!isEditing}
+                  onChange={(e) =>
+                    setfetchedformData((prev) => ({
+                      ...prev,
+                      submissionDate: e.target.value,
+                    }))
+                  }
                 />
               </div>
             </div>
@@ -419,7 +438,13 @@ const LeaveFilehandle = () => {
                   name="natureOfLeave"
                   value={fetchedformData.natureOfLeave}
                   className="input"
-                  disabled
+                  disabled={!isEditing}
+                  onChange={(e) =>
+                    setfetchedformData((prev) => ({
+                      ...prev,
+                      natureOfLeave: e.target.value,
+                    }))
+                  }
                 />
               </div>
             </div>
@@ -435,7 +460,13 @@ const LeaveFilehandle = () => {
                   name="leaveStartDate"
                   value={fetchedformData.leaveStartDate}
                   className="input"
-                  disabled
+                  disabled={!isEditing}
+                  onChange={(e) =>
+                    setfetchedformData((prev) => ({
+                      ...prev,
+                      leaveStartDate: e.target.value,
+                    }))
+                  }
                 />
               </div>
             </div>
@@ -451,8 +482,14 @@ const LeaveFilehandle = () => {
                   name="leaveEndDate"
                   value={fetchedformData.leaveEndDate}
                   className="input"
-                  disabled
+                  disabled={!isEditing}
                   required
+                  onChange={(e) =>
+                    setfetchedformData((prev) => ({
+                      ...prev,
+                      leaveEndDate: e.target.value,
+                    }))
+                  }
                 />
               </div>
             </div>
@@ -473,7 +510,13 @@ const LeaveFilehandle = () => {
                   placeholder="Purpose of Leave"
                   value={fetchedformData.purposeOfLeave}
                   className="input"
-                  disabled
+                  disabled={!isEditing}
+                  onChange={(e) =>
+                    setfetchedformData((prev) => ({
+                      ...prev,
+                      purposeOfLeave: e.target.value,
+                    }))
+                  }
                 />
               </div>
             </div>
@@ -490,7 +533,13 @@ const LeaveFilehandle = () => {
                   placeholder="Full Address"
                   value={fetchedformData.addressDuringLeave}
                   className="input"
-                  disabled
+                  disabled={!isEditing}
+                  onChange={(e) =>
+                    setfetchedformData((prev) => ({
+                      ...prev,
+                      addressDuringLeave: e.target.value,
+                    }))
+                  }
                 />
               </div>
             </div>
@@ -511,7 +560,13 @@ const LeaveFilehandle = () => {
                   placeholder="Enter the name"
                   value={fetchedformData.academicResponsibility}
                   className="input"
-                  disabled
+                  disabled={!isEditing}
+                  onChange={(e) =>
+                    setfetchedformData((prev) => ({
+                      ...prev,
+                      academicResponsibility: e.target.value,
+                    }))
+                  }
                 />
               </div>
             </div>
@@ -531,7 +586,13 @@ const LeaveFilehandle = () => {
                   placeholder="Enter the name"
                   value={fetchedformData.addministrativeResponsibiltyAssigned}
                   className="input"
-                  disabled
+                  disabled={!isEditing}
+                  onChange={(e) =>
+                    setfetchedformData((prev) => ({
+                      ...prev,
+                      addministrativeResponsibiltyAssigned: e.target.value,
+                    }))
+                  }
                 />
               </div>
             </div>
