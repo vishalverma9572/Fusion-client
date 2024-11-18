@@ -96,6 +96,15 @@ const LtcForm = () => {
       setPlaceOfVisit("");
     }
   };
+  const [numberOfChildren, setNumberOfChildren] = useState(0); // To track the number of children
+  const [childrenNames, setChildrenNames] = useState([]); // To store the names of children
+
+  // Function to handle dynamic changes in children's names
+  const handleChildrenNameChange = (e, index) => {
+    const newNames = [...childrenNames];
+    newNames[index] = e.target.value;
+    setChildrenNames(newNames);
+  };
 
   const handleVisitingPlaceChange = (event) => {
     setPlaceOfVisit(event.target.value);
@@ -660,7 +669,6 @@ const LtcForm = () => {
 
         <Divider />
 
-        {/* Section 6: Details of Family Members */}
         {/* Section 6: Details of Family Members Who Will Avail LTC */}
 
         {/* Label for Family Members */}
@@ -711,7 +719,7 @@ const LtcForm = () => {
           {/* Number of Children Field */}
           <div className="grid-col">
             <label className="input-label" htmlFor="numberOfChildren">
-              (c) Name of Child (if any)
+              (c) Child (if any)
             </label>
             <div className="input-wrapper">
               <User size={20} />
@@ -727,7 +735,6 @@ const LtcForm = () => {
           </div>
         </div>
 
-        {/* Section for Family Members */}
         {/* Section for Family Members */}
         <label
           className="input-label"
@@ -834,6 +841,7 @@ const LtcForm = () => {
             </div>
           )}
         </div>
+
         {/* Section for Dependent Family Members */}
         <label
           className="input-label"
