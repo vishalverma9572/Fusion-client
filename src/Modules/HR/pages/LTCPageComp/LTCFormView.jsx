@@ -619,6 +619,7 @@ className="input"
                   }}
                 >
                  {numFamilyMenbers}
+                 {/* fixed this */}
                 </div>
               </div>
             </div>
@@ -700,7 +701,9 @@ className="input"
                         textAlign: "center",
                       }}
                     >
-                      {numDependents}
+                      
+                      {numDependents} 
+                    
                     </div>
                   </div>
                 </div>
