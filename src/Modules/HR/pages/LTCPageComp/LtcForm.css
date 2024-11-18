@@ -197,7 +197,10 @@
     width: 100%;
     margin-bottom: 20px;
 }
-
+.black-text {
+    color: black !important; /* Ensures the text inside the dropdown is black */
+  }
+  
 .Ltc_container .declaration-section input {
     padding-left: 14px;
 }
