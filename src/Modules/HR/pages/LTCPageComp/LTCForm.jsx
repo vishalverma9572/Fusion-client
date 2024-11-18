@@ -229,7 +229,7 @@ const LtcForm = () => {
       return;
     }
 
-    //const adjustedMonth = "";
+    const adjustedMonth = "";
     // Create a submission object with main form data and additional fields for children and dependents
     const submission = {
       name: formData.name,
@@ -256,7 +256,7 @@ const LtcForm = () => {
       detailsOfFamilyMembersAboutToAvail: childrenFields,
       detailsOfDependents: dependentsFields,
       amountOfAdvanceRequired: formData.amountOfAdvanceRequired,
-      adjustedMonth: formData.adjustedMonth,
+      adjustedMonth: adjustedMonth,
       certifiedThatFamilyDependents: formData.certificationDetails,
       submissionDate: formData.date,
       certifiedThatAdvanceTakenOn: formData.previousLTCDate,
@@ -669,6 +669,7 @@ const LtcForm = () => {
 
         <Divider />
 
+        {/* Section 6: Details of Family Members */}
         {/* Section 6: Details of Family Members Who Will Avail LTC */}
 
         {/* Label for Family Members */}
@@ -719,7 +720,7 @@ const LtcForm = () => {
           {/* Number of Children Field */}
           <div className="grid-col">
             <label className="input-label" htmlFor="numberOfChildren">
-              (c) Child (if any)
+              (c) Name of Child (if any)
             </label>
             <div className="input-wrapper">
               <User size={20} />
@@ -735,6 +736,7 @@ const LtcForm = () => {
           </div>
         </div>
 
+        {/* Section for Family Members */}
         {/* Section for Family Members */}
         <label
           className="input-label"
@@ -841,7 +843,6 @@ const LtcForm = () => {
             </div>
           )}
         </div>
-
         {/* Section for Dependent Family Members */}
         <label
           className="input-label"
@@ -1058,15 +1059,15 @@ const LtcForm = () => {
           </div>
 
           <div className="grid-col" style={{ flex: "0 0 50%" }}>
-            <label className="input-label" htmlFor="adjustedMonth">
+            <label className="input-label" htmlFor="adjustmentMonth">
               has been adjusted in the month of:
             </label>
             <div className="input-wrapper" style={{ position: "relative" }}>
               {/* Month Dropdown */}
               <select
-                id="adjustedMonth"
-                name="adjustedMonth"
-                value={formData.adjustedMonth}
+                id="adjustmentMonth"
+                name="adjustmentMonth"
+                value={formData.adjustmentMonth}
                 onChange={handleChange}
                 className="input"
                 required
