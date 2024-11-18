@@ -96,15 +96,6 @@ const LtcForm = () => {
       setPlaceOfVisit("");
     }
   };
-  const [numberOfChildren, setNumberOfChildren] = useState(0); // To track the number of children
-  const [childrenNames, setChildrenNames] = useState([]); // To store the names of children
-
-  // Function to handle dynamic changes in children's names
-  const handleChildrenNameChange = (e, index) => {
-    const newNames = [...childrenNames];
-    newNames[index] = e.target.value;
-    setChildrenNames(newNames);
-  };
 
   const handleVisitingPlaceChange = (event) => {
     setPlaceOfVisit(event.target.value);
@@ -229,7 +220,7 @@ const LtcForm = () => {
       return;
     }
 
-    const adjustedMonth = "";
+    //const adjustedMonth = "";
     // Create a submission object with main form data and additional fields for children and dependents
     const submission = {
       name: formData.name,
@@ -256,7 +247,7 @@ const LtcForm = () => {
       detailsOfFamilyMembersAboutToAvail: childrenFields,
       detailsOfDependents: dependentsFields,
       amountOfAdvanceRequired: formData.amountOfAdvanceRequired,
-      adjustedMonth: adjustedMonth,
+      adjustedMonth: formData.adjustedMonth,
       certifiedThatFamilyDependents: formData.certificationDetails,
       submissionDate: formData.date,
       certifiedThatAdvanceTakenOn: formData.previousLTCDate,
@@ -1059,15 +1050,15 @@ const LtcForm = () => {
           </div>
 
           <div className="grid-col" style={{ flex: "0 0 50%" }}>
-            <label className="input-label" htmlFor="adjustmentMonth">
+            <label className="input-label" htmlFor="adjustedMonth">
               has been adjusted in the month of:
             </label>
             <div className="input-wrapper" style={{ position: "relative" }}>
               {/* Month Dropdown */}
               <select
-                id="adjustmentMonth"
-                name="adjustmentMonth"
-                value={formData.adjustmentMonth}
+                id="adjustedMonth"
+                name="adjustedMonth"
+                value={formData.adjustedMonth}
                 onChange={handleChange}
                 className="input"
                 required
