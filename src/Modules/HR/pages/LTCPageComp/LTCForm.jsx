@@ -85,9 +85,9 @@ const LtcForm = () => {
   const [dependentsFields, setDependentsFields] = useState([
     { fullName: "", age: "", reason: "" },
   ]);
-  const [selectedPlace, setSelectedPlace] = useState("HomeTown"); // Default is "HomeTown"
-  const [placeOfVisit, setPlaceOfVisit] = useState("");
+  const [selectedPlace, setSelectedPlace] = useState("HomeTown"); // Defaults to "HomeTown"
 
+  const [placeOfVisit, setPlaceOfVisit] = useState("");
   const handlePlaceChange = (value) => {
     setSelectedPlace(value);
     if (value === "HomeTown") {
@@ -95,6 +95,15 @@ const LtcForm = () => {
     } else {
       setPlaceOfVisit("");
     }
+  };
+  const [numberOfChildren, setNumberOfChildren] = useState(0); // To track the number of children
+  const [childrenNames, setChildrenNames] = useState([]); // To store the names of children
+
+  // Function to handle dynamic changes in children's names
+  const handleChildrenNameChange = (e, index) => {
+    const newNames = [...childrenNames];
+    newNames[index] = e.target.value;
+    setChildrenNames(newNames);
   };
 
   const handleVisitingPlaceChange = (event) => {
@@ -247,12 +256,6 @@ const LtcForm = () => {
       detailsOfFamilyMembersAboutToAvail: childrenFields,
       detailsOfDependents: dependentsFields,
       amountOfAdvanceRequired: formData.amountOfAdvanceRequired,
-
-      //numFamilyMenbers: numFamilyMenbers,
-      //children: childrenFields,
-      //numDependents: numDependents,
-      // detailsOfDependents: [],
-
       adjustedMonth: adjustedMonth,
       certifiedThatFamilyDependents: formData.certificationDetails,
       submissionDate: formData.date,
