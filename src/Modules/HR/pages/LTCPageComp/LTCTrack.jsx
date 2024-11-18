@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import InboxTable from "../../components/tables/InboxTable";
-import { get_form_track, get_ltc_inbox } from "../../../../routes/hr/index"; // Ensure this is the correct import path
-import LoadingComponent from "../../components/Loading"; // Ensure this is the correct import path
+import { get_form_track, get_ltc_inbox } from "../../../../routes/hr/index";
+import { useParams } from "react-router-dom";
+import LoadingComponent from "../../components/Loading";
+import TrackTable from "../../components/tables/TrackTable";
 
 function LTCTrack() {
+  const { id } = useParams();
   const [trackData, setTrackData] = useState([]); // Correct useState syntax
   const [loading, setLoading] = useState(true); // Add loading state
 
@@ -12,7 +15,6 @@ function LTCTrack() {
     { title: "Home", path: "/dashboard" },
     { title: "Human Resources", path: "/hr" },
     { title: "LTC", path: "/hr/ltc" },
-
     { title: "Track", path: `${currentPath}` },
   ];
 
