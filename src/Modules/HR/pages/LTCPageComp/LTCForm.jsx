@@ -85,15 +85,17 @@ const LtcForm = () => {
   const [dependentsFields, setDependentsFields] = useState([
     { fullName: "", age: "", reason: "" },
   ]);
-  const [selectedPlace, setSelectedPlace] = useState("HomeTown"); // Default is "HomeTown"
-  const [placeOfVisit, setPlaceOfVisit] = useState("");
+  const [selectedPlace, setSelectedPlace] = useState("HomeTown"); // Defaults to "HomeTown"
 
-  const handlePlaceChange = (value) => {
-    setSelectedPlace(value); // Update the selected place value
-    if (value === "HomeTown") {
-      setPlaceOfVisit(""); // Reset the visiting place when "HomeTown" is selected
-    }
-  };
+const [placeOfVisit, setPlaceOfVisit] = useState("");
+const handlePlaceChange = (value) => {
+setSelectedPlace(value); 
+if (value === "HomeTown") {
+setPlaceOfVisit("HomeTown");
+} else {
+setPlaceOfVisit(""); 
+}
+};
   const [numberOfChildren, setNumberOfChildren] = useState(0); // To track the number of children
   const [childrenNames, setChildrenNames] = useState([]); // To store the names of children
 
