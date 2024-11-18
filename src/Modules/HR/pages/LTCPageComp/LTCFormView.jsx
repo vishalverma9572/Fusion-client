@@ -618,7 +618,7 @@ className="input"
                     textAlign: "center",
                   }}
                 >
-                  {numDependents}
+                 {numFamilyMenbers}
                 </div>
               </div>
             </div>
