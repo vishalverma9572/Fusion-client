@@ -87,15 +87,15 @@ const LtcForm = () => {
   ]);
   const [selectedPlace, setSelectedPlace] = useState("HomeTown"); // Defaults to "HomeTown"
 
-const [placeOfVisit, setPlaceOfVisit] = useState("");
-const handlePlaceChange = (value) => {
-setSelectedPlace(value); 
-if (value === "HomeTown") {
-setPlaceOfVisit("HomeTown");
-} else {
-setPlaceOfVisit(""); 
-}
-};
+  const [placeOfVisit, setPlaceOfVisit] = useState("");
+  const handlePlaceChange = (value) => {
+    setSelectedPlace(value);
+    if (value === "HomeTown") {
+      setPlaceOfVisit("HomeTown");
+    } else {
+      setPlaceOfVisit("");
+    }
+  };
   const [numberOfChildren, setNumberOfChildren] = useState(0); // To track the number of children
   const [childrenNames, setChildrenNames] = useState([]); // To store the names of children
 
@@ -401,6 +401,7 @@ setPlaceOfVisit("");
               />
             </div>
           </div>
+
           <div className="grid-col">
             <label className="input-label" htmlFor="departmentInfo">
               3. Department / Section
@@ -570,6 +571,7 @@ setPlaceOfVisit("");
             </div>
           </div>
         </div>
+
         <Divider />
 
         {/* Row 6: Whether L.T.C. is desired for going to hometown or elsewhere */}
@@ -718,48 +720,21 @@ setPlaceOfVisit("");
           {/* Number of Children Field */}
           <div className="grid-col">
             <label className="input-label" htmlFor="numberOfChildren">
-              (c) Number of Children (if any)
+              (c) Name of Child (if any)
             </label>
             <div className="input-wrapper">
               <User size={20} />
               <input
-                type="number"
-                id="numberOfChildren"
-                name="numberOfChildren"
-                placeholder="Enter Number of Children"
-                value={numberOfChildren}
-                onChange={(e) => setNumberOfChildren(Number(e.target.value))}
+                type="text"
+                id="childName"
+                name="childName"
+                placeholder="Enter Child's Name"
+                onChange={handleChange}
                 className="input"
-                min="0"
               />
             </div>
           </div>
         </div>
-
-        {/* Dynamic Children Fields */}
-        {numberOfChildren > 0 && (
-          <div className="grid-row">
-            {Array.from({ length: numberOfChildren }, (_, index) => (
-              <div className="grid-col" key={index}>
-                <label className="input-label" htmlFor={`child${index + 1}`}>
-                  Child Name {index + 1}
-                </label>
-                <div className="input-wrapper">
-                  <User size={20} />
-                  <input
-                    type="text"
-                    id={`child${index + 1}`}
-                    name={`child${index + 1}`}
-                    placeholder={`Enter Name of Child ${index + 1}`}
-                    value={childrenNames[index] || ""}
-                    onChange={(e) => handleChildrenNameChange(e, index)}
-                    className="input"
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
 
         {/* Section for Family Members */}
         {/* Section for Family Members */}
