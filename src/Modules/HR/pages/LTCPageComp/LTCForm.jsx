@@ -254,12 +254,6 @@ const LtcForm = () => {
       detailsOfFamilyMembersAboutToAvail: childrenFields,
       detailsOfDependents: dependentsFields,
       amountOfAdvanceRequired: formData.amountOfAdvanceRequired,
-
-      //numFamilyMenbers: numFamilyMenbers,
-      //children: childrenFields,
-      //numDependents: numDependents,
-      // detailsOfDependents: [],
-
       adjustedMonth: adjustedMonth,
       certifiedThatFamilyDependents: formData.certificationDetails,
       submissionDate: formData.date,
