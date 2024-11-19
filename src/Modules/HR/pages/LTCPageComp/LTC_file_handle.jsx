@@ -287,7 +287,7 @@ const LTCFormView = () => {
       amountOfAdvanceRequired: fetchedformData.amountOfAdvanceRequired,
       adjustedMonth: adjustedMonth,
       certifiedThatFamilyDependents: fetchedformData.certificationDetails,
-      submissionDate: fetchedformData.date,
+      //submissionDate: fetchedformData.date,
       certifiedThatAdvanceTakenOn: fetchedformData.previousLTCDate,
       phoneNumberForContact: fetchedformData.phoneNumber,
       //username_reciever: formData.username_reciever,
