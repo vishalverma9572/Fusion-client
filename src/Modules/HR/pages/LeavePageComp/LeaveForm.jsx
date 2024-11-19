@@ -28,9 +28,27 @@ const LeaveForm = () => {
   const dispatch = useDispatch();
   const [verifiedReceiver, setVerifiedReceiver] = useState(false);
   const navigate = useNavigate();
+    // Fetch leave types and available counts
+   useEffect(() => {
+    axios
+      .get("/api/leave-types/") // Replace with your backend endpoint
+      .then((response) => {
+        const data = response.data.map((item) => ({
+          leavetype: item.leavetype,
+          availableCount: item.availableCount,
+          startDate: "",
+          endDate: "",
+          duration: 0,
+        }));
+        setLeaveData(data);
+        setFormValues(data);
+      })
+      .catch((error) => console.error("Error fetching leave types:", error));
+  }, []);
 
   // Fetch user details
   useEffect(() => {
+    
     const fetchMyDetails = async () => {
       try {
         const token = localStorage.getItem("authToken");
@@ -244,8 +262,69 @@ const LeaveForm = () => {
             </div>
           </div>
         </div>
-        <div className="grid-row three-columns">
-          <div className="grid-col">
+        <div className="grid-row">
+          
+          {/* leave type info */}
+  <Text size="xl" weight={700} mb="md">
+    Nature of Leave
+  </Text>
+  {formData.natureOfLeave.map((item, index) => (
+    <Group key={index} mb="md" spacing="xl" className={`leave-group ${index % 2 === 0 ? 'even' : 'odd'}`}>
+      <div className="leave-type-container">
+        <Text size="md" weight={600}>{item.leavetype}</Text>
+        <Text size="sm">Available: {item.availableCount}</Text>
+
+        <DatePicker
+          placeholder="Start Date"
+          label="Leave Start Date"
+          value={item.startDate}
+          onChange={(date) => handleChange(index, "startDate", date)}
+        />
+        <DatePicker
+          placeholder="End Date"
+          label="Leave End Date"
+          value={item.endDate}
+          onChange={(date) => handleChange(index, "endDate", date)}
+        />
+        <NumberInput
+          placeholder="Duration"
+          label="Duration (Days)"
+          value={item.duration}
+          onChange={(value) => handleChange(index, "duration", value)}
+        />
+      </div>
+
+      {/* Add second leave type entry for the next column */}
+      {formValues.natureOfLeave[index + 1] && (
+        <div className="leave-type-container">
+          <Text size="md" weight={600}>{formValues.natureOfLeave[index + 1].leavetype}</Text>
+          <Text size="sm">Available: {formValues.natureOfLeave[index + 1].availableCount}</Text>
+
+          <DatePicker
+            placeholder="Start Date"
+            label="Leave Start Date"
+            value={formData.natureOfLeave[index + 1].startDate}
+            onChange={(date) => handleChange(index + 1, "startDate", date)}
+          />
+          <DatePicker
+            placeholder="End Date"
+            label="Leave End Date"
+            value={formData.natureOfLeave[index + 1].endDate}
+            onChange={(date) => handleChange(index + 1, "endDate", date)}
+          />
+          <NumberInput
+            placeholder="Duration"
+            label="Duration (Days)"
+            value={formData.natureOfLeave[index + 1].duration}
+            onChange={(value) => handleChange(index + 1, "duration", value)}
+          />
+        </div>
+      )}
+    </Group>
+  ))}
+</div>
+        
+          {/* <div className="grid-col">
             <label className="input-label" htmlFor="natureOfLeave">
               Nature of Leave
             </label>
@@ -293,8 +372,12 @@ const LeaveForm = () => {
                 }}
               />
             </div>
-          </div>
+          </div> */}
+    {/* station leave - yes/no , start date, end date , leave start date end date */}
+          <div className="grid-row">
+            <div className ="grid-col">
 
+            </div>
           <div className="grid-col">
             <label className="input-label" htmlFor="leaveStartDate">
               Leave Start Date
@@ -312,7 +395,7 @@ const LeaveForm = () => {
               />
             </div>
           </div>
-
+          
           <div className="grid-col">
             <label className="input-label" htmlFor="leaveEndDate">
               Leave End Date
@@ -330,8 +413,8 @@ const LeaveForm = () => {
               />
             </div>
           </div>
-        </div>
-
+       
+</div>
         {/* Section 4: Purpose of Leave */}
         <div className="grid-row">
           <div className="purpose">
