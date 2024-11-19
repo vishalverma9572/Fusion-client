@@ -29,6 +29,7 @@ import {
   get_my_details,
   submit_ltc_form,
 } from "../../../../routes/hr";
+import { Navigate } from "react-router-dom";
 
 const LtcForm = () => {
   const formData = useSelector((state) => state.form);
@@ -85,6 +86,7 @@ const LtcForm = () => {
   const [dependentsFields, setDependentsFields] = useState([
     { fullName: "", age: "", reason: "" },
   ]);
+
   const [selectedPlace, setSelectedPlace] = useState("HomeTown"); // Defaults to "HomeTown"
 
   const [placeOfVisit, setPlaceOfVisit] = useState("");
@@ -96,6 +98,7 @@ const LtcForm = () => {
       setPlaceOfVisit("");
     }
   };
+
   const [numberOfChildren, setNumberOfChildren] = useState(0); // To track the number of children
   const [childrenNames, setChildrenNames] = useState([]); // To store the names of children
 
@@ -229,7 +232,7 @@ const LtcForm = () => {
       return;
     }
 
-    const adjustedMonth = "";
+    //const adjustedMonth = "";
     // Create a submission object with main form data and additional fields for children and dependents
     const submission = {
       name: formData.name,
@@ -250,13 +253,13 @@ const LtcForm = () => {
       modeOfTravel: formData.modeOfTravel,
       detailsOfFamilyMembersAlreadyDone: [
         formData.selfName,
-        formData.wifeName,
+        formData.spouseName,
         formData.children,
       ],
       detailsOfFamilyMembersAboutToAvail: childrenFields,
       detailsOfDependents: dependentsFields,
       amountOfAdvanceRequired: formData.amountOfAdvanceRequired,
-      adjustedMonth: adjustedMonth,
+      adjustedMonth: formData.adjustedMonth,
       certifiedThatFamilyDependents: formData.certificationDetails,
       submissionDate: formData.date,
       certifiedThatAdvanceTakenOn: formData.previousLTCDate,
@@ -669,7 +672,6 @@ const LtcForm = () => {
 
         <Divider />
 
-        {/* Section 6: Details of Family Members */}
         {/* Section 6: Details of Family Members Who Will Avail LTC */}
 
         {/* Label for Family Members */}
@@ -711,6 +713,7 @@ const LtcForm = () => {
                 id="spouseName"
                 name="spouseName"
                 placeholder="Enter Spouse's Name"
+                value={formData.spouseName || ""}
                 onChange={handleChange}
                 className="input"
               />
@@ -719,7 +722,7 @@ const LtcForm = () => {
 
           {/* Number of Children Field */}
           <div className="grid-col">
-            <label className="input-label" htmlFor="numberOfChildren">
+            <label className="input-label" htmlFor="childName">
               (c) Name of Child (if any)
             </label>
             <div className="input-wrapper">
@@ -727,8 +730,9 @@ const LtcForm = () => {
               <input
                 type="text"
                 id="childName"
-                name="childName"
+                name="children"
                 placeholder="Enter Child's Name"
+                value={formData.children || ""}
                 onChange={handleChange}
                 className="input"
               />
@@ -736,7 +740,6 @@ const LtcForm = () => {
           </div>
         </div>
 
-        {/* Section for Family Members */}
         {/* Section for Family Members */}
         <label
           className="input-label"
@@ -843,6 +846,7 @@ const LtcForm = () => {
             </div>
           )}
         </div>
+
         {/* Section for Dependent Family Members */}
         <label
           className="input-label"
@@ -1059,16 +1063,18 @@ const LtcForm = () => {
           </div>
 
           <div className="grid-col" style={{ flex: "0 0 50%" }}>
-            <label className="input-label" htmlFor="adjustmentMonth">
+            <label className="input-label" htmlFor="adjustedMonth">
               has been adjusted in the month of:
             </label>
             <div className="input-wrapper" style={{ position: "relative" }}>
               {/* Month Dropdown */}
               <select
-                id="adjustmentMonth"
-                name="adjustmentMonth"
-                value={formData.adjustmentMonth}
-                onChange={handleChange}
+                id="adjustedMonth"
+                name="adjustedMonth"
+                value={formData.adjustedMonth}
+                onChange={(e) =>
+                  setFormData({ ...formData, adjustedMonth: e.target.value })
+                } // Use e.target.value for native <select>
                 className="input"
                 required
                 style={{
