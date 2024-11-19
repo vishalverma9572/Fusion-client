@@ -366,7 +366,8 @@ const LeaveFilehandle = () => {
                   placeholder="Department Name"
                   value={fetchedformData.departmentInfo}
                   className="input"
-                  disabled
+                  onChange={handleChange}
+                  disabled={!isEditing}
                 />
               </div>
             </div>
@@ -383,6 +384,8 @@ const LeaveFilehandle = () => {
                   placeholder="XXXXXXXXXXXX"
                   value={fetchedformData.pfNo}
                   className="input"
+                  onChange={handleChange}
+                  disabled={!isEditing}
                   required
                 />
               </div>
@@ -419,7 +422,8 @@ const LeaveFilehandle = () => {
                   name="natureOfLeave"
                   value={fetchedformData.natureOfLeave}
                   className="input"
-                  disabled
+                  onChange={handleChange}
+                  disabled={!isEditing}
                 />
               </div>
             </div>
@@ -435,7 +439,8 @@ const LeaveFilehandle = () => {
                   name="leaveStartDate"
                   value={fetchedformData.leaveStartDate}
                   className="input"
-                  disabled
+                  onChange={handleChange}
+                  disabled={!isEditing}
                 />
               </div>
             </div>
@@ -451,7 +456,8 @@ const LeaveFilehandle = () => {
                   name="leaveEndDate"
                   value={fetchedformData.leaveEndDate}
                   className="input"
-                  disabled
+                  onChange={handleChange}
+                  disabled={!isEditing}
                   required
                 />
               </div>
@@ -473,7 +479,8 @@ const LeaveFilehandle = () => {
                   placeholder="Purpose of Leave"
                   value={fetchedformData.purposeOfLeave}
                   className="input"
-                  disabled
+                  onChange={handleChange}
+                  disabled={!isEditing}
                 />
               </div>
             </div>
@@ -490,7 +497,8 @@ const LeaveFilehandle = () => {
                   placeholder="Full Address"
                   value={fetchedformData.addressDuringLeave}
                   className="input"
-                  disabled
+                  onChange={handleChange}
+                  disabled={!isEditing}
                 />
               </div>
             </div>
@@ -511,7 +519,8 @@ const LeaveFilehandle = () => {
                   placeholder="Enter the name"
                   value={fetchedformData.academicResponsibility}
                   className="input"
-                  disabled
+                  onChange={handleChange}
+                  disabled={!isEditing}
                 />
               </div>
             </div>
@@ -531,7 +540,8 @@ const LeaveFilehandle = () => {
                   placeholder="Enter the name"
                   value={fetchedformData.addministrativeResponsibiltyAssigned}
                   className="input"
-                  disabled
+                  onChange={handleChange}
+                  disabled={!isEditing}
                 />
               </div>
             </div>
