@@ -123,7 +123,8 @@
 /* Form input */
  .input,.HR_header .select {
   background-color: #c6c4c420;
-  color: #00000067;
+  /* color: #00000067; */
+  color: black;
   font-family: 'Roboto', sans-serif; 
   font-size: 16px;  
   font-weight: 400;
