@@ -294,6 +294,7 @@
 
 .family-details-table td input {
     width: 100%;
+    color: black;
     /* Full width for input fields */
     padding: 10px;
     /* Padding for input fields */

@@ -29,6 +29,7 @@ import {
   get_my_details,
   submit_ltc_form,
 } from "../../../../routes/hr";
+import { Navigate } from "react-router-dom";
 
 const LtcForm = () => {
   const formData = useSelector((state) => state.form);
@@ -252,7 +253,7 @@ const LtcForm = () => {
       modeOfTravel: formData.modeOfTravel,
       detailsOfFamilyMembersAlreadyDone: [
         formData.selfName,
-        formData.wifeName,
+        formData.spouseName,
         formData.children,
       ],
       detailsOfFamilyMembersAboutToAvail: childrenFields,
@@ -712,6 +713,7 @@ const LtcForm = () => {
                 id="spouseName"
                 name="spouseName"
                 placeholder="Enter Spouse's Name"
+                value={formData.spouseName || ""}
                 onChange={handleChange}
                 className="input"
               />
@@ -720,16 +722,17 @@ const LtcForm = () => {
 
           {/* Number of Children Field */}
           <div className="grid-col">
-            <label className="input-label" htmlFor="numberOfChildren">
-              (c) Child (if any)
+            <label className="input-label" htmlFor="childName">
+              (c) Name of Child (if any)
             </label>
             <div className="input-wrapper">
               <User size={20} />
               <input
                 type="text"
                 id="childName"
-                name="childName"
+                name="children"
                 placeholder="Enter Child's Name"
+                value={formData.children || ""}
                 onChange={handleChange}
                 className="input"
               />
