@@ -1,6 +1,8 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { Button, Select } from "@mantine/core";
+import { Button, Group, NumberInput, Select, Text } from "@mantine/core";
+import { MantineProvider } from "@mantine/core";
+import { DatePicker } from "@mantine/dates";
 import {
   PaperPlaneRight,
   CheckCircle,
@@ -19,15 +21,65 @@ import {
   search_employee,
   get_my_details,
   submit_leave_form,
+  get_leave_balance,
 } from "../../../../routes/hr";
 import "./LeaveForm.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const LeaveForm = () => {
   const formData = useSelector((state) => state.form);
   const dispatch = useDispatch();
   const [verifiedReceiver, setVerifiedReceiver] = useState(false);
+  const { id } = useParams();
   const navigate = useNavigate();
+  // State for leave types and leave balances
+  const [leaveData, setLeaveData] = useState([]);
+  const [leaveBalances, setLeaveBalances] = useState(null);
+  const [formValues, setFormValues] = useState([]);
+
+  useEffect(() => {
+    const fetchLeaveData = async () => {
+      try {
+        // Fetch leave balances data
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          console.error("No authentication token found!");
+          return;
+        }
+
+        const leaveBalanceResponse = await fetch(`${get_leave_balance}/${id}`, {
+          method: "GET",
+          headers: { Authorization: `Token ${token}` },
+        });
+
+        if (!leaveBalanceResponse.ok) {
+          alert("Failed to fetch leave balances. Please try again later.");
+          throw new Error("Network response was not ok");
+        }
+
+        const leaveBalanceData = await leaveBalanceResponse.json();
+        console.log(leaveBalanceData);
+
+        // Map the leave balance data to the structure
+        const mappedData = Object.keys(leaveBalanceData).map((leavetype) => ({
+          leavetype: leavetype, // Name of the leave type
+          availableCount: leaveBalanceData[leavetype], // Available count for that leave type
+          startDate: "",
+          endDate: "",
+          duration: 0,
+        }));
+
+        // Set the mapped data to the state
+        setLeaveBalances(mappedData);
+        console.log(leaveBalances);
+        setFormValues(mappedData); // Optional: If you want to update formValues too
+      } catch (error) {
+        console.error("Error fetching leave data:", error);
+      }
+    };
+
+    fetchLeaveData();
+  }, []); // Empty dependency array ensures this runs only once on component mount
 
   // Fetch user details
   useEffect(() => {
@@ -53,6 +105,7 @@ const LeaveForm = () => {
         dispatch(
           updateForm({ name: "designation", value: fetchedData.designation }),
         );
+        console.log(fetchedData);
       } catch (error) {
         console.error("Failed to fetch user details:", error);
       }
@@ -99,6 +152,14 @@ const LeaveForm = () => {
     dispatch(updateForm({ name, value }));
   };
 
+  const handleLeaveBalanceChange = (index, field, value) => {
+    setLeaveBalances((prevBalances) => {
+      const newBalances = [...prevBalances];
+      newBalances[index] = { ...newBalances[index], [field]: value };
+      return newBalances;
+    });
+  };
+
   const handleSelectChange = (value) => {
     dispatch(updateForm({ name: "natureOfLeave", value }));
   };
@@ -110,8 +171,14 @@ const LeaveForm = () => {
       return;
     }
 
+    // Filter leave types with non-empty startDate, endDate, and duration
+    const filteredLeaves = leaveBalances.filter(
+      (leave) => leave.startDate && leave.endDate && leave.duration,
+    );
+
     const submission = {
       ...formData,
+      natureOfLeave: filteredLeaves,
     };
 
     try {
@@ -129,6 +196,7 @@ const LeaveForm = () => {
         },
         body: JSON.stringify(submission),
       });
+      console.log(submission);
 
       if (!response.ok) {
         alert("Failed to submit form. Please try again later.");
@@ -244,92 +312,133 @@ const LeaveForm = () => {
             </div>
           </div>
         </div>
-        <div className="grid-row three-columns">
-          <div className="grid-col">
-            <label className="input-label" htmlFor="natureOfLeave">
-              Nature of Leave
-            </label>
-            <div className="input-wrapper">
-              <Select
-                className="select"
-                placeholder="Select a leave type"
-                data={[
-                  { value: "Casual", label: "Casual" },
 
-                  { value: "Vacation", label: "Vacation" },
-                  { value: "Earned", label: "Earned" },
-                  { value: "Commuted Leave", label: "Commuted Leave" },
-                  {
-                    value: "Special Casual Leave",
-                    label: "Special Casual Leave",
-                  },
-                  { value: "Restricted Holiday", label: "Restricted Holiday" },
-                  { value: "Station Leave", label: "Station Leave" },
-                ]}
-                value={formData.natureOfLeave}
-                onChange={handleSelectChange}
-                required
-                styles={{
-                  input: {
-                    border: "none",
-                    backgroundColor: "transparent",
-                    color: "#000",
-                    fontSize: "14px",
-                    margin: "-8px 0px 0px -40px",
-                    fontFamily: "Roboto, sans-serif",
-                  },
-                  dropdown: {
-                    backgroundColor: "#fff",
-                    border: "1px solid #ccc",
-                    borderRadius: "4px",
-                    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-                  },
-                  item: {
-                    padding: "10px",
-                    fontSize: "14px",
-                    color: "#2d3b45",
-                    ":hover": { backgroundColor: "#e2e8f0", color: "#1a2a33" },
-                  },
-                }}
-              />
+        <div className="grid-container">
+          {leaveBalances?.map((item, index) => (
+            <div className="grid-item" key={index}>
+              {/* Single Leave Component */}
+              <div className="leave-component-row">
+                {/* Leave Type and Available */}
+                <div className="leave-type-section">
+                  <span className="leave-type">{item.leavetype}</span>
+                  <span className="available-details">
+                    Available:{" "}
+                    <span className="available-count">
+                      {item.availableCount}
+                    </span>
+                  </span>
+                </div>
+
+                {/* Start Date */}
+                <div className="leave-detail">
+                  <label
+                    className="detail-label"
+                    htmlFor={`startDate-${index}`}
+                  >
+                    Start Date
+                  </label>
+                  <input
+                    type="date"
+                    id={`startDate-${index}`}
+                    name="startDate"
+                    value={item.startDate}
+                    onChange={(e) =>
+                      handleLeaveBalanceChange(
+                        index,
+                        "startDate",
+                        e.target.value,
+                      )
+                    }
+                    className="detail-input"
+                    // required
+                  />
+                </div>
+
+                {/* End Date */}
+                <div className="leave-detail">
+                  <label className="detail-label" htmlFor={`endDate-${index}`}>
+                    End Date
+                  </label>
+                  <input
+                    type="date"
+                    id={`endDate-${index}`}
+                    name="endDate"
+                    value={item.endDate}
+                    onChange={(e) =>
+                      handleLeaveBalanceChange(index, "endDate", e.target.value)
+                    }
+                    className="detail-input"
+                    // required
+                  />
+                </div>
+
+                {/* Duration */}
+                <div className="leave-detail">
+                  <label className="detail-label" htmlFor={`duration-${index}`}>
+                    Duration (Days)
+                  </label>
+                  <input
+                    type="number"
+                    id={`duration-${index}`}
+                    name="duration"
+                    value={item.duration}
+                    onChange={(e) =>
+                      handleLeaveBalanceChange(
+                        index,
+                        "duration",
+                        e.target.value,
+                      )
+                    }
+                    className="detail-input"
+                    // required
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {/* Extra Row for Last Row's Components */}
+          {/* {leaveBalances.length % 2 !== 0 && ( */}
+          <div className="grid-item last-row">
+            {/* Leave Start Date */}
+            <div className="leave-detail">
+              <label className="detail-label" htmlFor="leaveStartDate">
+                Leave Start Date
+              </label>
+              <div className="input-wrapper">
+                <Calendar size={20} />
+                <input
+                  type="date"
+                  id="leaveStartDate"
+                  name="leaveStartDate"
+                  value={formData.leaveStartDate}
+                  onChange={handleChange}
+                  className="detail-input"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Leave End Date */}
+            <div className="leave-detail">
+              <label className="detail-label" htmlFor="leaveEndDate">
+                Leave End Date
+              </label>
+              <div className="input-wrapper">
+                <Calendar size={20} />
+                <input
+                  type="date"
+                  id="leaveEndDate"
+                  name="leaveEndDate"
+                  value={formData.leaveEndDate}
+                  onChange={handleChange}
+                  className="detail-input"
+                  required
+                />
+              </div>
             </div>
           </div>
-
-          <div className="grid-col">
-            <label className="input-label" htmlFor="leaveStartDate">
-              Leave Start Date
-            </label>
-            <div className="input-wrapper">
-              <Calendar size={20} />
-              <input
-                type="date"
-                id="leaveStartDate"
-                name="leaveStartDate"
-                value={formData.leaveStartDate}
-                onChange={handleChange}
-                className="input"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="grid-col">
-            <label className="input-label" htmlFor="leaveEndDate">
-              Leave End Date
-            </label>
-            <div className="input-wrapper">
-              <Calendar size={20} />
-              <input
-                type="date"
-                id="leaveEndDate"
-                name="leaveEndDate"
-                value={formData.leaveEndDate}
-                onChange={handleChange}
-                className="input"
-                required
-              />
-            </div>
-          </div>
+          {/* )} */}
         </div>
 
         {/* Section 4: Purpose of Leave */}

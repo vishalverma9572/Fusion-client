@@ -45,6 +45,7 @@
     position: relative;
     display: flex;
     align-items: center;
+    background-color: white;
     gap: 10px;
     ;
   }
@@ -309,4 +310,81 @@
   /* .grid-row{
     width: 70%;
     background-color: red;
-  } */
+  } *//* Grid container for the layout */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two items per row */
+  gap: 1rem;
+  padding: 1rem;
+}
+
+/* Each grid item (leave component or extra row) */
+.grid-item {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Layout for leave component */
+.leave-component-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap; /* For responsive design */
+}
+
+/* Styling for leave type and available details */
+.leave-type-section {
+  flex: 1.5;
+  display: flex;
+  flex-direction: column;
+}
+
+.leave-type {
+  font-family: 'Roboto', sans-serif;  
+  font-size: 16px;  
+ 
+}
+
+.available-details {
+  font-family: 'Roboto', sans-serif;  
+  font-size: 16px;  
+  
+}
+
+/* Styling for each leave detail */
+.leave-detail {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-label {
+  font-family: 'Roboto', sans-serif;  
+  font-size: 16px;  
+ 
+}
+
+.detail-input {
+  padding: 0.3rem;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 100%;
+}
+
+/* Styling for last-row elements */
+.last-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
