@@ -18,6 +18,15 @@ const tabItems = [
   { title: "CPDA Adv Archive", path: "/hr/cpda_adv/adv_archive" },
 ];
 
+// Define navigation bar sections
+const sectionItems = [
+  { title: "Leave Management", path: "/hr/leave/leaveform" },
+  { title: "LTC", path: "/hr/ltc/ltcform" },
+  { title: "CPDA Adavnce", path: "/hr/cpda_adv/adv_form" },
+  { title: "CPDA Claim", path: "/hr/cpda_claim/cpdaform" },
+  { title: "Appraisal", path: "/hr/appraisal/appraisal_form" },
+];
+
 function CPDA_ADVANCE() {
   const [activeTab, setActiveTab] = useState("0");
   const [loading, setLoading] = useState(false);
@@ -35,6 +44,7 @@ function CPDA_ADVANCE() {
     { title: "Human Resources", path: "/hr" },
     { title: "CPDA Adv Management", path: "/hr/cpda_adv" },
   ];
+
   // Update active tab based on current URL
   useEffect(() => {
     const currentPath = location.pathname;
@@ -48,6 +58,10 @@ function CPDA_ADVANCE() {
   const handleTabChange = (index) => {
     setActiveTab(index);
     navigate(tabItems[index].path);
+  };
+
+  const handleSectionNavigation = (path) => {
+    navigate(path);
   };
 
   const handleButtonChange = (direction) => {
@@ -76,11 +90,27 @@ function CPDA_ADVANCE() {
     };
     fetchCpda_ADVANCEData();
   }, []);
-  console.log(activeTab);
 
   return (
     <>
       <HrBreadcrumbs items={exampleItems} />
+
+      {/* Horizontal Navigation Bar */}
+      <div className={classes.sectionTabsContainer}>
+        {sectionItems.map((item, index) => (
+          <div
+            key={index}
+            className={`${classes.sectionTab} ${
+              location.pathname.includes(item.path.split("/")[2])
+                ? classes.activeSectionTab
+                : ""
+            }`}
+            onClick={() => handleSectionNavigation(item.path)}
+          >
+            {item.title}
+          </div>
+        ))}
+      </div>
 
       <Flex justify="flex-start" align="center" mt="lg">
         <Button

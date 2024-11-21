@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Tabs, Button, Flex, Text, Loader, Container } from "@mantine/core";
 import { CaretCircleLeft, CaretCircleRight } from "@phosphor-icons/react";
-import { useNavigate, useLocation } from "react-router-dom"; // Import these hooks
+import { useNavigate, useLocation } from "react-router-dom";
 import CustomBreadcrumbs from "../../../components/Breadcrumbs";
 import classes from "./AppraisalPage.module.css";
 import AppraisalForm from "./AppraisalPageComp/AppraisalForm";
@@ -18,17 +18,27 @@ const tabItems = [
   { title: "Appraisal Archive", path: "/hr/appraisal/appraisal_archive" },
 ];
 
+// Define horizontal navigation bar items
+const sectionItems = [
+  { title: "Leave Management", path: "/hr/leave/leaveform" },
+  { title: "LTC", path: "/hr/ltc/ltcform" },
+  { title: "CPDA Adavnce", path: "/hr/cpda_adv/adv_form" },
+  { title: "CPDA Claim", path: "/hr/cpda_claim/cpdaform" },
+  { title: "Appraisal", path: "/hr/appraisal/appraisal_form" },
+];
+
 function Appraisal() {
   const [activeTab, setActiveTab] = useState("0");
   const [loading, setLoading] = useState(false);
   const tabsListRef = useRef(null);
-  const navigate = useNavigate(); // Initialize navigate
-  const location = useLocation(); // Initialize location
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  //scroll to top on page load
+  // Scroll to top on page load
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
   const exampleItems = [
     { title: "Home", path: "/dashboard" },
     { title: "Human Resources", path: "/hr" },
@@ -44,10 +54,14 @@ function Appraisal() {
     setActiveTab(matchingTab !== -1 ? String(matchingTab) : "0");
   }, [location.pathname]);
 
-  // Function to handle tab change by clicking on a tab
+  // Handle tab change
   const handleTabChange = (index) => {
     setActiveTab(index);
     navigate(tabItems[index].path); // Update the URL when the tab changes
+  };
+
+  const handleSectionNavigation = (path) => {
+    navigate(path); // Navigate to different section in HR
   };
 
   const handleButtonChange = (direction) => {
@@ -55,14 +69,14 @@ function Appraisal() {
       direction === "next"
         ? Math.min(+activeTab + 1, tabItems.length - 1)
         : Math.max(+activeTab - 1, 0);
-    handleTabChange(String(newIndex)); // Use handleTabChange to update tab and URL
+    handleTabChange(String(newIndex));
     tabsListRef.current.scrollBy({
       left: direction === "next" ? 50 : -50,
       behavior: "smooth",
     });
   };
 
-  // Fetch any necessary Appraisal data
+  // Fetch necessary Appraisal data
   useEffect(() => {
     const fetchAppraisalData = async () => {
       setLoading(true);
@@ -80,6 +94,24 @@ function Appraisal() {
   return (
     <>
       <HrBreadcrumbs items={exampleItems} />
+
+      {/* Horizontal Navigation Bar */}
+      <div className={classes.sectionTabsContainer}>
+        {sectionItems.map((item, index) => (
+          <div
+            key={index}
+            className={`${classes.sectionTab} ${
+              location.pathname.includes(item.path.split("/")[2])
+                ? classes.activeSectionTab
+                : ""
+            }`}
+            onClick={() => handleSectionNavigation(item.path)}
+          >
+            {item.title}
+          </div>
+        ))}
+      </div>
+
       <Flex justify="flex-start" align="center" mt="lg">
         <Button
           style={{ marginRight: "20px" }}
@@ -107,7 +139,7 @@ function Appraisal() {
                       ? classes.fusionActiveRecentTab
                       : ""
                   }
-                  onClick={() => handleTabChange(String(index))} // Update onClick to change tab and URL
+                  onClick={() => handleTabChange(String(index))}
                 >
                   <Text>{item.title}</Text>
                 </Tabs.Tab>

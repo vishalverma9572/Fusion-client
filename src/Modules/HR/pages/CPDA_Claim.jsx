@@ -18,6 +18,15 @@ const tabItems = [
   { title: "CPDA claim Archive", path: "/hr/cpda_claim/cpda_archive" },
 ];
 
+// Define navigation bar sections
+const sectionItems = [
+  { title: "Leave Management", path: "/hr/leave/leaveform" },
+  { title: "LTC", path: "/hr/ltc/ltcform" },
+  { title: "CPDA Adavnce", path: "/hr/cpda_adv/adv_form" },
+  { title: "CPDA Claim", path: "/hr/cpda_claim/cpdaform" },
+  { title: "Appraisal", path: "/hr/appraisal/appraisal_form" },
+];
+
 function CPDA_Claim() {
   const [activeTab, setActiveTab] = useState("0");
   const [loading, setLoading] = useState(false);
@@ -29,6 +38,12 @@ function CPDA_Claim() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const exampleItems = [
+    { title: "Home", path: "/dashboard" },
+    { title: "Human Resources", path: "/hr" },
+    { title: "CPDA Claim Management", path: "/hr/cpda_claim" },
+  ];
 
   // Update active tab based on current URL
   useEffect(() => {
@@ -43,6 +58,10 @@ function CPDA_Claim() {
   const handleTabChange = (index) => {
     setActiveTab(index);
     navigate(tabItems[index].path); // Ensure navigate is called with correct path
+  };
+
+  const handleSectionNavigation = (path) => {
+    navigate(path);
   };
 
   const handleButtonChange = (direction) => {
@@ -71,15 +90,28 @@ function CPDA_Claim() {
     };
     fetchCPDA_ClaimData();
   }, []);
-  const exampleItems = [
-    { title: "Home", path: "/dashboard" },
-    { title: "Human Resources", path: "/hr" },
-    { title: "CPDA Claim Management", path: "/hr/cpda_claim" },
-  ];
 
   return (
     <>
       <HrBreadcrumbs items={exampleItems} />
+
+      {/* Horizontal Navigation Bar */}
+      <div className={classes.sectionTabsContainer}>
+        {sectionItems.map((item, index) => (
+          <div
+            key={index}
+            className={`${classes.sectionTab} ${
+              location.pathname.includes(item.path.split("/")[2])
+                ? classes.activeSectionTab
+                : ""
+            }`}
+            onClick={() => handleSectionNavigation(item.path)}
+          >
+            {item.title}
+          </div>
+        ))}
+      </div>
+
       <Flex justify="flex-start" align="center" mt="lg">
         <Button
           style={{ marginRight: "20px" }}
@@ -107,7 +139,7 @@ function CPDA_Claim() {
                       ? classes.fusionActiveRecentTab
                       : ""
                   }
-                  onClick={() => handleTabChange(String(index))} // Ensure this triggers correctly
+                  onClick={() => handleTabChange(String(index))}
                 >
                   <Text>{item.title}</Text>
                 </Tabs.Tab>
