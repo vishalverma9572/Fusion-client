@@ -33,7 +33,7 @@ import {
 } from "@phosphor-icons/react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateForm, resetForm } from "../../../../redux/formSlice";
-//import "./LeaveFormView.css";
+import "./LtcForm.css";
 import HrBreadcrumbs from "../../components/HrBreadcrumbs";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import LoadingComponent from "../../components/Loading";
@@ -421,62 +421,31 @@ const LTCFormView = () => {
           </Link>
         )}
         <form>
-          {/* Row 1: Name and Designation */}
-          <div className="grid-row">
-            <div className="grid-col">
-              <label className="input-label" htmlFor="name">
-                Name
-              </label>
-              <div className="input-wrapper">
-                <User size={20} />
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={fetchedformData.name}
-                  placeholder="Enter Your Full Name"
-                  //onChange={handleChange}
-                  className="input"
-                  disabled
-                />
-              </div>
-            </div>
-            <div className="grid-col">
-              <label className="input-label" htmlFor="designation">
-                Designation
-              </label>
-              <div className="input-wrapper">
-                <Tag size={20} />
-                <input
-                  type="text"
-                  id="designation"
-                  name="designation"
-                  value={fetchedformData.designation}
-                  placeholder="Enter Your Designation"
-                  //onChange={handleChange}
-                  className="input"
-                  disabled
-                />
-              </div>
-            </div>
-          </div>
-          {/* Row 2: Provident Fund No. and Basic Pay */}
+          {/* Row 1: Block Year, Provident Fund No., and Basic Pay */}
           <div className="grid-row">
             <div className="grid-col">
               <label className="input-label" htmlFor="blockYear">
-                Block year
+                Block Year
               </label>
               <div className="input-wrapper">
                 <IdentificationCard size={20} />
                 <input
                   type="number"
-                  id="blockYear" // updated to match the key in fetchedformData
-                  name="blockYear" // updated to match the key in fetchedformData
+                  id="blockYear"
+                  name="blockYear"
                   value={fetchedformData.blockYear}
                   placeholder="Block year"
-                  //onChange={handleChange}
+                  onChange={(e) =>
+                    setfetchedformData((prev) => ({
+                      ...prev,
+                      [e.target.name]: e.target.value,
+                    }))
+                  }
                   className="input"
-                  disabled
+                  disabled={!isEditing}
+                  style={{
+                    color: isEditing ? "black" : "inherit", // Apply black color when editing
+                  }}
                 />
               </div>
             </div>
@@ -492,9 +461,17 @@ const LTCFormView = () => {
                   name="pfNo"
                   value={fetchedformData.pfNo}
                   placeholder="Provident Fund Number"
-                  //onChange={handleChange}
+                  onChange={(e) =>
+                    setfetchedformData((prev) => ({
+                      ...prev,
+                      [e.target.name]: e.target.value,
+                    }))
+                  }
                   className="input"
-                  disabled
+                  disabled={!isEditing}
+                  style={{
+                    color: isEditing ? "black" : "inherit", // Apply black color when editing
+                  }}
                 />
               </div>
             </div>
@@ -510,19 +487,73 @@ const LTCFormView = () => {
                   name="basicPaySalary"
                   value={fetchedformData.basicPaySalary}
                   placeholder="Enter Basic Pay"
-                  //onChange={handleChange}
+                  onChange={(e) =>
+                    setfetchedformData((prev) => ({
+                      ...prev,
+                      [e.target.name]: e.target.value,
+                    }))
+                  }
                   className="input"
-                  disabled
+                  disabled={!isEditing}
+                  style={{
+                    color: isEditing ? "black" : "inherit", // Apply black color when editing
+                  }}
                 />
               </div>
             </div>
           </div>
+          <Divider />
 
-          {/* Row 3: Department and Nature of Leave */}
+          {/* Row 2: Name and Designation and Department */}
+
           <div className="grid-row">
             <div className="grid-col">
+              <label className="input-label" htmlFor="name">
+                1. Name
+              </label>
+              <div className="input-wrapper">
+                <User size={20} />
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={fetchedformData.name}
+                  placeholder="Enter Your Full Name"
+                  //onChange={handleChange}
+                  className="input"
+                  disabled
+                  style={{
+                    color: "black", // Apply black color when editing
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="grid-col">
+              <label className="input-label" htmlFor="designation">
+                2. Designation
+              </label>
+              <div className="input-wrapper">
+                <Tag size={20} />
+                <input
+                  type="text"
+                  id="designation"
+                  name="designation"
+                  value={fetchedformData.designation}
+                  placeholder="Enter Your Designation"
+                  //onChange={handleChange}
+                  className="input"
+                  disabled
+                  style={{
+                    color: "black", // Apply black color when editing
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="grid-col">
               <label className="input-label" htmlFor="departmentInfo">
-                Department / Section
+                3. Department / Section
               </label>
               <div className="input-wrapper">
                 <Building size={20} />
@@ -549,103 +580,143 @@ const LTCFormView = () => {
                     { value: "Design", label: "Design" },
                   ]}
                   value={fetchedformData.departmentInfo}
-                  /*onChange={(value) =>
-                  handleSelectChange(value, "departmentInfo")
-                } */
                   className="input"
-                  //styles={selectStyles}
-                  disabled
+                  styles={{
+                    singleValue: (base) => ({
+                      ...base,
+                      color: "black", // Ensure the fetched data font color is black
+                    }),
+                    placeholder: (base) => ({
+                      ...base,
+                      color: "black", // Placeholder color is also black, if needed
+                    }),
+                  }}
+                  onChange={(value) =>
+                    setfetchedformData((prev) => ({
+                      ...prev,
+                      departmentInfo: value,
+                    }))
+                  }
+                  isDisabled={!isEditing} // Enable/Disable based on editing mode
                 />
               </div>
             </div>
           </div>
 
           <Divider />
-          <div className="grid-col">
-            <label className="input-label" htmlFor="leaveRequired">
-              (a) Whether leave is required for availing L.T.C.?
+
+          <div className="grid-row">
+            <div className="grid-col">
+              <label className="input-label" htmlFor="leaveRequired">
+                4. (a) Whether leave is required for availing L.T.C.?
+              </label>
+              <div className="input-wrapper">
+                <Question size={20} />
+                <select
+                  id="leaveRequired"
+                  name="leaveRequired"
+                  value={
+                    fetchedformData.leaveRequired === true
+                      ? "Yes"
+                      : fetchedformData.leaveRequired === false
+                        ? "No"
+                        : "Not Specified"
+                  }
+                  className="input"
+                  onChange={(e) =>
+                    setfetchedformData((prev) => ({
+                      ...prev,
+                      leaveRequired:
+                        e.target.value === "Yes"
+                          ? true
+                          : e.target.value === "No"
+                            ? false
+                            : null,
+                    }))
+                  }
+                  style={{
+                    color: "black", // Ensures the font color of the selected value is black
+                    backgroundColor: "transparent", // Keeps the default background color
+                  }}
+                >
+                  <option style={{ color: "black" }} value="Yes">
+                    Yes
+                  </option>
+                  <option style={{ color: "black" }} value="No">
+                    No
+                  </option>
+                  <option style={{ color: "black" }} value="Not Specified">
+                    Not Specified
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Row 4: Leave Duration */}
+
+          <div className="grid-row align-center">
+            <label className="input-label" htmlFor="leaveStartDate">
+              (b) (i) If so, duration of leave applied for:
+            </label>
+            <span style={{ margin: "0 1rem" }}>From:</span>
+            <div className="input-wrapper">
+              <Calendar size={20} />
+              <input
+                type="date"
+                id="leaveStartDate"
+                name="leaveStartDate" // changed to match the key in fetchedformData
+                value={fetchedformData.leaveStartDate}
+                className="input"
+                onChange={handleChange}
+                disabled={!isEditing}
+                style={{
+                  color: isEditing ? "black" : "inherit", // Apply black color when editing
+                }}
+              />
+            </div>
+            <span style={{ margin: "0 1rem" }}>To:</span>
+            <div className="input-wrapper">
+              <Calendar size={20} />
+              <input
+                type="date"
+                id="leaveEndDate"
+                name="leaveEndDate" // changed to match the key in fetchedformData
+                value={fetchedformData.leaveEndDate}
+                className="input"
+                onChange={handleChange}
+                disabled={!isEditing}
+                style={{
+                  color: isEditing ? "black" : "inherit", // Apply black color when editing
+                }}
+              />
+            </div>
+
+            <label
+              className="input-label"
+              htmlFor="dateOfDepartureForFamily"
+              style={{ marginLeft: "2rem" }}
+            >
+              (ii) Date of departure of family, if not availing himself:
             </label>
             <div className="input-wrapper">
-              <Question size={20} />
-              <select
-                id="leaveRequired"
-                name="leaveRequired"
-                value={
-                  fetchedformData.leaveRequired === true
-                    ? "Yes"
-                    : fetchedformData.leaveRequired === false
-                      ? "No"
-                      : "Not Specified"
-                }
+              <Calendar size={20} />
+              <input
+                type="date"
+                id="dateOfDepartureForFamily"
+                name="dateOfDepartureForFamily" // changed to match the key in fetchedformData
+                value={fetchedformData.dateOfDepartureForFamily}
                 className="input"
-                disabled
-              >
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-                <option value="Not Specified">Not Specified</option>
-              </select>
+                onChange={handleChange}
+                disabled={!isEditing}
+                style={{
+                  color: isEditing ? "black" : "inherit", // Apply black color when editing
+                }}
+              />
             </div>
           </div>
 
           <div className="grid-row">
-            <div className="grid-col">
-              <label className="input-label" htmlFor="leaveStartDate">
-                (b) (i) If so, duration of leave applied for From:
-              </label>
-              <div className="input-wrapper">
-                <Calendar size={20} />
-                <input
-                  type="date"
-                  id="leaveStartDate"
-                  name="leaveStartDate" // changed to match the key in fetchedfetchedformData
-                  value={fetchedformData.leaveStartDate}
-                  //onChange={handleChange}
-                  className="input"
-                  disabled
-                />
-              </div>
-            </div>
-
-            <div className="grid-col">
-              <label className="input-label" htmlFor="leaveEndDate">
-                To:
-              </label>
-              <div className="input-wrapper">
-                <Calendar size={20} />
-                <input
-                  type="date"
-                  id="leaveEndDate"
-                  name="leaveEndDate" // changed to match the key in fetchedfetchedformData
-                  value={fetchedformData.leaveEndDate}
-                  //onChange={handleChange}
-                  className="input"
-                  disabled
-                />
-              </div>
-            </div>
-
-            <div className="grid-col">
-              <label className="input-label" htmlFor="dateOfDepartureForFamily">
-                (ii) Date of departure of family, if not availing himself
-              </label>
-              <div className="input-wrapper">
-                <Calendar size={20} />
-                <input
-                  type="date"
-                  id="dateOfDepartureForFamily"
-                  name="dateOfDepartureForFamily" // changed to match the key in fetchedfetchedformData
-                  value={fetchedformData.dateOfDepartureForFamily}
-                  //onChange={handleChange}
-                  className="input"
-                  disabled
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Row 4: LTC Availability and Purpose */}
-          <div className="grid-row">
-            {" "}
             <div className="grid-col">
               <label className="input-label" htmlFor="natureOfLeave">
                 (c) Nature of Leave
@@ -671,13 +742,30 @@ const LTCFormView = () => {
                     { value: "Station Leave", label: "Station Leave" },
                   ]}
                   value={fetchedformData.natureOfLeave}
-                  //onChange={(value) => handleSelectChange(value, "natureOfLeave")}
+                  onChange={(selectedOption) =>
+                    handleChange({
+                      target: {
+                        name: "natureOfLeave",
+                        value: selectedOption.value,
+                      },
+                    })
+                  }
                   className="input"
-                  disabled
-                  //styles={selectStyles}
+                  styles={{
+                    singleValue: (base) => ({
+                      ...base,
+                      color: "black", // Set selected text color to black
+                    }),
+                    placeholder: (base) => ({
+                      ...base,
+                      color: "black", // Ensure placeholder text is also black
+                    }),
+                  }}
+                  isDisabled={!isEditing} // Enable/Disable based on isEditing
                 />
               </div>
             </div>
+
             <div className="grid-col">
               <label className="input-label" htmlFor="purposeOfLeave">
                 (d) Purpose
@@ -690,36 +778,49 @@ const LTCFormView = () => {
                   name="purposeOfLeave"
                   value={fetchedformData.purposeOfLeave}
                   placeholder="Enter Purpose of Travel"
-                  //onChange={handleChange}
+                  onChange={handleChange}
                   className="input"
-                  disabled
+                  disabled={!isEditing} // Enable/Disable based on isEditing
+                  style={{
+                    color: isEditing ? "black" : "inherit", // Apply black color when editing
+                  }}
                 />
               </div>
             </div>
           </div>
 
           <div className="grid-row">
-            {/* Whether L.T.C. is desired for going to hometown or elsewhere */}
             <div className="grid-col">
               <label className="input-label" htmlFor="placeOfVisit">
-                Whether L.T.C. is desired for going to home town or elsewhere?
-                Select Place:
+                5. Whether L.T.C. is desired for going to home town or
+                elsewhere? Select Place:
               </label>
               <div className="input-wrapper">
                 <input
+                  type="text"
+                  id="placeOfVisit"
+                  name="placeOfVisit"
                   value={fetchedformData.placeOfVisit}
-                  onChange={(value) => handlePlaceChange(value, "placeOfVisit")}
+                  placeholder="Enter Place of Visit"
+                  onChange={(event) =>
+                    handleChange({
+                      target: {
+                        name: "placeOfVisit",
+                        value: event.target.value,
+                      },
+                    })
+                  }
                   className="input"
+                  disabled={!isEditing} // Enable/Disable based on isEditing
                 />
               </div>
             </div>
           </div>
 
-          {/* Row 5: Mode of Travel and Address During Leave */}
           <div className="grid-row">
             <div className="grid-col">
               <label className="input-label" htmlFor="modeOfTravel">
-                Mode of Travel
+                6. Mode of Travel
               </label>
               <div className="input-wrapper">
                 <Airplane size={20} />
@@ -731,17 +832,24 @@ const LTCFormView = () => {
                     { value: "Train", label: "Train" },
                     { value: "Car", label: "Car" },
                   ]}
-                  value={fetchedformData.modeofTravel}
-                  //onChange={(value) => handleSelectChange(value, "modeOfTravel")}
+                  value={fetchedformData.modeOfTravel}
+                  onChange={(selectedOption) =>
+                    handleChange({
+                      target: {
+                        name: "modeOfTravel",
+                        value: selectedOption.value,
+                      },
+                    })
+                  }
                   className="input"
-                  disabled
+                  isDisabled={!isEditing} // Enable/Disable based on isEditing
                 />
               </div>
             </div>
 
             <div className="grid-col">
               <label className="input-label" htmlFor="addressDuringLeave">
-                Address During Leave
+                7. Address During Leave
               </label>
               <div className="input-wrapper">
                 <MapPin size={20} />
@@ -751,10 +859,20 @@ const LTCFormView = () => {
                   name="addressDuringLeave"
                   value={fetchedformData.addressDuringLeave}
                   placeholder="Enter Address During Leave"
-                  //onChange={handleChange}
+                  onChange={(event) =>
+                    handleChange({
+                      target: {
+                        name: "addressDuringLeave",
+                        value: event.target.value,
+                      },
+                    })
+                  }
                   className="input"
                   required
-                  disabled
+                  disabled={!isEditing} // Enable/Disable based on isEditing
+                  style={{
+                    color: isEditing ? "black" : "inherit", // Apply black color when editing
+                  }}
                 />
               </div>
             </div>
@@ -1012,7 +1130,7 @@ const LTCFormView = () => {
             {/* Amount of advance required */}
             <div className="grid-col amount-advance">
               <label className="input-label" htmlFor="amountOfAdvanceRequired">
-                Amount of advance required, if any:
+                9. Amount of advance required, if any:
               </label>
               <div className="input-wrapper">
                 <Money size={20} />
@@ -1021,13 +1139,30 @@ const LTCFormView = () => {
                   id="amountOfAdvanceRequired"
                   name="amountOfAdvanceRequired"
                   value={fetchedformData.amountOfAdvanceRequired}
-                  //onChange={handleChange}
                   className="input"
                   disabled
                 />
               </div>
             </div>
 
+            <div className="grid-col">
+              <label className="input-label" htmlFor="date">
+                Taken on the Date:
+              </label>
+              <div className="input-wrapper">
+                <Calendar size={20} />
+                <input
+                  type="date"
+                  id="date"
+                  name="date"
+                  value={fetchedformData.submissionDate}
+                  disabled
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="grid-row">
             {/* Certified Details */}
             <div className="grid-col">
               <label className="input-label" htmlFor="certificationDetails">
@@ -1046,7 +1181,6 @@ const LTCFormView = () => {
                         ? "No"
                         : "Not specified"
                   }
-                  //onChange={handleChange}
                   className="input"
                   disabled
                 />
@@ -1054,28 +1188,18 @@ const LTCFormView = () => {
             </div>
           </div>
 
-          {/* Date Fields */}
-          <div className="grid-row">
-            <div className="grid-col">
-              <label className="input-label" htmlFor="date">
-                Date:
-              </label>
-              <div className="input-wrapper">
-                <Calendar size={20} />
-                <input
-                  type="date"
-                  id="date"
-                  name="date"
-                  value={fetchedformData.submissionDate}
-                  //onChange={handleChange}
-                  className="input"
-                  disabled
-                />
-              </div>
-            </div>
-            <div className="grid-col">
-              <label className="input-label" htmlFor="previousLTCDate">
-                Certified that the previous L.T.C. advance drawn by me on:
+          <div
+            className="grid-row"
+            style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}
+          >
+            {/* Previous LTC Date Field */}
+            <div className="grid-col" style={{ flex: "1 1 30%" }}>
+              <label
+                className="input-label"
+                htmlFor="previousLTCDate"
+                style={{ whiteSpace: "nowrap" }}
+              >
+                (ii) Certified that the previous L.T.C. advance drawn by me on:
               </label>
               <div className="input-wrapper">
                 <Calendar size={20} />
@@ -1084,15 +1208,46 @@ const LTCFormView = () => {
                   id="previousLTCDate"
                   name="previousLTCDate"
                   value={fetchedformData.certifiedThatAdvanceTakenOn}
-                  //onChange={handleChange}
                   className="input"
                   disabled
-                />{" "}
+                />
               </div>
             </div>
-            <div className="grid-col">
+
+            {/* Adjusted Month Dropdown */}
+            <div className="grid-col" style={{ flex: "1 1 30%" }}>
+              <label className="input-label" htmlFor="adjustedMonth">
+                has been adjusted in the month of:
+              </label>
+              <div className="input-wrapper" style={{ position: "relative" }}>
+                <select
+                  id="adjustedMonth"
+                  name="adjustedMonth"
+                  value={fetchedformData.adjustedMonth || ""}
+                  className="input"
+                  disabled
+                >
+                  <option value="">Select Month</option>
+                  <option value="January">January</option>
+                  <option value="February">February</option>
+                  <option value="March">March</option>
+                  <option value="April">April</option>
+                  <option value="May">May</option>
+                  <option value="June">June</option>
+                  <option value="July">July</option>
+                  <option value="August">August</option>
+                  <option value="September">September</option>
+                  <option value="October">October</option>
+                  <option value="November">November</option>
+                  <option value="December">December</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Phone Number Field */}
+            <div className="grid-col" style={{ flex: "1 1 30%" }}>
               <label className="input-label" htmlFor="phoneNumber">
-                Phone Number for contact:
+                10. Phone Number for contact:
               </label>
               <div className="input-wrapper">
                 <Phone size={20} />
@@ -1101,13 +1256,13 @@ const LTCFormView = () => {
                   id="phoneNumber"
                   name="phoneNumber"
                   value={fetchedformData.phoneNumberForContact}
-                  //onChange={handleChange}
                   className="input"
                   disabled
                 />
               </div>
             </div>
           </div>
+
           {!isEditing && (
             <div style={{ marginTop: "30px", textAlign: "center" }}>
               <Button
