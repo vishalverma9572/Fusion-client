@@ -2,19 +2,26 @@ import React, { useEffect, useState, useRef } from "react";
 import { Tabs, Button, Flex, Text, Loader, Container } from "@mantine/core";
 import { CaretCircleLeft, CaretCircleRight } from "@phosphor-icons/react";
 import { useNavigate, useLocation } from "react-router-dom";
-import CustomBreadcrumbs from "../../../components/Breadcrumbs"; // Your breadcrumbs component
-import classes from "./LeavePage.module.css"; // Add your styles here
+import HrBreadcrumbs from "../components/HrBreadcrumbs";
 import LeaveForm from "./LeavePageComp/LeaveForm";
 import LeaveArchive from "./LeavePageComp/LeaveArchive";
 import LeaveInbox from "./LeavePageComp/LeaveInbox";
 import LeaveRequests from "./LeavePageComp/LeaveRequests";
-import HrBreadcrumbs from "../components/HrBreadcrumbs";
+import classes from "./LeavePage.module.css";
 
 const tabItems = [
   { title: "Leave Form", path: "/hr/leave/leaveform" },
   { title: "Leave Requests", path: "/hr/leave/leaverequests" },
   { title: "Leave Inbox", path: "/hr/leave/leaveinbox" },
   { title: "Leave Archive", path: "/hr/leave/leavearchive" },
+];
+
+const sectionItems = [
+  { title: "Leave Management", path: "/hr/leave/leaveform" },
+  { title: "LTC", path: "/hr/ltc/ltcform" },
+  { title: "CPDA Adavnce", path: "/hr/cpda_adv/adv_form" },
+  { title: "CPDA Claim", path: "/hr/cpda_claim/cpdaform" },
+  { title: "Appraisal", path: "/hr/appraisal/appraisal_form" },
 ];
 
 function Leave() {
@@ -24,15 +31,17 @@ function Leave() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  //scroll to top on page load
+  // Scroll to top on page load
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  const exampleItems = [
+
+  const breadcrumbsItems = [
     { title: "Home", path: "/dashboard" },
     { title: "Human Resources", path: "/hr" },
     { title: "Leave Management", path: "/hr/leave" },
   ];
+
   // Set active tab based on the current URL
   useEffect(() => {
     const currentPath = location.pathname;
@@ -42,10 +51,14 @@ function Leave() {
     setActiveTab(matchingTab !== -1 ? String(matchingTab) : "0");
   }, [location.pathname]);
 
-  // Function to handle tab change by clicking on a tab
+  // Handle tab change
   const handleTabChange = (index) => {
     setActiveTab(index);
-    navigate(tabItems[index].path); // Update the URL when the tab changes
+    navigate(tabItems[index].path);
+  };
+
+  const handleSectionNavigation = (path) => {
+    navigate(path);
   };
 
   const handleButtonChange = (direction) => {
@@ -60,24 +73,29 @@ function Leave() {
     });
   };
 
-  // Fetch any necessary leave data
-  useEffect(() => {
-    const fetchLeaveData = async () => {
-      setLoading(true);
-      try {
-        // Fetch leave data here if needed
-      } catch (error) {
-        console.error("Error fetching leave data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchLeaveData();
-  }, []);
-
   return (
     <>
-      <HrBreadcrumbs items={exampleItems} />
+      {/* Primary Breadcrumbs */}
+      <HrBreadcrumbs items={breadcrumbsItems} />
+
+      {/* Horizontal Navigation Bar */}
+      <div className={classes.sectionTabsContainer}>
+        {sectionItems.map((item, index) => (
+          <div
+            key={index}
+            className={`${classes.sectionTab} ${
+              location.pathname.includes(item.path.split("/")[2])
+                ? classes.activeSectionTab
+                : ""
+            }`}
+            onClick={() => handleSectionNavigation(item.path)}
+          >
+            {item.title}
+          </div>
+        ))}
+      </div>
+
+      {/* Tabs */}
       <Flex justify="flex-start" align="center" mt="lg">
         <Button
           style={{ marginRight: "20px" }}
@@ -105,7 +123,7 @@ function Leave() {
                       ? classes.fusionActiveRecentTab
                       : ""
                   }
-                  onClick={() => handleTabChange(String(index))} // Trigger navigation on click
+                  onClick={() => handleTabChange(String(index))}
                 >
                   <Text>{item.title}</Text>
                 </Tabs.Tab>
@@ -125,6 +143,8 @@ function Leave() {
           />
         </Button>
       </Flex>
+
+      {/* Content */}
       {loading ? (
         <Container py="xl">
           <Loader size="lg" />

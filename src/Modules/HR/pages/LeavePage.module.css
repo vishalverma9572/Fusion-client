@@ -7,6 +7,36 @@
   padding-top: 50px;            /* Reset padding */
   box-sizing: border-box;   /* Ensure padding and border are included in the element's width/height */
 }
+/* Horizontal Navigation Bar Styling */
+.sectionTabsContainer {
+  display: flex;
+  justify-content: flex-start; /* Align items to the left */
+  align-items: center; /* Vertically align the text */
+  gap: 20px; /* Add spacing between items */
+  margin-bottom: 20px; /* Space below the bar */
+  padding: 10px 0; /* Padding for better spacing */
+  border-bottom: 2px solid #e0e0e0; /* Optional: Bottom border for separation */
+}
+
+.sectionTab {
+  font-size: 18px; /* Match the Leave component's font size */
+  color: black; /* Default color */
+  cursor: pointer; /* Pointer cursor on hover */
+  padding: 5px 10px; /* Padding for better click area */
+  border-radius: 4px; /* Slight rounding for a smooth appearance */
+  transition: background-color 0.3s, color 0.3s; /* Smooth transitions */
+}
+
+.sectionTab:hover {
+  background-color: rgba(21, 171, 255, 0.1); /* Light blue background on hover */
+  color: #15abff; /* Blue color on hover */
+}
+
+.activeSectionTab {
+  background-color: rgba(21, 171, 255, 0.1); /* Active tab background */
+  color: #15abff; /* Active tab text color */
+  
+}
 
 
 .fusionTabsContainer {

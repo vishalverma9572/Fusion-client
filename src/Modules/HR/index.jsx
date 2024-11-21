@@ -21,7 +21,7 @@ export default function HR() {
   return (
     <Routes>
       {/* Show welcome message at /hr */}
-      <Route path="/" element={<Hr_Dashboard />} />
+      <Route path="/" element={<LeavePage />} />
       {/* Render LeavePage at /hr/leave */}
       <Route path="leave/file_handler/:id" element={<LeaveFilehandle />} />
       <Route path="leave/view/:id" element={<LeaveFormView />} />
