@@ -21,39 +21,38 @@ import { MantineProvider } from "@mantine/core"; // Import MantineProvider
 
 export default function HR() {
   return (
-    <MantineProvider>
-      <Routes>
-        {/* Show welcome message at /hr */}
-        <Route path="/" element={<Hr_Dashboard />} />
-        {/* Render LeavePage at /hr/leave */}
-        <Route path="leave/file_handler/:id" element={<LeaveFilehandle />} />
-        <Route path="leave/view/:id" element={<LeaveFormView />} />
-        <Route path="leave/*" element={<LeavePage />} />
+    <Routes>
+      {/* Show welcome message at /hr */}
+      <Route path="/" element={<LeavePage />} />
+      {/* Render LeavePage at /hr/leave */}
+      <Route path="leave/file_handler/:id" element={<LeaveFilehandle />} />
+      <Route path="leave/view/:id" element={<LeaveFormView />} />
+      <Route path="leave/*" element={<LeavePage />} />
 
-        {/* Route for the CPDA Advance View page */}
-        <Route
-          path="cpda_adv/file_handler/:id"
-          element={<Cpda_advFilehandle />}
-        />
-        <Route path="cpda_adv/view/:id" element={<CPDA_ADVANCEView />} />
-        <Route path="cpda_adv/*" element={<CPDA_ADVANCE />} />
+      {/* Route for the CPDA Advance View page */}
+      <Route
+        path="cpda_adv/file_handler/:id"
+        element={<Cpda_advFilehandle />}
+      />
+      <Route path="cpda_adv/view/:id" element={<CPDA_ADVANCEView />} />
+      <Route path="cpda_adv/*" element={<CPDA_ADVANCE />} />
 
-        <Route path="ltc/*" element={<LTC />} />
-        <Route path="ltc/view/:id" element={<LTCFormView />} />
-        <Route path="ltc/view/:id" element={<LTCFormView />} />
-        <Route path="ltc/file_handler/:id" element={<LTCFilehandle />} />
+      <Route path="ltc/*" element={<LTC />} />
+      <Route path="ltc/view/:id" element={<LTCFormView />} />
+      <Route path="ltc/view/:id" element={<LTCFormView />} />
+      <Route path="ltc/file_handler/:id" element={<LTCFilehandle />} />
 
-        <Route path="appraisal/*" element={<Appraisal />} />
+      <Route path="appraisal/*" element={<Appraisal />} />
 
-        <Route path="cpda_claim/*" element={<CPDA_Claim />} />
-        <Route path="cpda_claim/view/:id" element={<CPDA_ClaimFormView />} />
-        <Route
-          path="cpda_claim/file_handler/:id"
-          element={<CPDA_ClaimFilehandle />}
-        />
+      <Route path="cpda_claim/*" element={<CPDA_Claim />} />
+      <Route path="cpda_claim/view/:id" element={<CPDA_ClaimFormView />} />
+      <Route
+        path="cpda_claim/file_handler/:id"
+        element={<CPDA_ClaimFilehandle />}
+      />
 
-        <Route path="FormView/*" element={<FormView />} />
-      </Routes>
-    </MantineProvider>
+      <Route path="FormView/*" element={<FormView />} />
+    </Routes>
+    // </MantineProvider>
   );
 }

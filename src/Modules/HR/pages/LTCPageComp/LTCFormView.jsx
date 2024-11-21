@@ -171,6 +171,28 @@ const LTCFormView = () => {
       </Title>
 
       <div className="leave_container">
+        <Link
+          to={`/hr/FormView/ltcform_track/${fetchedformData.file_id}`}
+          style={{
+            display: "inline-block",
+            padding: "10px 20px",
+            backgroundColor: "#007bffcc", // Blue background, adjust color as needed
+            color: "#fff",
+            textDecoration: "none",
+            borderRadius: "4px",
+            textAlign: "center",
+            fontWeight: "bold",
+            cursor: "pointer",
+            marginBottom: "20px",
+            marginTop: "20px",
+          }}
+          // Add hover effect
+          onMouseEnter={(e) => (e.target.style.backgroundColor = "#007bff")}
+          onMouseLeave={(e) => (e.target.style.backgroundColor = "#007bffcc")}
+        >
+          Track Status
+        </Link>
+
         <form>
           {/* Row 1:Block Year,  Provident Fund No. and Basic Pay */}
 
@@ -976,26 +998,6 @@ const LTCFormView = () => {
 
           {/* Footer */}
         </form>
-        <Link
-          to={`/hr/FormView/ltcform_track/${fetchedformData.file_id}`}
-          style={{
-            display: "inline-block",
-            padding: "10px 20px",
-            backgroundColor: "#007bffcc", // Blue background, adjust color as needed
-            color: "#fff",
-            textDecoration: "none",
-            borderRadius: "4px",
-            textAlign: "center",
-            fontWeight: "bold",
-            cursor: "pointer",
-            marginBottom: "20px",
-          }}
-          // Add hover effect
-          onMouseEnter={(e) => (e.target.style.backgroundColor = "#007bff")}
-          onMouseLeave={(e) => (e.target.style.backgroundColor = "#007bffcc")}
-        >
-          Track Status
-        </Link>
       </div>
     </>
   );

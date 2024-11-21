@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Tabs, Button, Flex, Text, Loader, Container } from "@mantine/core";
 import { CaretCircleLeft, CaretCircleRight } from "@phosphor-icons/react";
-import { useNavigate, useLocation } from "react-router-dom"; // Import these hooks
+import { useNavigate, useLocation } from "react-router-dom";
 
 import classes from "./LTCPage.module.css";
 import LTCForm from "./LTCPageComp/LTCForm";
@@ -18,14 +18,22 @@ const tabItems = [
   { title: "LTC Archive", path: "/hr/ltc/ltcarchive" },
 ];
 
+const sectionItems = [
+  { title: "Leave Management", path: "/hr/leave/leaveform" },
+  { title: "LTC", path: "/hr/ltc/ltcform" },
+  { title: "CPDA Adavnce", path: "/hr/cpda_adv/adv_form" },
+  { title: "CPDA Claim", path: "/hr/cpda_claim/cpdaform" },
+  { title: "Appraisal", path: "/hr/appraisal/appraisal_form" },
+];
+
 function LTC() {
   const [activeTab, setActiveTab] = useState("0");
   const [loading, setLoading] = useState(false);
   const tabsListRef = useRef(null);
-  const navigate = useNavigate(); // Initialize navigate
-  const location = useLocation(); // Initialize location
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  //scroll to top on page load
+  // Scroll to top on page load
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -48,7 +56,11 @@ function LTC() {
   // Function to handle tab change by clicking on a tab
   const handleTabChange = (index) => {
     setActiveTab(index);
-    navigate(tabItems[index].path); // Update the URL when the tab changes
+    navigate(tabItems[index].path);
+  };
+
+  const handleSectionNavigation = (path) => {
+    navigate(path);
   };
 
   const handleButtonChange = (direction) => {
@@ -56,7 +68,7 @@ function LTC() {
       direction === "next"
         ? Math.min(+activeTab + 1, tabItems.length - 1)
         : Math.max(+activeTab - 1, 0);
-    handleTabChange(String(newIndex)); // Use handleTabChange to update tab and URL
+    handleTabChange(String(newIndex));
     tabsListRef.current.scrollBy({
       left: direction === "next" ? 50 : -50,
       behavior: "smooth",
@@ -81,6 +93,24 @@ function LTC() {
   return (
     <>
       <HrBreadcrumbs items={exampleItems} />
+
+      {/* Horizontal Navigation Bar */}
+      <div className={classes.sectionTabsContainer}>
+        {sectionItems.map((item, index) => (
+          <div
+            key={index}
+            className={`${classes.sectionTab} ${
+              location.pathname.includes(item.path.split("/")[2])
+                ? classes.activeSectionTab
+                : ""
+            }`}
+            onClick={() => handleSectionNavigation(item.path)}
+          >
+            {item.title}
+          </div>
+        ))}
+      </div>
+
       <Flex justify="flex-start" align="center" mt="lg">
         <Button
           style={{ marginRight: "20px" }}
@@ -108,7 +138,7 @@ function LTC() {
                       ? classes.fusionActiveRecentTab
                       : ""
                   }
-                  onClick={() => handleTabChange(String(index))} // Update onClick to change tab and URL
+                  onClick={() => handleTabChange(String(index))}
                 >
                   <Text>{item.title}</Text>
                 </Tabs.Tab>
