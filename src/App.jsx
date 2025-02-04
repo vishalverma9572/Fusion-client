@@ -5,6 +5,7 @@ import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import { Notifications } from "@mantine/notifications";
 import { Layout } from "./components/layout";
 import Dashboard from "./Modules/Dashboard/dashboardNotifications";
+import ComplaintSystem from "./Modules/ComplaintManagement/index";
 import Profile from "./Modules/Profile/profile";
 import LoginPage from "./pages/login";
 import ForgotPassword from "./pages/forgotPassword";
@@ -43,6 +44,14 @@ export default function App() {
           element={
             <Layout>
               <Profile />
+            </Layout>
+          }
+        />
+        <Route
+          path="/complaints"
+          element={
+            <Layout>
+              <ComplaintSystem />
             </Layout>
           }
         />
