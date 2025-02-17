@@ -78,6 +78,7 @@ import RoomsAvailibility from "./Modules/Visitors_Hostel/roomsAvailability";
 import AccountStatemnts from "./Modules/Visitors_Hostel/accountStatements";
 import FacultyProfessionalProfile from "./Modules/facultyProfessionalProfile/facultyProfessionalProfile";
 import InactivityHandler from "./helper/inactivityhandler";
+import DepartmentPage from "./Modules/Department/DepartmentDashboard";
 
 export default function App() {
   const location = useLocation();
@@ -215,6 +216,14 @@ export default function App() {
           element={
             <Layout>
               <ComplaintSystem />
+            </Layout>
+          }
+        />
+        <Route
+          path="/department"
+          element={
+            <Layout>
+              <DepartmentPage />
             </Layout>
           }
         />
