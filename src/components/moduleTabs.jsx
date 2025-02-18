@@ -69,7 +69,7 @@ function ModuleTabs({ tabs, activeTab, setActiveTab, badges = [] }) {
                   key={index}
                   className={activeTab === `${index}` ? classes.activeTab : ""}
                 >
-                  <Flex gap="4px">
+                  <Flex gap="1px">
                     <Text>{tab.title}</Text>
                     {badges[index] > 0 && (
                       <Badge

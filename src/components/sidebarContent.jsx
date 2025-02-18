@@ -81,7 +81,7 @@ const Modules = [
     label: "File Tracking",
     id: "fts",
     icon: <FileTrackingIcon size={18} />,
-    url: "/",
+    url: "/filetracking",
   },
   {
     label: "Scholarship Portal",

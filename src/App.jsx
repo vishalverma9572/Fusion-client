@@ -66,6 +66,7 @@ import LoginPage from "./pages/login";
 import ForgotPassword from "./pages/forgotPassword";
 import AcademicPage from "./Modules/Academic/index";
 import ValidateAuth from "./helper/validateauth";
+import FileTracking from "./Modules/FileTracking";
 import VisitorsContent from "./Modules/Visitors_Hostel/visitorsContent";
 import CancellationRequest from "./Modules/Visitors_Hostel/cancellationRequest";
 import BookingForm from "./Modules/Visitors_Hostel/bookingForm";
@@ -111,6 +112,14 @@ export default function App() {
           element={
             <Layout>
               <Profile />
+            </Layout>
+          }
+        />
+        <Route
+          path="/filetracking"
+          element={
+            <Layout>
+              <FileTracking />
             </Layout>
           }
         />
