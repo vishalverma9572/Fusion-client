@@ -73,13 +73,14 @@ function ModuleTabs({ tabs, activeTab, setActiveTab, badges = [] }) {
                       : ""
                   }
                 >
-                  <Flex gap="1px">
+                  <Flex gap="2px">
                     <Text>{tab.title}</Text>
                     {badges[index] > 0 && (
                       <Badge
                         color={badges[index] > 0 ? "blue" : "grey"}
-                        size="sm"
-                        p={6}
+                        size={isMobile ? "xs" : "sm"}
+                        w={isMobile ? "sm" : "md"}
+                        p={isMobile ? 0 : 2}
                       >
                         {badges[index]}
                       </Badge>
