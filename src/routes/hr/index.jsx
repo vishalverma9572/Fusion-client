@@ -1,5 +1,9 @@
 import { host } from "../globalRoutes";
 
+export const get_leave_balance = `${host}/hr2/api/get_leave_balance`;
+export const get_form_initials = `${host}/hr2/api/get_form_initials`;
+export const search_employees = `${host}/hr2/api/search_employees`;
+
 export const search_employee = `${host}/hr2/api/search_employee`;
 export const get_my_details = `${host}/hr2/api/get_my_details`;
 export const get_form_track = (formId) =>

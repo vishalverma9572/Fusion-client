@@ -9,6 +9,7 @@ import LeaveArchive from "./LeavePageComp/LeaveArchive";
 import LeaveInbox from "./LeavePageComp/LeaveInbox";
 import LeaveRequests from "./LeavePageComp/LeaveRequests";
 import HrBreadcrumbs from "../components/HrBreadcrumbs";
+import LeaveBalanceButton from "./LeavePageComp/LeaveBalanceButton";
 
 const tabItems = [
   { title: "Leave Form", path: "/hr/leave/leaveform" },
@@ -78,6 +79,7 @@ function Leave() {
   return (
     <>
       <HrBreadcrumbs items={exampleItems} />
+      <LeaveBalanceButton />
       <Flex justify="flex-start" align="center" mt="lg">
         <Button
           style={{ marginRight: "20px" }}
