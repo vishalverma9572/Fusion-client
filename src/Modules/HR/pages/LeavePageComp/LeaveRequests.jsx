@@ -1,12 +1,21 @@
 import React, { useEffect, useState } from "react";
-import RequestsTable from "../../components/tables/RequestsTable";
-import { get_leave_requests } from "../../../../routes/hr/index"; // Ensure this is the correct import path
-import LoadingComponent from "../../components/Loading"; // Ensure this is the correct import path
+import { Title, Select, TextInput, Container } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
+import { Eye } from "@phosphor-icons/react";
+import LoadingComponent from "../../components/Loading";
+import { EmptyTable } from "../../components/tables/EmptyTable";
+import { get_leave_requests } from "../../../../routes/hr/index";
+import "./LeaveRequests.css";
 
 function LeaveRequests() {
-  const [requestData, setRequestData] = useState([]); // Correct useState syntax
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [requestData, setRequestData] = useState([]); // State for leave requests
+  const [filteredData, setFilteredData] = useState([]); // State for filtered leave requests
+  const [loading, setLoading] = useState(true); // Loading state
+  const [selectedStatus, setSelectedStatus] = useState("All"); // State for status filter
+  const [selectedDate, setSelectedDate] = useState(""); // State for date filter (as string)
+  const navigate = useNavigate();
 
+  // Fetch leave requests from the backend
   useEffect(() => {
     const fetchLeaveRequests = async () => {
       console.log("Fetching leave requests...");
@@ -16,11 +25,19 @@ function LeaveRequests() {
         return;
       }
       try {
-        const response = await fetch(get_leave_requests, {
-          headers: { Authorization: `Token ${token}` },
-        });
+        const queryParams = new URLSearchParams();
+        if (selectedDate) {
+          queryParams.append("date", selectedDate);
+        }
+        const response = await fetch(
+          `${get_leave_requests}?${queryParams.toString()}`,
+          {
+            headers: { Authorization: `Token ${token}` },
+          },
+        );
         const data = await response.json();
         setRequestData(data.leave_requests); // Set fetched data
+        setFilteredData(data.leave_requests); // Initialize filtered data
         setLoading(false); // Set loading to false once data is fetched
         console.log(data);
       } catch (error) {
@@ -28,14 +45,145 @@ function LeaveRequests() {
         setLoading(false); // Set loading to false if there’s an error
       }
     };
-    fetchLeaveRequests(); // Ensure function is called
-  }, []); // Adding empty dependency array to run only once
+    fetchLeaveRequests(); // Call the function to fetch data
+  }, [selectedDate]); // Re-fetch data when selectedDate changes
 
+  // Handle "View" button click
+  const handleViewClick = (view) => {
+    navigate(`./view/${view}`);
+  };
+
+  // Function to determine status color
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "Pending":
+        return "#FFD700"; // Yellow
+      case "Accepted":
+        return "#32CD32"; // Green
+      case "Rejected":
+        return "#FF0000"; // Red
+      default:
+        return "#333"; // Default color
+    }
+  };
+
+  // Handle status filter change
+  const handleStatusFilterChange = (value) => {
+    setSelectedStatus(value);
+    if (value === "All") {
+      setFilteredData(requestData); // Show all data
+    } else {
+      const filtered = requestData.filter((item) => item.status === value);
+      setFilteredData(filtered); // Filter by status
+    }
+  };
+
+  // Handle date filter change
+  const handleDateFilterChange = (event) => {
+    setSelectedDate(event.target.value); // Update selectedDate state
+  };
+
+  // Table headers
+  const headers = [
+    "ID",
+    "Submission Date",
+    "Status",
+    "Leave Start Date",
+    "Leave End Date",
+    "View",
+  ];
+
+  // Render loading component if data is still being fetched
   if (loading) {
     return <LoadingComponent loadingMsg="Fetching Leave Requests..." />;
   }
 
-  return <RequestsTable title="Leave Requests" data={requestData} />;
+  return (
+    <div className="app-container">
+      <Title
+        order={2}
+        style={{ fontWeight: "500", marginTop: "40px", marginLeft: "15px" }}
+      >
+        Leave Requests
+      </Title>
+
+      {/* Filter Section */}
+      <div style={{ margin: "20px 15px", display: "flex", gap: "20px" }}>
+        <TextInput
+          label="Filter by Date"
+          placeholder="Select or enter a date"
+          type="date"
+          value={selectedDate}
+          onChange={handleDateFilterChange}
+          style={{ maxWidth: "300px" }}
+        />
+        <Select
+          label="Filter by Status"
+          placeholder="Select a status"
+          value={selectedStatus}
+          onChange={handleStatusFilterChange}
+          data={[
+            { value: "All", label: "All" },
+            { value: "Pending", label: "Pending" },
+            { value: "Accepted", label: "Accepted" },
+            { value: "Rejected", label: "Rejected" },
+          ]}
+        />
+      </div>
+
+      {/* Display EmptyTable if no data is found */}
+      {filteredData.length === 0 ? (
+        <EmptyTable
+          title="No Leave Requests Found"
+          message="There are no leave requests available. Please check back later."
+        />
+      ) : (
+        <div className="form-table-container">
+          <table className="form-table">
+            <thead>
+              <tr>
+                {headers.map((header, index) => (
+                  <th key={index} className="table-header">
+                    {header}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {filteredData.map((item, index) => (
+                <tr className="table-row" key={index}>
+                  <td>{item.id}</td>
+                  <td>{item.submissionDate}</td>
+                  <td>
+                    <span
+                      style={{
+                        color: getStatusColor(item.status),
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {item.status}
+                    </span>
+                  </td>
+                  <td>{item.leaveStartDate}</td>
+                  <td>{item.leaveEndDate}</td>
+                  <td>
+                    <span
+                      className="text-link"
+                      onClick={() => handleViewClick(item.id)}
+                      style={{ color: getStatusColor(item.status) }}
+                    >
+                      <Eye size={20} />
+                      View
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default LeaveRequests;
