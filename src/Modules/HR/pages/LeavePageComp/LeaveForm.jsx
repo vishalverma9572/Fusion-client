@@ -219,24 +219,23 @@ const LeaveForm = () => {
 
   return (
     <Box
-      sx={{
-        maxWidth: "850px",
-        margin: "auto",
-        padding: "30px",
-        border: "1px solid #ddd",
+      style={{
+        padding: "25px 30px",
+        margin: "20px 5px",
+        border: "1px solid #e0e0e0",
         borderRadius: "8px",
-        backgroundColor: "#f9f9f9",
       }}
     >
       {/* Section 1: Your Details */}
-      <br />
+
       <Title order={4}>Your Details</Title>
-      <br />
 
       <Grid gutter="lg" style={{ padding: "0 20px" }}>
         {/* Loading or error message */}
-        {loading && <p>Loading your details...</p>}
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        <Grid.Col span={12}>
+          {loading && <p>Loading your details...</p>}
+          {error && <p style={{ color: "red" }}>{error}</p>}
+        </Grid.Col>
 
         <Grid.Col span={6}>
           <TextInput

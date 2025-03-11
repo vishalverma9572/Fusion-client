@@ -151,7 +151,12 @@ function LeaveRequests() {
             </thead>
             <tbody>
               {filteredData.map((item, index) => (
-                <tr className="table-row" key={index}>
+                <tr
+                  className="table-row"
+                  key={index}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleViewClick(item.id)}
+                >
                   <td>{item.id}</td>
                   <td>{item.submissionDate}</td>
                   <td>
@@ -167,11 +172,7 @@ function LeaveRequests() {
                   <td>{item.leaveStartDate}</td>
                   <td>{item.leaveEndDate}</td>
                   <td>
-                    <span
-                      className="text-link"
-                      onClick={() => handleViewClick(item.id)}
-                      style={{ color: getStatusColor(item.status) }}
-                    >
+                    <span className="text-link">
                       <Eye size={20} />
                       View
                     </span>

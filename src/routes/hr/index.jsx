@@ -5,6 +5,11 @@ export const search_employees = `${host}/hr2/api/search_employees`;
 
 export const get_leave_balance = `${host}/hr2/api/get_leave_balance`;
 export const submit_leave_form = `${host}/hr2/api/submit_leave_form`;
+export const get_leave_form_by_id = `${host}/hr2/api/get_leave_form_by_id`;
+export const handle_leave_academic_responsibility = `${host}/hr2/api/handle_leave_academic_responsibility`;
+export const handle_leave_administrative_responsibility = `${host}/hr2/api/handle_leave_administrative_responsibility`;
+export const download_leave_form_pdf = `${host}/hr2/api/download_leave_form_pdf`;
+export const get_leave_inbox = `${host}/hr2/api/get_leave_inbox`;
 
 export const search_employee = `${host}/hr2/api/search_employee`;
 export const get_my_details = `${host}/hr2/api/get_my_details`;
@@ -13,7 +18,7 @@ export const get_form_track = (formId) =>
 export const get_form_id = `${host}/hr2/api/get_form_id`;
 // Leave routes
 export const get_leave_requests = `${host}/hr2/api/get_leave_requests`;
-export const get_leave_inbox = `${host}/hr2/api/get_leave_inbox`;
+
 export const get_leave_archive = `${host}/hr2/api/get_leave_archive`;
 
 export const view_leave_form = `${host}/hr2/api/view_leave_form_data`;

@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import CustomBreadcrumbs from "../../../components/Breadcrumbs"; // Your breadcrumbs component
 import classes from "./LeavePage.module.css"; // Add your styles here
 import LeaveForm from "./LeavePageComp/LeaveForm";
-import LeaveArchive from "./LeavePageComp/LeaveArchive";
+// import LeaveArchive from "./LeavePageComp/LeaveArchive";
 import LeaveInbox from "./LeavePageComp/LeaveInbox";
 import LeaveRequests from "./LeavePageComp/LeaveRequests";
 import HrBreadcrumbs from "../components/HrBreadcrumbs";
@@ -15,7 +15,7 @@ const tabItems = [
   { title: "Leave Form", path: "/hr/leave/leaveform" },
   { title: "Leave Requests", path: "/hr/leave/leaverequests" },
   { title: "Leave Inbox", path: "/hr/leave/leaveinbox" },
-  { title: "Leave Archive", path: "/hr/leave/leavearchive" },
+  // { title: "Leave Archive", path: "/hr/leave/leavearchive" },
 ];
 
 function Leave() {
@@ -116,7 +116,7 @@ function Leave() {
           </Tabs>
         </div>
         <Button
-          style={{ marginLeft: "220px" }}
+          style={{ marginLeft: "85px" }}
           onClick={() => handleButtonChange("next")}
           variant="default"
           p={0}
@@ -136,7 +136,7 @@ function Leave() {
           {activeTab === "0" && <LeaveForm />}
           {activeTab === "1" && <LeaveRequests />}
           {activeTab === "2" && <LeaveInbox />}
-          {activeTab === "3" && <LeaveArchive />}
+          {/* {activeTab === "3" && <LeaveArchive />} */}
         </div>
       )}
     </>

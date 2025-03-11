@@ -1,6 +1,15 @@
-import React from "react";
-import { useEffect, useState } from "react";
-import { Button, Select, Title } from "@mantine/core";
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  Select,
+  Title,
+  Box,
+  Grid,
+  Text,
+  Badge,
+  Divider,
+  Anchor,
+} from "@mantine/core";
 import {
   PaperPlaneRight,
   ArrowBendUpRight,
@@ -18,18 +27,19 @@ import {
   FloppyDisk,
   UserList,
 } from "@phosphor-icons/react";
-import { useDispatch, useSelector } from "react-redux";
-import { updateForm, resetForm } from "../../../../redux/formSlice";
-import "./LeaveFormView.css";
+import { useParams } from "react-router-dom";
 import HrBreadcrumbs from "../../components/HrBreadcrumbs";
-import { Link, useParams } from "react-router-dom";
 import LoadingComponent from "../../components/Loading";
 import { EmptyTable } from "../../components/tables/EmptyTable";
-import { view_leave_form } from "../../../../routes/hr";
+import {
+  get_leave_form_by_id,
+  download_leave_form_pdf,
+} from "../../../../routes/hr";
+import "./LeaveFormView.css";
 
 const LeaveFormView = () => {
   const { id } = useParams();
-  const [fetchedformData, setfetchedformData] = useState(null);
+  const [fetchedformData, setFetchedFormData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const exampleItems = [
@@ -40,7 +50,7 @@ const LeaveFormView = () => {
   ];
 
   useEffect(() => {
-    const fetchfetchedformData = async () => {
+    const fetchFormData = async () => {
       const token = localStorage.getItem("authToken");
       if (!token) {
         console.error("No authentication token found!");
@@ -49,7 +59,7 @@ const LeaveFormView = () => {
       }
 
       try {
-        const response = await fetch(`${view_leave_form}/${id}`, {
+        const response = await fetch(`${get_leave_form_by_id}/${id}`, {
           headers: { Authorization: `Token ${token}` },
         });
 
@@ -59,7 +69,7 @@ const LeaveFormView = () => {
 
         const data = await response.json();
         console.log(data);
-        setfetchedformData(data);
+        setFetchedFormData(data.leave_form); // Assuming the API returns data in a `leave_form` key
         setLoading(false);
       } catch (error) {
         console.error("Failed to fetch form data:", error);
@@ -67,7 +77,7 @@ const LeaveFormView = () => {
       }
     };
 
-    fetchfetchedformData();
+    fetchFormData();
   }, [id]);
 
   if (loading) {
@@ -83,279 +93,351 @@ const LeaveFormView = () => {
     );
   }
 
+  const handleDownloadPdf = async () => {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      console.error("No authentication token found!");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${download_leave_form_pdf}/${id}`, {
+        headers: { Authorization: `Token ${token}` },
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = fetchedformData.attachedPdfName;
+      a.click();
+    } catch (error) {
+      console.error("Failed to download PDF:", error);
+    }
+  };
+
   return (
     <>
       <HrBreadcrumbs items={exampleItems} />
-      {/* //title  */}
-      <Title
-        order={2}
-        style={{ fontWeight: "500", marginTop: "40px", marginLeft: "15px" }}
+      {/* Title */}
+      <Box
+        style={{
+          padding: "25px 30px",
+          margin: "20px 5px",
+          border: "1px solid #e0e0e0",
+          borderRadius: "8px",
+        }}
       >
-        Leave Form Details
-      </Title>
+        <Title order={2} style={{ fontWeight: "500", marginBottom: "20px" }}>
+          Leave Form Details
+        </Title>
+        <Grid>
+          <Grid.Col span={6}>
+            <Text>
+              <strong>Status:</strong>{" "}
+              <Badge
+                color={
+                  fetchedformData.status === "Accepted"
+                    ? "green"
+                    : fetchedformData.status === "Rejected"
+                      ? "red"
+                      : "yellow"
+                }
+              >
+                {fetchedformData.status}
+              </Badge>
+            </Text>
+          </Grid.Col>
+        </Grid>
 
-      <div className="leave_container">
-        <Link
-          to={`/hr/FormView/leaveform_track/${fetchedformData.file_id}`}
-          style={{
-            display: "inline-block",
-            padding: "10px 20px",
-            backgroundColor: "#007bffcc", // Blue background, adjust color as needed
-            color: "#fff",
-            textDecoration: "none",
-            borderRadius: "4px",
-            textAlign: "center",
-            fontWeight: "bold",
-            cursor: "pointer",
-            marginBottom: "20px",
+        {/* Form Data Display */}
+        <Box
+          sx={{
+            maxWidth: "850px",
+            margin: "auto",
+            padding: "30px",
+            border: "1px solid #ddd",
+            borderRadius: "8px",
+            backgroundColor: "#f9f9f9",
           }}
-          // Add hover effect
-          onMouseEnter={(e) => (e.target.style.backgroundColor = "#007bff")}
-          onMouseLeave={(e) => (e.target.style.backgroundColor = "#007bffcc")}
         >
-          Track Status
-        </Link>
-        <form>
-          {/* Section 1: Name, Designation (Left), Application Date (Right) */}
-          <div className="grid-row">
-            <div className="grid-col left-side">
-              <label className="input-label" htmlFor="name">
-                Name
-              </label>
-              <div className="input-wrapper">
-                <User size={20} />
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={fetchedformData.name}
-                  placeholder="Name"
-                  className="input"
-                  disabled
-                />
-              </div>
-              <label
-                className="input-label"
-                style={{ marginTop: "20px" }}
-                htmlFor="designation"
-              >
-                Designation
-              </label>
-              <div className="input-wrapper">
-                <Tag size={20} />
-                <input
-                  type="text"
-                  id="designation"
-                  name="designation"
-                  placeholder="Designation"
-                  value={fetchedformData.designation}
-                  className="input"
-                  disabled
-                />
-              </div>
-            </div>
+          {/* Section 1: Your Details */}
+          <Title order={4} style={{ marginTop: "30px" }}>
+            Employee Details{" "}
+          </Title>
+          <Divider my="sm" />
+          <Grid gutter="lg" style={{ padding: "0 20px" }}>
+            <Grid.Col span={6}>
+              <Text>
+                <strong>Name:</strong> {fetchedformData.name}
+              </Text>
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <Text>
+                <strong>Designation:</strong> {fetchedformData.designation}
+              </Text>
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <Text>
+                <strong>Personal File Number:</strong> {fetchedformData.pfno}
+              </Text>
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <Text>
+                <strong>Department:</strong> {fetchedformData.department}
+              </Text>
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <Text>
+                <strong>Submission Date:</strong>{" "}
+                {fetchedformData.submissionDate}
+              </Text>
+            </Grid.Col>
+          </Grid>
 
-            <div className="grid-col right-side">
-              <label
-                className="input-label"
-                style={{ textAlign: "center", marginTop: "50px" }}
-                htmlFor="submissionDate"
-              >
-                Application Date
-              </label>
-              <div
-                className="input-wrapper center"
-                style={{ width: "300px", margin: "auto" }}
-              >
-                <Calendar size={20} />
-                <input
-                  type="date"
-                  id="submissionDate"
-                  name="submissionDate"
-                  value={fetchedformData.submissionDate}
-                  className="input center"
-                  disabled
-                />
-              </div>
-            </div>
-          </div>
+          {/* Section 2: Leave Details */}
+          <Title order={4} mt="xl" style={{ marginTop: "30px" }}>
+            Leave Details
+          </Title>
+          <Divider my="sm" />
+          <Grid gutter="lg" style={{ padding: "0 20px" }}>
+            <Grid.Col span={6}>
+              <Text>
+                <strong>Leave Start Date:</strong>{" "}
+                {fetchedformData.leaveStartDate}
+              </Text>
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <Text>
+                <strong>Leave End Date:</strong> {fetchedformData.leaveEndDate}
+              </Text>
+            </Grid.Col>
+            <Grid.Col span={12}>
+              <Text>
+                <strong>Purpose of Leave:</strong> {fetchedformData.purpose}
+              </Text>
+            </Grid.Col>
+            <Grid.Col span={12}>
+              <Text>
+                <strong>Remarks:</strong> {fetchedformData.remarks}
+              </Text>
+            </Grid.Col>
+          </Grid>
 
-          {/* Section 2: Discipline/Department (Left), PF Number (Right) */}
-          <div className="grid-row">
-            <div className="grid-col">
-              <label className="input-label" htmlFor="departmentInfo">
-                Department
-              </label>
-              <div className="input-wrapper">
-                <Building size={20} />
-                <input
-                  type="text"
-                  id="departmentInfo"
-                  name="departmentInfo"
-                  placeholder="Department Name"
-                  value={fetchedformData.departmentInfo}
-                  className="input"
-                  disabled
-                />
-              </div>
-            </div>
+          {/* Section 3: Leave Types */}
+          <Title order={4} mt="xl" style={{ marginTop: "30px" }}>
+            Leave Types
+          </Title>
+          <Divider my="sm" />
+          <Grid gutter="lg" style={{ padding: "0 20px" }}>
+            <Grid.Col span={6}>
+              <Text>
+                <strong>Casual Leave:</strong> {fetchedformData.casualLeave}{" "}
+                (Balance: {fetchedformData.cadualLeaveBalance})
+              </Text>
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <Text>
+                <strong>Vacation Leave:</strong> {fetchedformData.vacationLeave}{" "}
+                (Balance: {fetchedformData.vacationLeaveBalance})
+              </Text>
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <Text>
+                <strong>Earned Leave:</strong> {fetchedformData.earnedLeave}{" "}
+                (Balance: {fetchedformData.earnedLeaveBalance})
+              </Text>
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <Text>
+                <strong>Commuted Leave:</strong> {fetchedformData.commutedLeave}{" "}
+                (Balance: {fetchedformData.commutedLeaveBalance})
+              </Text>
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <Text>
+                <strong>Special Casual Leave:</strong>{" "}
+                {fetchedformData.specialCasualLeave} (Balance:{" "}
+                {fetchedformData.specialCasualLeaveBalance})
+              </Text>
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <Text>
+                <strong>Restricted Holiday:</strong>{" "}
+                {fetchedformData.restrictedHoliday} (Balance:{" "}
+                {fetchedformData.restrictedHolidayBalance})
+              </Text>
+            </Grid.Col>
+          </Grid>
 
-            <div className="grid-col">
-              <label className="input-label" htmlFor="pfNo">
-                PF Number
-              </label>
-              <div className="input-wrapper">
-                <IdentificationCard size={20} />
-                <input
-                  type="number"
-                  id="pfNo"
-                  name="pfNo"
-                  placeholder="XXXXXXXXXXXX"
-                  value={fetchedformData.pfNo}
-                  className="input"
-                  required
-                />
-              </div>
-            </div>
-          </div>
+          {/* Section 4: Station Leave */}
+          {fetchedformData.stationLeave && (
+            <>
+              <Title order={4} mt="xl" style={{ marginTop: "30px" }}>
+                Station Leave Details
+              </Title>
+              <Divider my="sm" />
+              <Grid gutter="lg" style={{ padding: "0 20px" }}>
+                <Grid.Col span={6}>
+                  <Text>
+                    <strong>Station Leave Start Date:</strong>{" "}
+                    {fetchedformData.stationLeaveStartDate}
+                  </Text>
+                </Grid.Col>
+                <Grid.Col span={6}>
+                  <Text>
+                    <strong>Station Leave End Date:</strong>{" "}
+                    {fetchedformData.stationLeaveEndDate}
+                  </Text>
+                </Grid.Col>
+                <Grid.Col span={12}>
+                  <Text>
+                    <strong>Address During Station Leave:</strong>{" "}
+                    {fetchedformData.stationLeaveAddress}
+                  </Text>
+                </Grid.Col>
+              </Grid>
+            </>
+          )}
 
-          {/* Section 3: Nature of Leave, Leave Start Date, Leave End Date */}
-          <div className="grid-row three-columns">
-            <div className="grid-col">
-              <label className="input-label" htmlFor="natureOfLeave">
-                Nature of Leave
-              </label>
-              <div className="input-wrapper">
-                <Building size={20} />
-                <input
-                  type="text"
-                  id="natureOfLeave"
-                  name="natureOfLeave"
-                  value={fetchedformData.natureOfLeave}
-                  className="input"
-                  disabled
-                />
-              </div>
-            </div>
+          {/* Section 5: Responsibility Transfer */}
+          <Title order={4} mt="xl" style={{ marginTop: "30px" }}>
+            Responsibility Transfer
+          </Title>
+          <Divider my="sm" />
+          <Grid gutter="lg" style={{ padding: "0 20px" }}>
+            <Grid.Col span={6}>
+              <Text style={{ marginBottom: "10px" }}>
+                <strong>Academic Responsibility:</strong>{" "}
+                {fetchedformData.academicResponsibility}
+              </Text>
+              <Text style={{ marginBottom: "10px" }}>
+                <strong>Academic Responsibility Designation:</strong>{" "}
+                {fetchedformData.academicResponsibilityDesignation}
+              </Text>
+              <Text style={{ marginBottom: "10px" }}>
+                <strong>Academic Responsibility Status:</strong>{" "}
+                <Badge
+                  color={
+                    fetchedformData.academicResponsibilityStatus === "Accepted"
+                      ? "green"
+                      : fetchedformData.academicResponsibilityStatus ===
+                          "Rejected"
+                        ? "red"
+                        : "yellow"
+                  }
+                >
+                  {fetchedformData.academicResponsibilityStatus}
+                </Badge>
+              </Text>
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <Text style={{ marginBottom: "10px" }}>
+                <strong>Administrative Responsibility:</strong>{" "}
+                {fetchedformData.administrativeResponsibility}
+              </Text>
+              <Text style={{ marginBottom: "10px" }}>
+                <strong>Administrative Responsibility Designation:</strong>{" "}
+                {fetchedformData.administrativeResponsibilityDesignation}
+              </Text>
+              <Text style={{ marginBottom: "10px" }}>
+                <strong>Administrative Responsibility Status:</strong>{" "}
+                <Badge
+                  color={
+                    fetchedformData.administrativeResponsibilityStatus ===
+                    "Accepted"
+                      ? "green"
+                      : fetchedformData.administrativeResponsibilityStatus ===
+                          "Rejected"
+                        ? "red"
+                        : "yellow"
+                  }
+                >
+                  {fetchedformData.administrativeResponsibilityStatus}
+                </Badge>
+              </Text>
+            </Grid.Col>
+          </Grid>
 
-            <div className="grid-col">
-              <label className="input-label" htmlFor="leaveStartDate">
-                Leave Start Date
-              </label>
-              <div className="input-wrapper">
-                <Calendar size={20} />
-                <input
-                  type="date"
-                  id="leaveStartDate"
-                  name="leaveStartDate"
-                  value={fetchedformData.leaveStartDate}
-                  className="input"
-                  disabled
-                />
-              </div>
-            </div>
+          {/* Section 6: Attachments */}
+          <Title order={4} mt="xl">
+            Attachments
+          </Title>
+          <Divider my="sm" />
+          <Grid gutter="lg" style={{ padding: "0 20px" }}>
+            <Grid.Col span={6}>
+              <Text>
+                <strong>Attached PDF:</strong>{" "}
+                {fetchedformData.attachedPdfName ? (
+                  <Anchor onClick={(e) => handleDownloadPdf(e)} download>
+                    {fetchedformData.attachedPdfName}
+                  </Anchor>
+                ) : (
+                  "No file attached"
+                )}
+              </Text>
+            </Grid.Col>
+          </Grid>
 
-            <div className="grid-col">
-              <label className="input-label" htmlFor="leaveEndDate">
-                Leave End Date
-              </label>
-              <div className="input-wrapper">
-                <Calendar size={20} />
-                <input
-                  type="date"
-                  id="leaveEndDate"
-                  name="leaveEndDate"
-                  value={fetchedformData.leaveEndDate}
-                  disabled
-                  className="input"
-                  required
-                />
-              </div>
-            </div>
-          </div>
+          {/* Section 6: Forward Application  only show if status is pending*/}
+          {fetchedformData.status === "Pending" && (
+            <>
+              <Title order={4} mt="xl" style={{ marginTop: "30px" }}>
+                Forward Application
+              </Title>
+              <Divider my="sm" />
+              <Grid gutter="lg" style={{ padding: "0 20px" }}>
+                <Grid.Col span={6}>
+                  <Text>
+                    <strong>Next reciever:</strong>{" "}
+                    {fetchedformData.firstRecievedBy}
+                  </Text>
+                </Grid.Col>
+                <Grid.Col span={6}>
+                  <Text>
+                    <strong>Next reciever's Designation:</strong>{" "}
+                    {fetchedformData.firstRecievedByDesignation}
+                  </Text>
+                </Grid.Col>
+              </Grid>
+            </>
+          )}
 
-          {/* Section 4: Purpose of Leave */}
-          <div className="grid-row">
-            <div className="purpose">
-              <label className="input-label" htmlFor="purposeOfLeave">
-                Purpose
-              </label>
-              <div className="input-wrapper">
-                <ClipboardText size={20} />
-                <input
-                  type="text"
-                  id="purposeOfLeave"
-                  name="purposeOfLeave"
-                  placeholder="purpose Of Leave"
-                  value={fetchedformData.purposeOfLeave}
-                  className="input"
-                  aria-rowcount={2}
-                  disabled
-                />
-              </div>
-            </div>
-            <div className="grid-col">
-              <label className="input-label" htmlFor="addressDuringLeave">
-                Adress during Leave
-              </label>
-              <div className="input-wrapper">
-                <UserList size={20} />
-                <input
-                  type="text"
-                  id="addressDuringLeave"
-                  name="addressDuringLeave"
-                  placeholder="Full Address"
-                  value={fetchedformData.addressDuringLeave}
-                  className="input"
-                  disabled
-                />
-              </div>
-            </div>
-          </div>
+          {/* Section 7: Approval  }
+          {fetchedformData.status === "Accepted" && (
+            <>
+              <Title order={4} mt="xl">
+                Approval
+              </Title>
+              <Divider my="sm" />
+              <Grid gutter="lg" style={{ padding: "0 20px" }}>
+                <Grid.Col span={6}>
+                  <Text>
+                    <strong>Approved By:</strong> {fetchedformData.approvedBy}
+                  </Text>
+                </Grid.Col>
+                <Grid.Col span={6}>
+                  <Text>
+                    <strong>Designation:</strong>{" "}
+                    {fetchedformData.approvedByDesignation}
+                  </Text>
+                </Grid.Col>
+                <Grid.Col span={6}>
+                  <Text>
+                    <strong>Approved Date:</strong> {fetchedformData.approvedDate}
+                  </Text>
+                </Grid.Col>
+              </Grid>
+            </>
+          )}
 
-          {/* Section 5: Academic and Administrative Responsibility */}
-          <div className="grid-row">
-            <div className="grid-col">
-              <label className="input-label" htmlFor="academicResponsibility">
-                Academic Responsibility
-              </label>
-              <div className="input-wrapper">
-                <Tag size={20} />
-                <input
-                  type="text"
-                  id="academicResponsibility"
-                  name="academicResponsibility"
-                  placeholder="Enter the name"
-                  value={fetchedformData.academicResponsibility}
-                  className="input"
-                  disabled
-                />
-              </div>
-            </div>
-
-            <div className="grid-col">
-              <label
-                className="input-label"
-                htmlFor="addministrativeResponsibiltyAssigned"
-              >
-                Administrative Responsibility
-              </label>
-              <div className="input-wrapper">
-                <Tag size={20} />
-                <input
-                  type="text"
-                  id="addministrativeResponsibiltyAssigned"
-                  name="addministrativeResponsibiltyAssigned"
-                  placeholder="Enter the name"
-                  value={fetchedformData.addministrativeResponsibiltyAssigned}
-                  className="input"
-                  disabled
-                />
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
+          {/* Section 8: Rejection */}
+        </Box>
+      </Box>
     </>
   );
 };

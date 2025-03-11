@@ -10,6 +10,7 @@ import FormView from "./pages/FormView";
 import CPDA_ADVANCEView from "./pages/CPDA_ADVANCEPageComp/CPDA_ADVANCEView";
 import LeaveFormView from "./pages/LeavePageComp/LeaveFormView";
 import LeaveFilehandle from "./pages/LeavePageComp/Leave_file_handle";
+import LeaveHandleResponsibility from "./pages/LeavePageComp/Leave_Handle_Responsibility";
 
 export default function HR() {
   return (
@@ -19,6 +20,10 @@ export default function HR() {
       {/* Render LeavePage at /hr/leave */}
       <Route path="leave/file_handler/:id" element={<LeaveFilehandle />} />
       <Route path="leave/view/:id" element={<LeaveFormView />} />
+      <Route
+        path="leave/handle_responsibility/:id"
+        element={<LeaveHandleResponsibility />}
+      />
       <Route path="leave/*" element={<LeavePage />} />
 
       {/* Route for the CPDA Advance View page */}
