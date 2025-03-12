@@ -142,18 +142,30 @@ const LeaveHandleResponsibility = () => {
           borderRadius: "8px",
         }}
       >
-        <Title
-          order={2}
-          style={{
-            fontWeight: "500",
-            marginLeft: "15px",
-            marginBottom: "20px",
-          }}
-        >
+        <Title order={2} style={{ fontWeight: "500", marginBottom: "20px" }}>
           Handle{" "}
           {responsibilityType === "academic" ? "Academic" : "Administrative"}{" "}
           Responsibility
         </Title>
+        <Grid>
+          <Grid.Col span={6}>
+            <Text>
+              <strong>Application Status:</strong>{" "}
+              <Badge
+                color={
+                  fetchedformData.status === "Accepted"
+                    ? "green"
+                    : fetchedformData.status === "Rejected"
+                      ? "red"
+                      : "yellow"
+                }
+              >
+                {fetchedformData.status}
+              </Badge>
+            </Text>
+          </Grid.Col>
+        </Grid>
+        <br />
 
         {/* Form Data Display */}
         <Box

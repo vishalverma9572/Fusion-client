@@ -27,7 +27,7 @@ import {
   FloppyDisk,
   UserList,
 } from "@phosphor-icons/react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import HrBreadcrumbs from "../../components/HrBreadcrumbs";
 import LoadingComponent from "../../components/Loading";
 import { EmptyTable } from "../../components/tables/EmptyTable";
@@ -41,6 +41,7 @@ const LeaveFormView = () => {
   const { id } = useParams();
   const [fetchedformData, setFetchedFormData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const exampleItems = [
     { title: "Home", path: "/dashboard" },
@@ -136,6 +137,8 @@ const LeaveFormView = () => {
           Leave Form Details
         </Title>
         <Grid>
+          {/* Left Column: Status Badge */}
+
           <Grid.Col span={6}>
             <Text>
               <strong>Status:</strong>{" "}
@@ -152,6 +155,28 @@ const LeaveFormView = () => {
               </Badge>
             </Text>
           </Grid.Col>
+
+          {/* Right Column: Track Status Button */}
+          {fetchedformData.academicResponsibilityStatus === "Accepted" &&
+            fetchedformData.administrativeResponsibilityStatus ===
+              "Accepted" && (
+              <Grid.Col
+                span={6}
+                style={{ display: "flex", justifyContent: "flex-end" }}
+              >
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    // Add functionality to track status
+                    navigate(
+                      `../FormView/leaveform_track/${fetchedformData.file_id}`,
+                    );
+                  }}
+                >
+                  Track Status
+                </Button>
+              </Grid.Col>
+            )}
         </Grid>
 
         {/* Form Data Display */}
@@ -383,31 +408,34 @@ const LeaveFormView = () => {
             </Grid.Col>
           </Grid>
 
-          {/* Section 6: Forward Application  only show if status is pending*/}
-          {fetchedformData.status === "Pending" && (
-            <>
-              <Title order={4} mt="xl" style={{ marginTop: "30px" }}>
-                Forward Application
-              </Title>
-              <Divider my="sm" />
-              <Grid gutter="lg" style={{ padding: "0 20px" }}>
-                <Grid.Col span={6}>
-                  <Text>
-                    <strong>Next reciever:</strong>{" "}
-                    {fetchedformData.firstRecievedBy}
-                  </Text>
-                </Grid.Col>
-                <Grid.Col span={6}>
-                  <Text>
-                    <strong>Next reciever's Designation:</strong>{" "}
-                    {fetchedformData.firstRecievedByDesignation}
-                  </Text>
-                </Grid.Col>
-              </Grid>
-            </>
-          )}
+          {/* Section 6: Forward Application  only show if status is pending and atleast one responsibility is pending*/}
+          {fetchedformData.status === "Pending" &&
+            (fetchedformData.academicResponsibilityStatus === "Pending" ||
+              fetchedformData.administrativeResponsibilityStatus ===
+                "Pending") && (
+              <>
+                <Title order={4} style={{ marginTop: "30px" }}>
+                  Forward Application
+                </Title>
+                <Divider my="sm" />
+                <Grid gutter="lg" style={{ padding: "0 20px" }}>
+                  <Grid.Col span={6}>
+                    <Text>
+                      <strong>Next receiver:</strong>{" "}
+                      {fetchedformData.firstRecievedBy}
+                    </Text>
+                  </Grid.Col>
+                  <Grid.Col span={6}>
+                    <Text>
+                      <strong>Next receiver's Designation:</strong>{" "}
+                      {fetchedformData.firstRecievedByDesignation}
+                    </Text>
+                  </Grid.Col>
+                </Grid>
+              </>
+            )}
 
-          {/* Section 7: Approval  }
+          {/* Section 7: Approval  */}
           {fetchedformData.status === "Accepted" && (
             <>
               <Title order={4} mt="xl">
@@ -428,14 +456,13 @@ const LeaveFormView = () => {
                 </Grid.Col>
                 <Grid.Col span={6}>
                   <Text>
-                    <strong>Approved Date:</strong> {fetchedformData.approvedDate}
+                    <strong>Approved Date:</strong>{" "}
+                    {fetchedformData.approvedDate}
                   </Text>
                 </Grid.Col>
               </Grid>
             </>
           )}
-
-          {/* Section 8: Rejection */}
         </Box>
       </Box>
     </>

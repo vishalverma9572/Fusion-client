@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import InboxTable from "../../components/tables/InboxTable";
-import { get_leave_inbox, get_form_track } from "../../../../routes/hr/index"; // Ensure this is the correct import path
+
+import { get_form_track } from "../../../../routes/hr/index"; // Ensure this is the correct import path
 import { useParams } from "react-router-dom";
 import LoadingComponent from "../../components/Loading"; // Ensure this is the correct import path
 import TrackTable from "../../components/tables/TrackTable";
@@ -17,7 +17,7 @@ function LeaveTrack() {
     { title: "Leave Management", path: "/hr/leave" },
     { title: "Track", path: `${currentPath}` },
   ];
-
+  console.log("checking");
   useEffect(() => {
     const fetchLeaveTrack = async () => {
       const token = localStorage.getItem("authToken");

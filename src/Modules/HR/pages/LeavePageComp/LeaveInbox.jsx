@@ -5,7 +5,7 @@ import { Eye } from "@phosphor-icons/react";
 import LoadingComponent from "../../components/Loading";
 import { EmptyTable } from "../../components/tables/EmptyTable";
 import { get_leave_inbox } from "../../../../routes/hr/index";
-// import "./LeaveInbox.css";
+import "./LeaveInbox.css";
 
 function LeaveInbox() {
   const [inboxData, setInboxData] = useState([]);
@@ -74,7 +74,7 @@ function LeaveInbox() {
   };
 
   const handle_leave_request_click = (id) => {
-    navigate(`./view/${id}`);
+    navigate(`./file_handler/${id}`);
   };
 
   const getStatusBadge = (status) => {
@@ -235,9 +235,10 @@ function LeaveInbox() {
                         );
                         break;
                       default:
-                        handle_leave_request_click(item.id);
+                        handle_leave_request_click(item.src_object_id);
                     }
                   }}
+                  style={{ cursor: "pointer" }}
                 >
                   <td
                     style={{
@@ -252,7 +253,7 @@ function LeaveInbox() {
                   <td>{item.name || item.sent_by_user}</td>
                   <td>{item.designation || item.sent_by_designation}</td>
                   <td>{getStatusBadge(item.status)}</td>
-                  <td>
+                  <td className="text-link">
                     <Eye size={20} /> View
                   </td>
                 </tr>

@@ -12,10 +12,10 @@ const TrackTable = ({ title, data, exampleItems }) => {
     "Receive Date",
     "Forward Date",
     "Remarks",
-    "Current Id",
-    "Current Designation",
-    "Receiver Id",
-    "Receive Designation",
+    "Sender's username",
+
+    "Receiver's name",
+    "Receiver's Designation",
   ];
 
   return (
@@ -72,7 +72,7 @@ const TrackTable = ({ title, data, exampleItems }) => {
                   </td>
                   <td>{item.remarks}</td>
                   <td>{item.current_id}</td>
-                  <td>{item.current_design}</td>
+
                   <td>{item.receiver_id}</td>
                   <td>{item.receive_design}</td>
                 </tr>

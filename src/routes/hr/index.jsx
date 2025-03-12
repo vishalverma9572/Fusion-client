@@ -2,6 +2,8 @@ import { host } from "../globalRoutes";
 
 export const get_form_initials = `${host}/hr2/api/get_form_initials`;
 export const search_employees = `${host}/hr2/api/search_employees`;
+export const get_form_track = (formId) =>
+  `${host}/hr2/api/get_track_file/${formId}`;
 
 export const get_leave_balance = `${host}/hr2/api/get_leave_balance`;
 export const submit_leave_form = `${host}/hr2/api/submit_leave_form`;
@@ -10,11 +12,11 @@ export const handle_leave_academic_responsibility = `${host}/hr2/api/handle_leav
 export const handle_leave_administrative_responsibility = `${host}/hr2/api/handle_leave_administrative_responsibility`;
 export const download_leave_form_pdf = `${host}/hr2/api/download_leave_form_pdf`;
 export const get_leave_inbox = `${host}/hr2/api/get_leave_inbox`;
+export const handle_leave_file = `${host}/hr2/api/handle_leave_file`;
 
 export const search_employee = `${host}/hr2/api/search_employee`;
 export const get_my_details = `${host}/hr2/api/get_my_details`;
-export const get_form_track = (formId) =>
-  `${host}/hr2/api/get_track_file/${formId}`;
+
 export const get_form_id = `${host}/hr2/api/get_form_id`;
 // Leave routes
 export const get_leave_requests = `${host}/hr2/api/get_leave_requests`;
