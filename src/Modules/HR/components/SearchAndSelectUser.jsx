@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import { Select } from "@mantine/core";
+import { search_employees } from "../../../routes/hr/index";
 
 const SearchAndSelectUser = ({ onUserSelect }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [error, setError] = useState(null);
-  const apiUrl = "http://127.0.0.1:8000/hr2/api/search_employees/";
+
   const token = localStorage.getItem("authToken");
 
   const fetchUsers = async (searchText) => {
     // Trigger search only if at least 4 characters are entered
-    if (searchText.length < 4) {
+    if (searchText.length < 3) {
       setSearchResults([]); // Clear previous results
       return;
     }
@@ -25,11 +26,14 @@ const SearchAndSelectUser = ({ onUserSelect }) => {
     setError(null);
 
     try {
-      const response = await fetch(`${apiUrl}?search_text=${searchText}`, {
-        headers: {
-          Authorization: `Token ${token}`,
+      const response = await fetch(
+        `${search_employees}?search_text=${searchText}`,
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
         },
-      });
+      );
       if (!response.ok) {
         throw new Error(`Failed to fetch users: ${response.statusText}`);
       }
