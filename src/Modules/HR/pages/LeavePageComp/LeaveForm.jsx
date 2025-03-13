@@ -12,6 +12,7 @@ import {
 import { get_form_initials, submit_leave_form } from "../../../../routes/hr";
 import "./LeaveForm.css";
 import SearchAndSelectUser from "../../components/SearchAndSelectUser";
+import { useNavigate } from "react-router-dom";
 
 const LeaveForm = () => {
   const [stationLeave, setStationLeave] = useState(false);
@@ -37,7 +38,7 @@ const LeaveForm = () => {
   });
 
   const today = new Date().toISOString().split("T")[0];
-
+  const navigate = useNavigate();
   const [details, setDetails] = useState({
     name: "",
     last_selected_role: "",
@@ -46,6 +47,7 @@ const LeaveForm = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [activeSubmit, setActiveSubmit] = useState(true);
 
   // Fetch user details from the API
   const fetchDetails = async () => {
@@ -97,6 +99,8 @@ const LeaveForm = () => {
   };
 
   const handleSubmit = async () => {
+    // set the active submit button to false
+    setActiveSubmit(false);
     // Validation Checks
     if (
       !formData.leaveStartDate ||
@@ -108,6 +112,7 @@ const LeaveForm = () => {
       !forwardTo
     ) {
       alert("All fields are required!");
+      setActiveSubmit(true);
       return;
     }
 
@@ -120,6 +125,7 @@ const LeaveForm = () => {
       alert(
         "Station leave details are required when station leave is checked!",
       );
+      setActiveSubmit(true);
       return;
     }
 
@@ -138,6 +144,7 @@ const LeaveForm = () => {
         alert(
           `"${field.replace(/([A-Z])/g, " $1")}" must be a non-negative integer!`,
         );
+        setActiveSubmit(true);
         return;
       }
     }
@@ -205,15 +212,19 @@ const LeaveForm = () => {
       });
 
       if (!response.ok) {
+        setActiveSubmit(true);
         throw new Error(`Error submitting form: ${response.statusText}`);
       }
 
       const result = await response.json();
       alert("Form submitted successfully!");
+      setActiveSubmit(true);
+      navigate("/hr/leave/leaverequests"); // Redirect to the leave page
       console.log("Form submission result:", result);
     } catch (err) {
       console.error("Form submission failed:", err.message);
       alert("Form submission failed. Please try again.");
+      setActiveSubmit(true);
     }
   };
 
@@ -409,7 +420,7 @@ const LeaveForm = () => {
 
         <Grid.Col span={12}>
           <Textarea
-            label="Remarks (if any)"
+            label="Remarks (if not any enter N/A)"
             name="remarks"
             value={formData.remarks}
             onChange={handleInputChange}
@@ -481,6 +492,10 @@ const LeaveForm = () => {
       <Grid gutter="lg" style={{ padding: "0 20px" }}>
         {/* Replace Academic Responsibility Select */}
         <Grid.Col span={6}>
+          {/* label Academic Respondibility */}
+          <Title order={6} style={{ marginBottom: "10px", marginTop: "20px" }}>
+            Academic Respondibility
+          </Title>
           <SearchAndSelectUser
             onUserSelect={(user) => setAcademicResponsibility(user)}
           />
@@ -488,6 +503,9 @@ const LeaveForm = () => {
 
         {/* Replace Administrative Responsibility Select */}
         <Grid.Col span={6}>
+          <Title order={6} style={{ marginBottom: "10px", marginTop: "20px" }}>
+            Administrative Respondibility
+          </Title>
           <SearchAndSelectUser
             onUserSelect={(user) => setAdministrativeResponsibility(user)}
           />
@@ -496,7 +514,7 @@ const LeaveForm = () => {
 
       {/* Section 4: Forward Application */}
       <br />
-      <Title order={4} sx={{ marginBottom: "20px" }}>
+      <Title order={4} style={{ marginBottom: "10px" }}>
         Forward Application
       </Title>
       <SearchAndSelectUser onUserSelect={(user) => setForwardTo(user)} />
@@ -508,6 +526,7 @@ const LeaveForm = () => {
             backgroundColor: "#15abff",
             "&:hover": { backgroundColor: "#0e8ad8" },
           }}
+          disabled={!activeSubmit}
         >
           Submit
         </Button>

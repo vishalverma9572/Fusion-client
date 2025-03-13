@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Table, ScrollArea, Loader } from "@mantine/core";
+import { Modal, Button, ScrollArea, Loader } from "@mantine/core";
 import { ListChecks } from "@phosphor-icons/react";
 import { get_leave_balance } from "../../../../routes/hr";
 
@@ -96,46 +96,44 @@ const LeaveBalanceButton = () => {
           </div>
         ) : leaveBalance ? (
           <ScrollArea>
-            <Table striped highlightOnHover withBorder withColumnBorders>
-              <thead style={{ backgroundColor: "#f5f5f5" }}>
-                <tr>
-                  <th style={{ fontWeight: "bold" }}>Leave Type</th>
-                  <th style={{ fontWeight: "bold" }}>Allotted</th>
-                  <th style={{ fontWeight: "bold" }}>Taken</th>
-                  <th style={{ fontWeight: "bold" }}>Balance</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Object.entries(leaveBalance).map(([key, value], index) => (
-                  <tr
-                    key={key}
-                    style={{
-                      backgroundColor: index % 2 === 0 ? "#f9f9f9" : "white",
-                      height: "50px",
-                    }}
-                  >
-                    <td
-                      style={{
-                        fontWeight: "bold",
-                        textTransform: "capitalize",
-                      }}
-                    >
-                      {key.replace(/_/g, " ")}
-                    </td>
-                    <td>{value.allotted}</td>
-                    <td>{value.taken}</td>
-                    <td
-                      style={{
-                        fontWeight: "bold",
-                        color: value.balance === 0 ? "red" : "green",
-                      }}
-                    >
-                      {value.balance}
-                    </td>
+            <div
+              className="form-table-container"
+              style={{ margin: " 0 auto " }}
+            >
+              <table className="form-table">
+                <thead>
+                  <tr>
+                    <th className="table-header">Leave Type</th>
+                    <th className="table-header">Allotted</th>
+                    <th className="table-header">Taken</th>
+                    <th className="table-header">Balance</th>
                   </tr>
-                ))}
-              </tbody>
-            </Table>
+                </thead>
+                <tbody>
+                  {Object.entries(leaveBalance).map(([key, value], index) => (
+                    <tr
+                      className="table-row"
+                      key={key}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <td style={{ textTransform: "capitalize" }}>
+                        {key.replace(/_/g, " ")}
+                      </td>
+                      <td>{value.allotted}</td>
+                      <td>{value.taken}</td>
+                      <td
+                        style={{
+                          fontWeight: "bold",
+                          color: value.balance === 0 ? "red" : "green",
+                        }}
+                      >
+                        {value.balance}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </ScrollArea>
         ) : (
           <div style={{ textAlign: "center", fontWeight: "bold" }}>
