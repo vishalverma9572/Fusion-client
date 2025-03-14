@@ -14,7 +14,7 @@ export default function Inboxfunc() {
   const [selectedFile, setSelectedFile] = useState(null);
   const token = localStorage.getItem("authToken");
   const role = useSelector((state) => state.user.role);
-  const username = useSelector((state) => state.user.name);
+  const username = useSelector((state) => state.user.roll_no);
   let current_module = useSelector((state) => state.module.current_module);
   current_module = current_module.split(" ").join("").toLowerCase();
 
