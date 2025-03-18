@@ -178,7 +178,7 @@ export default function View({ onBack, fileID, updateFiles }) {
           <Button
             onClick={() => {
               console.log(file);
-              window.open(`${host}${file?.upload_file}`, "_blank");
+              window.open(`${host}/${file?.upload_file}`, "_blank");
             }}
           >
             Download Attachment
