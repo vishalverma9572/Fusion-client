@@ -20,6 +20,7 @@ import {
 import { notifications } from "@mantine/notifications";
 import axios from "axios";
 import { createFileRoute } from "../../../routes/filetrackingRoutes";
+import { host } from "../../../routes/globalRoutes";
 
 export default function View({ onBack, fileID, updateFiles }) {
   const [activeSection, setActiveSection] = useState(null);
@@ -177,10 +178,7 @@ export default function View({ onBack, fileID, updateFiles }) {
           <Button
             onClick={() => {
               console.log(file);
-              window.open(
-                `http://localhost:8000${file?.upload_file}`,
-                "_blank",
-              );
+              window.open(`${host}${file?.upload_file}`, "_blank");
             }}
           >
             Download Attachment
