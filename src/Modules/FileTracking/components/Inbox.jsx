@@ -232,6 +232,13 @@ export default function Inboxfunc() {
         radius="md"
         withBorder
         className="inbox-card"
+        style={{
+          backgroundColor: "#F5F7F8",
+          position: "absolute",
+          height: "70vh",
+          width: "90vw",
+          overflowY: "auto",
+        }}
       >
         {!selectedFile && (
           <Title order={2} mb="md" className="main-title">

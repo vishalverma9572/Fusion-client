@@ -60,7 +60,20 @@ function ViewDraft({ file, onBack }) {
   };
 
   return (
-    <Card shadow="sm" padding="lg" radius="md" withBorder>
+    <Card
+      // shadow="sm" padding="lg" radius="md" withBorder
+      shadow="sm"
+      padding="lg"
+      radius="m"
+      withBorder
+      style={{
+        backgroundColor: "#F5F7F8",
+        // position: "absolute",
+        height: "70vh",
+        width: "90vw",
+        overflowY: "auto",
+      }}
+    >
       <Box
         style={{
           display: "flex",

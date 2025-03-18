@@ -207,7 +207,14 @@ export default function Compose() {
       padding="lg"
       radius="md"
       withBorder
-      style={{ backgroundColor: "#F5F7F8", position: "relative" }}
+      className="inbox-card"
+      style={{
+        backgroundColor: "#F5F7F8",
+        position: "absolute",
+        height: "70vh",
+        width: "90vw",
+        overflowY: "auto",
+      }}
     >
       <Box
         style={{
@@ -314,10 +321,16 @@ export default function Compose() {
             <Select
               label="Receiver Designation"
               placeholder="Select designation"
-              onClick={() => fetchRoles()}
-              value={receiver_designation}
-              data={receiverRoles}
+              onClick={() => {
+                if (receiverRoles.length === 0) {
+                  fetchRoles();
+                }
+              }}
+              value={receiver_designation} // Use receiver_designation (string)
+              data={receiverRoles} // Ensure this is populated correctly
               onChange={(value) => setReceiverDesignation(value)}
+              searchable // Allows searching for designations
+              nothingFound="No designations found"
             />
           </Grid.Col>
         </Grid>

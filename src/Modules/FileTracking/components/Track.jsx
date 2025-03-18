@@ -253,7 +253,20 @@ export default function Track() {
         }
       `}</style>
 
-      <Card className="track-card">
+      <Card
+        shadow="sm"
+        padding="lg"
+        radius="md"
+        withBorder
+        style={{
+          backgroundColor: "#F5F7F8",
+          position: "absolute",
+          height: "70vh",
+          width: "90vw",
+          overflowY: "auto",
+        }}
+        className="track-card"
+      >
         {!selectedFile && (
           <Title order={2} mb="md" className="main-title">
             Track Files
