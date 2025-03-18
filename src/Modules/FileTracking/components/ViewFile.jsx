@@ -81,6 +81,7 @@ export default function View({ onBack, fileID, updateFiles }) {
   return (
     <Card
       shadow="sm"
+      padding="lg"
       radius="md"
       withBorder
       style={{
