@@ -95,8 +95,8 @@ function ViewDraft({ file, onBack }) {
       </Box>
 
       <TextInput
-        label="Description"
-        placeholder="Enter description"
+        label="Title"
+        placeholder="Enter Title"
         onChange={(e) => setTitle(e.currentTarget.value)}
         mb="sm"
       />
