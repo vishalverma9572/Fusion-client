@@ -4,6 +4,9 @@ import "@mantine/notifications/styles.css";
 import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import { Notifications } from "@mantine/notifications";
 import { Layout } from "./components/layout";
+// import { IwdRoutes } from "./Modules/Iwd/routes/index";
+import IwdModule from "./Modules/Iwd/index";
+import { DesignationsProvider } from "./Modules/Iwd/helper/designationContext";
 import Dashboard from "./Modules/Dashboard/dashboardNotifications";
 import ComplaintSystem from "./Modules/ComplaintManagement/index";
 import Profile from "./Modules/Dashboard/StudentProfile/profilePage";
@@ -78,6 +81,16 @@ export default function App() {
             <Layout>
               <Profile />
             </Layout>
+          }
+        />
+        <Route
+          path="/iwd"
+          element={
+            <DesignationsProvider>
+              <Layout>
+                <IwdModule />
+              </Layout>
+            </DesignationsProvider>
           }
         />
         <Route

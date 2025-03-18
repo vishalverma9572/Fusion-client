@@ -49,6 +49,7 @@ function SidebarContent({ isCollapsed, toggleSidebar }) {
     "mess_management",
     "visitor_hostel",
     "department",
+    "iwd",
   ];
 
   const Modules = [
@@ -153,7 +154,7 @@ function SidebarContent({ isCollapsed, toggleSidebar }) {
       label: "Institute Work Departments",
       id: "iwd",
       icon: <IWDIcon size={18} />,
-      url: "/",
+      url: "/iwd",
     },
     {
       label: "Hostel Management",
