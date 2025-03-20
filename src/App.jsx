@@ -1,4 +1,5 @@
 import { createTheme, MantineProvider } from "@mantine/core";
+import { useSelector } from "react-redux";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 import { Route, Routes, Navigate, useLocation } from "react-router-dom";
@@ -27,6 +28,11 @@ import InventoryManagement from "./Modules/Visitors_Hostel/inventory";
 import RoomsAvailibility from "./Modules/Visitors_Hostel/roomsAvailability";
 import AccountStatemnts from "./Modules/Visitors_Hostel/accountStatements";
 import FacultyProfessionalProfile from "./Modules/facultyProfessionalProfile/facultyProfessionalProfile";
+
+// eslint-disable-next-line import/no-unresolved
+import ConvenorBreadcumbs from "./Modules/Scholarship/convenor/components/ConvenorBreadcumbs";
+import UserBreadcrumbs from "./Modules/Scholarship/user/components/UserBreadcumbs";
+
 import InactivityHandler from "./helper/inactivityhandler";
 import DepartmentPage from "./Modules/Department/DepartmentDashboard";
 
@@ -43,6 +49,7 @@ const theme = createTheme({
 
 export default function App() {
   const location = useLocation();
+  const role = useSelector((state) => state.user.role);
   return (
     <MantineProvider theme={theme}>
       <Notifications position="top-center" autoClose={2000} limit={1} />
@@ -214,6 +221,19 @@ export default function App() {
             </Layout>
           }
         />
+
+        {/* scholarship */}
+        <Route
+          path="/scholarship"
+          element={
+            <Layout>
+              {role === "spacsconvenor" && <ConvenorBreadcumbs />}
+              {role === "student" && <UserBreadcrumbs />}
+              {role === "spacsassistant" && <ConvenorBreadcumbs />}
+            </Layout>
+          }
+        />
+
         <Route path="/accounts/login" element={<LoginPage />} />
         <Route path="/reset-password" element={<ForgotPassword />} />
       </Routes>
