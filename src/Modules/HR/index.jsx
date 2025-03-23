@@ -11,6 +11,9 @@ import CPDA_ADVANCEView from "./pages/CPDA_ADVANCEPageComp/CPDA_ADVANCEView";
 import LeaveFormView from "./pages/LeavePageComp/LeaveFormView";
 import LeaveFilehandle from "./pages/LeavePageComp/Leave_file_handle";
 import LeaveHandleResponsibility from "./pages/LeavePageComp/Leave_Handle_Responsibility";
+import AdminLeaveManagement from "./pages/adminLeaveManagement";
+import ManageLeaveBalance from "./pages/ManageLeaveBalance";
+// import UpdateLeaveBalance from "./pages/UpdateLeaveBalance";
 
 export default function HR() {
   return (
@@ -33,6 +36,15 @@ export default function HR() {
       <Route path="appraisal/*" element={<Appraisal />} />
       <Route path="cpda_claim/*" element={<CPDA_Claim />} />
       <Route path="FormView/*" element={<FormView />} />
+      <Route path="admin_leave/*" element={<AdminLeaveManagement />} />
+      <Route
+        path="/admin_leave/manage_leave_balance/*"
+        element={<ManageLeaveBalance />}
+      />
+      {/* <Route
+        path="admin_leave/update_leave_balance/*"
+        element={<UpdateLeaveBalance  />}
+      /> */}
     </Routes>
   );
 }
