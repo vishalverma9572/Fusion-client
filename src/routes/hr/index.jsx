@@ -1,10 +1,13 @@
 import { host } from "../globalRoutes";
 
 export const get_form_initials = `${host}/hr2/api/get_form_initials`;
-export const get_employee_details = `${host}/hr2/api/get_employee_details`;
+export const get_employee_initials = `${host}/hr2/api/get_employee_initials`;
 export const search_employees = `${host}/hr2/api/search_employees`;
 export const get_form_track = (formId) =>
   `${host}/hr2/api/get_track_file/${formId}`;
+// admin routes
+export const admin_get_all_leave_balances = `${host}/hr2/api/admin_get_all_leave_balances`;
+export const admin_get_leave_requests = `${host}/hr2/api/admin_get_leave_requests`;
 
 export const get_leave_balance = `${host}/hr2/api/get_leave_balance`;
 export const submit_leave_form = `${host}/hr2/api/submit_leave_form`;

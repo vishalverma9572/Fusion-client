@@ -10,7 +10,7 @@ import {
   Textarea,
 } from "@mantine/core";
 import {
-  get_employee_details,
+  get_employee_initials,
   get_form_initials,
   submit_leave_form,
 } from "../../../../routes/hr";
@@ -67,7 +67,7 @@ const LeaveForm = () => {
     }
     try {
       // Call the endpoint with the employee id in the URL
-      const response = await fetch(`${get_employee_details}/${employeeId}`, {
+      const response = await fetch(`${get_employee_initials}/${employeeId}`, {
         headers: { Authorization: `Token ${token}` },
       });
       if (!response.ok) {

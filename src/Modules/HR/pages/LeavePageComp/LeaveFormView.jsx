@@ -36,19 +36,39 @@ import {
   download_leave_form_pdf,
 } from "../../../../routes/hr";
 import "./LeaveFormView.css";
+import { use } from "react";
 
 const LeaveFormView = () => {
   const { id } = useParams();
   const [fetchedformData, setFetchedFormData] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const admin = new URLSearchParams(window.location.search).get("admin");
+  const [exampleItems, setExampleItems] = useState([]);
+  useEffect(() => {
+    if (admin) {
+      setExampleItems([
+        { title: "Home", path: "/dashboard" },
+        { title: "Human Resources", path: "/hr" },
+        { title: "Admin Leave Management", path: "/hr/admin_leave" },
+        {
+          title: "Leave Requests",
+          path: "/hr/admin_leave/review_leave_requests",
+        },
+        { title: "View Form", path: `/hr/leave/view/${id}?admin=true` },
+        // { title: "Handle Leave", path: `/hr/leave/handle/${id}` },
+      ]);
+    } else {
+      setExampleItems([
+        { title: "Home", path: "/dashboard" },
+        { title: "Human Resources", path: "/hr" },
+        { title: "Leave", path: "/hr/leave" },
+        { title: "View Form", path: `/hr/leave/view/${id}` },
+      ]);
+    }
+  }, [admin]);
 
-  const exampleItems = [
-    { title: "Home", path: "/dashboard" },
-    { title: "Human Resources", path: "/hr" },
-    { title: "Leave", path: "/hr/leave" },
-    { title: "View Form", path: `/hr/leave/view/${id}` },
-  ];
+  // get admi=true or not from query params
 
   useEffect(() => {
     const fetchFormData = async () => {
@@ -168,9 +188,15 @@ const LeaveFormView = () => {
                   variant="outline"
                   onClick={() => {
                     // Add functionality to track status
-                    navigate(
-                      `../FormView/leaveform_track/${fetchedformData.file_id}`,
-                    );
+                    if (admin) {
+                      navigate(
+                        `../FormView/leaveform_track/${fetchedformData.file_id}?admin=true  `,
+                      );
+                    } else {
+                      navigate(
+                        `../FormView/leaveform_track/${fetchedformData.file_id}`,
+                      );
+                    }
                   }}
                 >
                   Track Status

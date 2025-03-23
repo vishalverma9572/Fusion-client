@@ -11,9 +11,14 @@ import CPDA_ADVANCEView from "./pages/CPDA_ADVANCEPageComp/CPDA_ADVANCEView";
 import LeaveFormView from "./pages/LeavePageComp/LeaveFormView";
 import LeaveFilehandle from "./pages/LeavePageComp/Leave_file_handle";
 import LeaveHandleResponsibility from "./pages/LeavePageComp/Leave_Handle_Responsibility";
+
 import AdminLeaveManagement from "./pages/LeavePageComp/AdminLeaveManagement";
-import ManageLeaveBalance from "./pages/LeavePageComp/ManageLeaveBalance";
+
 import OfflineLeaveForm from "./pages/LeavePageComp/OfflineLeaveForm";
+
+import ViewEmployeeLB from "./pages/LeavePageComp/ViewEmployeeLB";
+import AdminLeaveRequests from "./pages/LeavePageComp/AdminLeaveRequests";
+// import UpdateLeaveBalance from "./pages/UpdateLeaveBalance";
 
 export default function HR() {
   return (
@@ -38,9 +43,14 @@ export default function HR() {
       <Route path="FormView/*" element={<FormView />} />
       <Route path="admin_leave/*" element={<AdminLeaveManagement />} />
       <Route
-        path="/admin_leave/manage_leave_balance/*"
-        element={<ManageLeaveBalance />}
+        path="/admin_leave/view_employees_leave_balance/*"
+        element={<ViewEmployeeLB />}
       />
+      <Route
+        path="admin_leave/review_leave_requests/*"
+        element={<AdminLeaveRequests />}
+      />
+
       <Route
         path="admin_leave/manage_offline_leave_form/*"
         element={<OfflineLeaveForm />}
