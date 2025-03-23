@@ -33,7 +33,7 @@
 import React from "react";
 import { Container, SimpleGrid, Title } from "@mantine/core";
 import { ShieldCheck, PencilSimple } from "@phosphor-icons/react";
-import PerformanceCard from "../components/FormComponent/PerformanceCard";
+import PerformanceCard from "../../components/FormComponent/PerformanceCard";
 
 const AdminLeaveManagement = () => {
   // Card for reviewing leave balances.
@@ -44,12 +44,12 @@ const AdminLeaveManagement = () => {
     link: "/hr/admin_leave/manage_leave_balance",
   };
 
-  // Card for updating leave balances.
-  const updateLeaveCard = {
-    title: "Update Leave Balance",
-    description: "Edit and update employee leave numbers.",
-    icon: PencilSimple, // Using PencilSimple icon to represent an edit/update action
-    link: "/hr/admin_leave/update_leave_balance",
+  // Card for managing offline leave form.
+  const manageOfflineLeaveCard = {
+    title: "Manage Offline Leave Form",
+    description: "Handle offline leave submissions.",
+    icon: PencilSimple,
+    link: "/hr/admin_leave/manage_offline_leave_form",
   };
 
   return (
@@ -63,6 +63,12 @@ const AdminLeaveManagement = () => {
           title={reviewLeaveCard.title}
           description={reviewLeaveCard.description}
           link={reviewLeaveCard.link}
+        />
+        <PerformanceCard
+          IconComponent={manageOfflineLeaveCard.icon}
+          title={manageOfflineLeaveCard.title}
+          description={manageOfflineLeaveCard.description}
+          link={manageOfflineLeaveCard.link}
         />
       </SimpleGrid>
     </Container>
