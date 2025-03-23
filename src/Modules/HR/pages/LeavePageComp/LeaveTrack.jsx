@@ -9,14 +9,30 @@ function LeaveTrack() {
   const { id } = useParams();
   const [trackData, setTrackData] = useState([]); // Correct useState syntax
   const [loading, setLoading] = useState(true); // Add loading state
+  const admin = new URLSearchParams(window.location.search).get("admin");
+  const [exampleItems, setExampleItems] = useState([]);
+  useEffect(() => {
+    if (admin) {
+      setExampleItems([
+        { title: "Home", path: "/dashboard" },
+        { title: "Human Resources", path: "/hr" },
+        { title: "Admin Leave Management", path: "/hr/admin_leave" },
+
+        { title: "Track", path: `${currentPath}?admin=true` },
+        // { title: "Handle Leave", path: `/hr/leave/handle/${id}` },
+      ]);
+    } else {
+      setExampleItems([
+        { title: "Home", path: "/dashboard" },
+        { title: "Human Resources", path: "/hr" },
+        { title: "Leave Management", path: "/hr/leave" },
+        { title: "Track", path: `${currentPath}` },
+      ]);
+    }
+  }, [admin]);
 
   const currentPath = window.location.pathname;
-  const exampleItems = [
-    { title: "Home", path: "/dashboard" },
-    { title: "Human Resources", path: "/hr" },
-    { title: "Leave Management", path: "/hr/leave" },
-    { title: "Track", path: `${currentPath}` },
-  ];
+
   console.log("checking");
   useEffect(() => {
     const fetchLeaveTrack = async () => {

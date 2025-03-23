@@ -36,8 +36,14 @@ function LeaveRequests() {
           },
         );
         const data = await response.json();
-        setRequestData(data.leave_requests); // Set fetched data
-        setFilteredData(data.leave_requests); // Initialize filtered data
+
+        // Sort the data by submissionDate in descending order (latest first)
+        const sortedData = data.leave_requests.sort((a, b) => {
+          return new Date(b.submissionDate) - new Date(a.submissionDate);
+        });
+
+        setRequestData(sortedData); // Set fetched and sorted data
+        setFilteredData(sortedData); // Initialize filtered data
         setLoading(false); // Set loading to false once data is fetched
         console.log(data);
       } catch (error) {
