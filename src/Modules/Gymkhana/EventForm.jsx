@@ -15,6 +15,7 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import "./GymkhanaForms.css";
 import { DateInput, TimeInput } from "@mantine/dates";
+import { host } from "../../routes/globalRoutes/index.jsx";
 
 function EventsApprovalForm({
   clubName,
@@ -62,16 +63,12 @@ function EventsApprovalForm({
   });
   const mutation = useMutation({
     mutationFn: (newEventData) => {
-      return axios.put(
-        "http://127.0.0.1:8000/gymkhana/api/new_event/",
-        newEventData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data", // For file uploads
-            Authorization: `Token ${token}`,
-          },
+      return axios.put(`${host}/gymkhana/api/new_event/`, newEventData, {
+        headers: {
+          "Content-Type": "multipart/form-data", // For file uploads
+          Authorization: `Token ${token}`,
         },
-      );
+      });
     },
     onSuccess: (response) => {
       console.log("Successfully requested:", response.data);

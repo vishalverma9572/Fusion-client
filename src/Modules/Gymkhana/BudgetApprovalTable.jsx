@@ -22,6 +22,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { notifications } from "@mantine/notifications";
+import { host } from "../../routes/globalRoutes/index.jsx";
 import {
   useGetUpcomingBudgets,
   useGetCommentsBudgetInfo,
@@ -163,7 +164,7 @@ function BudgetApprovals({ clubName }) {
   const updateBudgetMutation = useMutation({
     mutationFn: (updatedBudgetData) => {
       return axios.put(
-        "http://127.0.0.1:8000/gymkhana/api/update_budget/",
+        `${host}/gymkhana/api/update_budget/`,
         updatedBudgetData,
         {
           headers: {
@@ -182,7 +183,7 @@ function BudgetApprovals({ clubName }) {
   const mutation = useMutation({
     mutationFn: (commentData) => {
       return axios.post(
-        "http://localhost:8000/gymkhana/api/create_budget_comment/",
+        `${host}/gymkhana/api/create_budget_comment/`,
         {
           budget_id: commentData.selectedBudget.id,
           commentator_designation: commentData.userRole,
@@ -239,7 +240,7 @@ function BudgetApprovals({ clubName }) {
   const updateAllocatedBudgetMutation = useMutation({
     mutationFn: (updatedBudgetData) => {
       return axios.put(
-        "http://127.0.0.1:8000/gymkhana/api/counsellor_approve_budget/",
+        `${host}/gymkhana/api/counsellor_approve_budget/`,
         updatedBudgetData,
         {
           headers: {

@@ -13,6 +13,7 @@ import PropTypes from "prop-types";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import "./GymkhanaForms.css";
+import { host } from "../../routes/globalRoutes/index.jsx";
 
 function CounsellorReview({
   clubName,
@@ -58,7 +59,7 @@ function CounsellorReview({
   const mutation = useMutation({
     mutationFn: (newBudgetData) => {
       return axios.put(
-        "http://127.0.0.1:8000/gymkhana/api/counsellor_approve_budget/", // API URL for the budget submission
+        `${host}/gymkhana/api/counsellor_approve_budget/`, // API URL for the budget submission
         newBudgetData,
         {
           headers: {

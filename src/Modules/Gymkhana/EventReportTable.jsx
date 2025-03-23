@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
 import { ActionIcon } from "@mantine/core";
 import { IconEye } from "@tabler/icons-react";
+import { host } from "../../routes/globalRoutes/index.jsx";
 
 const columns = [
   { accessorKey: "event", header: "Event" },
@@ -24,14 +25,11 @@ function EventReportTable({ clubName }) {
   const [isError, setIsError] = useState(false);
   const token = localStorage.getItem("authToken");
   useEffect(() => {
-    fetch(
-      `http://localhost:8000/gymkhana/api/event_report_list/?club=${clubName}`,
-      {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
+    fetch(`${host}/gymkhana/api/event_report_list/?club=${clubName}`, {
+      headers: {
+        Authorization: `Token ${token}`,
       },
-    )
+    })
       .then((response) => response.json())
       .then((data) => {
         console.log("Fetched Events:", data);
@@ -46,7 +44,7 @@ function EventReportTable({ clubName }) {
 
   const openPdfReport = (reportId) => {
     if (reportId) {
-      const pdfUrl = `http://localhost:8000/gymkhana/api/event_report_pdf/${reportId}/`;
+      const pdfUrl = `${host}/gymkhana/api/event_report_pdf/${reportId}/`;
       const link = document.createElement("a");
       link.href = pdfUrl;
       fetch(pdfUrl, {

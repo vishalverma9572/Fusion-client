@@ -15,6 +15,7 @@ import PropTypes from "prop-types";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import "./GymkhanaForms.css";
+import { host } from "../../routes/globalRoutes";
 
 function FestForm({
   initialValues,
@@ -58,7 +59,7 @@ function FestForm({
       formData.append("link", newFestData.link);
 
       return axios.post(
-        "http://127.0.0.1:8000/gymkhana/api/new_fest/", // API URL for the fest submission
+        `${host}/gymkhana/api/new_fest/`, // API URL for the fest submission
         formData,
         {
           headers: {

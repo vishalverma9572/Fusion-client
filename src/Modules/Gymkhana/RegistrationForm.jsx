@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { host } from "../../routes/globalRoutes/index.jsx";
 
 function ClubRegistrationForm({ clubName }) {
   const token = localStorage.getItem("authToken");
@@ -31,9 +32,8 @@ function ClubRegistrationForm({ clubName }) {
   // TODO need to add logic for addition to DB
   const mutation = useMutation({
     mutationFn: (newMemberData) => {
-      console.log(newMemberData);
       return axios.post(
-        "http://localhost:8000/gymkhana/api/club_membership/",
+        `${host}/gymkhana/api/club_membership/`,
         {
           member: newMemberData.rollNumber,
           club: newMemberData.club,

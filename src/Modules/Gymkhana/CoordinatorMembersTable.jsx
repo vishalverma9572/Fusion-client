@@ -9,6 +9,7 @@ import PropTypes from "prop-types";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useGetClubMembers } from "./BackendLogic/ApiRoutes";
+import { host } from "../../routes/globalRoutes/index.jsx";
 
 function CoordinatorMembers({ clubName }) {
   const token = localStorage.getItem("authToken");
@@ -23,7 +24,7 @@ function CoordinatorMembers({ clubName }) {
   const approvemutation = useMutation({
     mutationFn: (clubMemberId) => {
       return axios.post(
-        "http://localhost:8000/gymkhana/api/member_approve/",
+        `${host}/gymkhana/api/member_approve/`,
         { id: clubMemberId },
         {
           headers: {
@@ -50,7 +51,7 @@ function CoordinatorMembers({ clubName }) {
   const rejectMutation = useMutation({
     mutationFn: (clubMemberId) => {
       return axios.post(
-        "http://localhost:8000/gymkhana/api/member_reject/",
+        `${host}/gymkhana/api/member_reject/`,
         { id: clubMemberId },
         {
           headers: {

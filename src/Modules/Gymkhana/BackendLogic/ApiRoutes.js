@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-
+import { host } from "../../../routes/globalRoutes/index.jsx";
 // club details from here can be inferred from here
 export const useGetData = (clubName, token) => {
   return useQuery({
@@ -8,7 +8,7 @@ export const useGetData = (clubName, token) => {
     queryFn: async () => {
       try {
         const { data } = await axios.post(
-          "http://localhost:8000/gymkhana/club_detail/",
+          `${host}/gymkhana/club_detail/`,
           { club_name: clubName },
           {
             headers: {
@@ -31,17 +31,13 @@ export const useGetUpcomingEvents = (token) => {
   return useQuery({
     queryKey: ["UpcomingEventsData"],
     queryFn: async () => {
-      console.log(token);
       try {
-        const { data } = await axios.get(
-          "http://localhost:8000/gymkhana/upcoming_events/",
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
+        const { data } = await axios.get(`${host}/gymkhana/upcoming_events/`, {
+          headers: {
+            Authorization: `Token ${token}`,
           },
-        );
-        console.log(data);
+        });
+
         return data;
       } catch (error) {
         console.error("Error:", error.response?.data || error.message);
@@ -58,14 +54,11 @@ export const useGetPastEvents = (token) => {
     queryKey: ["PastEventsData"],
     queryFn: async () => {
       try {
-        const { data } = await axios.get(
-          "http://localhost:8000/gymkhana/past_events/",
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
+        const { data } = await axios.get(`${host}/gymkhana/past_events/`, {
+          headers: {
+            Authorization: `Token ${token}`,
           },
-        );
+        });
         return data;
       } catch (error) {
         console.error("Error:", error.response?.data || error.message);
@@ -81,10 +74,9 @@ export const useGetClubMembers = (clubName, token) => {
   return useQuery({
     queryKey: ["clubMemebersData"],
     queryFn: async () => {
-      console.log(token);
       try {
         const { data } = await axios.post(
-          "http://localhost:8000/gymkhana/api/members_records/",
+          `${host}/gymkhana/api/members_records/`,
           { club_name: clubName },
           {
             headers: {
@@ -107,7 +99,7 @@ export const useGetClubAcheivement = (clubName, token) => {
     queryFn: async () => {
       try {
         const { data } = await axios.post(
-          "http://localhost:8000/gymkhana/api/show_achievement/",
+          `${host}/gymkhana/api/show_achievement/`,
           { club_name: clubName },
           {
             headers: {
@@ -115,7 +107,7 @@ export const useGetClubAcheivement = (clubName, token) => {
             },
           },
         );
-        console.log(data);
+
         return data;
       } catch (error) {
         console.error("Error:", error.response?.data || error.message);
@@ -127,13 +119,12 @@ export const useGetClubAcheivement = (clubName, token) => {
 // TODO: implement the comment functionality
 
 export const useGetCommentsEventInfo = (EventId, token) => {
-  console.log("EventId:", EventId);
   return useQuery({
     queryKey: ["commentsEventInfo", EventId],
     queryFn: async () => {
       try {
         const { data } = await axios.post(
-          "http://localhost:8000/gymkhana/api/list_event_comments/",
+          `${host}/gymkhana/api/list_event_comments/`,
           { event_id: EventId },
           {
             headers: {
@@ -141,7 +132,6 @@ export const useGetCommentsEventInfo = (EventId, token) => {
             },
           },
         );
-        console.log("Comments data", data);
         return data;
       } catch (error) {
         console.error("Error:", error.response?.data || error.message);
@@ -155,7 +145,7 @@ export const useGetCommentsEventInfo = (EventId, token) => {
 
 export const approveFICEventButton = async (eventId, token) => {
   const response = axios.put(
-    "http://localhost:8000/gymkhana/api/fic_approve_event/",
+    `${host}/gymkhana/api/fic_approve_event/`,
     { id: eventId },
     {
       headers: {
@@ -168,7 +158,7 @@ export const approveFICEventButton = async (eventId, token) => {
 
 export const approveCounsellorEventButton = async (eventId, token) => {
   return axios.put(
-    "http://localhost:8000/gymkhana/api/counsellor_approve_event/",
+    `${host}/gymkhana/api/counsellor_approve_event/`,
     { id: eventId },
     {
       headers: {
@@ -180,7 +170,7 @@ export const approveCounsellorEventButton = async (eventId, token) => {
 
 export const approveDeanEventButton = async (eventId, token) => {
   return axios.put(
-    "http://localhost:8000/gymkhana/api/dean_approve_event/",
+    `${host}/gymkhana/api/dean_approve_event/`,
     { id: eventId },
     {
       headers: {
@@ -194,7 +184,7 @@ export const approveDeanEventButton = async (eventId, token) => {
 
 export const rejectEventButton = async (eventId, token) => {
   return axios.put(
-    "http://localhost:8000/gymkhana/api/reject_event/",
+    `${host}/gymkhana/api/reject_event/`,
     { id: eventId },
     {
       headers: {
@@ -207,7 +197,7 @@ export const rejectEventButton = async (eventId, token) => {
 // API call for modifying
 export const modifyEventButton = async (eventId, token) => {
   return axios.put(
-    "http://localhost:8000/gymkhana/api/modify_event/",
+    `${host}/gymkhana/api/modify_event/`,
     { id: eventId },
     {
       headers: {
@@ -221,15 +211,12 @@ export const useGetUpcomingBudgets = (token) => {
     queryKey: ["UpcomingBudgetData"],
     queryFn: async () => {
       try {
-        const { data } = await axios.get(
-          "http://localhost:8000/gymkhana/budget/",
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
+        const { data } = await axios.get(`${host}/gymkhana/budget/`, {
+          headers: {
+            Authorization: `Token ${token}`,
           },
-        );
-        console.log(data);
+        });
+
         return data;
       } catch (error) {
         console.error("Error:", error.response?.data || error.message);
@@ -241,13 +228,12 @@ export const useGetUpcomingBudgets = (token) => {
 
 // API call to get comments or details for a specific budget
 export const useGetCommentsBudgetInfo = (budgetId, token) => {
-  console.log("BudgetId:", budgetId);
   return useQuery({
     queryKey: ["commentsBudgetInfo", budgetId],
     queryFn: async () => {
       try {
         const { data } = await axios.post(
-          "http://localhost:8000/gymkhana/api/list_budget_comments/",
+          `${host}/gymkhana/api/list_budget_comments/`,
           { budget_id: budgetId },
           {
             headers: {
@@ -269,7 +255,7 @@ export const useGetCommentsBudgetInfo = (budgetId, token) => {
 // API call to approve budget by FIC
 export const approveFICBudgetButton = async (budgetId, token) => {
   const response = axios.put(
-    "http://localhost:8000/gymkhana/api/fic_approve_budget/",
+    `${host}/gymkhana/api/fic_approve_budget/`,
     { id: budgetId },
     {
       headers: {
@@ -283,7 +269,7 @@ export const approveFICBudgetButton = async (budgetId, token) => {
 // API call to approve budget by Counsellor
 export const approveCounsellorBudgetButton = async (budgetId, token) => {
   return axios.put(
-    "http://localhost:8000/gymkhana/api/counsellor_approve_budget/",
+    `${host}/gymkhana/api/counsellor_approve_budget/`,
     { id: budgetId },
     {
       headers: {
@@ -296,7 +282,7 @@ export const approveCounsellorBudgetButton = async (budgetId, token) => {
 // API call to approve budget by Dean
 export const reviewDeanBudgetButton = async (budgetId, token) => {
   return axios.put(
-    "http://localhost:8000/gymkhana/api/dean_review_budget/",
+    `${host}/gymkhana/api/dean_review_budget/`,
     { id: budgetId },
     {
       headers: {
@@ -307,7 +293,7 @@ export const reviewDeanBudgetButton = async (budgetId, token) => {
 };
 export const approveDeanBudgetButton = async (budgetId, token) => {
   return axios.put(
-    "http://localhost:8000/gymkhana/api/dean_approve_budget/",
+    `${host}/gymkhana/api/dean_approve_budget/`,
     { id: budgetId },
     {
       headers: {
@@ -320,7 +306,7 @@ export const approveDeanBudgetButton = async (budgetId, token) => {
 // API call for rejecting budget
 export const rejectBudgetButton = async (budgetId, token) => {
   return axios.put(
-    "http://localhost:8000/gymkhana/api/reject_budget/",
+    `${host}/gymkhana/api/reject_budget/`,
     { id: budgetId },
     {
       headers: {
@@ -333,7 +319,7 @@ export const rejectBudgetButton = async (budgetId, token) => {
 // API call for modifying budget
 export const modifyBudgetButton = async (budgetId, token) => {
   return axios.put(
-    "http://localhost:8000/gymkhana/api/modify_budget/",
+    `${host}/gymkhana/api/modify_budget/`,
     { id: budgetId },
     {
       headers: {
@@ -349,7 +335,7 @@ export const useGetCurrentLoginnedRoleRelatedClub = (InputName, token) => {
     queryFn: async () => {
       try {
         const { data } = await axios.post(
-          "http://localhost:8000/gymkhana/api/list_club_position/",
+          `${host}/gymkhana/api/list_club_position/`,
           { name: InputName },
           {
             headers: {
@@ -370,14 +356,11 @@ export const useGetFests = (token) => {
     queryKey: ["FestsData"],
     queryFn: async () => {
       try {
-        const { data } = await axios.get(
-          "http://localhost:8000/gymkhana/fest/",
-          {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
+        const { data } = await axios.get(`${host}/gymkhana/fest/`, {
+          headers: {
+            Authorization: `Token ${token}`,
           },
-        );
+        });
         // console.log("fetched data",data);
         return data;
       } catch (error) {
@@ -394,7 +377,7 @@ export const useGetNewsLetterEvent = (roll_no, token) => {
     queryFn: async () => {
       try {
         const { data } = await axios.post(
-          "http://localhost:8000/gymkhana/api/coordinator_events/",
+          `${host}/gymkhana/api/coordinator_events/`,
           { roll_number: roll_no },
           {
             headers: {

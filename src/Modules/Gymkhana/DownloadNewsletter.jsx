@@ -1,17 +1,16 @@
 import { useState } from "react";
 import { Button, Alert, Radio } from "@mantine/core";
 import axios from "axios";
+import { host } from "../../routes/globalRoutes/index.jsx";
 
 function DownloadNewsletter() {
   const [errorMessage, setErrorMessage] = useState("");
   const token = localStorage.getItem("authToken");
   const [selectedOption, setSelectedOption] = useState("6 months");
-  console.log(token, "---------");
-  console.log(selectedOption);
   const handleDownloadPDF = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/gymkhana/api/newsletter_pdf/?timeframe=${selectedOption}`,
+        `${host}/gymkhana/api/newsletter_pdf/?timeframe=${selectedOption}`,
         {
           responseType: "blob",
           headers: {
@@ -29,7 +28,6 @@ function DownloadNewsletter() {
     } catch {
       setErrorMessage("Failed to download the newsletter PDF.");
     }
-    console.log(selectedOption);
   };
 
   return (

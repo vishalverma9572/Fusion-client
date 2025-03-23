@@ -1,6 +1,7 @@
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "mantine-react-table/styles.css";
+
 import React, { useMemo, useState } from "react";
 import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
 import {
@@ -25,6 +26,7 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { notifications } from "@mantine/notifications";
+import { host } from "../../routes/globalRoutes/index.jsx";
 import {
   rejectEventButton,
   modifyEventButton,
@@ -140,15 +142,11 @@ function EventApprovals({ clubName }) {
 
   const updateEventMutation = useMutation({
     mutationFn: (updatedEventData) => {
-      return axios.put(
-        "http://127.0.0.1:8000/gymkhana/api/update_event/",
-        updatedEventData,
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
+      return axios.put(`${host}/gymkhana/api/update_event/`, updatedEventData, {
+        headers: {
+          Authorization: `Token ${token}`,
         },
-      );
+      });
     },
     onSuccess: () => {
       closeEditModal();
@@ -160,7 +158,7 @@ function EventApprovals({ clubName }) {
   const mutation = useMutation({
     mutationFn: (commentData) => {
       return axios.post(
-        "http://localhost:8000/gymkhana/api/create_event_comment/",
+        `${host}/gymkhana/api/create_event_comment/`,
         {
           event_id: commentData.selectedEvent.id,
           commentator_designation: commentData.userRole,

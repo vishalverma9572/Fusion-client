@@ -17,7 +17,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { notifications } from "@mantine/notifications";
 import { useGetNewsLetterEvent } from "./BackendLogic/ApiRoutes";
-import { authRoute } from "../../routes/globalRoutes";
+import { host, authRoute } from "../../routes/globalRoutes";
 
 function NewsForm({
   initialValues,
@@ -103,7 +103,7 @@ function NewsForm({
   const mutation = useMutation({
     mutationFn: (newEventData) => {
       return axios.post(
-        "http://127.0.0.1:8000/gymkhana/api/coordinator_eventsinput/", // Adjust API URL as needed
+        `${host}/gymkhana/api/coordinator_eventsinput/`, // Adjust API URL as needed
         newEventData,
         {
           headers: {
