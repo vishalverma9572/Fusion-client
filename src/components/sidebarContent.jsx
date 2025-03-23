@@ -170,7 +170,7 @@ function SidebarContent({ isCollapsed, toggleSidebar }) {
 
   useEffect(() => {
     const filterModules = Modules.filter(
-      (module) => accessibleModules?.[module.id] || module.id === "home",
+      (module) => accessibleModules[module.id] || module.id === "home",
     );
     setFilteredModules(filterModules);
   }, [accessibleModules]);
