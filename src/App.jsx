@@ -8,7 +8,6 @@ import { Notifications } from "@mantine/notifications";
 import { Layout } from "./components/layout";
 
 // import { IwdRoutes } from "./Modules/Iwd/routes/index";
-import IwdModule from "./Modules/Iwd/index";
 import { DesignationsProvider } from "./Modules/Iwd/helper/designationContext";
 import { HealthCenter } from "./Modules/Health Center";
 import PurchaseNavbar from "./Modules/Purchase/PurchaseNavbar";
@@ -28,6 +27,7 @@ import NewForwardIndent from "./Modules/Purchase/NewForwardIndent.jsx";
 import ConvenorBreadcumbs from "./Modules/Scholarship/convenor/components/ConvenorBreadcumbs";
 import UserBreadcrumbs from "./Modules/Scholarship/user/components/UserBreadcumbs";
 
+const IwdModule = lazy(() => import("./Modules/Iwd/index"));
 const Dashboard = lazy(
   () => import("./Modules/Dashboard/dashboardNotifications"),
 );
@@ -301,7 +301,9 @@ export default function App() {
           element={
             <DesignationsProvider>
               <Layout>
-                <IwdModule />
+                <Suspense fallback={<div>Loading .... </div>}>
+                  <IwdModule />
+                </Suspense>
               </Layout>
             </DesignationsProvider>
           }
@@ -552,6 +554,16 @@ export default function App() {
               <PurchaseNavbar />
               <StockEntry />
             </Layout>
+          }
+        />
+        <Route
+          path="/iwd"
+          element={
+            <DesignationsProvider>
+              <Layout>
+                <IwdModule />
+              </Layout>
+            </DesignationsProvider>
           }
         />
         <Route path="/accounts/login" element={<LoginPage />} />
