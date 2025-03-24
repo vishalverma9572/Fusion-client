@@ -53,6 +53,7 @@ function SidebarContent({ isCollapsed, toggleSidebar }) {
     "iwd",
     "phc",
     "spacs",
+    "purchase_and_store",
   ];
 
   const Modules = [
@@ -133,7 +134,7 @@ function SidebarContent({ isCollapsed, toggleSidebar }) {
       label: "Purchase and Store",
       id: "purchase_and_store",
       icon: <StoreIcon size={18} />,
-      url: "/",
+      url: "/purchase",
     },
     {
       label: "Human Resource",
