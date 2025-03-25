@@ -53,7 +53,7 @@ function SidebarContent({ isCollapsed, toggleSidebar }) {
     "iwd",
     "phc",
     "spacs",
-    "placement_cell"
+    "placement_cell",
     "purchase_and_store",
   ];
 
