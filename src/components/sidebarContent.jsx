@@ -48,6 +48,7 @@ function SidebarContent({ isCollapsed, toggleSidebar }) {
     "complaint_management",
     "mess_management",
     "visitor_hostel",
+    "hostel_management",
     "department",
     "gymkhana",
     "iwd",
@@ -165,7 +166,7 @@ function SidebarContent({ isCollapsed, toggleSidebar }) {
       label: "Hostel Management",
       id: "hostel_management",
       icon: <HostelIcon size={18} />,
-      url: "/",
+      url: "/hostel",
     },
     {
       label: "Other Academic Procedure",

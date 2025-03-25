@@ -31,8 +31,10 @@ import NewForwardIndent from "./Modules/Purchase/NewForwardIndent.jsx";
 // eslint-disable-next-line import/no-unresolved
 import ConvenorBreadcumbs from "./Modules/Scholarship/convenor/components/ConvenorBreadcumbs";
 import UserBreadcrumbs from "./Modules/Scholarship/user/components/UserBreadcumbs";
+import HostelPage from "./Modules/Hostel-Management/index";
 
 const IwdModule = lazy(() => import("./Modules/Iwd/index"));
+
 const Dashboard = lazy(
   () => import("./Modules/Dashboard/dashboardNotifications"),
 );
@@ -330,6 +332,14 @@ export default function App() {
               <Suspense fallback={<div>Loading .... </div>}>
                 <DepartmentPage />
               </Suspense>
+            </Layout>
+          }
+        />
+        <Route
+          path="/hostel"
+          element={
+            <Layout>
+              <HostelPage />
             </Layout>
           }
         />
