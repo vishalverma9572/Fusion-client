@@ -35,6 +35,7 @@ export default function Compose() {
   const [receiver_designations, setReceiverDesignations] = React.useState("");
   const [subject, setSubject] = React.useState("");
   const [description, setDescription] = React.useState("");
+  const [remarks, setRemarks] = React.useState("");
   const token = localStorage.getItem("authToken");
 
   const roles = useSelector((state) => state.user.roles);
@@ -65,10 +66,10 @@ export default function Compose() {
     setReceiverUsername("");
     setSubject("");
     setDescription("");
+    setRemarks("");
   };
   useEffect(() => {
     setDesignation(roles);
-    console.log(receiverRoles);
   }, [roles, receiverRoles]);
 
   useEffect(() => {
@@ -86,7 +87,6 @@ export default function Compose() {
         // Ensure response.data.users is an array before mapping
         if (response.data && Array.isArray(users)) {
           const suggestedUsernames = users.map((user) => user.fields.username);
-          console.log(suggestedUsernames);
           if (isMounted) {
             setUsernameSuggestions(suggestedUsernames);
           }
@@ -124,13 +124,14 @@ export default function Compose() {
   }, [receiver_username]);
   const handleSaveDraft = async () => {
     try {
-      console.log(uploaderRole);
-      console.log(module);
-      console.log(typeof files);
       const formData = new FormData();
       formData.append("designation", uploaderRole);
       formData.append("src_module", module);
-
+      formData.append("subject", subject);
+      formData.append("description", description);
+      formData.append("remarks", remarks);
+      formData.append("receiver_username", receiver_username);
+      formData.append("receiver_designation", receiver_designation);
       files.forEach((file) => {
         formData.append("files", file); // `files` should be an array of File objects
       });
@@ -273,6 +274,14 @@ export default function Compose() {
           onChange={(e) => setDescription(e.target.value)}
           required
         />
+        <Textarea
+          label="Remarks"
+          placeholder="Enter remarks"
+          mb="sm"
+          value={remarks}
+          onChange={(e) => setRemarks(e.target.value)}
+          required
+        />
         <Select
           label="Designation"
           placeholder="Sender's Designation"
@@ -289,8 +298,8 @@ export default function Compose() {
           value={files} // Set the file state as the value
           onChange={handleFileChange} // Update file state on change
           mb="sm"
-          withAsterisk
           multiple
+          maxSize={10 * 1024 * 1024}
         />
         {files && (
           <Group position="apart" mt="sm">
@@ -307,8 +316,8 @@ export default function Compose() {
         <Grid mb="sm" gutter="sm">
           <Grid.Col span={{ base: 12, sm: 6 }}>
             <Autocomplete
-              label="Forward To"
-              placeholder="Enter forward recipient"
+              label="Send To"
+              placeholder="Enter recipient"
               value={receiver_username}
               data={usernameSuggestions} // Pass the array of suggestions
               onChange={(value) => {

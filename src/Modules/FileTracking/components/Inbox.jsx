@@ -39,8 +39,8 @@ export default function Inboxfunc() {
             Authorization: `Token ${token}`,
           },
         });
+        console.log("Inbox: ", response.data);
         setFiles(response.data);
-        console.log(response.data);
       } catch (err) {
         console.error("Error fetching files:", err);
       }
