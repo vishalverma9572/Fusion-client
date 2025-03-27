@@ -70,7 +70,7 @@ export default function Compose() {
   };
   useEffect(() => {
     setDesignation(roles);
-  }, [roles, receiverRoles]);
+  }, [roles]);
 
   useEffect(() => {
     let isMounted = true;
