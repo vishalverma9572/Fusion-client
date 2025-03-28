@@ -45,7 +45,6 @@ export default function ViewFile({ onBack, fileID, updateFiles }) {
   const [receiver_username, setReceiverUsername] = useState("");
   const [receiver_designation, setReceiverDesignation] = useState("");
   const [receiver_designations, setReceiverDesignations] = useState("");
-  const [current_owner, setCurrentOwner] = useState("");
   const [current_receiver, setCurrentReceiver] = useState("");
   const [usernameSuggestions, setUsernameSuggestions] = useState([]);
   const [files, setFiles] = useState([]);
@@ -93,7 +92,6 @@ export default function ViewFile({ onBack, fileID, updateFiles }) {
           },
         });
         setTrackingHistory(response.data);
-        setCurrentOwner(response.data[0].current_id);
         setCurrentReceiver(response.data[0].receiver_id);
         console.log("Tracking: ", response.data);
       } catch (err) {
@@ -401,9 +399,7 @@ export default function ViewFile({ onBack, fileID, updateFiles }) {
         <Button
           leftIcon={<PaperPlaneTilt size={20} />}
           onClick={() => toggleSection("forward")}
-          disabled={
-            current_owner !== currentUser && current_receiver !== currentUser
-          } // Disable if the current user is not the owner
+          disabled={current_receiver !== currentUser} // Disable if the current user is not the latest receiver.
         >
           Forward
         </Button>
