@@ -137,22 +137,24 @@ export default function ViewFile({ onBack, fileID, updateFiles }) {
 
   // Fetch designations when a user is selected
   const fetchRoles = async () => {
-    const response = await axios.get(
-      `${designationsRoute}${receiver_username}`,
-      {
-        headers: {
-          Authorization: `Token ${token}`,
+    if (!receiver_username || receiver_username === "") return "";
+    try {
+      const response = await axios.get(
+        `${designationsRoute}${receiver_username}`,
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
         },
-      },
-    );
-    console.log(response);
-    setReceiverDesignations(response.data.designations);
-  };
-  useEffect(() => {
-    if (receiver_username) {
-      fetchRoles();
+      );
+      console.log(response);
+      setReceiverDesignations(response.data.designations);
+    } catch (err) {
+      if (err.response && err.response.status === 500) {
+        console.warn("Retrying fetchRoles in 2 seconds...");
+      }
     }
-  }, [receiver_username]);
+  };
   // Toggle sections (forward/delete/etc)
   const toggleSection = (section) => {
     setActiveSection(activeSection === section ? null : section);
@@ -228,8 +230,8 @@ export default function ViewFile({ onBack, fileID, updateFiles }) {
       );
       if (response.status === 201) {
         notifications.show({
-          title: "File sent successfully",
-          message: "The file has been sent successfully.",
+          title: "File forwarded successfully",
+          message: "The file has forwarded sent successfully.",
           color: "green",
           position: "top-center",
         });
@@ -243,6 +245,7 @@ export default function ViewFile({ onBack, fileID, updateFiles }) {
       }
     } catch (err) {
       console.log(err);
+      setIsForwarding(false);
     }
   };
 
@@ -394,7 +397,6 @@ export default function ViewFile({ onBack, fileID, updateFiles }) {
           ))}
         </tbody>
       </Table>
-
       <Group position="center" mt="lg" spacing="xl">
         <Button
           leftIcon={<PaperPlaneTilt size={20} />}
@@ -482,7 +484,13 @@ export default function ViewFile({ onBack, fileID, updateFiles }) {
           />
 
           <Group position="right">
-            <Button variant="outline" onClick={() => setActiveSection(null)}>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setActiveSection(null);
+                setIsForwarding(false);
+              }}
+            >
               Cancel
             </Button>
             <Button color="blue" onClick={handleForward} loading={isForwarding}>
