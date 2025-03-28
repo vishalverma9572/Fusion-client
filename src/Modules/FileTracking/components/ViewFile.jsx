@@ -58,6 +58,7 @@ export default function ViewFile({ onBack, fileID, updateFiles }) {
         label: role,
       }))
     : [];
+  const currentUser = useSelector((state) => state.user.roll_no);
   // Helper function to format dates
   const convertDate = (date) => {
     const d = new Date(date);
@@ -401,8 +402,7 @@ export default function ViewFile({ onBack, fileID, updateFiles }) {
           leftIcon={<PaperPlaneTilt size={20} />}
           onClick={() => toggleSection("forward")}
           disabled={
-            current_owner !== useSelector((state) => state.user.roll_no) &&
-            current_owner !== current_receiver
+            current_owner !== currentUser && current_receiver !== currentUser
           } // Disable if the current user is not the owner
         >
           Forward
