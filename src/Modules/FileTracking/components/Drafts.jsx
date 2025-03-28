@@ -288,7 +288,11 @@ export default function Draft() {
                       textAlign: "center",
                     }}
                   >
-                    {file.id}
+                    {new Date(file.upload_date).getFullYear()}-
+                    {(new Date(file.upload_date).getMonth() + 1)
+                      .toString()
+                      .padStart(2, "0")}
+                    -#{file.id}
                   </td>
                   <td
                     style={{

@@ -306,7 +306,12 @@ export default function Inboxfunc() {
                         {file.uploader}
                       </td>
                       <td className="file-cell" data-label="File ID">
-                        {file.id}
+                        {file.branch}-{new Date(file.upload_date).getFullYear()}
+                        -
+                        {(new Date(file.upload_date).getMonth() + 1)
+                          .toString()
+                          .padStart(2, "0")}
+                        -#{file.id}
                       </td>
                       <td className="subject-cell" data-label="Subject">
                         {file.subject}
