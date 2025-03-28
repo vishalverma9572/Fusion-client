@@ -106,22 +106,24 @@ export default function Compose() {
   }, [receiver_username, token]);
 
   const fetchRoles = async () => {
-    const response = await axios.get(
-      `${designationsRoute}${receiver_username}`,
-      {
-        headers: {
-          Authorization: `Token ${token}`,
+    try {
+      const response = await axios.get(
+        `${designationsRoute}${receiver_username}`,
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
         },
-      },
-    );
-    console.log(response);
-    setReceiverDesignations(response.data.designations);
-  };
-  useEffect(() => {
-    if (receiver_username) {
-      fetchRoles();
+      );
+      console.log(response);
+      setReceiverDesignations(response.data.designations);
+    } catch (err) {
+      if (err.response && err.response.status === 500) {
+        console.warn("Retrying fetchRoles in 2 seconds...");
+        setTimeout(fetchRoles, 2000); // Retry after 2s
+      }
     }
-  }, [receiver_username]);
+  };
   const handleSaveDraft = async () => {
     try {
       const formData = new FormData();
