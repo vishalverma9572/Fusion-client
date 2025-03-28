@@ -12,7 +12,7 @@ import {
   Group,
   TextInput,
 } from "@mantine/core";
-import { ArrowArcRight, Eye } from "@phosphor-icons/react";
+import { Eye } from "@phosphor-icons/react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import View from "./ViewFile";
@@ -28,6 +28,8 @@ export default function Outboxfunc() {
   const token = localStorage.getItem("authToken");
   const role = useSelector((state) => state.user.role);
   const username = useSelector((state) => state.user.roll_no);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+  const [searchQuery, setSearchQuery] = useState("");
   let current_module = useSelector((state) => state.module.current_module);
   current_module = current_module.split(" ").join("").toLowerCase();
   const convertDate = (date) => {
@@ -92,8 +94,25 @@ export default function Outboxfunc() {
     setForwardFile(null); // Reset forward file state
   };
 
-  const handleForwardFile = (file) => {
-    setForwardFile(file); // Set the file to be forwarded
+  const sortedFiles = [...files].sort((a, b) => {
+    if (!sortConfig.key) return 0;
+    const direction = sortConfig.direction === "asc" ? 1 : -1;
+    return a[sortConfig.key] > b[sortConfig.key] ? direction : -direction;
+  });
+
+  const filteredFiles = sortedFiles.filter(
+    (file) =>
+      file.uploader.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      file.id.toString().includes(searchQuery) ||
+      file.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      convertDate(file.upload_date).includes(searchQuery),
+  );
+
+  const handleSort = (key) => {
+    setSortConfig((prev) => ({
+      key,
+      direction: prev.key === key && prev.direction === "asc" ? "desc" : "asc",
+    }));
   };
 
   const handleSubmitForward = async () => {
@@ -157,15 +176,23 @@ export default function Outboxfunc() {
       }}
     >
       {!selectedFile && !forwardFile && (
-        <Title
-          order={2}
-          mb="md"
-          style={{
-            fontSize: "24px",
-          }}
-        >
-          Outbox
-        </Title>
+        <Group position="apart" mb="md">
+          <Title
+            order={2}
+            mb="md"
+            style={{
+              fontSize: "24px",
+            }}
+          >
+            Outbox
+          </Title>
+          <TextInput
+            placeholder="Search files..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{ marginBottom: "10px", marginLeft: "auto" }}
+          />
+        </Group>
       )}
 
       {selectedFile ? (
@@ -268,24 +295,20 @@ export default function Outboxfunc() {
           >
             <thead>
               <tr style={{ backgroundColor: "#0000" }}>
-                <th
-                  style={{
-                    padding: "12px",
-                    width: "8%",
-                    border: "1px solid #ddd",
-                  }}
-                >
-                  Forward
+                <th onClick={() => handleSort("id")}>
+                  File ID{" "}
+                  {sortConfig.key === "id" &&
+                    (sortConfig.direction === "asc" ? "↑" : "↓")}
                 </th>
-
-                <th style={{ padding: "12px", border: "1px solid #ddd" }}>
-                  File ID
+                <th onClick={() => handleSort("subject")}>
+                  Subject{" "}
+                  {sortConfig.key === "subject" &&
+                    (sortConfig.direction === "asc" ? "↑" : "↓")}
                 </th>
-                <th style={{ padding: "12px", border: "1px solid #ddd" }}>
-                  Subject
-                </th>
-                <th style={{ padding: "12px", border: "1px solid #ddd" }}>
-                  Date
+                <th onClick={() => handleSort("upload_date")}>
+                  Date{" "}
+                  {sortConfig.key === "upload_date" &&
+                    (sortConfig.direction === "asc" ? "↑" : "↓")}
                 </th>
                 <th
                   style={{
@@ -299,9 +322,9 @@ export default function Outboxfunc() {
               </tr>
             </thead>
             <tbody>
-              {files.map((file, index) => (
+              {filteredFiles.map((file, index) => (
                 <tr key={index}>
-                  <td
+                  {/* <td
                     style={{
                       padding: "8px",
                       textAlign: "center",
@@ -328,7 +351,7 @@ export default function Outboxfunc() {
                         <ArrowArcRight size="1rem" />
                       </ActionIcon>
                     </Tooltip>
-                  </td>
+                  </td> */}
 
                   <td
                     style={{
