@@ -202,9 +202,9 @@ export default function Inboxfunc() {
               <tr>
                 <th data-label="">Archive</th>
                 {[
+                  "File ID",
                   "uploader",
                   "designation",
-                  "id",
                   "subject",
                   "upload_date",
                 ].map((key) => (
@@ -214,7 +214,7 @@ export default function Inboxfunc() {
                     style={{
                       padding: "12px",
                       width: "15.5%",
-                      border: "1px solid #0000",
+                      border: "1px solid #ddd",
                       cursor: "pointer",
                       display: "align-items",
                       alignItems: "center",
@@ -241,7 +241,7 @@ export default function Inboxfunc() {
                   style={{
                     padding: "12px",
                     width: "8.5%",
-                    border: "1px solid #0000",
+                    border: "1px solid ##ddd",
                   }}
                 >
                   View File
@@ -280,6 +280,19 @@ export default function Inboxfunc() {
                       border: "1px solid #ddd",
                       textAlign: "center",
                     }}
+                  >
+                    {file.branch}-{new Date(file.upload_date).getFullYear()}-
+                    {(new Date(file.upload_date).getMonth() + 1)
+                      .toString()
+                      .padStart(2, "0")}
+                    -#{file.id}
+                  </td>
+                  <td
+                    style={{
+                      padding: "12px",
+                      border: "1px solid #ddd",
+                      textAlign: "center",
+                    }}
                     data-label="Sent By"
                   >
                     {file.sent_by_user}
@@ -293,20 +306,6 @@ export default function Inboxfunc() {
                     data-label="Sent By"
                   >
                     {file.sent_by_designation}
-                  </td>
-                  {/* <td className="archive-cell" data-label=""> */}
-                  <td
-                    style={{
-                      padding: "12px",
-                      border: "1px solid #ddd",
-                      textAlign: "center",
-                    }}
-                  >
-                    {file.branch}-{new Date(file.upload_date).getFullYear()}-
-                    {(new Date(file.upload_date).getMonth() + 1)
-                      .toString()
-                      .padStart(2, "0")}
-                    -#{file.id}
                   </td>
                   <td
                     style={{
@@ -354,18 +353,6 @@ export default function Inboxfunc() {
                         <Eye size="1rem" />
                       </ActionIcon>
                     </Tooltip>
-                    {/* <ActionIcon
-                      variant="outline"
-                      color="black"
-                      className="view-icon"
-                      data-default-color="white"
-                      data-hover-color="#e0e0e0"
-                      onMouseEnter={handleMouseEnter}
-                      onMouseLeave={handleMouseLeave}
-                      onClick={() => setSelectedFile(file)}
-                    >
-                      <Eye size="1rem" />
-                    </ActionIcon> */}
                   </td>
                 </tr>
               ))}

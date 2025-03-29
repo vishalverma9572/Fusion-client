@@ -14,6 +14,8 @@ import {
   ActionIcon,
   Grid,
   Autocomplete,
+  Modal,
+  Text,
 } from "@mantine/core";
 import PropTypes from "prop-types";
 
@@ -50,6 +52,8 @@ export default function ViewFile({ onBack, fileID, updateFiles }) {
   const [files, setFiles] = useState([]);
   const [remarks, setRemarks] = useState("");
   const [isForwarding, setIsForwarding] = useState(false);
+  const [opened, setOpened] = useState(false);
+  const [selectedRemarks, setSelectedRemarks] = useState("");
   const token = localStorage.getItem("authToken");
   const receiverRoles = Array.isArray(receiver_designations)
     ? receiver_designations.map((role) => ({
@@ -66,6 +70,12 @@ export default function ViewFile({ onBack, fileID, updateFiles }) {
   const removeFile = () => {
     setFiles(null);
   };
+
+  const handleOpenRemarksModal = (x) => {
+    setSelectedRemarks(x); // Set the remarks to show
+    setOpened(true); // Open the modal
+  };
+
   // Fetch file details when component mounts or fileID changes
   useEffect(() => {
     const getFile = async () => {
@@ -344,59 +354,198 @@ export default function ViewFile({ onBack, fileID, updateFiles }) {
       <Title order={4} mt="xl" mb="md">
         Tracking History
       </Title>
-
-      <Table striped highlightOnHover>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Sender</th>
-            <th>Receiver</th>
-            <th>Designation</th>
-            <th>Remarks</th>
-            <th>Attachment</th>
-          </tr>
-        </thead>
-        <tbody>
-          {trackingHistory.map((track, index) => (
-            <tr key={index}>
-              <td>{convertDate(track.forward_date)}</td>
-              <td>{track.current_id}</td>
-              <td>{track.receiver_id}</td>
-              <td>{track.receive_design}</td>
-              <td>{track.remarks || "-"}</td>
-              <td>
-                {(
-                  index === trackingHistory.length - 1
-                    ? uploadedFile
-                    : track.upload_file
-                ) ? (
-                  <Button
-                    variant="subtle"
-                    size="xs"
-                    leftIcon={<DownloadSimple size={16} />}
-                    onClick={() =>
-                      downloadAttachment(
-                        index === trackingHistory.length - 1
-                          ? uploadedFile
-                          : track.upload_file,
-                      )
-                    }
-                  >
-                    {(index === trackingHistory.length - 1
+      <Box
+        style={{
+          border: "1px solid #ddd",
+          borderRadius: "8px",
+          overflowY: "auto",
+          overflowX: "auto",
+          height: "56vh",
+          backgroundColor: "#fff",
+        }}
+      >
+        <Table
+          highlightOnHover
+          style={{
+            width: "100%",
+            borderCollapse: "collapse",
+            tableLayout: "fixed",
+            fontSize: "12px", // Reduced font size
+          }}
+        >
+          <thead>
+            <tr>
+              <th
+                style={{
+                  padding: "8px", // Reduced padding
+                  width: "9%",
+                  border: "1px solid #ddd",
+                  textAlign: "center",
+                }}
+              >
+                Date
+              </th>
+              <th
+                style={{
+                  padding: "8px", // Reduced padding
+                  width: "13%",
+                  border: "1px solid #ddd",
+                  textAlign: "center",
+                }}
+              >
+                Sender
+              </th>
+              <th
+                style={{
+                  padding: "8px", // Reduced padding
+                  width: "13%",
+                  border: "1px solid #ddd",
+                  textAlign: "center",
+                }}
+              >
+                Receiver
+              </th>
+              <th
+                style={{
+                  padding: "8px", // Reduced padding
+                  width: "13%",
+                  border: "1px solid #ddd",
+                  textAlign: "center",
+                }}
+              >
+                Designation
+              </th>
+              <th
+                style={{
+                  padding: "8px", // Reduced padding
+                  width: "20%",
+                  border: "1px solid #ddd",
+                  textAlign: "center",
+                }}
+              >
+                Remarks
+              </th>
+              <th
+                style={{
+                  padding: "8px", // Reduced padding
+                  width: "10%",
+                  border: "1px solid #ddd",
+                  textAlign: "center",
+                }}
+              >
+                Attachment
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {trackingHistory.map((track, index) => (
+              <tr key={index}>
+                <td
+                  style={{
+                    padding: "8px", // Reduced padding
+                    textAlign: "center",
+                    border: "1px solid #ddd",
+                    wordWrap: "break-word", // Prevent overflow
+                  }}
+                >
+                  {convertDate(track.forward_date)}
+                </td>
+                <td
+                  style={{
+                    padding: "8px", // Reduced padding
+                    textAlign: "center",
+                    border: "1px solid #ddd",
+                    wordWrap: "break-word", // Prevent overflow
+                  }}
+                >
+                  {track.current_id}
+                </td>
+                <td
+                  style={{
+                    padding: "8px", // Reduced padding
+                    textAlign: "center",
+                    border: "1px solid #ddd",
+                    wordWrap: "break-word", // Prevent overflow
+                  }}
+                >
+                  {track.receiver_id}
+                </td>
+                <td
+                  style={{
+                    padding: "8px", // Reduced padding
+                    textAlign: "center",
+                    border: "1px solid #ddd",
+                    wordWrap: "break-word", // Prevent overflow
+                  }}
+                >
+                  {track.receive_design}
+                </td>
+                <td
+                  style={{
+                    padding: "8px", // Reduced padding
+                    textAlign: "center",
+                    border: "1px solid #ddd",
+                    wordWrap: "break-word", // Prevent overflow
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleOpenRemarksModal(track.remarks || "-")}
+                >
+                  {track.remarks && track.remarks.length > 15
+                    ? `${track.remarks.slice(0, 15)}...`
+                    : track.remarks || "-"}
+                </td>
+                <td
+                  style={{
+                    padding: "8px", // Reduced padding
+                    textAlign: "center",
+                    border: "1px solid #ddd",
+                  }}
+                >
+                  {(
+                    index === trackingHistory.length - 1
                       ? uploadedFile
                       : track.upload_file
-                    )
-                      .split("/")
-                      .pop()}
-                  </Button>
-                ) : (
-                  "File not found"
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+                  ) ? (
+                    <Button
+                      variant="subtle"
+                      size="xs"
+                      leftIcon={<DownloadSimple size={16} />}
+                      onClick={() =>
+                        downloadAttachment(
+                          index === trackingHistory.length - 1
+                            ? uploadedFile
+                            : track.upload_file,
+                        )
+                      }
+                      style={{
+                        display: "inline-block",
+                        padding: "5px 10px",
+                        fontSize: "10px", // Reduced font size
+                      }}
+                    >
+                      Download
+                    </Button>
+                  ) : (
+                    "File not found"
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+
+        {/* Modal to show remarks */}
+        <Modal
+          opened={opened}
+          onClose={() => setOpened(false)}
+          title="Full Remarks"
+          size="lg"
+        >
+          <Text style={{ whiteSpace: "pre-wrap", wordWrap: "break-word" }}>
+            {selectedRemarks}
+          </Text>
+        </Modal>
+      </Box>
       <Group position="center" mt="lg" spacing="xl">
         <Button
           leftIcon={<PaperPlaneTilt size={20} />}
@@ -405,13 +554,6 @@ export default function ViewFile({ onBack, fileID, updateFiles }) {
         >
           Forward
         </Button>
-        {/* <Button
-          leftIcon={<Trash size={20} />}
-          color="red"
-          onClick={handleDelete}
-        >
-          Delete
-        </Button> */}
         {file?.upload_file && (
           <Button
             leftIcon={<DownloadSimple size={20} />}
@@ -467,9 +609,16 @@ export default function ViewFile({ onBack, fileID, updateFiles }) {
             label="Remarks"
             placeholder="Enter remarks"
             value={remarks}
-            onChange={(e) => setRemarks(e.currentTarget.value)}
+            onChange={(e) => {
+              const words = e.currentTarget.value.trim().split(/\s+/);
+              if (words.length < 50) {
+                setRemarks(e.currentTarget.value);
+              }
+            }}
             mb="md"
           />
+
+          <Text align="right">{remarks.split(/\s+/).length} / 50 words</Text>
 
           <FileInput
             label="Attach file (PDF, JPG, PNG) (MAX: 10MB)"
