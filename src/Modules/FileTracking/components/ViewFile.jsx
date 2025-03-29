@@ -405,13 +405,13 @@ export default function ViewFile({ onBack, fileID, updateFiles }) {
         >
           Forward
         </Button>
-        <Button
+        {/* <Button
           leftIcon={<Trash size={20} />}
           color="red"
           onClick={handleDelete}
         >
           Delete
-        </Button>
+        </Button> */}
         {file?.upload_file && (
           <Button
             leftIcon={<DownloadSimple size={20} />}
@@ -497,16 +497,16 @@ export default function ViewFile({ onBack, fileID, updateFiles }) {
               Forward File
             </Button>
             {files && (
-              <Group position="apart" mt="sm">
-                <Button
-                  leftIcon={<Trash size={16} />}
-                  color="red"
-                  onClick={removeFile}
-                  compact
-                >
-                  Remove File
-                </Button>
-              </Group>
+              // <Group position="apart" mt="sm">
+              <Button
+                leftIcon={<Trash size={16} />}
+                color="red"
+                onClick={removeFile}
+                compact
+              >
+                Remove File
+              </Button>
+              // </Group>
             )}
           </Group>
         </Card>
