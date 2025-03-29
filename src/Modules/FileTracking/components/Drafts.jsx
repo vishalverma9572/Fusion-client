@@ -154,7 +154,7 @@ export default function Draft() {
             style={{
               width: "100%",
               borderCollapse: "collapse",
-              tableLayout: "fixed",
+              tableLayout: "auto",
               fontSize: "14px",
             }}
           >

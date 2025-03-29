@@ -9,7 +9,7 @@ import {
   Group,
   TextInput,
 } from "@mantine/core";
-import { Eye } from "@phosphor-icons/react";
+import { Eye, CaretUp, CaretDown, ArrowsDownUp } from "@phosphor-icons/react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import View from "./ViewFile";
@@ -157,31 +157,37 @@ export default function Outboxfunc() {
           >
             <thead>
               <tr style={{ backgroundColor: "#0000" }}>
-                <th onClick={() => handleSort("id")}>
-                  File ID{" "}
-                  {sortConfig.key === "id" &&
-                    (sortConfig.direction === "asc" ? "↑" : "↓")}
-                </th>
-                <th onClick={() => handleSort("subject")}>
-                  Subject{" "}
-                  {sortConfig.key === "subject" &&
-                    (sortConfig.direction === "asc" ? "↑" : "↓")}
-                </th>
-                <th onClick={() => handleSort("subject")}>
-                  Sent to{" "}
-                  {sortConfig.key === "subject" &&
-                    (sortConfig.direction === "asc" ? "↑" : "↓")}
-                </th>
-                <th onClick={() => handleSort("subject")}>
-                  Designation{" "}
-                  {sortConfig.key === "subject" &&
-                    (sortConfig.direction === "asc" ? "↑" : "↓")}
-                </th>
-                <th onClick={() => handleSort("upload_date")}>
-                  Date{" "}
-                  {sortConfig.key === "upload_date" &&
-                    (sortConfig.direction === "asc" ? "↑" : "↓")}
-                </th>
+                {[
+                  { key: "id", label: "File ID" },
+                  { key: "subject", label: "Subject" },
+                  { key: "sent_to", label: "Sent to" },
+                  { key: "receiver_designation", label: "Designation" },
+                  { key: "upload_date", label: "Date" },
+                ].map(({ key, label }) => (
+                  <th
+                    key={key}
+                    onClick={() => handleSort(key)}
+                    style={{
+                      cursor: "pointer",
+                      padding: "12px",
+                      width: "15.5%",
+                      border: "1px solid #0000",
+                      alignItems: "center",
+                      gap: "5px",
+                    }}
+                  >
+                    {label}
+                    {sortConfig.key === key ? (
+                      sortConfig.direction === "asc" ? (
+                        <CaretUp size={16} />
+                      ) : (
+                        <CaretDown size={16} />
+                      )
+                    ) : (
+                      <ArrowsDownUp size={16} opacity={0.6} />
+                    )}
+                  </th>
+                ))}
                 <th
                   style={{
                     padding: "12px",

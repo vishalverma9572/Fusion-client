@@ -9,7 +9,13 @@ import {
   TextInput,
   Group,
 } from "@mantine/core";
-import { Archive, Eye } from "@phosphor-icons/react";
+import {
+  Archive,
+  Eye,
+  CaretUp,
+  CaretDown,
+  ArrowsDownUp,
+} from "@phosphor-icons/react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import View from "./ViewFile";
@@ -194,38 +200,48 @@ export default function Inboxfunc() {
           >
             <thead>
               <tr>
-                {/* In responsive view, leave header labels empty for Archive and View File */}
                 <th data-label="">Archive</th>
-                <th onClick={() => handleSort("uploader")}>
-                  Sent By{" "}
-                  {sortConfig.key === "uploader" &&
-                    (sortConfig.direction === "asc" ? "↑" : "↓")}
-                </th>
-                <th onClick={() => handleSort("uploader")}>
-                  Designation{" "}
-                  {sortConfig.key === "uploader" &&
-                    (sortConfig.direction === "asc" ? "↑" : "↓")}
-                </th>
-                <th onClick={() => handleSort("id")}>
-                  File ID{" "}
-                  {sortConfig.key === "id" &&
-                    (sortConfig.direction === "asc" ? "↑" : "↓")}
-                </th>
-                <th onClick={() => handleSort("subject")}>
-                  Subject{" "}
-                  {sortConfig.key === "subject" &&
-                    (sortConfig.direction === "asc" ? "↑" : "↓")}
-                </th>
-                <th onClick={() => handleSort("upload_date")}>
-                  Date{" "}
-                  {sortConfig.key === "upload_date" &&
-                    (sortConfig.direction === "asc" ? "↑" : "↓")}
-                </th>
+                {[
+                  "uploader",
+                  "designation",
+                  "id",
+                  "subject",
+                  "upload_date",
+                ].map((key) => (
+                  <th
+                    key={key}
+                    onClick={() => handleSort(key)}
+                    style={{
+                      padding: "12px",
+                      width: "15.5%",
+                      border: "1px solid #0000",
+                      cursor: "pointer",
+                      display: "align-items",
+                      alignItems: "center",
+                      gap: "5px",
+                    }}
+                  >
+                    {key === "uploader"
+                      ? "Sent By"
+                      : key === "upload_date"
+                        ? "Date"
+                        : key.charAt(0).toUpperCase() + key.slice(1)}
+                    {sortConfig.key === key ? (
+                      sortConfig.direction === "asc" ? (
+                        <CaretUp size={16} />
+                      ) : (
+                        <CaretDown size={16} />
+                      )
+                    ) : (
+                      <ArrowsDownUp size={16} opacity={0.6} />
+                    )}
+                  </th>
+                ))}
                 <th
                   style={{
                     padding: "12px",
                     width: "8.5%",
-                    border: "1px solid #ddd",
+                    border: "1px solid #0000",
                   }}
                 >
                   View File
