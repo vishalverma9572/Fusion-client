@@ -6,10 +6,7 @@ import {
   Table,
   ActionIcon,
   Tooltip,
-  Select,
-  Button,
   TextInput,
-  Textarea,
   Group,
 } from "@mantine/core";
 import { Archive, Eye } from "@phosphor-icons/react";
@@ -19,9 +16,6 @@ import View from "./ViewFile";
 import {
   getFilesRoute,
   createArchiveRoute,
-  designationsRoute,
-  createFileRoute,
-  forwardFileRoute,
 } from "../../../routes/filetrackingRoutes";
 
 export default function Inboxfunc() {
@@ -35,19 +29,6 @@ export default function Inboxfunc() {
   let current_module = useSelector((state) => state.module.current_module);
   current_module = current_module.split(" ").join("").toLowerCase();
 
-  const [receiver_username, setReceiverUsername] = React.useState("");
-  const [receiver_designation, setReceiverDesignation] = React.useState("");
-  const [receiver_designations, setReceiverDesignations] = React.useState("");
-  const [forwardFile, setForwardFile] = useState(null); // For forwarding file
-  // const [selectedFile, setSelectedFile] = useState(null); // For viewing file details
-  // const [forwardFile] = useState(null); // For forwarding file
-  const [remarks, setRemarks] = useState(""); // State for remarks
-  const receiverRoles = Array.isArray(receiver_designations)
-    ? receiver_designations.map((receiver_role) => ({
-        value: receiver_role,
-        label: receiver_role,
-      }))
-    : [];
   // Helper function to convert dates
   const convertDate = (date) => {
     const d = new Date(date);
@@ -78,18 +59,6 @@ export default function Inboxfunc() {
 
     getFiles();
   }, [username, role, current_module, token]);
-
-  const fetchRoles = async () => {
-    const response = await axios.get(
-      `${designationsRoute}${receiver_username}`,
-      {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-      },
-    );
-    setReceiverDesignations(response.data.designations);
-  };
 
   // Archive file handler
   const handleArchive = async (fileID) => {
@@ -151,52 +120,6 @@ export default function Inboxfunc() {
       e.currentTarget.dataset.defaultColor;
   };
 
-  const handleSubmitForward = async () => {
-    try {
-      let response = await axios.get(`${createFileRoute}${forwardFile.id}`, {
-        withCredentials: true,
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-      });
-
-      setForwardFile(response.data);
-      const fileAttachment =
-        forwardFile.upload_file instanceof File
-          ? forwardFile.upload_file
-          : new File([forwardFile.upload_file], "uploaded_file", {
-              type: "application/octet-stream",
-            });
-
-      console.log(forwardFile.upload_file);
-      const formData = new FormData();
-      formData.append("file_attachment", fileAttachment);
-      console.log(receiver_username);
-      formData.append("receiver", receiver_username);
-      formData.append("receiver_designation", receiver_designation);
-      formData.append("remarks", remarks);
-      console.log(formData);
-      console.log(forwardFile.id);
-      response = await axios.post(
-        `${forwardFileRoute}${forwardFile.id}/`,
-        formData,
-        {
-          withCredentials: true,
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        },
-      );
-      // Reset form and state
-      setForwardFile(null);
-      setReceiverDesignation(""); // Reset designation
-      setReceiverUsername("");
-      setRemarks("");
-    } catch (err) {
-      console.error("Error forwarding file:", err);
-    }
-  };
-
   return (
     <Card
       shadow="sm"
@@ -250,66 +173,6 @@ export default function Inboxfunc() {
             }
           />
         </div>
-      ) : forwardFile ? (
-        <div
-          style={{
-            margin: "1rem",
-            padding: "1rem",
-            borderRadius: "8px",
-            backgroundColor: "#f9f9f9",
-            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-          }}
-        >
-          <Title order={3} mb="md">
-            Forward File
-          </Title>
-          <Box>
-            {/* Step 1: Select the recipient's designation */}
-            <TextInput
-              label="Forward To"
-              placeholder="Enter forward recipient"
-              value={receiver_username}
-              onChange={(e) => {
-                setReceiverUsername(e.target.value);
-              }}
-              mb="sm"
-            />
-            {/* Receiver Designation as a dropdown */}
-            <Select
-              label="Receiver Designation"
-              placeholder="Select designation"
-              onClick={() => fetchRoles()}
-              value={receiver_designation}
-              data={receiverRoles}
-              mb="sm"
-              onChange={(value) => setReceiverDesignation(value)}
-            />
-
-            {/* Remarks Textarea */}
-            <Textarea
-              label="Remarks"
-              placeholder="Add any remarks here"
-              value={remarks}
-              onChange={(e) => setRemarks(e.target.value)}
-              mt="md"
-              style={{ height: "100px" }}
-            />
-
-            {/* Forward and Cancel Buttons */}
-            <Group position="right" mt="md">
-              <Button
-                variant="light"
-                color="blue"
-                onClick={handleSubmitForward}
-              >
-                Forward File
-              </Button>
-              <Button variant="subtle" color="gray" onClick={handleBack}>
-                Cancel
-              </Button>
-            </Group>
-          </Box>
-        </div>
       ) : (
         <Box
           style={{
@@ -335,6 +198,11 @@ export default function Inboxfunc() {
                 <th data-label="">Archive</th>
                 <th onClick={() => handleSort("uploader")}>
                   Sent By{" "}
+                  {sortConfig.key === "uploader" &&
+                    (sortConfig.direction === "asc" ? "↑" : "↓")}
+                </th>
+                <th onClick={() => handleSort("uploader")}>
+                  Designation{" "}
                   {sortConfig.key === "uploader" &&
                     (sortConfig.direction === "asc" ? "↑" : "↓")}
                 </th>
@@ -389,26 +257,6 @@ export default function Inboxfunc() {
                         <Archive size="1rem" />
                       </ActionIcon>
                     </Tooltip>
-                    {/* <Tooltip label="View File" position="top" withArrow>
-                          <ActionIcon
-                          variant="light"
-                          color="black"
-                          style={{
-                            transition: "background-color 0.3s",
-                            width: "2rem",
-                            height: "2rem",
-                            }}
-                            onClick={() => setSelectedFile(file)}
-                            onMouseEnter={(e) => {
-                              e.target.style.backgroundColor = "#E3F2FD";
-                              }}
-                              onMouseLeave={(e) => {
-                                e.target.style.backgroundColor = "transparent";
-                                }}
-                                >
-                                <Eye size="1rem" />
-                                </ActionIcon>
-                                </Tooltip> */}
                   </td>
                   <td
                     style={{
@@ -418,7 +266,17 @@ export default function Inboxfunc() {
                     }}
                     data-label="Sent By"
                   >
-                    {file.uploader}
+                    {file.sent_by_user}
+                  </td>
+                  <td
+                    style={{
+                      padding: "12px",
+                      border: "1px solid #ddd",
+                      textAlign: "center",
+                    }}
+                    data-label="Sent By"
+                  >
+                    {file.sent_by_designation}
                   </td>
                   {/* <td className="archive-cell" data-label=""> */}
                   <td

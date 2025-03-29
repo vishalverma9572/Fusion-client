@@ -6,9 +6,6 @@ import {
   Table,
   ActionIcon,
   Tooltip,
-  Select,
-  Textarea,
-  Button,
   Group,
   TextInput,
 } from "@mantine/core";
@@ -16,12 +13,7 @@ import { Eye } from "@phosphor-icons/react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import View from "./ViewFile";
-import {
-  forwardFileRoute,
-  outboxRoute,
-  designationsRoute,
-  createFileRoute,
-} from "../../../routes/filetrackingRoutes";
+import { outboxRoute } from "../../../routes/filetrackingRoutes";
 
 export default function Outboxfunc() {
   const [files, setFiles] = useState([]);
@@ -36,19 +28,7 @@ export default function Outboxfunc() {
     const d = new Date(date);
     return d.toLocaleString();
   };
-  const [receiver_username, setReceiverUsername] = React.useState("");
-  const [receiver_designation, setReceiverDesignation] = React.useState("");
-  const [receiver_designations, setReceiverDesignations] = React.useState("");
   const [selectedFile, setSelectedFile] = useState(null); // For viewing file details
-  const [forwardFile, setForwardFile] = useState(null); // For forwarding file
-
-  const [remarks, setRemarks] = useState(""); // State for remarks
-  const receiverRoles = Array.isArray(receiver_designations)
-    ? receiver_designations.map((receiver_role) => ({
-        value: receiver_role,
-        label: receiver_role,
-      }))
-    : [];
   useEffect(() => {
     const getFiles = async () => {
       try {
@@ -78,20 +58,8 @@ export default function Outboxfunc() {
     // Call the getFiles function to fetch data on component mount
     getFiles();
   }, []);
-  const fetchRoles = async () => {
-    const response = await axios.get(
-      `${designationsRoute}${receiver_username}`,
-      {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-      },
-    );
-    setReceiverDesignations(response.data.designations);
-  };
   const handleBack = () => {
     setSelectedFile(null);
-    setForwardFile(null); // Reset forward file state
   };
 
   const sortedFiles = [...files].sort((a, b) => {
@@ -115,52 +83,6 @@ export default function Outboxfunc() {
     }));
   };
 
-  const handleSubmitForward = async () => {
-    try {
-      let response = await axios.get(`${createFileRoute}${forwardFile.id}`, {
-        withCredentials: true,
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-      });
-
-      setForwardFile(response.data);
-      const fileAttachment =
-        forwardFile.upload_file instanceof File
-          ? forwardFile.upload_file
-          : new File([forwardFile.upload_file], "uploaded_file", {
-              type: "application/octet-stream",
-            });
-
-      console.log(forwardFile.upload_file);
-      const formData = new FormData();
-      formData.append("file_attachment", fileAttachment);
-      console.log(receiver_username);
-      formData.append("receiver", receiver_username);
-      formData.append("receiver_designation", receiver_designation);
-      formData.append("remarks", remarks);
-      console.log(formData);
-      console.log(forwardFile.id);
-      response = await axios.post(
-        `${forwardFileRoute}${forwardFile.id}/`,
-        formData,
-        {
-          withCredentials: true,
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        },
-      );
-      // Reset form and state
-      setForwardFile(null);
-      setReceiverDesignation(""); // Reset designation
-      setReceiverUsername("");
-      setRemarks("");
-    } catch (err) {
-      console.error("Error forwarding file:", err);
-    }
-  };
-
   return (
     <Card
       shadow="sm"
@@ -175,7 +97,7 @@ export default function Outboxfunc() {
         overflowY: "auto",
       }}
     >
-      {!selectedFile && !forwardFile && (
+      {!selectedFile && (
         <Group position="apart" mb="md">
           <Title
             order={2}
@@ -214,66 +136,6 @@ export default function Outboxfunc() {
             }
           />
         </div>
-      ) : forwardFile ? (
-        <div
-          style={{
-            margin: "1rem",
-            padding: "1rem",
-            borderRadius: "8px",
-            backgroundColor: "#f9f9f9",
-            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-          }}
-        >
-          <Title order={3} mb="md">
-            Forward File
-          </Title>
-          <Box>
-            {/* Step 1: Select the recipient's designation */}
-            <TextInput
-              label="Forward To"
-              placeholder="Enter forward recipient"
-              value={receiver_username}
-              onChange={(e) => {
-                setReceiverUsername(e.target.value);
-              }}
-              mb="sm"
-            />
-            {/* Receiver Designation as a dropdown */}
-            <Select
-              label="Receiver Designation"
-              placeholder="Select designation"
-              onClick={() => fetchRoles()}
-              value={receiver_designation}
-              data={receiverRoles}
-              mb="sm"
-              onChange={(value) => setReceiverDesignation(value)}
-            />
-
-            {/* Remarks Textarea */}
-            <Textarea
-              label="Remarks"
-              placeholder="Add any remarks here"
-              value={remarks}
-              onChange={(e) => setRemarks(e.target.value)}
-              mt="md"
-              style={{ height: "100px" }}
-            />
-
-            {/* Forward and Cancel Buttons */}
-            <Group position="right" mt="md">
-              <Button
-                variant="light"
-                color="blue"
-                onClick={handleSubmitForward}
-              >
-                Forward File
-              </Button>
-              <Button variant="subtle" color="gray" onClick={handleBack}>
-                Cancel
-              </Button>
-            </Group>
-          </Box>
-        </div>
       ) : (
         <Box
           style={{
@@ -305,6 +167,16 @@ export default function Outboxfunc() {
                   {sortConfig.key === "subject" &&
                     (sortConfig.direction === "asc" ? "↑" : "↓")}
                 </th>
+                <th onClick={() => handleSort("subject")}>
+                  Sent to{" "}
+                  {sortConfig.key === "subject" &&
+                    (sortConfig.direction === "asc" ? "↑" : "↓")}
+                </th>
+                <th onClick={() => handleSort("subject")}>
+                  Designation{" "}
+                  {sortConfig.key === "subject" &&
+                    (sortConfig.direction === "asc" ? "↑" : "↓")}
+                </th>
                 <th onClick={() => handleSort("upload_date")}>
                   Date{" "}
                   {sortConfig.key === "upload_date" &&
@@ -324,35 +196,6 @@ export default function Outboxfunc() {
             <tbody>
               {filteredFiles.map((file, index) => (
                 <tr key={index}>
-                  {/* <td
-                    style={{
-                      padding: "8px",
-                      textAlign: "center",
-                      border: "1px solid #ddd",
-                    }}
-                  >
-                    <Tooltip label="Forward" position="top" withArrow>
-                      <ActionIcon
-                        variant="light"
-                        color="blue"
-                        style={{
-                          transition: "background-color 0.3s",
-                          width: "2rem",
-                          height: "2rem",
-                        }}
-                        onClick={() => handleForwardFile(file)} // Set the file to forward
-                        onMouseEnter={(e) => {
-                          e.target.style.backgroundColor = "#ffebee";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.target.style.backgroundColor = "transparent";
-                        }}
-                      >
-                        <ArrowArcRight size="1rem" />
-                      </ActionIcon>
-                    </Tooltip>
-                  </td> */}
-
                   <td
                     style={{
                       padding: "12px",
@@ -374,6 +217,24 @@ export default function Outboxfunc() {
                     }}
                   >
                     {file.subject}
+                  </td>
+                  <td
+                    style={{
+                      padding: "12px",
+                      border: "1px solid #ddd",
+                      textAlign: "center",
+                    }}
+                  >
+                    {file.receiver}
+                  </td>
+                  <td
+                    style={{
+                      padding: "12px",
+                      border: "1px solid #ddd",
+                      textAlign: "center",
+                    }}
+                  >
+                    {file.receiver_designation}
                   </td>
                   <td
                     style={{
