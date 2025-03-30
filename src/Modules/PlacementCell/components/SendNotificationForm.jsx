@@ -8,10 +8,11 @@ import {
   Title,
   Container,
 } from "@mantine/core";
-import { DatePickerInput, TimeInput } from "@mantine/dates";
-import { sendNotificationRoute } from "../../../routes/placementCellRoutes";
-import { notifications } from "@mantine/notifications";
 import axios from "axios";
+import { DatePickerInput, TimeInput } from "@mantine/dates";
+import { notifications } from "@mantine/notifications";
+import { sendNotificationRoute } from "../../../routes/placementCellRoutes";
+
 function SendNotificationForm() {
   const [formData, setFormData] = useState({
     sendTo: "Student",
@@ -29,7 +30,7 @@ function SendNotificationForm() {
   const handleSubmit = async () => {
     try {
       const token = localStorage.getItem("authToken");
-      const response = await axios.post(sendNotificationRoute, formData, {
+      await axios.post(sendNotificationRoute, formData, {
         headers: {
           Authorization: `Token ${token}`,
         },

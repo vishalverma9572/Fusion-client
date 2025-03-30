@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from "react";
 import {
   TextInput,
@@ -32,13 +33,13 @@ function FieldsForm() {
           },
         });
 
-        if (response.status == 200) {
+        if (response.status === 200) {
           setFields([]);
           response.data.forEach((element) => {
             const newField = [element.name, element.type, element.required];
             setFields((prevFields) => [...prevFields, newField]);
           });
-        } else if (response.status == 406) {
+        } else if (response.status === 406) {
           notifications.show({
             title: "Error fetching data",
             message: `Error fetching data: ${response.status}`,
@@ -51,7 +52,7 @@ function FieldsForm() {
             color: "red",
           });
         }
-      } catch (error) {
+      } catch (err) {
         notifications.show({
           title: "Failed to fetch data",
           message: "Failed to fetch feilds list",
@@ -80,7 +81,7 @@ function FieldsForm() {
         },
       });
 
-      if (response.status == 200) {
+      if (response.status === 200) {
         notifications.show({
           title: "Success",
           message: "Field added!",
@@ -96,8 +97,8 @@ function FieldsForm() {
           position: "top-center",
         });
       }
-    } catch (error) {
-      console.error("Error adding fields:", error);
+    } catch (err) {
+      console.error("Error adding fields:", err);
       notifications.show({
         title: "Error",
         message: "Failed to add field.",

@@ -7,7 +7,6 @@ import {
   TextInput,
   Select,
   Textarea,
-  Card,
   Container,
   Title,
 } from "@mantine/core";
@@ -18,8 +17,8 @@ function CreateNextRoundForm() {
   const [modalOpened, setModalOpened] = useState(false);
   const [roundNumber, setRoundNumber] = useState();
   const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
-  const [location, setLocation] = useState("");
+  // const [time, setTime] = useState(""); // Not used anywhere hence commented
+  // const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [roundType, setRoundType] = useState("");
 
@@ -33,15 +32,15 @@ function CreateNextRoundForm() {
       test_date: date,
       // time:time,
       // location:location,
-      description: description,
+      description,
       test_type: roundType,
     };
 
     setModalOpened(false);
     setRoundNumber();
     setDate("");
-    setTime("");
-    setLocation("");
+    // setTime("");
+    // setLocation("");
     setDescription("");
     setRoundType("");
 

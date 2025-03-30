@@ -41,7 +41,7 @@ function PlacementScheduleGrid({ data, itemsPerPage, cardsPerRow }) {
     <Container fluid>
       <Grid gutter="md">
         {paddedItems.map((item, index) => (
-          <Grid.Col key={index} span={"content"}>
+          <Grid.Col key={index} span="content">
             {item ? (
               <PlacementScheduleCard
                 jobId={item.id}
@@ -57,7 +57,7 @@ function PlacementScheduleGrid({ data, itemsPerPage, cardsPerRow }) {
                 check={item.check}
               />
             ) : (
-              <div></div>
+              <div />
             )}
           </Grid.Col>
         ))}
@@ -75,7 +75,13 @@ function PlacementScheduleGrid({ data, itemsPerPage, cardsPerRow }) {
 }
 
 PlacementScheduleGrid.propTypes = {
-  data: PropTypes.array.isRequired,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
+
   itemsPerPage: PropTypes.number.isRequired,
   cardsPerRow: PropTypes.number.isRequired,
 };

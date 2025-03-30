@@ -14,9 +14,11 @@ import {
 import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
 import { notifications } from "@mantine/notifications";
 import axios from "axios";
-import { fetchDebaredlistRoute } from "../../../routes/placementCellRoutes";
-import { sendNotificationRoute } from "../../../routes/placementCellRoutes";
-import { debarredStatusRoute } from "../../../routes/placementCellRoutes";
+import {
+  fetchDebaredlistRoute,
+  sendNotificationRoute,
+  debarredStatusRoute,
+} from "../../../routes/placementCellRoutes";
 
 function DebarredStudents() {
   const [debarredStudents, setDebarredStudents] = useState([]);
@@ -66,7 +68,7 @@ function DebarredStudents() {
     setLoading(true);
     try {
       const newDebarredStudent = {
-        rollNo: rollNo,
+        rollNo,
         name: studentDetails.name,
         reason,
       };
@@ -79,24 +81,16 @@ function DebarredStudents() {
         description: "",
       };
       const token = localStorage.getItem("authToken");
-      const response = await axios.post(
-        `${debarredStatusRoute}${rollNo}/`,
-        newDebarredStudent,
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
+      await axios.post(`${debarredStatusRoute}${rollNo}/`, newDebarredStudent, {
+        headers: {
+          Authorization: `Token ${token}`,
         },
-      );
-      const response2 = await axios.post(
-        sendNotificationRoute,
-        notificationData,
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
+      });
+      await axios.post(sendNotificationRoute, notificationData, {
+        headers: {
+          Authorization: `Token ${token}`,
         },
-      );
+      });
       setDebarredStudents((prev) => [...prev, newDebarredStudent]);
       notifications.show({
         title: "Success",

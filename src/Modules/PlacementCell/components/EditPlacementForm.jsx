@@ -13,21 +13,12 @@ import {
   Button,
   MultiSelect,
 } from "@mantine/core";
-import { DateInput, DatePicker } from "@mantine/dates";
-import { TimeInput } from "@mantine/dates";
+import { DateInput, TimeInput } from "@mantine/dates";
 import PropTypes from "prop-types";
 
-const EditPlacementForm = ({ isOpen, onClose, placementData, onSubmit }) => {
-  const {
-    companyLogo,
-    companyName,
-    location,
-    position,
-    jobType,
-    deadline,
-    description,
-    salary,
-  } = placementData;
+function EditPlacementForm({ isOpen, onClose, placementData, onSubmit }) {
+  const { companyName, location, position, jobType, description, salary } =
+    placementData;
 
   const [company, setCompany] = useState(companyName);
   const [date, setDate] = useState(new Date());
@@ -47,17 +38,17 @@ const EditPlacementForm = ({ isOpen, onClose, placementData, onSubmit }) => {
 
   const [selectedFields, setSelectedFields] = useState([]);
 
-  const getFormattedDate = (date) => {
-    if (!date) return null;
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
+  const getFormattedDate = (date_) => {
+    if (!date_) return null;
+    const year = date_.getFullYear();
+    const month = String(date_.getMonth() + 1).padStart(2, "0");
+    const day = String(date_.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
 
   const handleSubmit = () => {
     const parsedCtc = parseFloat(ctc);
-    if (isNaN(parsedCtc) || parsedCtc <= 0) {
+    if (Number.isNaN(parsedCtc) || parsedCtc <= 0) {
       alert("CTC must be a valid positive decimal number.");
       return;
     }
@@ -204,7 +195,7 @@ const EditPlacementForm = ({ isOpen, onClose, placementData, onSubmit }) => {
       </Card>
     </Modal>
   );
-};
+}
 
 EditPlacementForm.propTypes = {
   isOpen: PropTypes.bool.isRequired,

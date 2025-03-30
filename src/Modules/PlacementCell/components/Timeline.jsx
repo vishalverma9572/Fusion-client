@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Timeline, Text, Card, Title, Container, Group } from "@mantine/core";
-import { Check, X, Minus } from "@phosphor-icons/react";
+import {
+  Timeline,
+  Text,
+  Title,
+  Container,
+  Group,
+  ActionIcon,
+} from "@mantine/core";
+import { Check, X, Minus, ArrowLeft } from "@phosphor-icons/react";
 import axios from "axios";
-import { ActionIcon } from "@mantine/core";
-import { ArrowLeft } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
 import { fetchTimeLineRoute } from "../../../routes/placementCellRoutes";
 

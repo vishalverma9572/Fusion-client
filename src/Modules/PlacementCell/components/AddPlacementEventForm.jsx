@@ -15,16 +15,14 @@ import {
 import { DatePicker, TimeInput } from "@mantine/dates";
 import { Calendar } from "@phosphor-icons/react";
 import axios from "axios";
-import { useSelector } from "react-redux";
 import { notifications } from "@mantine/notifications";
-import { addPlacementEventForm } from "../../../routes/placementCellRoutes";
 import {
+  addPlacementEventForm,
   fetchRegistrationRoute,
   fetchFieldsSubmitformRoute,
 } from "../../../routes/placementCellRoutes";
 
 function AddPlacementEventForm() {
-  const role = useSelector((state) => state.user.role);
   const [company, setCompany] = useState("");
   const [date, setDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -57,8 +55,9 @@ function AddPlacementEventForm() {
   };
 
   const getCompanyId = (companyName) => {
-    const company = companies.find((c) => c.companyName === companyName);
-    return company ? company.id : null;
+    const _company = companies.find((c) => c.companyName === companyName);
+    setCompany(_company.companyName);
+    return _company ? company.id : null;
   };
 
   useEffect(() => {
@@ -155,7 +154,7 @@ function AddPlacementEventForm() {
 
     const matchingIds = selectedFields
       .map((value) => {
-        const field = tpoFields.find((field) => field.value === value);
+        const field = tpoFields.find((f) => f.value === value);
         return field ? field.id : null;
       })
       .filter((id) => id !== null);
@@ -192,7 +191,7 @@ function AddPlacementEventForm() {
     formData.append("selected_fields", selectedFields.join(", "));
 
     try {
-      const response = await axios.post(addPlacementEventForm, formData, {
+      await axios.post(addPlacementEventForm, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Token ${token}`,
@@ -230,7 +229,7 @@ function AddPlacementEventForm() {
           <Select
             label="Select Company"
             placeholder="Select a company"
-            data={companies.map((company) => company.companyName)}
+            data={companies.map((company_) => company_.companyName)}
             value={selectedCompany}
             onChange={setSelectedCompany}
             required

@@ -16,11 +16,13 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { format } from "date-fns";
+import { notifications } from "@mantine/notifications";
 import EditPlacementForm from "./EditPlacementForm";
 import ApplyForPlacementForm from "./ApplyForPlacementForm";
-import { notifications } from "@mantine/notifications";
-import { ApplyForPlacementRoute } from "../../../routes/placementCellRoutes";
-import { addPlacementEventForm } from "../../../routes/placementCellRoutes";
+import {
+  ApplyForPlacementRoute,
+  addPlacementEventForm,
+} from "../../../routes/placementCellRoutes";
 
 function PlacementScheduleCard({
   jobId,
@@ -378,7 +380,7 @@ function PlacementScheduleCard({
         opened={modalOpened}
         onClose={() => setModalOpened(false)}
         centered
-        size={"lg"}
+        size="lg"
       >
         <Container d>
           <ApplyForPlacementForm
@@ -395,6 +397,7 @@ function PlacementScheduleCard({
 
 PlacementScheduleCard.propTypes = {
   jobId: PropTypes.string.isRequired,
+  jobId2: PropTypes.string.isRequired,
   companyName: PropTypes.string.isRequired,
   location: PropTypes.string.isRequired,
   position: PropTypes.string.isRequired,

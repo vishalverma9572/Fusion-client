@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/no-unstable-nested-components */
 import React, { useState, useEffect, useMemo } from "react";
 import {
   Card,
@@ -7,7 +9,6 @@ import {
   Select,
   TextInput,
   Grid,
-  Loader,
   Pagination,
   Alert,
   Chip,
@@ -24,7 +25,6 @@ import { fetchRestrictionsRoute } from "../../../routes/placementCellRoutes";
 
 function RestrictionsTab() {
   const [restrictions, setRestrictions] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [activePage, setActivePage] = useState(1);
   const recordsPerPage = 10;
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -63,7 +63,7 @@ function RestrictionsTab() {
           },
         });
 
-        if (response.status == 200) {
+        if (response.status === 200) {
           setRestrictions([]);
           response.data.forEach((element) => {
             const newField = {
@@ -74,7 +74,7 @@ function RestrictionsTab() {
             };
             setRestrictions((prevFields) => [...prevFields, newField]);
           });
-        } else if (response.status == 406) {
+        } else if (response.status === 406) {
           notifications.show({
             title: "Error fetching data",
             message: `Error fetching data: ${response.status}`,
@@ -97,6 +97,43 @@ function RestrictionsTab() {
     };
     fetchRestrictionsList();
   }, []);
+
+  const getRuleDescription = () => {
+    if (!criteria || !condition || values.length === 0) return "";
+
+    let conditionText = "";
+
+    if (criteria === "cgpa") {
+      conditionText =
+        condition === "greater_than"
+          ? `Students with CGPA > ${values[0]} are not allowed to participate in further drives.`
+          : `Students with CGPA < ${values[0]} are not allowed to participate in further drives.`;
+    } else if (criteria === "company") {
+      conditionText =
+        condition === "equal"
+          ? `Students placed in ${values.join(", ")} are not allowed to participate in further drives.`
+          : `Students not placed in ${values.join(", ")} are not allowed to participate in further drives.`;
+    } else if (criteria === "year") {
+      conditionText =
+        condition === "greater_than"
+          ? `Students in year > ${values[0]} are not allowed to participate in further drives.`
+          : `Students in year < ${values[0]} are not allowed to participate in further drives.`;
+    } else if (criteria === "ctc") {
+      conditionText =
+        condition === "greater_than"
+          ? `Students with CTC > ${values[0]} are not allowed to participate in further drives.`
+          : `Students with CTC < ${values[0]} are not allowed to participate in further drives.`;
+    }
+
+    return conditionText;
+  };
+
+  const resetForm = () => {
+    setCriteria("");
+    setCondition("");
+    setValues([]);
+    setEditingRestriction(null);
+  };
 
   const handleSubmit = async () => {
     const restrictionData = {
@@ -131,7 +168,7 @@ function RestrictionsTab() {
           },
         );
 
-        if (response.status == 200) {
+        if (response.status === 200) {
           notifications.show({
             title: "Success",
             message: "successfully added!",
@@ -178,43 +215,6 @@ function RestrictionsTab() {
     setIsModalOpen(true);
   };
 
-  const resetForm = () => {
-    setCriteria("");
-    setCondition("");
-    setValues([]);
-    setEditingRestriction(null);
-  };
-
-  const getRuleDescription = () => {
-    if (!criteria || !condition || values.length === 0) return "";
-
-    let conditionText = "";
-
-    if (criteria === "cgpa") {
-      conditionText =
-        condition === "greater_than"
-          ? `Students with CGPA > ${values[0]} are not allowed to participate in further drives.`
-          : `Students with CGPA < ${values[0]} are not allowed to participate in further drives.`;
-    } else if (criteria === "company") {
-      conditionText =
-        condition === "equal"
-          ? `Students placed in ${values.join(", ")} are not allowed to participate in further drives.`
-          : `Students not placed in ${values.join(", ")} are not allowed to participate in further drives.`;
-    } else if (criteria === "year") {
-      conditionText =
-        condition === "greater_than"
-          ? `Students in year > ${values[0]} are not allowed to participate in further drives.`
-          : `Students in year < ${values[0]} are not allowed to participate in further drives.`;
-    } else if (criteria === "ctc") {
-      conditionText =
-        condition === "greater_than"
-          ? `Students with CTC > ${values[0]} are not allowed to participate in further drives.`
-          : `Students with CTC < ${values[0]} are not allowed to participate in further drives.`;
-    }
-
-    return conditionText;
-  };
-
   const columns = useMemo(
     () => [
       { accessorKey: "criteria", header: "Criteria", size: 200 },
@@ -247,8 +247,6 @@ function RestrictionsTab() {
     (activePage - 1) * recordsPerPage,
     activePage * recordsPerPage,
   );
-
-  if (loading) return <Loader />;
 
   return (
     <Container>
@@ -291,7 +289,7 @@ function RestrictionsTab() {
         opened={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title="Add/Edit Restriction"
-        size={"lg"}
+        size="lg"
         centered
       >
         <Card style={{ maxWidth: "800px", margin: "0 auto" }}>

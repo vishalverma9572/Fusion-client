@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   TextInput,
   Button,
@@ -14,8 +14,8 @@ import {
   Image,
 } from "@mantine/core";
 import { ArrowLeft, Check } from "@phosphor-icons/react";
-import ApplicationStatusTimeline from "./components/Timeline";
 import { useNavigate, useLocation } from "react-router-dom";
+import ApplicationStatusTimeline from "./components/Timeline";
 
 function JobApplicationForm() {
   const [submitted, setSubmitted] = useState(false);

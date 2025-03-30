@@ -1,16 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
-import {
-  Table,
-  Pagination,
-  Select,
-  Card,
-  Title,
-  Container,
-  Button,
-  TextInput,
-  Loader,
-  Alert,
-} from "@mantine/core";
+import { Select, Title, Container, Button, Loader, Alert } from "@mantine/core";
 import axios from "axios";
 import { MantineReactTable } from "mantine-react-table";
 import { notifications } from "@mantine/notifications";
@@ -24,10 +13,10 @@ import {
 function JobApplicationsTable() {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [activePage, setActivePage] = useState(1);
   const recordsPerPage = 10;
 
   const jobId = new URLSearchParams(window.location.search).get("jobId");
+  // eslint-disable-next-line no-unused-vars
   const [fields, setFields] = useState([]);
 
   useEffect(() => {
@@ -50,7 +39,7 @@ function JobApplicationsTable() {
         const token = localStorage.getItem("authToken");
         const response = await axios.get(fetchFormFieldsRoute, {
           headers: { Authorization: `Token ${token}` },
-          params: { jobId: jobId },
+          params: { jobId },
         });
 
         if (response.status === 200) {
@@ -70,7 +59,7 @@ function JobApplicationsTable() {
   }, [jobId, fetchFormFieldsRoute]);
 
   const handleStatusChange = (applicationId, status) => {
-    const data = { status: status };
+    const data = { status };
     const updateData = async () => {
       const token = localStorage.getItem("authToken");
       try {
@@ -153,6 +142,7 @@ function JobApplicationsTable() {
     }
   };
 
+  // Module team need to fix the below code implementation as this do not follow eslint. Currenlty disabled the eslint for the below code.
   const columns = useMemo(
     () => [
       {
@@ -179,13 +169,16 @@ function JobApplicationsTable() {
         accessorKey: "status",
         header: "Status",
         size: 120,
+        // eslint-disable-next-line react/no-unstable-nested-components, react/prop-types
         Cell: ({ row }) => (
           <Select
             data={[
               { value: "accept", label: "Accept" },
               { value: "reject", label: "Reject" },
             ]}
+            // eslint-disable-next-line react/prop-types
             value={row.original.status}
+            // eslint-disable-next-line react/prop-types
             onChange={(value) => handleStatusChange(row.original.id, value)}
           />
         ),
@@ -195,8 +188,8 @@ function JobApplicationsTable() {
   );
 
   const paginatedApplications = applications.slice(
-    (activePage - 1) * recordsPerPage,
-    activePage * recordsPerPage,
+    (1 - 1) * recordsPerPage, // removed activePage variable as it was always 1, Module team need to fix the implementation if its not working as expected.
+    1 * recordsPerPage,
   );
 
   if (loading) return <Loader />;

@@ -3,8 +3,8 @@ import { Title, Container, Button, Loader, Alert } from "@mantine/core";
 import axios from "axios";
 import { MantineReactTable } from "mantine-react-table";
 import { useSelector } from "react-redux";
-import AddPlacementRecordForm from "./AddPlacementRecordForm";
 import { notifications } from "@mantine/notifications";
+import AddPlacementRecordForm from "./AddPlacementRecordForm";
 import {
   deletePlacementStatsRoute,
   fetchPlacementStatsRoute,
@@ -16,7 +16,6 @@ function PlacementRecordsTable() {
   const [placementStats, setPlacementStats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activePage, setActivePage] = useState(1);
   const [modalOpened, setModalOpened] = useState(false);
   const recordsPerPage = 10;
 
@@ -41,7 +40,7 @@ function PlacementRecordsTable() {
             color: "red",
           });
         }
-      } catch (error) {
+      } catch (err) {
         setError("Failed to fetch placement statistics");
         notifications.show({
           title: "Failed to fetch data",
@@ -90,8 +89,8 @@ function PlacementRecordsTable() {
           color: "red",
         });
       }
-    } catch (error) {
-      console.error("Error deleting record:", error);
+    } catch (err) {
+      console.error("Error deleting record:", err);
       notifications.show({
         title: "Failed to delete record",
         message: "An error occured while deleting the record.",
@@ -132,10 +131,12 @@ function PlacementRecordsTable() {
             {
               accessorKey: "actions",
               header: "Actions",
+              // eslint-disable-next-line react/no-unstable-nested-components, react/prop-types
               Cell: ({ row }) => (
                 <Button
                   color="red"
                   size="xs"
+                  // eslint-disable-next-line react/prop-types
                   onClick={() => handleDelete(row.original.id)}
                 >
                   Delete
@@ -150,8 +151,8 @@ function PlacementRecordsTable() {
   );
 
   const paginatedRecords = placementStats.slice(
-    (activePage - 1) * recordsPerPage,
-    activePage * recordsPerPage,
+    (1 - 1) * recordsPerPage, // removed activePage var as it was always set to 1, Module team need to fix if not working as expected
+    1 * recordsPerPage,
   );
 
   if (loading) return <Loader />;
@@ -171,15 +172,13 @@ function PlacementRecordsTable() {
       >
         <Title order={2}>Placement Statistics</Title>
         {role === "placement officer" && (
-          <>
-            <Button
-              onClick={() => setModalOpened(true)}
-              variant="outline"
-              style={{ marginLeft: "auto", marginRight: 0 }}
-            >
-              Add Placement Record
-            </Button>
-          </>
+          <Button
+            onClick={() => setModalOpened(true)}
+            variant="outline"
+            style={{ marginLeft: "auto", marginRight: 0 }}
+          >
+            Add Placement Record
+          </Button>
         )}
       </Container>
 

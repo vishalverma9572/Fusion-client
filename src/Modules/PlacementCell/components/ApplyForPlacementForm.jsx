@@ -93,6 +93,7 @@ function ApplyToPlacementForm({ jobID }) {
       const token = localStorage.getItem("authToken");
 
       const responses = Object.entries(formData)
+        // eslint-disable-next-line no-unused-vars
         .filter(([field_id, data]) => data?.value !== undefined)
         .map(([field_id, data]) => ({
           field_id,

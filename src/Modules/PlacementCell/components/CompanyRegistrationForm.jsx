@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   TextInput,
   Textarea,
@@ -12,7 +13,7 @@ import {
 import { notifications } from "@mantine/notifications";
 import { MantineReactTable } from "mantine-react-table";
 import { fetchRegistrationRoute } from "../../../routes/placementCellRoutes";
-import axios from "axios";
+
 function CompanyRegistrationForm() {
   const [companyName, setCompanyName] = useState("");
   const [description, setDescription] = useState("");
@@ -61,13 +62,13 @@ function CompanyRegistrationForm() {
         } else {
           setCompanies(response.data);
         }
-      } catch (error) {
+      } catch (err) {
         notifications.show({
           title: "Failed to fetch data",
           message: "Failed to fetch companies list",
           color: "red",
         });
-        console.error(error);
+        console.error(err);
       }
     };
     fetchRegistrationData();
@@ -100,7 +101,7 @@ function CompanyRegistrationForm() {
         },
       );
 
-      if (response.status == 200) {
+      if (response.status === 200) {
         notifications.show({
           title: "Success",
           message: "successfully added!",
@@ -116,8 +117,8 @@ function CompanyRegistrationForm() {
           position: "top-center",
         });
       }
-    } catch (error) {
-      console.error("Error adding restriction:", error);
+    } catch (err) {
+      console.error("Error adding restriction:", err);
       notifications.show({
         title: "Error",
         message: "Failed to add restriction.",

@@ -1,5 +1,5 @@
 import "@mantine/dates/styles.css";
-
+import PropTypes from "prop-types";
 import React, { useState } from "react";
 import {
   TextInput,
@@ -10,7 +10,6 @@ import {
   Modal,
   Title,
 } from "@mantine/core";
-import { useNavigate } from "react-router-dom";
 import { notifications } from "@mantine/notifications";
 import { fetchPlacementStatsRoute } from "../../../routes/placementCellRoutes";
 
@@ -22,8 +21,6 @@ function AddPlacementRecordForm({ opened, onClose }) {
   const [placementType, setPlacementType] = useState("");
   const [testType, setTestType] = useState("");
   const [testScore, setTestScore] = useState("");
-
-  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     const formData = new FormData();
@@ -70,7 +67,6 @@ function AddPlacementRecordForm({ opened, onClose }) {
         throw new Error(errorData.error || "An error occurred");
       }
 
-      const data = await response.json();
       notifications.show({
         title: "Record Added",
         message: "Placement record has been added successfully.",
@@ -179,5 +175,10 @@ function AddPlacementRecordForm({ opened, onClose }) {
     </Container>
   );
 }
+
+AddPlacementRecordForm.propTypes = {
+  opened: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
 
 export default AddPlacementRecordForm;

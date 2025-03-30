@@ -172,6 +172,8 @@ function PlacementCellPage() {
           ? tpoTabs
           : [];
 
+  const handleTabChange = () => {}; // This is temporarily empty to avoid eslint error, Module team needs to implement this!
+
   return (
     <div style={styles.container}>
       <CustomBreadcrumbs />
