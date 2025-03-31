@@ -115,7 +115,7 @@ function InventoryDashboard() {
             headers: {
               Authorization: `Token ${token}`,
             },
-          }
+          },
         );
         if (!response.ok) {
           throw new Error("Network error");
@@ -162,7 +162,7 @@ function InventoryDashboard() {
                 <div style={{ fontSize: "20px", fontWeight: "bold" }}>
                   {inventoryItems.reduce(
                     (total, item) => total + item.totalQuantity,
-                    0
+                    0,
                   )}
                 </div>
               </div>
@@ -181,9 +181,7 @@ function InventoryDashboard() {
                 <CardItem key={index}>
                   <IconWrapper>{item.icon}</IconWrapper>
                   <div>
-                    <div
-                      style={{ fontWeight: "bold", fontSize: "18px" }}
-                    >
+                    <div style={{ fontWeight: "bold", fontSize: "18px" }}>
                       {item.name}
                     </div>
                     <InfoText>{item.totalQuantity} items</InfoText>

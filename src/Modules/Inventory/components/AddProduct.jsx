@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import "../styles/addProduct.css";
@@ -104,6 +105,8 @@ function AddProduct({ onSuccess, selectedDepartment, val, name }) {
 AddProduct.propTypes = {
   onSuccess: PropTypes.func,
   selectedDepartment: PropTypes.string.isRequired,
+  val: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
 };
 
 export default AddProduct;
