@@ -6,6 +6,7 @@ import "@mantine/notifications/styles.css";
 import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import { Notifications } from "@mantine/notifications";
 import { Layout } from "./components/layout";
+import InventoryIndex from "./Modules/Inventory/components/InventoryIndex";
 
 // eslint-disable-next-line import/no-unresolved
 import { DesignationsProvider } from "./Modules/Iwd/helper/designationContext";
@@ -189,6 +190,16 @@ export default function App() {
             </Layout>
           }
         />
+
+        <Route
+          path="/inventory"
+          element={
+            <Layout>
+              <InventoryIndex />
+            </Layout>
+          }
+        />
+
         <Route
           path="/profile"
           element={
@@ -551,6 +562,7 @@ export default function App() {
             </Layout>
           }
         />
+
         <Route path="/accounts/login" element={<LoginPage />} />
         <Route path="/reset-password" element={<ForgotPassword />} />
         <Route
