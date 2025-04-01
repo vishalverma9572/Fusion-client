@@ -1,8 +1,7 @@
-/* eslint-disable no-restricted-globals */
-/* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import "../styles/transferProduct.css";
+import { InventoryTransfer } from "../../../routes/inventoryRoutes";
 
 function TransferProduct() {
   const {
@@ -10,50 +9,35 @@ function TransferProduct() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const [inventoryData, setInventoryData] = useState([]); // State to manage inventory data
-  console.log(inventoryData);
+  // Removed unused inventoryData state
+
   const onSubmit = async (data) => {
     try {
       const token = localStorage.getItem("authToken");
-      const response = await fetch(
-        "http://127.0.0.1:8000/inventory/api/transfer_product/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Token ${token}`,
-          },
-          body: JSON.stringify({
-            productName: data.productName,
-            quantity: parseInt(data.quantity, 10),
-            fromDepartment: data.fromDepartment,
-            toDepartment: data.toDepartment,
-          }),
+      const response = await fetch(InventoryTransfer, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${token}`,
         },
-      );
+        body: JSON.stringify({
+          productName: data.productName,
+          quantity: parseInt(data.quantity, 10),
+          fromDepartment: data.fromDepartment,
+          toDepartment: data.toDepartment,
+        }),
+      });
 
       if (response.ok) {
         const result = await response.json();
         console.log("Product transferred successfully:", result);
         alert("Product transferred successfully.");
 
-        setInventoryData((prevData) => {
-          const updatedData = [...prevData];
-          const existingIndex = updatedData.findIndex(
-            (item) =>
-              item.name === result.name &&
-              item.department === result.department.name,
-          );
-          if (existingIndex !== -1) {
-            updatedData[existingIndex] = result;
-          } else {
-            updatedData.push(result);
-          }
-          return updatedData;
-        });
+        // Update inventory data logic can be implemented here if needed
+        console.log("Inventory data update logic is not defined.");
       } else {
         const error = await response.json();
-        alert(`Error: ${error.error}` || error.detail);
+        alert(`Error: ${error.error || error.detail}`);
       }
     } catch (error) {
       console.error("Error transferring product:", error);
@@ -71,7 +55,8 @@ function TransferProduct() {
         </label>
         <input
           type="text"
-          {...register("productName", { required: "Product Name is required" })}
+          name="productName"
+          ref={(e) => register(e, { required: "Product Name is required" })}
           placeholder="Enter Product Name"
         />
         {errors.productName && (
@@ -84,7 +69,8 @@ function TransferProduct() {
         </label>
         <input
           type="number"
-          {...register("quantity", {
+          name="quantity"
+          ref={register({
             required: "Quantity is required",
             min: { value: 1, message: "Quantity must be at least 1" },
           })}
@@ -100,7 +86,8 @@ function TransferProduct() {
         </label>
         <input
           type="text"
-          {...register("fromDepartment", {
+          name="fromDepartment"
+          ref={register({
             required: "From Department is required",
           })}
           placeholder="Enter From Department"
@@ -114,9 +101,9 @@ function TransferProduct() {
           <span className="required">*</span>
         </label>
         <select
-          {...register("toDepartment", {
-            required: "To Department is required",
-          })}
+          ref={(e) => {
+            register(e, { required: "To Department is required" });
+          }}
         >
           <option value="">Select Department</option>
           <option value="CSE">CSE</option>
