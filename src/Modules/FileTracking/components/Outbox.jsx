@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Card,
@@ -6,17 +6,31 @@ import {
   Table,
   ActionIcon,
   Tooltip,
-  Group,
   TextInput,
+  Group,
+  Modal,
+  Text,
+  Button,
 } from "@mantine/core";
-import { Eye, CaretUp, CaretDown, ArrowsDownUp } from "@phosphor-icons/react";
-import { useSelector } from "react-redux";
+import {
+  Archive,
+  Eye,
+  CaretUp,
+  CaretDown,
+  ArrowsDownUp,
+} from "@phosphor-icons/react";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { notifications } from "@mantine/notifications";
 import View from "./ViewFile";
-import { outboxRoute } from "../../../routes/filetrackingRoutes";
+import {
+  getFilesRoute,
+  createArchiveRoute,
+} from "../../../routes/filetrackingRoutes";
 
-export default function Outboxfunc() {
+export default function Inboxfunc() {
   const [files, setFiles] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
   const token = localStorage.getItem("authToken");
   const role = useSelector((state) => state.user.role);
   const username = useSelector((state) => state.user.roll_no);
@@ -24,44 +38,75 @@ export default function Outboxfunc() {
   const [searchQuery, setSearchQuery] = useState("");
   let current_module = useSelector((state) => state.module.current_module);
   current_module = current_module.split(" ").join("").toLowerCase();
+
+  // New state for archive confirmation modal
+  const [showArchiveModal, setShowArchiveModal] = useState(false);
+  const [selectedArchiveFile, setSelectedArchiveFile] = useState(null);
+
+  // Helper function to convert dates
   const convertDate = (date) => {
     const d = new Date(date);
     return d.toLocaleString();
   };
-  const [selectedFile, setSelectedFile] = useState(null); // For viewing file details
+
+  // Fetch files on component mount
   useEffect(() => {
     const getFiles = async () => {
       try {
-        const response = await axios.get(
-          `${outboxRoute}`,
-
-          {
-            params: {
-              username,
-              designation: role,
-              src_module: current_module,
-            },
-            withCredentials: true,
-            headers: {
-              Authorization: `Token ${token}`,
-            },
+        const response = await axios.get(`${getFilesRoute}`, {
+          params: {
+            username,
+            designation: role,
+            src_module: current_module,
           },
-        );
-        // Set the response data to the files state
+          withCredentials: true,
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
+        console.log("Inbox: ", response.data);
         setFiles(response.data);
-        console.log(response.data);
       } catch (err) {
         console.error("Error fetching files:", err);
       }
     };
 
-    // Call the getFiles function to fetch data on component mount
     getFiles();
-  }, []);
+  }, [username, role, current_module, token]);
+
+  const handleArchive = async (fileID) => {
+    try {
+      await axios.post(
+        `${createArchiveRoute}`,
+        { file_id: fileID },
+        {
+          params: {
+            username,
+            designation: role,
+            src_module: current_module,
+          },
+          withCredentials: true,
+          headers: {
+            Authorization: `Token ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+      const updatedFiles = files.filter((file) => file.id !== fileID);
+      setFiles(updatedFiles);
+      notifications.show({
+        title: "File archived",
+        message: "The file has been successfully archived",
+        color: "green",
+      });
+    } catch (err) {
+      console.error("Error archiving file:", err);
+    }
+  };
+
   const handleBack = () => {
     setSelectedFile(null);
   };
-
   const sortedFiles = [...files].sort((a, b) => {
     if (!sortConfig.key) return 0;
     const direction = sortConfig.direction === "asc" ? 1 : -1;
@@ -81,6 +126,30 @@ export default function Outboxfunc() {
       key,
       direction: prev.key === key && prev.direction === "asc" ? "desc" : "asc",
     }));
+  };
+
+  // Using e.currentTarget ensures the style is applied to the ActionIcon element
+  const handleMouseEnter = (e) => {
+    e.currentTarget.style.backgroundColor = e.currentTarget.dataset.hoverColor;
+  };
+
+  const handleMouseLeave = (e) => {
+    e.currentTarget.style.backgroundColor =
+      e.currentTarget.dataset.defaultColor;
+  };
+
+  // Archive modal functions
+  const openArchiveModal = (file) => {
+    setSelectedArchiveFile(file);
+    setShowArchiveModal(true);
+  };
+
+  const confirmArchive = () => {
+    if (selectedArchiveFile) {
+      handleArchive(selectedArchiveFile.id);
+      setShowArchiveModal(false);
+      setSelectedArchiveFile(null);
+    }
   };
 
   return (
@@ -106,7 +175,7 @@ export default function Outboxfunc() {
               fontSize: "24px",
             }}
           >
-            Outbox
+            Inbox
           </Title>
           <TextInput
             placeholder="Search files..."
@@ -156,27 +225,33 @@ export default function Outboxfunc() {
             }}
           >
             <thead>
-              <tr style={{ backgroundColor: "#0000" }}>
+              <tr>
+                <th data-label="">Archive</th>
                 {[
-                  { key: "id", label: "File ID" },
-                  { key: "subject", label: "Subject" },
-                  { key: "sent_to", label: "Sent to" },
-                  { key: "receiver_designation", label: "Designation" },
-                  { key: "upload_date", label: "Date" },
-                ].map(({ key, label }) => (
+                  "File ID",
+                  "uploader",
+                  "designation",
+                  "subject",
+                  "upload_date",
+                ].map((key) => (
                   <th
                     key={key}
                     onClick={() => handleSort(key)}
                     style={{
-                      cursor: "pointer",
                       padding: "12px",
                       width: "15.5%",
-                      border: "1px solid #0000",
+                      border: "1px solid #ddd",
+                      cursor: "pointer",
+                      display: "align-items",
                       alignItems: "center",
                       gap: "5px",
                     }}
                   >
-                    {label}
+                    {key === "uploader"
+                      ? "Sent By"
+                      : key === "upload_date"
+                        ? "Date"
+                        : key.charAt(0).toUpperCase() + key.slice(1)}
                     {sortConfig.key === key ? (
                       sortConfig.direction === "asc" ? (
                         <CaretUp size={16} />
@@ -192,16 +267,39 @@ export default function Outboxfunc() {
                   style={{
                     padding: "12px",
                     width: "8.5%",
-                    border: "1px solid #ddd",
+                    border: "1px solid ##ddd",
                   }}
                 >
                   View File
                 </th>
               </tr>
             </thead>
+
             <tbody>
               {filteredFiles.map((file, index) => (
                 <tr key={index}>
+                  <td
+                    style={{
+                      padding: "12px",
+                      textAlign: "center",
+                      border: "1px solid #ddd",
+                    }}
+                  >
+                    <Tooltip label="Archive file" position="top" withArrow>
+                      <ActionIcon
+                        variant="light"
+                        color="blue"
+                        className="archive-icon"
+                        data-default-color="transparent"
+                        data-hover-color="#ffebee"
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                        onClick={() => openArchiveModal(file)}
+                      >
+                        <Archive size="1rem" />
+                      </ActionIcon>
+                    </Tooltip>
+                  </td>
                   <td
                     style={{
                       padding: "12px",
@@ -221,26 +319,28 @@ export default function Outboxfunc() {
                       border: "1px solid #ddd",
                       textAlign: "center",
                     }}
+                    data-label="Sent By"
+                  >
+                    {file.sent_by_user}
+                  </td>
+                  <td
+                    style={{
+                      padding: "12px",
+                      border: "1px solid #ddd",
+                      textAlign: "center",
+                    }}
+                    data-label="Sent By"
+                  >
+                    {file.sent_by_designation}
+                  </td>
+                  <td
+                    style={{
+                      padding: "12px",
+                      border: "1px solid #ddd",
+                      textAlign: "center",
+                    }}
                   >
                     {file.subject}
-                  </td>
-                  <td
-                    style={{
-                      padding: "12px",
-                      border: "1px solid #ddd",
-                      textAlign: "center",
-                    }}
-                  >
-                    {file.receiver}
-                  </td>
-                  <td
-                    style={{
-                      padding: "12px",
-                      border: "1px solid #ddd",
-                      textAlign: "center",
-                    }}
-                  >
-                    {file.receiver_designation}
                   </td>
                   <td
                     style={{
@@ -254,9 +354,10 @@ export default function Outboxfunc() {
                   <td
                     style={{
                       padding: "12px",
-                      textAlign: "center",
                       border: "1px solid #ddd",
+                      textAlign: "center",
                     }}
+                    data-label=""
                   >
                     <Tooltip label="View File" position="top" withArrow>
                       <ActionIcon
@@ -285,6 +386,43 @@ export default function Outboxfunc() {
           </Table>
         </Box>
       )}
+      {/* Archive Confirmation Modal */}
+      <Modal
+        opened={showArchiveModal}
+        onClose={() => setShowArchiveModal(false)}
+        title={
+          <Text align="center" weight={600} size="lg">
+            Confirm Archive
+          </Text>
+        }
+        centered
+      >
+        <Text weight={600} mb="md">
+          Are you sure you want to archive this file?
+        </Text>
+        {selectedArchiveFile && (
+          <>
+            <Text mb="ls">Subject: {selectedArchiveFile.subject}</Text>
+            <Text mb="md">File ID: #{selectedArchiveFile.id}</Text>
+          </>
+        )}
+        <Group justify="center" gap="xl" style={{ width: "100%" }}>
+          <Button
+            onClick={confirmArchive}
+            color="blue"
+            style={{ width: "120px" }}
+          >
+            Confirm
+          </Button>
+          <Button
+            onClick={() => setShowArchiveModal(false)}
+            variant="outline"
+            style={{ width: "120px" }}
+          >
+            Cancel
+          </Button>
+        </Group>
+      </Modal>
     </Card>
   );
 }
