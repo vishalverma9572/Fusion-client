@@ -204,6 +204,20 @@ const LeaveHandleResponsibility = () => {
             </Grid.Col>
             <Grid.Col span={6}>
               <Text>
+                <strong>Application Type:</strong>{" "}
+                <Badge
+                  color={
+                    fetchedformData.application_type === "Online"
+                      ? "blue"
+                      : "green"
+                  }
+                >
+                  {fetchedformData.application_type}
+                </Badge>
+              </Text>
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <Text>
                 <strong>Submission Date:</strong>{" "}
                 {fetchedformData.submissionDate}
               </Text>
