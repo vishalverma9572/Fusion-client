@@ -77,6 +77,7 @@ export default function Outboxfunc() {
     return (
       idString.toLowerCase().includes(searchQuery.toLowerCase()) ||
       file.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      file.uploader.toLowerCase().includes(searchQuery.toLowerCase()) ||
       convertDate(file.upload_date)
         .toLowerCase()
         .includes(searchQuery.toLowerCase()) ||
@@ -170,12 +171,13 @@ export default function Outboxfunc() {
               <tr style={{ backgroundColor: "#0000" }}>
                 {[
                   { key: "id", label: "File ID" },
-                  { key: "subject", label: "Subject" },
+                  { key: "uploader", label: "Uploader" },
                   { key: "sent_to", label: "Sent to" },
                   {
                     key: "receiver_designation",
                     label: "Receiver's Designation",
                   },
+                  { key: "subject", label: "Subject" },
                   { key: "upload_date", label: "Date" },
                 ].map(({ key, label }) => (
                   <th
@@ -236,7 +238,7 @@ export default function Outboxfunc() {
                       textAlign: "center",
                     }}
                   >
-                    {file.subject}
+                    {file.uploader}
                   </td>
                   <td
                     style={{
@@ -255,6 +257,15 @@ export default function Outboxfunc() {
                     }}
                   >
                     {file.receiver_designation}
+                  </td>
+                  <td
+                    style={{
+                      padding: "12px",
+                      border: "1px solid #ddd",
+                      textAlign: "center",
+                    }}
+                  >
+                    {file.subject}
                   </td>
                   <td
                     style={{
