@@ -125,7 +125,8 @@ export default function Inboxfunc() {
       file.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
       convertDate(file.upload_date)
         .toLowerCase()
-        .includes(searchQuery.toLowerCase())
+        .includes(searchQuery.toLowerCase()) ||
+      file.sent_by_designation.toLowerCase().includes(searchQuery.toLowerCase())
     );
   });
   const handleSort = (key) => {
@@ -236,10 +237,10 @@ export default function Inboxfunc() {
                 <th data-label="">Archive</th>
                 {[
                   "File ID",
-                  "uploader",
-                  "designation",
-                  "subject",
-                  "upload_date",
+                  "Sent By",
+                  "Sender's Designation",
+                  "Subject",
+                  "Date",
                 ].map((key) => (
                   <th
                     key={key}
@@ -254,11 +255,7 @@ export default function Inboxfunc() {
                       gap: "5px",
                     }}
                   >
-                    {key === "uploader"
-                      ? "Sent By"
-                      : key === "upload_date"
-                        ? "Date"
-                        : key.charAt(0).toUpperCase() + key.slice(1)}
+                    {key.charAt(0).toUpperCase() + key.slice(1)}
                     {sortConfig.key === key ? (
                       sortConfig.direction === "asc" ? (
                         <CaretUp size={16} />
