@@ -121,6 +121,7 @@ export default function Inboxfunc() {
                       -#${file.id}`;
     return (
       file.uploader.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      file.sent_by_user.toLowerCase().includes(searchQuery.toLowerCase()) ||
       idString.toLowerCase().includes(searchQuery.toLowerCase()) ||
       file.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
       convertDate(file.upload_date)
@@ -233,10 +234,11 @@ export default function Inboxfunc() {
             }}
           >
             <thead>
-              <tr>
+              <tr style={{ backgroundColor: "#0000" }}>
                 <th data-label="">Archive</th>
                 {[
                   "File ID",
+                  "Uploader",
                   "Sent By",
                   "Sender's Designation",
                   "Subject",
@@ -299,8 +301,9 @@ export default function Inboxfunc() {
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
                         onClick={() => openArchiveModal(file)}
+                        disabled={file.uploader !== username} // only the original uploader can archive the file.
                       >
-                        <Archive size="1rem" />
+                        <Archive size="1.5rem" />
                       </ActionIcon>
                     </Tooltip>
                   </td>
@@ -316,6 +319,16 @@ export default function Inboxfunc() {
                       .toString()
                       .padStart(2, "0")}
                     -#{file.id}
+                  </td>
+                  <td
+                    style={{
+                      padding: "12px",
+                      border: "1px solid #ddd",
+                      textAlign: "center",
+                    }}
+                    data-label="Sent By"
+                  >
+                    {file.uploader}
                   </td>
                   <td
                     style={{
@@ -407,7 +420,14 @@ export default function Inboxfunc() {
         {selectedArchiveFile && (
           <>
             <Text mb="ls">Subject: {selectedArchiveFile.subject}</Text>
-            <Text mb="md">File ID: #{selectedArchiveFile.id}</Text>
+            <Text mb="md">
+              File ID: {selectedArchiveFile.branch}-
+              {new Date(selectedArchiveFile.upload_date).getFullYear()}-
+              {(new Date(selectedArchiveFile.upload_date).getMonth() + 1)
+                .toString()
+                .padStart(2, "0")}
+              -#{selectedArchiveFile.id}
+            </Text>
           </>
         )}
         <Group justify="center" gap="xl" style={{ width: "100%" }}>

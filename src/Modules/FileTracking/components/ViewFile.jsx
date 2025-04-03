@@ -704,7 +704,15 @@ export default function ViewFile({ onBack, fileID, updateFiles }) {
         {selectedForwardFile && (
           <>
             <Text mb="ls">Subject: {selectedForwardFile.subject}</Text>
-            <Text mb="md">File ID: #{selectedForwardFile.id}</Text>
+            <Text mb="md">
+              {" "}
+              File ID: {selectedForwardFile.branch}-
+              {new Date(selectedForwardFile.upload_date).getFullYear()}-
+              {(new Date(selectedForwardFile.upload_date).getMonth() + 1)
+                .toString()
+                .padStart(2, "0")}
+              -#{selectedForwardFile.id}
+            </Text>
           </>
         )}
         <Group justify="center" gap="xl" style={{ width: "100%" }}>
