@@ -57,7 +57,7 @@ export default function Outboxfunc() {
 
     // Call the getFiles function to fetch data on component mount
     getFiles();
-  }, []);
+  }, [role, token]);
   const handleBack = () => {
     setSelectedFile(null);
   };
