@@ -271,6 +271,8 @@ export default function ViewFile({ onBack, fileID, updateFiles }) {
       handleForward();
       setShowForwardModal(false);
       setSelectedForwardFile(null);
+      toggleSection(null);
+      onBack();
     }
   };
   // Handle file download
