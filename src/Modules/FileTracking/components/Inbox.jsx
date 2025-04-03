@@ -113,14 +113,21 @@ export default function Inboxfunc() {
     return a[sortConfig.key] > b[sortConfig.key] ? direction : -direction;
   });
 
-  const filteredFiles = sortedFiles.filter(
-    (file) =>
+  const filteredFiles = sortedFiles.filter((file) => {
+    const idString = `${file.branch}-${new Date(file.upload_date).getFullYear()}-
+                      ${(new Date(file.upload_date).getMonth() + 1)
+                        .toString()
+                        .padStart(2, "0")}
+                      -#${file.id}`;
+    return (
       file.uploader.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      file.id.toString().includes(searchQuery) ||
+      idString.toLowerCase().includes(searchQuery.toLowerCase()) ||
       file.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      convertDate(file.upload_date).includes(searchQuery),
-  );
-
+      convertDate(file.upload_date)
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase())
+    );
+  });
   const handleSort = (key) => {
     setSortConfig((prev) => ({
       key,
