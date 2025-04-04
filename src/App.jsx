@@ -11,6 +11,7 @@ import InventoryIndex from "./Modules/Inventory/components/InventoryIndex";
 // eslint-disable-next-line import/no-unresolved
 import { DesignationsProvider } from "./Modules/Iwd/helper/designationContext";
 import UserBreadcrumbs from "./Modules/Scholarship/user/components/UserBreadcumbs";
+import OtherAcadProcedures from "./Modules/Otheracademic/OtherAcademicProcedures";
 
 const PlacementCellPage = lazy(() => import("./Modules/PlacementCell"));
 const JobApplicationForm = lazy(
@@ -105,9 +106,7 @@ const GymkhanaDashboard = lazy(
   () => import("./Modules/Gymkhana/GymkhanaDashboard.jsx"),
 );
 
-const Examination = lazy(
-  () => import("./Modules/Examination/examination"),
-);
+const Examination = lazy(() => import("./Modules/Examination/examination"));
 
 const ProgrammeCurriculumRoutes = lazy(
   () => import("./Modules/Program_curriculum/programmCurriculum"),
@@ -599,6 +598,16 @@ export default function App() {
             <Layout>
               <Suspense fallback={<div>Loading .... </div>}>
                 <GymkhanaDashboard />
+              </Suspense>
+            </Layout>
+          }
+        />
+        <Route
+          path="/otherAcadProcedures"
+          element={
+            <Layout>
+              <Suspense fallback={<div>Loading .... </div>}>
+                <OtherAcadProcedures />
               </Suspense>
             </Layout>
           }

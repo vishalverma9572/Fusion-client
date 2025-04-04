@@ -61,6 +61,7 @@ function SidebarContent({ isCollapsed, toggleSidebar }) {
     "program_and_curriculum",
     "course_registration",
     "examinations",
+    "other_academics",
   ];
 
   const Modules = [
@@ -188,7 +189,7 @@ function SidebarContent({ isCollapsed, toggleSidebar }) {
       label: "Other Academic Procedure",
       id: "other_academics",
       icon: <OtherAcademicIcon size={18} />,
-      url: "/",
+      url: "/otherAcadProcedures",
     },
   ];
 
