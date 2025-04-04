@@ -41,7 +41,7 @@ function OtherAcadProcedures() {
     { title: "Leave TA", component: <ApproveLeaveTA /> }, // 7
     { title: "Leave Thesis", component: <ApproveLeaveThesis /> }, // 8
 
-    { title: "Assistant Request Director", component: <Director /> },
+    { title: "Assistant Request Director", component: <Director /> }, // 9
     { title: "Assistant Request Dean ", component: <DeanPage /> }, // 10
     { title: "Assistant Request HOD ", component: <HoDPage /> }, // 11
     { title: "Assistant Request Acadadmin ", component: <AcadAdminPage /> }, // 12
@@ -61,11 +61,11 @@ function OtherAcadProcedures() {
       roll_no[2] === "P"
     ) {
       filteredTabItems = allTabItems.filter((_, index) =>
-        [0, 2, 4, 9, 13].includes(index),
+        [0, 2, 4, 13].includes(index),
       );
     } else {
       filteredTabItems = allTabItems.filter((_, index) =>
-        [0, 1, 2, 9].includes(index),
+        [0, 1, 2].includes(index),
       );
     }
   } else if (role === "acadadmin") {
