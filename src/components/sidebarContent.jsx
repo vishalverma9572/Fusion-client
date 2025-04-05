@@ -118,7 +118,7 @@ const Modules = [
     label: "Human Resource",
     id: "hr",
     icon: <HumanResourceIcon size={18} />,
-    url: "/",
+    url: "/hr",
   },
   {
     label: "Examination",
