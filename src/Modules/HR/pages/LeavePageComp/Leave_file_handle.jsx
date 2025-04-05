@@ -272,6 +272,20 @@ const LeaveFileHandle = () => {
             </Grid.Col>
             <Grid.Col span={6}>
               <Text>
+                <strong>Application Type:</strong>{" "}
+                <Badge
+                  color={
+                    fetchedformData.application_type === "Online"
+                      ? "blue"
+                      : "green"
+                  }
+                >
+                  {fetchedformData.application_type}
+                </Badge>
+              </Text>
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <Text>
                 <strong>Submission Date:</strong>{" "}
                 {fetchedformData.submissionDate}
               </Text>
@@ -646,11 +660,17 @@ const LeaveFileHandle = () => {
               </Text>
             </Grid.Col>
           </Grid>
+          {/* add note that Please Track status of the file before doing any Actions if you don't have current ownership the Action will not be performed */}
 
           {/* Section 7: Action Buttons */}
           <Title order={4} mt="xl">
             Select Action
           </Title>
+          <Text color="red" mt="md" style={{ padding: "0 20px" }}>
+            <strong>Note:</strong> Please track the status of the file before
+            performing any actions. If you don't have current ownership, the
+            action will not be performed.
+          </Text>
           <Divider my="sm" />
           <Group position="center" mt="xl">
             <Button

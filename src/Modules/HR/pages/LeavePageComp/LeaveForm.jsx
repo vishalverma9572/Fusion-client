@@ -249,6 +249,7 @@ const LeaveForm = () => {
     >
       {/* Section 1: Your Details */}
       <Title order={4}>Your Details</Title>
+      <br />
       <Grid gutter="lg" style={{ padding: "0 20px" }}>
         <Grid.Col span={12}>
           {loading && <p>Loading your details...</p>}
