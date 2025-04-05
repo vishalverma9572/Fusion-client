@@ -10,6 +10,7 @@ import {
   Textarea,
   Group,
   Anchor,
+  Table,
 } from "@mantine/core";
 import { useNavigate, useParams } from "react-router-dom";
 import { CheckCircle, XCircle, PaperPlaneRight } from "@phosphor-icons/react";
@@ -64,6 +65,7 @@ const LeaveFileHandle = () => {
 
         const data = await response.json();
         setFetchedFormData(data.leave_form); // Assuming the API returns data in a `leave_form` key
+        console.log("Fetched form data:", data.leave_form);
         setLoading(false);
       } catch (error) {
         console.error("Failed to fetch form data:", error);
@@ -304,49 +306,221 @@ const LeaveFileHandle = () => {
               </Text>
             </Grid.Col>
           </Grid>
-          {/* Section 3: Leave Types */}
+          {/* Section 3: Complete Leave Types and Balances */}
           <Title order={4} mt="xl" style={{ marginTop: "30px" }}>
-            Leave Types
+            Leave Details
           </Title>
           <Divider my="sm" />
-          <Grid gutter="lg" style={{ padding: "0 20px" }}>
-            <Grid.Col span={6}>
-              <Text>
-                <strong>Casual Leave:</strong> {fetchedformData.casualLeave}{" "}
-                (Balance: {fetchedformData.cadualLeaveBalance})
-              </Text>
+          <Grid gutter="xl">
+            <Grid.Col
+              span={6}
+              style={{ borderRight: "1px solid #ccc", paddingRight: "24px" }}
+            >
+              <Title order={5} mb="sm" style={{ textAlign: "center" }}>
+                Leave Types Applied
+              </Title>
+              <Table>
+                <thead>
+                  <tr style={{ backgroundColor: "#e9ecef" }}>
+                    <th
+                      style={{
+                        padding: "8px",
+                        border: "1px solid #ccc",
+                        textAlign: "left",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Leave Type
+                    </th>
+                    <th
+                      style={{
+                        padding: "8px",
+                        border: "1px solid #ccc",
+                        textAlign: "center",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Days Applied
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    {
+                      type: "Casual Leave",
+                      applied: fetchedformData.casualLeave,
+                    },
+                    {
+                      type: "Vacation Leave",
+                      applied: fetchedformData.vacationLeave,
+                    },
+                    {
+                      type: "Earned Leave",
+                      applied: fetchedformData.earnedLeave,
+                    },
+                    {
+                      type: "Commuted Leave",
+                      applied: fetchedformData.commutedLeave,
+                    },
+                    {
+                      type: "Special Casual Leave",
+                      applied: fetchedformData.specialCasualLeave,
+                    },
+                    {
+                      type: "Restricted Holiday",
+                      applied: fetchedformData.restrictedHoliday,
+                    },
+                    {
+                      type: "Half Pay Leave",
+                      applied: fetchedformData.halfPayLeave,
+                    },
+                    {
+                      type: "Maternity Leave",
+                      applied: fetchedformData.maternityLeave,
+                    },
+                    {
+                      type: "Child Care Leave",
+                      applied: fetchedformData.childCareLeave,
+                    },
+                    {
+                      type: "Paternity Leave",
+                      applied: fetchedformData.paternityLeave,
+                    },
+                  ].map((leave, index) => (
+                    <tr
+                      key={`applied-${index}`}
+                      style={{
+                        backgroundColor:
+                          index % 2 === 0 ? "#ffffff" : "#e8e8e8",
+                      }}
+                    >
+                      <td
+                        style={{
+                          padding: "8px",
+                          border: "1px solid #ccc",
+                          textAlign: "left",
+                        }}
+                      >
+                        {leave.type}
+                      </td>
+                      <td
+                        style={{
+                          padding: "8px",
+                          border: "1px solid #ccc",
+                          textAlign: "center",
+                          fontWeight: leave.applied > 0 ? "bold" : "normal",
+                        }}
+                      >
+                        {leave.applied || "0"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
             </Grid.Col>
-            <Grid.Col span={6}>
-              <Text>
-                <strong>Vacation Leave:</strong> {fetchedformData.vacationLeave}{" "}
-                (Balance: {fetchedformData.vacationLeaveBalance})
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Text>
-                <strong>Earned Leave:</strong> {fetchedformData.earnedLeave}{" "}
-                (Balance: {fetchedformData.earnedLeaveBalance})
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Text>
-                <strong>Commuted Leave:</strong> {fetchedformData.commutedLeave}{" "}
-                (Balance: {fetchedformData.commutedLeaveBalance})
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Text>
-                <strong>Special Casual Leave:</strong>{" "}
-                {fetchedformData.specialCasualLeave} (Balance:{" "}
-                {fetchedformData.specialCasualLeaveBalance})
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Text>
-                <strong>Restricted Holiday:</strong>{" "}
-                {fetchedformData.restrictedHoliday} (Balance:{" "}
-                {fetchedformData.restrictedHolidayBalance})
-              </Text>
+
+            <Grid.Col span={6} style={{ paddingLeft: "24px" }}>
+              <Title order={5} mb="sm" style={{ textAlign: "center" }}>
+                All Leave Balances
+              </Title>
+              <Table>
+                <thead>
+                  <tr style={{ backgroundColor: "#e9ecef" }}>
+                    <th
+                      style={{
+                        padding: "8px",
+                        border: "1px solid #ccc",
+                        textAlign: "left",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Leave Type
+                    </th>
+                    <th
+                      style={{
+                        padding: "8px",
+                        border: "1px solid #ccc",
+                        textAlign: "center",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Balance (Days)
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    {
+                      type: "Casual Leave",
+                      balance: fetchedformData.casualLeaveBalance,
+                    },
+                    {
+                      type: "Special Casual Leave",
+                      balance: fetchedformData.special_casual_leaveBalance,
+                    },
+                    {
+                      type: "Earned Leave",
+                      balance: fetchedformData.earned_leaveBalance,
+                    },
+                    {
+                      type: "Half Pay Leave",
+                      balance: fetchedformData.half_pay_leaveBalance,
+                    },
+                    {
+                      type: "Maternity Leave",
+                      balance: fetchedformData.maternity_leaveBalance,
+                    },
+                    {
+                      type: "Child Care Leave",
+                      balance: fetchedformData.child_care_leaveBalance,
+                    },
+                    {
+                      type: "Paternity Leave",
+                      balance: fetchedformData.paternity_leaveBalance,
+                    },
+                  ].map((leave, index) => {
+                    const balance = parseFloat(leave.balance) || 0;
+                    const isNegative = balance < 0;
+                    const isPositive = balance > 0;
+
+                    return (
+                      <tr
+                        key={`balance-${index}`}
+                        style={{
+                          backgroundColor:
+                            index % 2 === 0 ? "#ffffff" : "#e8e8e8",
+                        }}
+                      >
+                        <td
+                          style={{
+                            padding: "8px",
+                            border: "1px solid #ccc",
+                            textAlign: "left",
+                          }}
+                        >
+                          {leave.type}
+                        </td>
+                        <td
+                          style={{
+                            padding: "8px",
+                            border: "1px solid #ccc",
+                            textAlign: "center",
+                            color: isNegative
+                              ? "#ff0000"
+                              : isPositive
+                                ? "#28a745"
+                                : "inherit",
+                            fontWeight:
+                              isNegative || isPositive ? "bold" : "normal",
+                          }}
+                        >
+                          {leave.balance || "0"}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
             </Grid.Col>
           </Grid>
 
@@ -385,59 +559,73 @@ const LeaveFileHandle = () => {
             Responsibility Transfer
           </Title>
           <Divider my="sm" />
-          <Grid gutter="lg" style={{ padding: "0 20px" }}>
-            <Grid.Col span={6}>
-              <Text style={{ marginBottom: "10px" }}>
-                <strong>Academic Responsibility:</strong>{" "}
-                {fetchedformData.academicResponsibility}
-              </Text>
-              <Text style={{ marginBottom: "10px" }}>
-                <strong>Academic Responsibility Designation:</strong>{" "}
-                {fetchedformData.academicResponsibilityDesignation}
-              </Text>
-              <Text style={{ marginBottom: "10px" }}>
-                <strong>Academic Responsibility Status:</strong>{" "}
-                <Badge
-                  color={
-                    fetchedformData.academicResponsibilityStatus === "Accepted"
-                      ? "green"
-                      : fetchedformData.academicResponsibilityStatus ===
-                          "Rejected"
-                        ? "red"
-                        : "yellow"
-                  }
+          {!fetchedformData.academicResponsibility &&
+          !fetchedformData.administrativeResponsibility ? (
+            <Text style={{ padding: "0 20px" }}>Not Applicable</Text>
+          ) : (
+            <Grid gutter="lg" style={{ padding: "0 20px" }}>
+              {fetchedformData.academicResponsibility && (
+                <Grid.Col
+                  span={fetchedformData.administrativeResponsibility ? 6 : 12}
                 >
-                  {fetchedformData.academicResponsibilityStatus}
-                </Badge>
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Text style={{ marginBottom: "10px" }}>
-                <strong>Administrative Responsibility:</strong>{" "}
-                {fetchedformData.administrativeResponsibility}
-              </Text>
-              <Text style={{ marginBottom: "10px" }}>
-                <strong>Administrative Responsibility Designation:</strong>{" "}
-                {fetchedformData.administrativeResponsibilityDesignation}
-              </Text>
-              <Text style={{ marginBottom: "10px" }}>
-                <strong>Administrative Responsibility Status:</strong>{" "}
-                <Badge
-                  color={
-                    fetchedformData.administrativeResponsibilityStatus ===
-                    "Accepted"
-                      ? "green"
-                      : fetchedformData.administrativeResponsibilityStatus ===
-                          "Rejected"
-                        ? "red"
-                        : "yellow"
-                  }
+                  <Text style={{ marginBottom: "10px" }}>
+                    <strong>Academic Responsibility:</strong>{" "}
+                    {fetchedformData.academicResponsibility}
+                  </Text>
+                  <Text style={{ marginBottom: "10px" }}>
+                    <strong>Academic Responsibility Designation:</strong>{" "}
+                    {fetchedformData.academicResponsibilityDesignation}
+                  </Text>
+                  <Text style={{ marginBottom: "10px" }}>
+                    <strong>Academic Responsibility Status:</strong>{" "}
+                    <Badge
+                      color={
+                        fetchedformData.academicResponsibilityStatus ===
+                        "Accepted"
+                          ? "green"
+                          : fetchedformData.academicResponsibilityStatus ===
+                              "Rejected"
+                            ? "red"
+                            : "yellow"
+                      }
+                    >
+                      {fetchedformData.academicResponsibilityStatus}
+                    </Badge>
+                  </Text>
+                </Grid.Col>
+              )}
+              {fetchedformData.administrativeResponsibility && (
+                <Grid.Col
+                  span={fetchedformData.academicResponsibility ? 6 : 12}
                 >
-                  {fetchedformData.administrativeResponsibilityStatus}
-                </Badge>
-              </Text>
-            </Grid.Col>
-          </Grid>
+                  <Text style={{ marginBottom: "10px" }}>
+                    <strong>Administrative Responsibility:</strong>{" "}
+                    {fetchedformData.administrativeResponsibility}
+                  </Text>
+                  <Text style={{ marginBottom: "10px" }}>
+                    <strong>Administrative Responsibility Designation:</strong>{" "}
+                    {fetchedformData.administrativeResponsibilityDesignation}
+                  </Text>
+                  <Text style={{ marginBottom: "10px" }}>
+                    <strong>Administrative Responsibility Status:</strong>{" "}
+                    <Badge
+                      color={
+                        fetchedformData.administrativeResponsibilityStatus ===
+                        "Accepted"
+                          ? "green"
+                          : fetchedformData.administrativeResponsibilityStatus ===
+                              "Rejected"
+                            ? "red"
+                            : "yellow"
+                      }
+                    >
+                      {fetchedformData.administrativeResponsibilityStatus}
+                    </Badge>
+                  </Text>
+                </Grid.Col>
+              )}
+            </Grid>
+          )}
 
           {/* Section 6: Attachments */}
           <Title order={4} mt="xl">

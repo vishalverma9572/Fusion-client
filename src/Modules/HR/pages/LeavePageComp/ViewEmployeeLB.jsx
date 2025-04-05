@@ -22,21 +22,76 @@ const ViewEmployeeLB = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Define leave types along with their abbreviations and full names.
+  // Updated leave types with explicit keys to match API response:
+  // - The "allottedKey" maps to LeavePerYear (e.g., "casual_leave_allotted")
+  // - The "takenKey" maps to LeaveBalance (e.g., "casual_leave_taken")
   const leaveTypes = [
-    { key: "casual_leave", abbrev: "CL", fullName: "Casual Leave" },
-    { key: "vacation_leave", abbrev: "VL", fullName: "Vacation Leave" },
-    { key: "earned_leave", abbrev: "EL", fullName: "Earned Leave" },
-    { key: "commuted_leave", abbrev: "COL", fullName: "Commuted Leave" },
+    {
+      key: "casual_leave",
+      allottedKey: "casual_leave_allotted",
+      takenKey: "casual_leave_taken",
+      abbrev: "CL",
+      fullName: "Casual Leave",
+    },
     {
       key: "special_casual_leave",
+      allottedKey: "special_casual_leave_allotted",
+      takenKey: "special_casual_leave_taken",
       abbrev: "SCL",
       fullName: "Special Casual Leave",
     },
-    { key: "restricted_holiday", abbrev: "RH", fullName: "Restricted Holiday" },
+    {
+      key: "earned_leave",
+      allottedKey: "earned_leave_allotted",
+      takenKey: "earned_leave_taken",
+      abbrev: "EL",
+      fullName: "Earned Leave",
+    },
+    {
+      key: "half_pay_leave",
+      allottedKey: "half_pay_leave_allotted",
+      takenKey: "half_pay_leave_taken",
+      abbrev: "HPL",
+      fullName: "Half Pay Leave",
+    },
+    {
+      key: "maternity_leave",
+      allottedKey: "maternity_leave_allotted",
+      takenKey: "maternity_leave_taken",
+      abbrev: "ML",
+      fullName: "Maternity Leave",
+    },
+    {
+      key: "child_care_leave",
+      allottedKey: "child_care_leave_allotted",
+      takenKey: "child_care_leave_taken",
+      abbrev: "CCL",
+      fullName: "Child Care Leave",
+    },
+    {
+      key: "paternity_leave",
+      allottedKey: "paternity_leave_allotted",
+      takenKey: "paternity_leave_taken",
+      abbrev: "PL",
+      fullName: "Paternity Leave",
+    },
+    {
+      key: "leave_encashment",
+      allottedKey: "leave_encashment_allotted",
+      takenKey: "leave_encashment_taken",
+      abbrev: "LE",
+      fullName: "Leave Encashment",
+    },
+    {
+      key: "restricted_holiday",
+      allottedKey: "restricted_holiday_allotted",
+      takenKey: "restricted_holiday_taken",
+      abbrev: "RH",
+      fullName: "Restricted Holiday",
+    },
   ];
 
-  // Fetch employee/leave details from one optimized API call.
+  // Fetch employee/leave details from the API.
   useEffect(() => {
     const fetchEmployeesAndLeaveData = async () => {
       const token = localStorage.getItem("authToken");
@@ -58,8 +113,7 @@ const ViewEmployeeLB = () => {
           throw new Error(errorData.error || "Failed to fetch leave details");
         }
         const data = await response.json();
-        // data.leave_balances is an array of objects with leave and department info.
-        // Transform keys to match what the UI expects.
+        // Transform the received employee leave data
         const mergedData = data.leave_balances.map((emp) => {
           const { employee_id, employee_username, employee_fullname, ...rest } =
             emp;
@@ -70,7 +124,6 @@ const ViewEmployeeLB = () => {
             ...rest,
           };
         });
-
         setAllEmployees(mergedData);
         setFilteredEmployees(mergedData);
       } catch (err) {
@@ -79,7 +132,6 @@ const ViewEmployeeLB = () => {
         setLoading(false);
       }
     };
-
     fetchEmployeesAndLeaveData();
   }, []);
 
@@ -131,6 +183,8 @@ const ViewEmployeeLB = () => {
     border: "1px solid #ccc",
     textAlign: "left",
   };
+
+  // Breadcrumbs for navigation.
   const exampleItems = [
     { title: "Home", path: "/dashboard" },
     { title: "Human Resources", path: "/hr" },
@@ -139,7 +193,6 @@ const ViewEmployeeLB = () => {
       title: "Review Employee's Leave Balances",
       path: "/hr/admin_leave/view_employees_leave_balance",
     },
-    // { title: "Handle Leave", path: `/hr/leave/handle/${id}` },
   ];
 
   // Abbreviation table styles for smaller text.
@@ -237,19 +290,18 @@ const ViewEmployeeLB = () => {
             style={{ overflowX: "auto" }}
           >
             <style>{`
-            .striped-table-container table tbody tr:nth-child(odd) {
-              background-color: #f7f7f7 !important;
-            }
-            .striped-table-container table tbody tr:nth-child(even) {
-              background-color: #ffffff !important;
-            }
-            .striped-table-container table tbody tr:hover {
-              background-color: #f1f3f5 !important;
-            }
-          `}</style>
-            {/* add a text as well total no of Employees */}
+              .striped-table-container table tbody tr:nth-child(odd) {
+                background-color: #e8e8e8 !important;
+              }
+              .striped-table-container table tbody tr:nth-child(even) {
+                background-color: #ffffff !important;
+              }
+              .striped-table-container table tbody tr:hover {
+                background-color: #f1f3f5 !important;
+              }
+            `}</style>
             <Text style={{ fontWeight: "bold", marginBottom: "25px" }}>
-              Total Matched Employees: {filteredEmployees.length}{" "}
+              Total Matched Employees: {filteredEmployees.length}
             </Text>
             <Table
               striped
@@ -280,22 +332,20 @@ const ViewEmployeeLB = () => {
                     <td style={cellStyle}>{emp.name}</td>
                     <td style={cellStyle}>{emp.username}</td>
                     <td style={cellStyle}>{emp.department || "N/A"}</td>
-                    {leaveTypes.map((leave) => {
-                      const allottedKey = `${leave.key}_allotted`;
-                      const takenKey = `${leave.key}_taken`;
-                      return (
-                        <React.Fragment key={leave.key}>
-                          <td style={cellStyle}>
-                            {emp[allottedKey] !== undefined
-                              ? emp[allottedKey]
-                              : "-"}
-                          </td>
-                          <td style={cellStyle}>
-                            {emp[takenKey] !== undefined ? emp[takenKey] : "-"}
-                          </td>
-                        </React.Fragment>
-                      );
-                    })}
+                    {leaveTypes.map((leave) => (
+                      <React.Fragment key={leave.key}>
+                        <td style={cellStyle}>
+                          {emp[leave.allottedKey] !== undefined
+                            ? emp[leave.allottedKey]
+                            : "-"}
+                        </td>
+                        <td style={cellStyle}>
+                          {emp[leave.takenKey] !== undefined
+                            ? emp[leave.takenKey]
+                            : "-"}
+                        </td>
+                      </React.Fragment>
+                    ))}
                   </tr>
                 ))}
               </tbody>

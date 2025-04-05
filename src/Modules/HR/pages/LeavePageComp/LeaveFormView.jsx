@@ -9,6 +9,7 @@ import {
   Divider,
   Anchor,
   Table,
+  SimpleGrid,
 } from "@mantine/core";
 import { useNavigate, useParams } from "react-router-dom";
 import HrBreadcrumbs from "../../components/HrBreadcrumbs";
@@ -152,6 +153,23 @@ const LeaveFormView = () => {
       type: "Paternity Leave",
       balance: fetchedformData.paternity_leaveBalance,
     },
+  ];
+
+  // Leave types applied data
+  const leaveTypesApplied = [
+    { type: "Casual Leave", applied: fetchedformData.casualLeave },
+    { type: "Vacation Leave", applied: fetchedformData.vacationLeave },
+    { type: "Earned Leave", applied: fetchedformData.earnedLeave },
+    { type: "Commuted Leave", applied: fetchedformData.commutedLeave },
+    {
+      type: "Special Casual Leave",
+      applied: fetchedformData.specialCasualLeave,
+    },
+    { type: "Restricted Holiday", applied: fetchedformData.restrictedHoliday },
+    { type: "Half Pay Leave", applied: fetchedformData.halfPayLeave },
+    { type: "Maternity Leave", applied: fetchedformData.maternityLeave },
+    { type: "Child Care Leave", applied: fetchedformData.childCareLeave },
+    { type: "Paternity Leave", applied: fetchedformData.paternityLeave },
   ];
 
   return (
@@ -300,88 +318,156 @@ const LeaveFormView = () => {
             </Grid.Col>
           </Grid>
 
-          {/* Leave Balances Table */}
+          {/* Combined Leave Types and Balances Section */}
           <Title order={4} mt="xl" style={{ marginTop: "30px" }}>
-            Leave Balances
+            Leave Type Details
           </Title>
           <Divider my="sm" />
-          <Table striped highlightOnHover>
-            <thead>
-              <tr>
-                <th>Leave Type</th>
-                <th>Balance</th>
-              </tr>
-            </thead>
-            <tbody>
-              {leaveBalances.map((leave, index) => (
-                <tr key={index}>
-                  <td>{leave.type}</td>
-                  <td>{leave.balance}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+          <Grid gutter="xl">
+            <Grid.Col
+              span={6}
+              style={{ borderRight: "1px solid #ccc", paddingRight: "24px" }}
+            >
+              <Title order={5} mb="sm" style={{ textAlign: "center" }}>
+                Leave Types Applied
+              </Title>
+              <Table>
+                <thead>
+                  <tr style={{ backgroundColor: "#e9ecef" }}>
+                    <th
+                      style={{
+                        padding: "8px",
+                        border: "1px solid #ccc",
+                        textAlign: "left",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Leave Type
+                    </th>
+                    <th
+                      style={{
+                        padding: "8px",
+                        border: "1px solid #ccc",
+                        textAlign: "center",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Days Applied
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {leaveTypesApplied.map((leave, index) => (
+                    <tr
+                      key={`applied-${index}`}
+                      style={{
+                        backgroundColor:
+                          index % 2 === 0 ? "#ffffff" : "#e8e8e8",
+                        "&:hover": {
+                          backgroundColor: "#f1f3f5",
+                        },
+                      }}
+                    >
+                      <td
+                        style={{
+                          padding: "8px",
+                          border: "1px solid #ccc",
+                          textAlign: "left",
+                        }}
+                      >
+                        {leave.type}
+                      </td>
+                      <td
+                        style={{
+                          padding: "8px",
+                          border: "1px solid #ccc",
+                          textAlign: "center",
+                        }}
+                      >
+                        {leave.applied || "0"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </Grid.Col>
 
-          {/* Leave Types */}
-          <Title order={4} mt="xl" style={{ marginTop: "30px" }}>
-            Leave Types Applied
-          </Title>
-          <Divider my="sm" />
-          <Grid gutter="lg" style={{ padding: "0 20px" }}>
-            <Grid.Col span={6}>
-              <Text>
-                <strong>Casual Leave:</strong> {fetchedformData.casualLeave}
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Text>
-                <strong>Vacation Leave:</strong> {fetchedformData.vacationLeave}
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Text>
-                <strong>Earned Leave:</strong> {fetchedformData.earnedLeave}
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Text>
-                <strong>Commuted Leave:</strong> {fetchedformData.commutedLeave}
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Text>
-                <strong>Special Casual Leave:</strong>{" "}
-                {fetchedformData.specialCasualLeave}
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Text>
-                <strong>Restricted Holiday:</strong>{" "}
-                {fetchedformData.restrictedHoliday}
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Text>
-                <strong>Half Pay Leave:</strong> {fetchedformData.halfPayLeave}
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Text>
-                <strong>Maternity Leave:</strong>{" "}
-                {fetchedformData.maternityLeave}
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Text>
-                <strong>Child Care Leave:</strong>{" "}
-                {fetchedformData.childCareLeave}
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Text>
-                <strong>Paternity Leave:</strong>{" "}
-                {fetchedformData.paternityLeave}
-              </Text>
+            <Grid.Col span={6} style={{ paddingLeft: "24px" }}>
+              <Title order={5} mb="sm" style={{ textAlign: "center" }}>
+                Leave Balances
+              </Title>
+              <Table>
+                <thead>
+                  <tr style={{ backgroundColor: "#e9ecef" }}>
+                    <th
+                      style={{
+                        padding: "8px",
+                        border: "1px solid #ccc",
+                        textAlign: "left",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Leave Type
+                    </th>
+                    <th
+                      style={{
+                        padding: "8px",
+                        border: "1px solid #ccc",
+                        textAlign: "center",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Balance (Days)
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {leaveBalances.map((leave, index) => {
+                    const balance = parseFloat(leave.balance) || 0;
+                    const isNegative = balance < 0;
+                    const isPositive = balance > 0;
+
+                    return (
+                      <tr
+                        key={`balance-${index}`}
+                        style={{
+                          backgroundColor:
+                            index % 2 === 0 ? "#ffffff" : "#e8e8e8",
+                          "&:hover": {
+                            backgroundColor: "#f1f3f5",
+                          },
+                        }}
+                      >
+                        <td
+                          style={{
+                            padding: "8px",
+                            border: "1px solid #ccc",
+                            textAlign: "left",
+                          }}
+                        >
+                          {leave.type}
+                        </td>
+                        <td
+                          style={{
+                            padding: "8px",
+                            border: "1px solid #ccc",
+                            textAlign: "center",
+                            color: isNegative
+                              ? "#ff0000"
+                              : isPositive
+                                ? "#28a745"
+                                : "inherit",
+                            fontWeight:
+                              isNegative || isPositive ? "bold" : "normal",
+                          }}
+                        >
+                          {leave.balance || "0"}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
             </Grid.Col>
           </Grid>
 

@@ -124,7 +124,7 @@ const LeaveBalanceButton = () => {
                       <td
                         style={{
                           fontWeight: "bold",
-                          color: value.balance === 0 ? "red" : "green",
+                          color: value.balance <= 0 ? "red" : "green",
                         }}
                       >
                         {value.balance}

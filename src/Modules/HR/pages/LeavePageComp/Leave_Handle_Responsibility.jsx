@@ -253,64 +253,78 @@ const LeaveHandleResponsibility = () => {
             </Grid.Col>
           </Grid>
 
-          {/* Section 3: Responsibility Transfer */}
+          {/* Section 5: Responsibility Transfer */}
           <Title order={4} mt="xl" style={{ marginTop: "30px" }}>
             Responsibility Transfer
           </Title>
           <Divider my="sm" />
-          <Grid gutter="lg" style={{ padding: "0 20px" }}>
-            <Grid.Col span={6}>
-              <Text style={{ marginBottom: "10px" }}>
-                <strong>Academic Responsibility:</strong>{" "}
-                {fetchedformData.academicResponsibility}
-              </Text>
-              <Text style={{ marginBottom: "10px" }}>
-                <strong>Academic Responsibility Designation:</strong>{" "}
-                {fetchedformData.academicResponsibilityDesignation}
-              </Text>
-              <Text style={{ marginBottom: "10px" }}>
-                <strong>Academic Responsibility Status:</strong>{" "}
-                <Badge
-                  color={
-                    fetchedformData.academicResponsibilityStatus === "Accepted"
-                      ? "green"
-                      : fetchedformData.academicResponsibilityStatus ===
-                          "Rejected"
-                        ? "red"
-                        : "yellow"
-                  }
+          {!fetchedformData.academicResponsibility &&
+          !fetchedformData.administrativeResponsibility ? (
+            <Text style={{ padding: "0 20px" }}>Not Applicable</Text>
+          ) : (
+            <Grid gutter="lg" style={{ padding: "0 20px" }}>
+              {fetchedformData.academicResponsibility && (
+                <Grid.Col
+                  span={fetchedformData.administrativeResponsibility ? 6 : 12}
                 >
-                  {fetchedformData.academicResponsibilityStatus}
-                </Badge>
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Text style={{ marginBottom: "10px" }}>
-                <strong>Administrative Responsibility:</strong>{" "}
-                {fetchedformData.administrativeResponsibility}
-              </Text>
-              <Text style={{ marginBottom: "10px" }}>
-                <strong>Administrative Responsibility Designation:</strong>{" "}
-                {fetchedformData.administrativeResponsibilityDesignation}
-              </Text>
-              <Text style={{ marginBottom: "10px" }}>
-                <strong>Administrative Responsibility Status:</strong>{" "}
-                <Badge
-                  color={
-                    fetchedformData.administrativeResponsibilityStatus ===
-                    "Accepted"
-                      ? "green"
-                      : fetchedformData.administrativeResponsibilityStatus ===
-                          "Rejected"
-                        ? "red"
-                        : "yellow"
-                  }
+                  <Text style={{ marginBottom: "10px" }}>
+                    <strong>Academic Responsibility:</strong>{" "}
+                    {fetchedformData.academicResponsibility}
+                  </Text>
+                  <Text style={{ marginBottom: "10px" }}>
+                    <strong>Academic Responsibility Designation:</strong>{" "}
+                    {fetchedformData.academicResponsibilityDesignation}
+                  </Text>
+                  <Text style={{ marginBottom: "10px" }}>
+                    <strong>Academic Responsibility Status:</strong>{" "}
+                    <Badge
+                      color={
+                        fetchedformData.academicResponsibilityStatus ===
+                        "Accepted"
+                          ? "green"
+                          : fetchedformData.academicResponsibilityStatus ===
+                              "Rejected"
+                            ? "red"
+                            : "yellow"
+                      }
+                    >
+                      {fetchedformData.academicResponsibilityStatus}
+                    </Badge>
+                  </Text>
+                </Grid.Col>
+              )}
+              {fetchedformData.administrativeResponsibility && (
+                <Grid.Col
+                  span={fetchedformData.academicResponsibility ? 6 : 12}
                 >
-                  {fetchedformData.administrativeResponsibilityStatus}
-                </Badge>
-              </Text>
-            </Grid.Col>
-          </Grid>
+                  <Text style={{ marginBottom: "10px" }}>
+                    <strong>Administrative Responsibility:</strong>{" "}
+                    {fetchedformData.administrativeResponsibility}
+                  </Text>
+                  <Text style={{ marginBottom: "10px" }}>
+                    <strong>Administrative Responsibility Designation:</strong>{" "}
+                    {fetchedformData.administrativeResponsibilityDesignation}
+                  </Text>
+                  <Text style={{ marginBottom: "10px" }}>
+                    <strong>Administrative Responsibility Status:</strong>{" "}
+                    <Badge
+                      color={
+                        fetchedformData.administrativeResponsibilityStatus ===
+                        "Accepted"
+                          ? "green"
+                          : fetchedformData.administrativeResponsibilityStatus ===
+                              "Rejected"
+                            ? "red"
+                            : "yellow"
+                      }
+                    >
+                      {fetchedformData.administrativeResponsibilityStatus}
+                    </Badge>
+                  </Text>
+                </Grid.Col>
+              )}
+            </Grid>
+          )}
 
           {/* Section 4: Action Buttons */}
           <Title order={4} mt="xl">
