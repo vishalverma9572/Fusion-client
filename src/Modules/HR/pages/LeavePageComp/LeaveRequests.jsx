@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Title, Select, TextInput, Container } from "@mantine/core";
+import { Title, Select, TextInput, Container, Paper } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { Eye } from "@phosphor-icons/react";
 import LoadingComponent from "../../components/Loading";
@@ -48,7 +48,7 @@ function LeaveRequests() {
         console.log(data);
       } catch (error) {
         console.error("Failed to fetch leave requests:", error);
-        setLoading(false); // Set loading to false if there’s an error
+        setLoading(false); // Set loading to false if there's an error
       }
     };
     fetchLeaveRequests(); // Call the function to fetch data
@@ -60,16 +60,16 @@ function LeaveRequests() {
   };
 
   // Function to determine status color
-  const getStatusColor = (status) => {
+  const getStatusClass = (status) => {
     switch (status) {
       case "Pending":
-        return "#FFD700"; // Yellow
+        return "status-badge status-pending";
       case "Accepted":
-        return "#32CD32"; // Green
+        return "status-badge status-accepted";
       case "Rejected":
-        return "#FF0000"; // Red
+        return "status-badge status-rejected";
       default:
-        return "#333"; // Default color
+        return "status-badge";
     }
   };
 
@@ -108,20 +108,23 @@ function LeaveRequests() {
     <div className="app-container">
       <Title
         order={2}
-        style={{ fontWeight: "500", marginTop: "40px", marginLeft: "15px" }}
+        style={{
+          fontWeight: "600",
+          marginBottom: "1.5rem",
+          color: "#1e293b",
+        }}
       >
         Leave Requests
       </Title>
 
-      {/* Filter Section */}
-      <div style={{ margin: "20px 15px", display: "flex", gap: "20px" }}>
+      <Paper className="filter-section" shadow="xs">
         <TextInput
           label="Filter by Date"
-          placeholder="Select or enter a date"
+          placeholder="Select a date"
           type="date"
           value={selectedDate}
           onChange={handleDateFilterChange}
-          style={{ maxWidth: "300px" }}
+          style={{ flex: 1 }}
         />
         <Select
           label="Filter by Status"
@@ -134,15 +137,16 @@ function LeaveRequests() {
             { value: "Accepted", label: "Accepted" },
             { value: "Rejected", label: "Rejected" },
           ]}
+          style={{ flex: 1 }}
         />
-      </div>
+      </Paper>
 
       {/* Display EmptyTable if no data is found */}
       {filteredData.length === 0 ? (
-        <EmptyTable
-          title="No Leave Requests Found"
-          message="There are no leave requests available. Please check back later."
-        />
+        <Paper className="empty-state" shadow="xs">
+          <h3>No Leave Requests Found</h3>
+          <p>There are no leave requests available. Please check back later.</p>
+        </Paper>
       ) : (
         <div className="form-table-container">
           <table className="form-table">
@@ -160,23 +164,17 @@ function LeaveRequests() {
                 <tr
                   className="table-row"
                   key={index}
-                  style={{ cursor: "pointer" }}
                   onClick={() => handleViewClick(item.id)}
                 >
                   <td>{item.id}</td>
-                  <td>{item.submissionDate}</td>
+                  <td>{new Date(item.submissionDate).toLocaleDateString()}</td>
                   <td>
-                    <span
-                      style={{
-                        color: getStatusColor(item.status),
-                        fontWeight: "bold",
-                      }}
-                    >
+                    <span className={getStatusClass(item.status)}>
                       {item.status}
                     </span>
                   </td>
-                  <td>{item.leaveStartDate}</td>
-                  <td>{item.leaveEndDate}</td>
+                  <td>{new Date(item.leaveStartDate).toLocaleDateString()}</td>
+                  <td>{new Date(item.leaveEndDate).toLocaleDateString()}</td>
                   <td>
                     <span className="text-link">
                       <Eye size={20} />
