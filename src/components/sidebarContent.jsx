@@ -62,6 +62,7 @@ function SidebarContent({ isCollapsed, toggleSidebar }) {
     "course_registration",
     "examinations",
     "other_academics",
+    "hr",
   ];
 
   const Modules = [
@@ -71,7 +72,6 @@ function SidebarContent({ isCollapsed, toggleSidebar }) {
       icon: <HomeIcon size={18} />,
       url: "/dashboard",
     },
-    // { label: "Course Management", id:"course_management", icon: <OtherIcon size={18} />, url: "/" },
     {
       label: "Academics",
       id: "course_registration",
@@ -159,7 +159,7 @@ function SidebarContent({ isCollapsed, toggleSidebar }) {
       label: "Human Resource",
       id: "hr",
       icon: <HumanResourceIcon size={18} />,
-      url: "/",
+      url: "/hr",
     },
     {
       label: "Examination",
@@ -217,7 +217,6 @@ function SidebarContent({ isCollapsed, toggleSidebar }) {
     const filterModules = Modules.filter(
       (module) => accessibleModules[module.id] || module.id === "home",
     );
-
     setFilteredModules(filterModules);
   }, [accessibleModules]);
 

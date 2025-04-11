@@ -62,6 +62,7 @@ const LoginPage = lazy(() => import("./pages/login"));
 const ForgotPassword = lazy(() => import("./pages/forgotPassword"));
 const AcademicPage = lazy(() => import("./Modules/Academic/index"));
 const ValidateAuth = lazy(() => import("./helper/validateauth"));
+const HR = lazy(() => import("./Modules/HR/index"));
 const MessPage = lazy(() => import("./Modules/Mess/pages/index"));
 const FileTracking = lazy(() => import("./Modules/FileTracking"));
 const ResearchProjects = lazy(() => import("./Modules/RSPC/researchProjects"));
@@ -153,6 +154,16 @@ export default function App() {
             <Layout>
               <Suspense fallback={<div>Loading .... </div>}>
                 <ProgrammeCurriculumRoutes />
+              </Suspense>
+            </Layout>
+          }
+        />
+        <Route
+          path="/hr/*"
+          element={
+            <Layout>
+              <Suspense fallback={<div>Loading .... </div>}>
+                <HR />
               </Suspense>
             </Layout>
           }
@@ -461,7 +472,6 @@ export default function App() {
               <Suspense fallback={<div>Loading .... </div>}>
                 <PurchaseNavbar />
                 <div style={{ margin: "32px" }}>
-                  {/* <MultiItemIndentForm /> */}
                   <IndentForm />
                 </div>
               </Suspense>
@@ -500,7 +510,6 @@ export default function App() {
             <Layout>
               <Suspense fallback={<div>Loading .... </div>}>
                 <PurchaseNavbar />
-                {/* <ForwardIndent /> */}
                 <NewForwardIndent />
               </Suspense>
             </Layout>

@@ -29,8 +29,9 @@ function BreadcrumbTabsFaculty() {
   }, [role, navigate]);
 
   // Check if user is HOD or DEAN Academic
-  const isHodOrDean = role && (role.startsWith("HOD") || role === "Dean Academic");
-  const isDean = role && (role === "Dean Academic");
+  const isHodOrDean =
+    role && (role.startsWith("HOD") || role === "Dean Academic");
+  const isDean = role && role === "Dean Academic";
 
   // Filter breadcrumb items based on role
   const breadcrumbItems = [
@@ -46,19 +47,31 @@ function BreadcrumbTabsFaculty() {
     { title: "Batches", url: "/programme_curriculum/faculty_batches" },
     { title: "Courses", url: "/programme_curriculum/faculty_courses" },
     // Only show Course Proposal for non-HOD/DEAN roles
-    ...(!isHodOrDean ? [{
-      title: "Course Proposal",
-      url: "/programme_curriculum/faculty_view_course_proposal",
-    }] : []),
-    ...(!isDean ? [{
-      title: "Course Proposal Tracking",
-      url: "/programme_curriculum/faculty_outward_files",
-    }] : []),
+    ...(!isHodOrDean
+      ? [
+          {
+            title: "Course Proposal",
+            url: "/programme_curriculum/faculty_view_course_proposal",
+          },
+        ]
+      : []),
+    ...(!isDean
+      ? [
+          {
+            title: "Course Proposal Tracking",
+            url: "/programme_curriculum/faculty_outward_files",
+          },
+        ]
+      : []),
     // Only show Inward Files for HOD/DEAN roles
-    ...(isHodOrDean ? [{
-      title: "Inward Files",
-      url: "/programme_curriculum/faculty_inward_files",
-    }] : []),
+    ...(isHodOrDean
+      ? [
+          {
+            title: "Inward Files",
+            url: "/programme_curriculum/faculty_inward_files",
+          },
+        ]
+      : []),
   ];
 
   // Helper function to get cached tab from localStorage
