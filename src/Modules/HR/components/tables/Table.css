@@ -1,22 +1,17 @@
 /* Table Container */
 .form-table-container {
-    /* max-width: 1000px; */
     margin: 20px auto;
-    padding: 10px;
-    background-color: #f7f8fc;
+    padding: 20px;
+    background-color: #f5f7fa;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   }
   
   /* Table */
   .form-table-container .form-table {
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 15px;
-    /* Adds gap between rows */
+    border-collapse: collapse;
     background-color: #ffffff;
-    border: 1px solid #545454;
-    /* Added border for cleaner look */
-    border-radius: 12px;
-    overflow: hidden;
+    border: 1px solid #e0e0e0;
   }
   
   /* Table Headers */
@@ -25,13 +20,10 @@
     font-size: 16px;
     font-weight: 700;
     color: rgb(0, 0, 0);
-    /* Darker text for readability */
     background-color: #ffffff;
-    /* White background for header */
     padding: 15px;
     text-align: center;
-    border-bottom: 2px solid #545454;
-    /* Clean line separating header */
+    border-bottom: 2px solid #e0e0e0;
   }
   
   /* Table Row */
@@ -41,18 +33,7 @@
     background-color: #ffffff;
     color: #333;
     transition: background-color 0.3s ease;
-    /* Row hover effect */
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-    border: 1px solid #545454;
-    /* Add a slight shadow between rows */
-  }
-  
-  /* Row Hover Effect */
-  .form-table-container .table-row:hover {
-    background-color: #f1f3f6;
-    /* Light background change on hover */
+    border: 1px solid #e0e0e0;
   }
   
   /* Data Cells */
@@ -61,11 +42,7 @@
     text-align: center;
     font-weight: 500;
     color: #333;
-    border-top: none;
-    position: relative;
-    border-radius: 0;
-    border-right: 1px solid #545454;
-    /* Subtle column divider */
+    border-right: 1px solid #e0e0e0;
   }
   
   /* Remove border from last column */
@@ -130,32 +107,32 @@
     font-weight: 700;
   }
   
-  /* Rounded Corners for Table Header */
+  /* Remove all border-radius related styles */
   .form-table-container .form-table thead th:first-child {
-    border-top-left-radius: 12px;
+    border-top-left-radius: 0;
   }
   
   .form-table-container .form-table thead th:last-child {
-    border-top-right-radius: 12px;
+    border-top-right-radius: 0;
   }
   
-  /* Rounding for Each Row */
+  /* Remove rounding for Each Row */
   .form-table-container .table-row td:first-child {
-    border-top-left-radius: 12px;
-    border-bottom-left-radius: 12px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
   }
   
   .form-table-container .table-row td:last-child {
-    border-top-right-radius: 12px;
-    border-bottom-right-radius: 12px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
   }
   
-  /* Special Case for Last Row */
+  /* Remove rounding for Last Row */
   .form-table-container .table-row:last-child td:first-child {
-    border-bottom-left-radius: 12px;
+    border-bottom-left-radius: 0;
   }
   
   .form-table-container .table-row:last-child td:last-child {
-    border-bottom-right-radius: 12px;
+    border-bottom-right-radius: 0;
   }
   /*15abff*/

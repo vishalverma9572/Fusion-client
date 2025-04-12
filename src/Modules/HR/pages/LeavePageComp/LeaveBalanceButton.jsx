@@ -54,27 +54,65 @@ const LeaveBalanceButton = () => {
           marginTop: "-50px",
           position: "relative",
           top: "50px",
+          paddingRight: "20px",
         }}
       >
         <Button
           onClick={() => setOpened(true)}
-          leftIcon={<ListChecks size={20} />}
+          leftIcon={<ListChecks size={20} weight="bold" />}
+          sx={(theme) => ({
+            backgroundColor: "#2b6cb0",
+            color: "#ffffff",
+            fontWeight: 600,
+            padding: "8px 16px",
+            borderRadius: "6px",
+            transition: "all 0.2s ease",
+            "&:hover": {
+              backgroundColor: "#1e4a82",
+              transform: "translateY(-1px)",
+              boxShadow: "0 4px 6px rgba(43, 108, 176, 0.2)",
+              // Reset to original color when not hovering
+              "@media (hover: none)": {
+                backgroundColor: "#2b6cb0",
+              },
+            },
+            "&:active": {
+              transform: "translateY(0)",
+              boxShadow: "none",
+            },
+          })}
         >
           Show Leave Balance
         </Button>
       </div>
+
       <Modal
         opened={opened}
         onClose={() => setOpened(false)}
         title={
-          <span style={{ fontWeight: "bold", fontSize: "20px" }}>
-            Leave Balance
+          <span
+            style={{
+              fontWeight: 600,
+              fontSize: "20px",
+              color: "#1a365d",
+              paddingBottom: "10px",
+              display: "block",
+            }}
+          >
+            Leave Balance Details
           </span>
         }
         centered
         size="lg"
         styles={{
-          modal: { height: "500px", padding: "20px" },
+          modal: {
+            borderRadius: "12px",
+            padding: "20px",
+            backgroundColor: "#f8fafc",
+          },
+          header: {
+            marginBottom: "10px",
+          },
         }}
       >
         {loading ? (
@@ -83,48 +121,125 @@ const LeaveBalanceButton = () => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              height: "100%",
+              height: "300px",
             }}
           >
-            <Loader size="lg" />
+            <Loader size="lg" variant="dots" />
           </div>
         ) : error ? (
           <div
-            style={{ color: "red", textAlign: "center", fontWeight: "bold" }}
+            style={{
+              color: "#e53e3e",
+              backgroundColor: "#fed7d7",
+              padding: "12px",
+              borderRadius: "6px",
+              fontWeight: 600,
+              textAlign: "center",
+            }}
           >
             {error}
           </div>
         ) : leaveBalance ? (
-          <ScrollArea>
+          <ScrollArea style={{ height: "400px" }}>
             <div
-              className="form-table-container"
-              style={{ margin: " 0 auto " }}
+              style={{
+                backgroundColor: "#ffffff",
+                borderRadius: "8px",
+                overflow: "hidden",
+                boxShadow: "0 1px 3px rgba(0, 0, 0, 0.05)",
+              }}
             >
-              <table className="form-table">
+              <table
+                style={{
+                  width: "100%",
+                  borderCollapse: "collapse",
+                  backgroundColor: "white",
+                }}
+              >
                 <thead>
                   <tr>
-                    <th className="table-header">Leave Type</th>
-                    <th className="table-header">Allotted</th>
-                    <th className="table-header">Taken</th>
-                    <th className="table-header">Balance</th>
+                    {["Leave Type", "Allotted", "Taken", "Balance"].map(
+                      (header, index) => (
+                        <th
+                          key={header}
+                          style={{
+                            padding: "14px 12px",
+                            backgroundColor: "#2b6cb0",
+                            color: "#ffffff",
+                            fontSize: "13px",
+                            fontWeight: 700,
+                            textTransform: "uppercase",
+                            letterSpacing: "0.4px",
+                            borderBottom: "2px solid #2c5282",
+                            borderRight: "1px solid #4a90e2",
+                            textAlign: index === 0 ? "left" : "center", // Center align for numeric columns
+                            paddingLeft: index === 0 ? "24px" : "12px",
+                          }}
+                        >
+                          {header}
+                        </th>
+                      ),
+                    )}
                   </tr>
                 </thead>
                 <tbody>
                   {Object.entries(leaveBalance).map(([key, value], index) => (
                     <tr
-                      className="table-row"
                       key={key}
-                      style={{ cursor: "pointer" }}
+                      style={{
+                        backgroundColor:
+                          index % 2 === 0 ? "#ffffff" : "#f7fafc",
+                        transition: "all 0.2s ease",
+                        ":hover": {
+                          backgroundColor: "#ebf8ff",
+                        },
+                      }}
                     >
-                      <td style={{ textTransform: "capitalize" }}>
-                        {key.replace(/_/g, " ")}
-                      </td>
-                      <td>{value.allotted}</td>
-                      <td>{value.taken}</td>
                       <td
                         style={{
-                          fontWeight: "bold",
-                          color: value.balance <= 0 ? "red" : "green",
+                          padding: "12px 12px 12px 24px",
+                          color: "#1a365d",
+                          fontSize: "14px",
+                          fontWeight: 600,
+                          borderBottom: "1px solid #e2e8f0",
+                          borderRight: "1px solid #e2e8f0",
+                          textAlign: "left",
+                        }}
+                      >
+                        {key.replace(/_/g, " ").toUpperCase()}
+                      </td>
+                      <td
+                        style={{
+                          padding: "12px",
+                          color: "#1a365d",
+                          fontSize: "14px",
+                          borderBottom: "1px solid #e2e8f0",
+                          borderRight: "1px solid #e2e8f0",
+                          textAlign: "center", // Center alignment
+                        }}
+                      >
+                        {value.allotted}
+                      </td>
+                      <td
+                        style={{
+                          padding: "12px",
+                          color: "#1a365d",
+                          fontSize: "14px",
+                          borderBottom: "1px solid #e2e8f0",
+                          borderRight: "1px solid #e2e8f0",
+                          textAlign: "center", // Center alignment
+                        }}
+                      >
+                        {value.taken}
+                      </td>
+                      <td
+                        style={{
+                          padding: "12px",
+                          fontWeight: 700,
+                          fontSize: "14px",
+                          borderBottom: "1px solid #e2e8f0",
+                          textAlign: "center", // Center alignment
+                          color: value.balance <= 0 ? "#e53e3e" : "#3182ce",
                         }}
                       >
                         {value.balance}
@@ -136,8 +251,17 @@ const LeaveBalanceButton = () => {
             </div>
           </ScrollArea>
         ) : (
-          <div style={{ textAlign: "center", fontWeight: "bold" }}>
-            No leave balance data available.
+          <div
+            style={{
+              padding: "20px",
+              backgroundColor: "#fff",
+              borderRadius: "8px",
+              textAlign: "center",
+              fontWeight: 600,
+              color: "#718096",
+            }}
+          >
+            No leave balance data available
           </div>
         )}
       </Modal>

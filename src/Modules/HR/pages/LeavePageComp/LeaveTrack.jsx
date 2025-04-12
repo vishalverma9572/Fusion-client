@@ -1,39 +1,36 @@
 import React, { useEffect, useState } from "react";
-
-import { get_form_track } from "../../../../routes/hr/index"; // Ensure this is the correct import path
+import { get_form_track } from "../../../../routes/hr/index";
 import { useParams } from "react-router-dom";
-import LoadingComponent from "../../components/Loading"; // Ensure this is the correct import path
+import LoadingComponent from "../../components/Loading";
 import TrackTable from "../../components/tables/TrackTable";
+import HrBreadcrumbs from "../../components/HrBreadcrumbs";
 
 function LeaveTrack() {
   const { id } = useParams();
-  const [trackData, setTrackData] = useState([]); // Correct useState syntax
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [trackData, setTrackData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const admin = new URLSearchParams(window.location.search).get("admin");
   const [exampleItems, setExampleItems] = useState([]);
+
   useEffect(() => {
+    const currentPath = window.location.pathname;
     if (admin) {
       setExampleItems([
         { title: "Home", path: "/dashboard" },
         { title: "Human Resources", path: "/hr" },
         { title: "Admin Leave Management", path: "/hr/admin_leave" },
-
         { title: "Track", path: `${currentPath}?admin=true` },
-        // { title: "Handle Leave", path: `/hr/leave/handle/${id}` },
       ]);
     } else {
       setExampleItems([
         { title: "Home", path: "/dashboard" },
         { title: "Human Resources", path: "/hr" },
         { title: "Leave Management", path: "/hr/leave" },
-        { title: "Track", path: `${currentPath}` },
+        { title: "Track", path: currentPath },
       ]);
     }
   }, [admin]);
 
-  const currentPath = window.location.pathname;
-
-  console.log("checking");
   useEffect(() => {
     const fetchLeaveTrack = async () => {
       const token = localStorage.getItem("authToken");
@@ -47,15 +44,15 @@ function LeaveTrack() {
           headers: { Authorization: `Token ${token}` },
         });
         const data = await response.json();
-        setTrackData(data.file_history); // Set fetched data
-        setLoading(false); // Set loading to false once data is fetched
+        setTrackData(data.file_history);
+        setLoading(false);
       } catch (error) {
         console.error("Failed to fetch leave Track:", error);
-        setLoading(false); // Set loading to false if there’s an error
+        setLoading(false);
       }
     };
-    fetchLeaveTrack(); // Ensure function is called
-  }, []); // Adding empty dependency array to run only once
+    fetchLeaveTrack();
+  }, [id]);
 
   if (loading) {
     return <LoadingComponent loadingMsg="Fetching Leave Track..." />;
