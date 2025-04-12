@@ -179,179 +179,792 @@ const LeaveFileHandle = () => {
   return (
     <>
       <HrBreadcrumbs items={exampleItems} />
-      {/* Title */}
-      <Box
-        style={{
-          padding: "25px 30px",
-          margin: "20px 5px",
-          border: "1px solid #e0e0e0",
-          borderRadius: "8px",
-        }}
-      >
-        <Title order={2} style={{ fontWeight: "500", marginBottom: "20px" }}>
-          Handle Leave Form
-        </Title>
-
-        <Grid>
-          {/* Left Column: Status Badge */}
-
-          <Grid.Col span={6}>
-            <Text>
-              <strong>Status:</strong>{" "}
-              <Badge
-                color={
-                  fetchedformData.status === "Accepted"
-                    ? "green"
-                    : fetchedformData.status === "Rejected"
-                      ? "red"
-                      : "yellow"
-                }
-              >
-                {fetchedformData.status}
-              </Badge>
-            </Text>
-          </Grid.Col>
-
-          {/* Right Column: Track Status Button */}
-          {fetchedformData.academicResponsibilityStatus === "Accepted" &&
-            fetchedformData.administrativeResponsibilityStatus ===
-              "Accepted" && (
-              <Grid.Col
-                span={6}
-                style={{ display: "flex", justifyContent: "flex-end" }}
-              >
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    // Add functionality to track status
-                    navigate(
-                      `../FormView/leaveform_track/${fetchedformData.file_id}`,
-                    );
-                  }}
-                >
-                  Track Status
-                </Button>
-              </Grid.Col>
-            )}
-        </Grid>
-        <br />
-        {/* Form Data Display */}
-        <Box
-          sx={{
-            maxWidth: "850px",
-            margin: "auto",
-            padding: "30px",
-            border: "1px solid #ddd",
-            borderRadius: "8px",
-            backgroundColor: "#f9f9f9",
+      <Box style={{ padding: "0 48px" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "32px",
           }}
         >
-          {/* Section 1: Employee Details */}
-          <Title order={4}>Employee Details</Title>
-          <Divider my="sm" />
-          <Grid gutter="lg" style={{ padding: "0 20px" }}>
-            <Grid.Col span={6}>
-              <Text>
-                <strong>Name:</strong> {fetchedformData.name}
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Text>
-                <strong>Designation:</strong> {fetchedformData.designation}
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Text>
-                <strong>Personal File Number:</strong> {fetchedformData.pfno}
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Text>
-                <strong>Department:</strong> {fetchedformData.department}
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Text>
-                <strong>Application Type:</strong>{" "}
-                <Badge
-                  color={
-                    fetchedformData.application_type === "Online"
-                      ? "blue"
-                      : "green"
-                  }
-                >
-                  {fetchedformData.application_type}
-                </Badge>
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Text>
-                <strong>Submission Date:</strong>{" "}
-                {fetchedformData.submissionDate}
-              </Text>
-            </Grid.Col>
-          </Grid>
-
-          {/* Section 2: Leave Details */}
-          <Title order={4} mt="xl">
-            Leave Details
-          </Title>
-          <Divider my="sm" />
-          <Grid gutter="lg" style={{ padding: "0 20px" }}>
-            <Grid.Col span={6}>
-              <Text>
-                <strong>Leave Start Date:</strong>{" "}
-                {fetchedformData.leaveStartDate}
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Text>
-                <strong>Leave End Date:</strong> {fetchedformData.leaveEndDate}
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={12}>
-              <Text>
-                <strong>Purpose of Leave:</strong> {fetchedformData.purpose}
-              </Text>
-            </Grid.Col>
-            <Grid.Col span={12}>
-              <Text>
-                <strong>Remarks:</strong> {fetchedformData.remarks}
-              </Text>
-            </Grid.Col>
-          </Grid>
-          {/* Section 3: Complete Leave Types and Balances */}
-          <Title order={4} mt="xl" style={{ marginTop: "30px" }}>
-            Leave Details
-          </Title>
-          <Divider my="sm" />
-          <Grid gutter="xl">
-            <Grid.Col
-              span={6}
-              style={{ borderRight: "1px solid #ccc", paddingRight: "24px" }}
+          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+            <Button
+              disabled
+              style={{
+                padding: "8px 16px",
+                borderRadius: "6px",
+                fontSize: "14px",
+                fontWeight: 600,
+                backgroundColor:
+                  fetchedformData.status === "Accepted"
+                    ? "#38a169"
+                    : fetchedformData.status === "Rejected"
+                      ? "#e53e3e"
+                      : "#d69e2e",
+                color: "#ffffff",
+                "&:hover": {
+                  backgroundColor:
+                    fetchedformData.status === "Accepted"
+                      ? "#38a169"
+                      : fetchedformData.status === "Rejected"
+                        ? "#e53e3e"
+                        : "#d69e2e",
+                },
+              }}
             >
-              <Title order={5} mb="sm" style={{ textAlign: "center" }}>
+              {fetchedformData.status}
+            </Button>
+            <Text
+              style={{
+                fontSize: "16px",
+                fontWeight: 700,
+                color: "#2d3748",
+                letterSpacing: "-0.2px",
+              }}
+            >
+              Leave Application Management Interface
+            </Text>
+          </div>
+          <Button
+            variant="filled"
+            color="blue"
+            style={{
+              padding: "8px 16px",
+              borderRadius: "6px",
+              fontSize: "14px",
+              fontWeight: 600,
+              backgroundColor: "#2b6cb0",
+              color: "#ffffff",
+              "&:hover": {
+                backgroundColor: "#2c5282",
+              },
+            }}
+            onClick={() => {
+              navigate(
+                `../FormView/leaveform_track/${fetchedformData.file_id}`,
+              );
+            }}
+            sx={(theme) => ({
+              backgroundColor: "#2b6cb0 !important",
+              color: "#ffffff",
+              padding: "8px 16px",
+              borderRadius: "6px",
+              fontSize: "14px",
+              fontWeight: 600,
+              transition: "all 0.2s ease",
+              minWidth: "120px",
+
+              "&:hover": {
+                backgroundColor: "#4a5568 !important",
+                transform: "translateY(-1px)",
+              },
+
+              "&:active": {
+                transform: "translateY(0)",
+              },
+            })}
+          >
+            Track Status
+          </Button>
+        </div>
+
+        {/* Employee Details Section */}
+        <div
+          style={{
+            backgroundColor: "#ffffff",
+            borderRadius: "12px",
+            padding: "24px",
+            boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+            marginBottom: "32px",
+            border: "1px solid #f0f0f0",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          {/* Decorative Top Border */}
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: "4px",
+              background: "linear-gradient(90deg, #2b6cb0, #4299e1, #63b3ed)",
+              borderTopLeftRadius: "12px",
+              borderTopRightRadius: "12px",
+            }}
+          />
+
+          {/* Section Header */}
+          <div
+            style={{
+              marginBottom: "32px",
+              borderBottom: "1px solid #e0e0e0",
+              paddingBottom: "16px",
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              marginTop: "4px",
+            }}
+          >
+            <div
+              style={{
+                width: "4px",
+                height: "28px",
+                background: "linear-gradient(to bottom, #2b6cb0, #4299e1)",
+                borderRadius: "2px",
+                boxShadow: "0 2px 4px rgba(66, 153, 225, 0.2)",
+              }}
+            />
+            <Title
+              order={4}
+              style={{
+                color: "#1a1a1a",
+                margin: 0,
+                fontSize: "18px",
+                fontWeight: 700,
+                letterSpacing: "-0.2px",
+                textShadow: "0 1px 2px rgba(0,0,0,0.05)",
+              }}
+            >
+              Employee Details
+            </Title>
+          </div>
+
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "24px" }}
+          >
+            {/* First Row */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                gap: "24px",
+              }}
+            >
+              <div style={{ flex: 1, maxWidth: "80%" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "8px",
+                    color: "#2b6cb0",
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.4px",
+                  }}
+                >
+                  Name
+                </label>
+                <input
+                  type="text"
+                  value={fetchedformData.name}
+                  disabled
+                  style={{
+                    width: "100%",
+                    padding: "12px 16px",
+                    border: "1px solid #e0e0e0",
+                    borderRadius: "8px",
+                    backgroundColor: "#ffffff",
+                    color: "#2d3748",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    transition: "all 0.2s ease",
+                    boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+                    ":disabled": {
+                      cursor: "not-allowed",
+                      backgroundColor: "#f8f9fa",
+                    },
+                    "&:hover": {
+                      borderColor: "#4299e1",
+                      boxShadow: "0 2px 4px rgba(66, 153, 225, 0.1)",
+                    },
+                  }}
+                />
+              </div>
+              <div style={{ flex: 1, maxWidth: "80%" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "8px",
+                    color: "#2b6cb0",
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.4px",
+                  }}
+                >
+                  Designation
+                </label>
+                <input
+                  type="text"
+                  value={fetchedformData.designation}
+                  disabled
+                  style={{
+                    width: "100%",
+                    padding: "12px 16px",
+                    border: "1px solid #e0e0e0",
+                    borderRadius: "8px",
+                    backgroundColor: "#ffffff",
+                    color: "#2d3748",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    transition: "all 0.2s ease",
+                    boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+                    ":disabled": {
+                      cursor: "not-allowed",
+                      backgroundColor: "#f8f9fa",
+                    },
+                    "&:hover": {
+                      borderColor: "#4299e1",
+                      boxShadow: "0 2px 4px rgba(66, 153, 225, 0.1)",
+                    },
+                  }}
+                />
+              </div>
+              <div style={{ flex: 1, maxWidth: "80%" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "8px",
+                    color: "#2b6cb0",
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.4px",
+                  }}
+                >
+                  Personal File Number
+                </label>
+                <input
+                  type="text"
+                  value={fetchedformData.pfno}
+                  disabled
+                  style={{
+                    width: "100%",
+                    padding: "12px 16px",
+                    border: "1px solid #e0e0e0",
+                    borderRadius: "8px",
+                    backgroundColor: "#ffffff",
+                    color: "#2d3748",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    transition: "all 0.2s ease",
+                    boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+                    ":disabled": {
+                      cursor: "not-allowed",
+                      backgroundColor: "#f8f9fa",
+                    },
+                    "&:hover": {
+                      borderColor: "#4299e1",
+                      boxShadow: "0 2px 4px rgba(66, 153, 225, 0.1)",
+                    },
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Second Row */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                gap: "24px",
+              }}
+            >
+              <div style={{ flex: 1, maxWidth: "80%" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "8px",
+                    color: "#2b6cb0",
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.4px",
+                  }}
+                >
+                  Department
+                </label>
+                <input
+                  type="text"
+                  value={fetchedformData.department}
+                  disabled
+                  style={{
+                    width: "100%",
+                    padding: "12px 16px",
+                    border: "1px solid #e0e0e0",
+                    borderRadius: "8px",
+                    backgroundColor: "#ffffff",
+                    color: "#2d3748",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    transition: "all 0.2s ease",
+                    boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+                    ":disabled": {
+                      cursor: "not-allowed",
+                      backgroundColor: "#f8f9fa",
+                    },
+                    "&:hover": {
+                      borderColor: "#4299e1",
+                      boxShadow: "0 2px 4px rgba(66, 153, 225, 0.1)",
+                    },
+                  }}
+                />
+              </div>
+              <div style={{ flex: 1, maxWidth: "80%" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "8px",
+                    color: "#2b6cb0",
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.4px",
+                  }}
+                >
+                  Application Type
+                </label>
+                <input
+                  type="text"
+                  value={fetchedformData.application_type}
+                  disabled
+                  style={{
+                    width: "100%",
+                    padding: "12px 16px",
+                    border: "1px solid #e0e0e0",
+                    borderRadius: "8px",
+                    backgroundColor: "#ffffff",
+                    color: "#2d3748",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    transition: "all 0.2s ease",
+                    boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+                    ":disabled": {
+                      cursor: "not-allowed",
+                      backgroundColor: "#f8f9fa",
+                    },
+                    "&:hover": {
+                      borderColor: "#4299e1",
+                      boxShadow: "0 2px 4px rgba(66, 153, 225, 0.1)",
+                    },
+                  }}
+                />
+              </div>
+              <div style={{ flex: 1, maxWidth: "80%" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "8px",
+                    color: "#2b6cb0",
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.4px",
+                  }}
+                >
+                  Submission Date
+                </label>
+                <input
+                  type="text"
+                  value={fetchedformData.submissionDate}
+                  disabled
+                  style={{
+                    width: "100%",
+                    padding: "12px 16px",
+                    border: "1px solid #e0e0e0",
+                    borderRadius: "8px",
+                    backgroundColor: "#ffffff",
+                    color: "#2d3748",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    transition: "all 0.2s ease",
+                    boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+                    ":disabled": {
+                      cursor: "not-allowed",
+                      backgroundColor: "#f8f9fa",
+                    },
+                    "&:hover": {
+                      borderColor: "#4299e1",
+                      boxShadow: "0 2px 4px rgba(66, 153, 225, 0.1)",
+                    },
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Leave Details Section */}
+        <div
+          style={{
+            backgroundColor: "#ffffff",
+            borderRadius: "12px",
+            padding: "24px",
+            boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+            marginBottom: "32px",
+            border: "1px solid #f0f0f0",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          {/* Decorative Top Border */}
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: "4px",
+              background: "linear-gradient(90deg, #2b6cb0, #4299e1, #63b3ed)",
+              borderTopLeftRadius: "12px",
+              borderTopRightRadius: "12px",
+            }}
+          />
+
+          {/* Section Header */}
+          <div
+            style={{
+              marginBottom: "32px",
+              borderBottom: "1px solid #e0e0e0",
+              paddingBottom: "16px",
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              marginTop: "4px",
+            }}
+          >
+            <div
+              style={{
+                width: "4px",
+                height: "28px",
+                background: "linear-gradient(to bottom, #2b6cb0, #4299e1)",
+                borderRadius: "2px",
+                boxShadow: "0 2px 4px rgba(66, 153, 225, 0.2)",
+              }}
+            />
+            <Title
+              order={4}
+              style={{
+                color: "#1a1a1a",
+                margin: 0,
+                fontSize: "18px",
+                fontWeight: 700,
+                letterSpacing: "-0.2px",
+                textShadow: "0 1px 2px rgba(0,0,0,0.05)",
+              }}
+            >
+              Leave Details
+            </Title>
+          </div>
+
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "24px" }}
+          >
+            {/* First Row - Leave Dates */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                gap: "24px",
+              }}
+            >
+              <div style={{ flex: 1, maxWidth: "80%" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "8px",
+                    color: "#2b6cb0",
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.4px",
+                  }}
+                >
+                  Leave Start Date
+                </label>
+                <input
+                  type="text"
+                  value={fetchedformData.leaveStartDate}
+                  disabled
+                  style={{
+                    width: "80%",
+                    padding: "12px 16px",
+                    border: "1px solid #e0e0e0",
+                    borderRadius: "8px",
+                    backgroundColor: "#ffffff",
+                    color: "#2d3748",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    transition: "all 0.2s ease",
+                    boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+                    ":disabled": {
+                      cursor: "not-allowed",
+                      backgroundColor: "#f8f9fa",
+                    },
+                    "&:hover": {
+                      borderColor: "#4299e1",
+                      boxShadow: "0 2px 4px rgba(66, 153, 225, 0.1)",
+                    },
+                  }}
+                />
+              </div>
+              <div style={{ flex: 1, maxWidth: "80%" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "8px",
+                    color: "#2b6cb0",
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.4px",
+                  }}
+                >
+                  Leave End Date
+                </label>
+                <input
+                  type="text"
+                  value={fetchedformData.leaveEndDate}
+                  disabled
+                  style={{
+                    width: "80%",
+                    padding: "12px 16px",
+                    border: "1px solid #e0e0e0",
+                    borderRadius: "8px",
+                    backgroundColor: "#ffffff",
+                    color: "#2d3748",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    transition: "all 0.2s ease",
+                    boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+                    ":disabled": {
+                      cursor: "not-allowed",
+                      backgroundColor: "#f8f9fa",
+                    },
+                    "&:hover": {
+                      borderColor: "#4299e1",
+                      boxShadow: "0 2px 4px rgba(66, 153, 225, 0.1)",
+                    },
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Second Row - Purpose and Remarks */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                gap: "24px",
+              }}
+            >
+              <div style={{ flex: 1, maxWidth: "80%" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "8px",
+                    color: "#2b6cb0",
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.4px",
+                  }}
+                >
+                  Purpose
+                </label>
+                <textarea
+                  value={fetchedformData.purpose}
+                  disabled
+                  style={{
+                    width: "80%",
+                    padding: "12px 16px",
+                    border: "1px solid #e0e0e0",
+                    borderRadius: "8px",
+                    backgroundColor: "#ffffff",
+                    color: "#2d3748",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    transition: "all 0.2s ease",
+                    boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+                    minHeight: "48px",
+                    resize: "none",
+                    ":disabled": {
+                      cursor: "not-allowed",
+                      backgroundColor: "#f8f9fa",
+                    },
+                    "&:hover": {
+                      borderColor: "#4299e1",
+                      boxShadow: "0 2px 4px rgba(66, 153, 225, 0.1)",
+                    },
+                  }}
+                />
+              </div>
+              <div style={{ flex: 1, maxWidth: "80%" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "8px",
+                    color: "#2b6cb0",
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.4px",
+                  }}
+                >
+                  Remarks
+                </label>
+                <textarea
+                  value={fetchedformData.remarks}
+                  disabled
+                  style={{
+                    width: "80%",
+                    padding: "12px 16px",
+                    border: "1px solid #e0e0e0",
+                    borderRadius: "8px",
+                    backgroundColor: "#ffffff",
+                    color: "#2d3748",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    transition: "all 0.2s ease",
+                    boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+                    minHeight: "48px",
+                    resize: "none",
+                    ":disabled": {
+                      cursor: "not-allowed",
+                      backgroundColor: "#f8f9fa",
+                    },
+                    "&:hover": {
+                      borderColor: "#4299e1",
+                      boxShadow: "0 2px 4px rgba(66, 153, 225, 0.1)",
+                    },
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Leave Types and Balances Section */}
+        <div
+          style={{
+            backgroundColor: "#ffffff",
+            borderRadius: "12px",
+            padding: "24px",
+            boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+            marginBottom: "32px",
+            border: "1px solid #f0f0f0",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          {/* Decorative Top Border */}
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: "4px",
+              background: "linear-gradient(90deg, #2b6cb0, #4299e1, #63b3ed)",
+              borderTopLeftRadius: "12px",
+              borderTopRightRadius: "12px",
+            }}
+          />
+
+          {/* Section Header */}
+          <div
+            style={{
+              marginBottom: "32px",
+              borderBottom: "1px solid #e0e0e0",
+              paddingBottom: "16px",
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              marginTop: "4px",
+            }}
+          >
+            <div
+              style={{
+                width: "4px",
+                height: "28px",
+                background: "linear-gradient(to bottom, #2b6cb0, #4299e1)",
+                borderRadius: "2px",
+                boxShadow: "0 2px 4px rgba(66, 153, 225, 0.2)",
+              }}
+            />
+            <Title
+              order={4}
+              style={{
+                color: "#1a1a1a",
+                margin: 0,
+                fontSize: "18px",
+                fontWeight: 700,
+                letterSpacing: "-0.2px",
+                textShadow: "0 1px 2px rgba(0,0,0,0.05)",
+              }}
+            >
+              Leave Types and Balances
+            </Title>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              gap: "48px",
+            }}
+          >
+            <div
+              style={{
+                flex: 1,
+                backgroundColor: "#ffffff",
+                padding: "20px",
+                borderRadius: "8px",
+                border: "1px solid #e2e8f0",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+              }}
+            >
+              <Title
+                order={5}
+                mb="sm"
+                style={{
+                  textAlign: "center",
+                  color: "#2b6cb0",
+                  marginBottom: "16px",
+                  paddingBottom: "8px",
+                  borderBottom: "1px solid #e2e8f0",
+                }}
+              >
                 Leave Types Applied
               </Title>
               <Table>
                 <thead>
-                  <tr style={{ backgroundColor: "#e9ecef" }}>
+                  <tr style={{ backgroundColor: "#f7fafc" }}>
                     <th
                       style={{
-                        padding: "8px",
-                        border: "1px solid #ccc",
+                        padding: "12px 16px",
+                        border: "1px solid #e2e8f0",
                         textAlign: "left",
-                        fontWeight: "bold",
+                        fontWeight: 700,
+                        fontSize: "13px",
+                        color: "#2d3748",
+                        letterSpacing: "0.3px",
                       }}
                     >
                       Leave Type
                     </th>
                     <th
                       style={{
-                        padding: "8px",
-                        border: "1px solid #ccc",
+                        padding: "12px 16px",
+                        border: "1px solid #e2e8f0",
                         textAlign: "center",
-                        fontWeight: "bold",
+                        fontWeight: 700,
+                        fontSize: "13px",
+                        color: "#2d3748",
+                        letterSpacing: "0.3px",
                       }}
                     >
                       Days Applied
@@ -402,27 +1015,31 @@ const LeaveFileHandle = () => {
                     },
                   ].map((leave, index) => (
                     <tr
-                      key={`applied-${index}`}
+                      key={index}
                       style={{
                         backgroundColor:
-                          index % 2 === 0 ? "#ffffff" : "#e8e8e8",
+                          index % 2 === 0 ? "#ffffff" : "#f8fafc",
                       }}
                     >
                       <td
                         style={{
-                          padding: "8px",
-                          border: "1px solid #ccc",
+                          padding: "12px 16px",
+                          border: "1px solid #e2e8f0",
                           textAlign: "left",
+                          fontSize: "14px",
+                          color: "#4a5568",
                         }}
                       >
                         {leave.type}
                       </td>
                       <td
                         style={{
-                          padding: "8px",
-                          border: "1px solid #ccc",
+                          padding: "12px 16px",
+                          border: "1px solid #e2e8f0",
                           textAlign: "center",
-                          fontWeight: leave.applied > 0 ? "bold" : "normal",
+                          fontSize: "14px",
+                          color: "#4a5568",
+                          fontWeight: leave.applied > 0 ? 600 : 400,
                         }}
                       >
                         {leave.applied || "0"}
@@ -431,31 +1048,56 @@ const LeaveFileHandle = () => {
                   ))}
                 </tbody>
               </Table>
-            </Grid.Col>
+            </div>
 
-            <Grid.Col span={6} style={{ paddingLeft: "24px" }}>
-              <Title order={5} mb="sm" style={{ textAlign: "center" }}>
-                All Leave Balances
+            <div
+              style={{
+                flex: 1,
+                backgroundColor: "#ffffff",
+                padding: "20px",
+                borderRadius: "8px",
+                border: "1px solid #e2e8f0",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+              }}
+            >
+              <Title
+                order={5}
+                mb="sm"
+                style={{
+                  textAlign: "center",
+                  color: "#2b6cb0",
+                  marginBottom: "16px",
+                  paddingBottom: "8px",
+                  borderBottom: "1px solid #e2e8f0",
+                }}
+              >
+                Leave Balances
               </Title>
               <Table>
                 <thead>
-                  <tr style={{ backgroundColor: "#e9ecef" }}>
+                  <tr style={{ backgroundColor: "#f7fafc" }}>
                     <th
                       style={{
-                        padding: "8px",
-                        border: "1px solid #ccc",
+                        padding: "12px 16px",
+                        border: "1px solid #e2e8f0",
                         textAlign: "left",
-                        fontWeight: "bold",
+                        fontWeight: 700,
+                        fontSize: "13px",
+                        color: "#2d3748",
+                        letterSpacing: "0.3px",
                       }}
                     >
                       Leave Type
                     </th>
                     <th
                       style={{
-                        padding: "8px",
-                        border: "1px solid #ccc",
+                        padding: "12px 16px",
+                        border: "1px solid #e2e8f0",
                         textAlign: "center",
-                        fontWeight: "bold",
+                        fontWeight: 700,
+                        fontSize: "13px",
+                        color: "#2d3748",
+                        letterSpacing: "0.3px",
                       }}
                     >
                       Balance (Days)
@@ -499,33 +1141,35 @@ const LeaveFileHandle = () => {
 
                     return (
                       <tr
-                        key={`balance-${index}`}
+                        key={index}
                         style={{
                           backgroundColor:
-                            index % 2 === 0 ? "#ffffff" : "#e8e8e8",
+                            index % 2 === 0 ? "#ffffff" : "#f8fafc",
                         }}
                       >
                         <td
                           style={{
-                            padding: "8px",
-                            border: "1px solid #ccc",
+                            padding: "12px 16px",
+                            border: "1px solid #e2e8f0",
                             textAlign: "left",
+                            fontSize: "14px",
+                            color: "#4a5568",
                           }}
                         >
                           {leave.type}
                         </td>
                         <td
                           style={{
-                            padding: "8px",
-                            border: "1px solid #ccc",
+                            padding: "12px 16px",
+                            border: "1px solid #e2e8f0",
                             textAlign: "center",
+                            fontSize: "14px",
                             color: isNegative
-                              ? "#ff0000"
+                              ? "#e53e3e"
                               : isPositive
-                                ? "#28a745"
-                                : "inherit",
-                            fontWeight:
-                              isNegative || isPositive ? "bold" : "normal",
+                                ? "#4299e1"
+                                : "#4a5568",
+                            fontWeight: isNegative || isPositive ? 600 : 400,
                           }}
                         >
                           {leave.balance || "0"}
@@ -535,206 +1179,893 @@ const LeaveFileHandle = () => {
                   })}
                 </tbody>
               </Table>
-            </Grid.Col>
-          </Grid>
+            </div>
+          </div>
+        </div>
 
-          {/* Section 4: Station Leave */}
-          {fetchedformData.stationLeave && (
-            <>
-              <Title order={4} mt="xl" style={{ marginTop: "30px" }}>
+        {/* Section 4: Station Leave */}
+        {fetchedformData.stationLeave && (
+          <div
+            style={{
+              backgroundColor: "#ffffff",
+              borderRadius: "12px",
+              padding: "24px",
+              boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+              marginBottom: "32px",
+              border: "1px solid #f0f0f0",
+              position: "relative",
+              overflow: "hidden",
+            }}
+          >
+            {/* Decorative Top Border */}
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                height: "4px",
+                background: "linear-gradient(90deg, #2b6cb0, #4299e1, #63b3ed)",
+                borderTopLeftRadius: "12px",
+                borderTopRightRadius: "12px",
+              }}
+            />
+
+            {/* Section Header */}
+            <div
+              style={{
+                marginBottom: "32px",
+                borderBottom: "1px solid #e0e0e0",
+                paddingBottom: "16px",
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+                marginTop: "4px",
+              }}
+            >
+              <div
+                style={{
+                  width: "4px",
+                  height: "28px",
+                  background: "linear-gradient(to bottom, #2b6cb0, #4299e1)",
+                  borderRadius: "2px",
+                  boxShadow: "0 2px 4px rgba(66, 153, 225, 0.2)",
+                }}
+              />
+              <Title
+                order={4}
+                style={{
+                  color: "#1a1a1a",
+                  margin: 0,
+                  fontSize: "18px",
+                  fontWeight: 700,
+                  letterSpacing: "-0.2px",
+                  textShadow: "0 1px 2px rgba(0,0,0,0.05)",
+                }}
+              >
                 Station Leave Details
               </Title>
-              <Divider my="sm" />
-              <Grid gutter="lg" style={{ padding: "0 20px" }}>
-                <Grid.Col span={6}>
-                  <Text>
-                    <strong>Station Leave Start Date:</strong>{" "}
-                    {fetchedformData.stationLeaveStartDate}
-                  </Text>
-                </Grid.Col>
-                <Grid.Col span={6}>
-                  <Text>
-                    <strong>Station Leave End Date:</strong>{" "}
-                    {fetchedformData.stationLeaveEndDate}
-                  </Text>
-                </Grid.Col>
-                <Grid.Col span={12}>
-                  <Text>
-                    <strong>Address During Station Leave:</strong>{" "}
-                    {fetchedformData.stationLeaveAddress}
-                  </Text>
-                </Grid.Col>
-              </Grid>
-            </>
-          )}
+            </div>
 
-          {/* Section 5: Responsibility Transfer */}
-          <Title order={4} mt="xl" style={{ marginTop: "30px" }}>
-            Responsibility Transfer
-          </Title>
-          <Divider my="sm" />
+            <Grid gutter={32} style={{ padding: "0 16px" }}>
+              <Grid.Col span={4}>
+                <div style={{ position: "relative", marginBottom: "24px" }}>
+                  <label
+                    style={{
+                      display: "block",
+                      marginBottom: "8px",
+                      color: "#2b6cb0",
+                      fontSize: "14px",
+                      fontWeight: 700,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.4px",
+                    }}
+                  >
+                    Station Leave Start Date
+                  </label>
+                  <input
+                    type="text"
+                    value={fetchedformData.stationLeaveStartDate}
+                    disabled
+                    style={{
+                      width: "80%",
+                      padding: "12px 16px",
+                      border: "1px solid #e0e0e0",
+                      borderRadius: "8px",
+                      backgroundColor: "#ffffff",
+                      color: "#2d3748",
+                      fontSize: "14px",
+                      fontWeight: 600,
+                      transition: "all 0.2s ease",
+                      boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+                      ":disabled": {
+                        cursor: "not-allowed",
+                        backgroundColor: "#f8f9fa",
+                      },
+                      "&:hover": {
+                        borderColor: "#4299e1",
+                        boxShadow: "0 2px 4px rgba(66, 153, 225, 0.1)",
+                      },
+                    }}
+                  />
+                </div>
+              </Grid.Col>
+              <Grid.Col span={4}>
+                <div style={{ position: "relative", marginBottom: "24px" }}>
+                  <label
+                    style={{
+                      display: "block",
+                      marginBottom: "8px",
+                      color: "#2b6cb0",
+                      fontSize: "14px",
+                      fontWeight: 700,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.4px",
+                    }}
+                  >
+                    Station Leave End Date
+                  </label>
+                  <input
+                    type="text"
+                    value={fetchedformData.stationLeaveEndDate}
+                    disabled
+                    style={{
+                      width: "80%",
+                      padding: "12px 16px",
+                      border: "1px solid #e0e0e0",
+                      borderRadius: "8px",
+                      backgroundColor: "#ffffff",
+                      color: "#2d3748",
+                      fontSize: "14px",
+                      fontWeight: 600,
+                      transition: "all 0.2s ease",
+                      boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+                      ":disabled": {
+                        cursor: "not-allowed",
+                        backgroundColor: "#f8f9fa",
+                      },
+                      "&:hover": {
+                        borderColor: "#4299e1",
+                        boxShadow: "0 2px 4px rgba(66, 153, 225, 0.1)",
+                      },
+                    }}
+                  />
+                </div>
+              </Grid.Col>
+              <Grid.Col span={4}>
+                <div style={{ position: "relative", marginBottom: "24px" }}>
+                  <label
+                    style={{
+                      display: "block",
+                      marginBottom: "8px",
+                      color: "#2b6cb0",
+                      fontSize: "14px",
+                      fontWeight: 700,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.4px",
+                    }}
+                  >
+                    Address During Station Leave
+                  </label>
+                  <input
+                    type="text"
+                    value={fetchedformData.stationLeaveAddress}
+                    disabled
+                    style={{
+                      width: "80%",
+                      padding: "12px 16px",
+                      border: "1px solid #e0e0e0",
+                      borderRadius: "8px",
+                      backgroundColor: "#ffffff",
+                      color: "#2d3748",
+                      fontSize: "14px",
+                      fontWeight: 600,
+                      transition: "all 0.2s ease",
+                      boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+                      ":disabled": {
+                        cursor: "not-allowed",
+                        backgroundColor: "#f8f9fa",
+                      },
+                      "&:hover": {
+                        borderColor: "#4299e1",
+                        boxShadow: "0 2px 4px rgba(66, 153, 225, 0.1)",
+                      },
+                    }}
+                  />
+                </div>
+              </Grid.Col>
+            </Grid>
+          </div>
+        )}
+
+        {/* Section 5: Responsibility Transfer */}
+        <div
+          style={{
+            backgroundColor: "#ffffff",
+            borderRadius: "12px",
+            padding: "24px",
+            boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+            marginBottom: "32px",
+            border: "1px solid #f0f0f0",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          {/* Decorative Top Border */}
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: "4px",
+              background: "linear-gradient(90deg, #2b6cb0, #4299e1, #63b3ed)",
+              borderTopLeftRadius: "12px",
+              borderTopRightRadius: "12px",
+            }}
+          />
+
+          {/* Section Header */}
+          <div
+            style={{
+              marginBottom: "32px",
+              borderBottom: "1px solid #e0e0e0",
+              paddingBottom: "16px",
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              marginTop: "4px",
+            }}
+          >
+            <div
+              style={{
+                width: "4px",
+                height: "28px",
+                background: "linear-gradient(to bottom, #2b6cb0, #4299e1)",
+                borderRadius: "2px",
+                boxShadow: "0 2px 4px rgba(66, 153, 225, 0.2)",
+              }}
+            />
+            <Title
+              order={4}
+              style={{
+                color: "#1a1a1a",
+                margin: 0,
+                fontSize: "18px",
+                fontWeight: 700,
+                letterSpacing: "-0.2px",
+                textShadow: "0 1px 2px rgba(0,0,0,0.05)",
+              }}
+            >
+              Responsibility Transfer
+            </Title>
+          </div>
+
           {!fetchedformData.academicResponsibility &&
           !fetchedformData.administrativeResponsibility ? (
             <Text style={{ padding: "0 20px" }}>Not Applicable</Text>
           ) : (
-            <Grid gutter="lg" style={{ padding: "0 20px" }}>
+            <Grid gutter={32} style={{ padding: "0 16px" }}>
               {fetchedformData.academicResponsibility && (
-                <Grid.Col
-                  span={fetchedformData.administrativeResponsibility ? 6 : 12}
-                >
-                  <Text style={{ marginBottom: "10px" }}>
-                    <strong>Academic Responsibility:</strong>{" "}
-                    {fetchedformData.academicResponsibility}
-                  </Text>
-                  <Text style={{ marginBottom: "10px" }}>
-                    <strong>Academic Responsibility Designation:</strong>{" "}
-                    {fetchedformData.academicResponsibilityDesignation}
-                  </Text>
-                  <Text style={{ marginBottom: "10px" }}>
-                    <strong>Academic Responsibility Status:</strong>{" "}
-                    <Badge
-                      color={
-                        fetchedformData.academicResponsibilityStatus ===
-                        "Accepted"
-                          ? "green"
-                          : fetchedformData.academicResponsibilityStatus ===
-                              "Rejected"
-                            ? "red"
-                            : "yellow"
-                      }
+                <Grid.Col span={6}>
+                  <div
+                    style={{
+                      backgroundColor: "#f8fafc",
+                      padding: "20px",
+                      borderRadius: "8px",
+                      border: "1px solid #e2e8f0",
+                      marginBottom: "24px",
+                      marginRight: "16px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: "16px",
+                      }}
                     >
-                      {fetchedformData.academicResponsibilityStatus}
-                    </Badge>
-                  </Text>
+                      <Title order={5} style={{ margin: 0, color: "#2b6cb0" }}>
+                        Academic Responsibility
+                      </Title>
+                      <span
+                        style={{
+                          padding: "4px 12px",
+                          borderRadius: "4px",
+                          fontSize: "12px",
+                          fontWeight: 700,
+                          backgroundColor:
+                            fetchedformData.academicResponsibilityStatus ===
+                            "Pending"
+                              ? "#F59E0B"
+                              : fetchedformData.academicResponsibilityStatus ===
+                                  "Accepted"
+                                ? "#10B981"
+                                : "#EF4444",
+                          color: "#ffffff",
+                          display: "inline-block",
+                          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+                          position: "relative",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {fetchedformData.academicResponsibilityStatus}
+                      </span>
+                    </div>
+                    <div style={{ marginBottom: "12px" }}>
+                      <div
+                        style={{
+                          color: "#4a5568",
+                          fontSize: "14px",
+                          fontWeight: 600,
+                          marginBottom: "4px",
+                        }}
+                      >
+                        {fetchedformData.academicResponsibility}
+                      </div>
+                      <div
+                        style={{
+                          color: "#718096",
+                          fontSize: "13px",
+                        }}
+                      >
+                        {fetchedformData.academicResponsibilityDesignation}
+                      </div>
+                    </div>
+                  </div>
                 </Grid.Col>
               )}
+
               {fetchedformData.administrativeResponsibility && (
-                <Grid.Col
-                  span={fetchedformData.academicResponsibility ? 6 : 12}
-                >
-                  <Text style={{ marginBottom: "10px" }}>
-                    <strong>Administrative Responsibility:</strong>{" "}
-                    {fetchedformData.administrativeResponsibility}
-                  </Text>
-                  <Text style={{ marginBottom: "10px" }}>
-                    <strong>Administrative Responsibility Designation:</strong>{" "}
-                    {fetchedformData.administrativeResponsibilityDesignation}
-                  </Text>
-                  <Text style={{ marginBottom: "10px" }}>
-                    <strong>Administrative Responsibility Status:</strong>{" "}
-                    <Badge
-                      color={
-                        fetchedformData.administrativeResponsibilityStatus ===
-                        "Accepted"
-                          ? "green"
-                          : fetchedformData.administrativeResponsibilityStatus ===
-                              "Rejected"
-                            ? "red"
-                            : "yellow"
-                      }
+                <Grid.Col span={6}>
+                  <div
+                    style={{
+                      backgroundColor: "#f8fafc",
+                      padding: "20px",
+                      borderRadius: "8px",
+                      border: "1px solid #e2e8f0",
+                      marginBottom: "24px",
+                      marginLeft: "16px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: "16px",
+                      }}
                     >
-                      {fetchedformData.administrativeResponsibilityStatus}
-                    </Badge>
-                  </Text>
+                      <Title order={5} style={{ margin: 0, color: "#2b6cb0" }}>
+                        Administrative Responsibility
+                      </Title>
+                      <span
+                        style={{
+                          padding: "4px 12px",
+                          borderRadius: "4px",
+                          fontSize: "12px",
+                          fontWeight: 700,
+                          backgroundColor:
+                            fetchedformData.administrativeResponsibilityStatus ===
+                            "Pending"
+                              ? "#F59E0B"
+                              : fetchedformData.administrativeResponsibilityStatus ===
+                                  "Accepted"
+                                ? "#10B981"
+                                : "#EF4444",
+                          color: "#ffffff",
+                          display: "inline-block",
+                          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+                          position: "relative",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {fetchedformData.administrativeResponsibilityStatus}
+                      </span>
+                    </div>
+                    <div style={{ marginBottom: "12px" }}>
+                      <div
+                        style={{
+                          color: "#4a5568",
+                          fontSize: "14px",
+                          fontWeight: 600,
+                          marginBottom: "4px",
+                        }}
+                      >
+                        {fetchedformData.administrativeResponsibility}
+                      </div>
+                      <div
+                        style={{
+                          color: "#718096",
+                          fontSize: "13px",
+                        }}
+                      >
+                        {
+                          fetchedformData.administrativeResponsibilityDesignation
+                        }
+                      </div>
+                    </div>
+                  </div>
                 </Grid.Col>
               )}
             </Grid>
           )}
+        </div>
 
-          {/* Section 6: Attachments */}
-          <Title order={4} mt="xl">
-            Attachments
-          </Title>
-          <Divider my="sm" />
-          <Grid gutter="lg" style={{ padding: "0 20px" }}>
+        {/* Section 6: Attachments */}
+        <div
+          style={{
+            backgroundColor: "#ffffff",
+            borderRadius: "12px",
+            padding: "24px",
+            boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+            marginBottom: "32px",
+            border: "1px solid #f0f0f0",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          {/* Decorative Top Border */}
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: "4px",
+              background: "linear-gradient(90deg, #2b6cb0, #4299e1, #63b3ed)",
+              borderTopLeftRadius: "12px",
+              borderTopRightRadius: "12px",
+            }}
+          />
+
+          {/* Section Header */}
+          <div
+            style={{
+              marginBottom: "32px",
+              borderBottom: "1px solid #e0e0e0",
+              paddingBottom: "16px",
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              marginTop: "4px",
+            }}
+          >
+            <div
+              style={{
+                width: "4px",
+                height: "28px",
+                background: "linear-gradient(to bottom, #2b6cb0, #4299e1)",
+                borderRadius: "2px",
+                boxShadow: "0 2px 4px rgba(66, 153, 225, 0.2)",
+              }}
+            />
+            <Title
+              order={4}
+              style={{
+                color: "#1a1a1a",
+                margin: 0,
+                fontSize: "18px",
+                fontWeight: 700,
+                letterSpacing: "-0.2px",
+                textShadow: "0 1px 2px rgba(0,0,0,0.05)",
+              }}
+            >
+              Attachments
+            </Title>
+          </div>
+
+          <Grid gutter={32} style={{ padding: "0 16px" }}>
+            {/* Attachments Section */}
             <Grid.Col span={6}>
-              <Text>
-                <strong>Attached PDF:</strong>{" "}
-                {fetchedformData.attachedPdfName ? (
-                  <Anchor onClick={(e) => handleDownloadPdf(e)} download>
-                    {fetchedformData.attachedPdfName}
-                  </Anchor>
-                ) : (
-                  "No file attached"
-                )}
-              </Text>
+              <div
+                style={{
+                  backgroundColor: "#f8fafc",
+                  padding: "20px",
+                  borderRadius: "8px",
+                  border: "1px solid #e2e8f0",
+                  marginRight: "16px",
+                }}
+              >
+                <Title
+                  order={5}
+                  style={{
+                    margin: 0,
+                    color: "#2b6cb0",
+                    marginBottom: "16px",
+                    paddingBottom: "8px",
+                    borderBottom: "1px solid #e2e8f0",
+                  }}
+                >
+                  Attachments
+                </Title>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "16px",
+                    padding: "12px 16px",
+                    backgroundColor: "#ffffff",
+                    borderRadius: "8px",
+                    border: "1px solid #e2e8f0",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "32px",
+                      height: "32px",
+                      background: "linear-gradient(135deg, #2b6cb0, #4299e1)",
+                      borderRadius: "50%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                      boxShadow: "0 2px 4px rgba(66, 153, 225, 0.2)",
+                    }}
+                  >
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="white"
+                    >
+                      <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                    </svg>
+                  </div>
+                  <Text>
+                    <strong>Attached PDF:</strong>{" "}
+                    {fetchedformData.attachedPdfName ? (
+                      <Anchor onClick={(e) => handleDownloadPdf(e)} download>
+                        {fetchedformData.attachedPdfName}
+                      </Anchor>
+                    ) : (
+                      "No file attached"
+                    )}
+                  </Text>
+                </div>
+              </div>
             </Grid.Col>
           </Grid>
-          {/* add note that Please Track status of the file before doing any Actions if you don't have current ownership the Action will not be performed */}
+        </div>
 
-          {/* Section 7: Action Buttons */}
-          <Title order={4} mt="xl">
-            Select Action
-          </Title>
-          <Text color="red" mt="md" style={{ padding: "0 20px" }}>
-            <strong>Note:</strong> Please track the status of the file before
-            performing any actions. If you don't have current ownership, the
-            action will not be performed.
-          </Text>
-          <Divider my="sm" />
-          <Group position="center" mt="xl">
+        {/* Action Buttons Section */}
+        <div
+          style={{
+            backgroundColor: "#ffffff",
+            borderRadius: "12px",
+            padding: "24px",
+            boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+            marginBottom: "32px",
+            border: "1px solid #f0f0f0",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          {/* Decorative Top Border */}
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: "4px",
+              background: "linear-gradient(90deg, #2b6cb0, #4299e1, #63b3ed)",
+              borderTopLeftRadius: "12px",
+              borderTopRightRadius: "12px",
+            }}
+          />
+
+          {/* Section Header */}
+          <div
+            style={{
+              marginBottom: "32px",
+              borderBottom: "1px solid #e0e0e0",
+              paddingBottom: "16px",
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              marginTop: "4px",
+            }}
+          >
+            <div
+              style={{
+                width: "4px",
+                height: "28px",
+                background: "linear-gradient(to bottom, #2b6cb0, #4299e1)",
+                borderRadius: "2px",
+                boxShadow: "0 2px 4px rgba(66, 153, 225, 0.2)",
+              }}
+            />
+            <Title
+              order={4}
+              style={{
+                color: "#1a1a1a",
+                margin: 0,
+                fontSize: "18px",
+                fontWeight: 700,
+                letterSpacing: "-0.2px",
+                textShadow: "0 1px 2px rgba(0,0,0,0.05)",
+              }}
+            >
+              Select Action
+            </Title>
+          </div>
+
+          <div
+            style={{
+              backgroundColor: "#f7fafc",
+              padding: "16px 20px",
+              borderRadius: "8px",
+              border: "1px solid #e2e8f0",
+              display: "flex",
+              alignItems: "center",
+              gap: "16px",
+              boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+              position: "relative",
+              overflow: "hidden",
+              marginBottom: "24px",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                bottom: 0,
+                width: "4px",
+                background: "linear-gradient(to bottom, #1a365d, #2b6cb0)",
+                boxShadow: "0 2px 4px rgba(43, 108, 176, 0.2)",
+              }}
+            />
+            <div
+              style={{
+                width: "36px",
+                height: "36px",
+                background: "linear-gradient(135deg, #2b6cb0, #4299e1)",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+                boxShadow: "0 2px 4px rgba(66, 153, 225, 0.2)",
+                marginLeft: "8px",
+              }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+              </svg>
+            </div>
+            <p
+              style={{
+                margin: 0,
+                color: "#4a5568",
+                fontSize: "13px",
+                lineHeight: 1.5,
+                fontWeight: 500,
+              }}
+            >
+              <span style={{ fontWeight: 700, color: "#2b6cb0" }}>Note:</span>{" "}
+              Please track the status of the file before performing any actions.
+              If you don't have current ownership, the action will not be
+              performed.
+            </p>
+          </div>
+
+          <Group position="center" mt="xl" style={{ gap: "16px" }}>
             <Button
               leftIcon={<CheckCircle size={20} />}
               onClick={() => setAction("accept")}
-              variant={action === "accept" ? "filled" : "outline"}
+              variant="filled"
               disabled={fetchedformData.status !== "Pending"}
+              style={{
+                padding: "8px 16px",
+                borderRadius: "6px",
+                fontWeight: 600,
+                fontSize: "14px",
+                backgroundColor: "#38a169",
+                color: "white",
+                border: "none",
+                "&:hover": {
+                  backgroundColor: "#2f855a",
+                },
+                "&:disabled": {
+                  backgroundColor: "#e2e8f0",
+                  color: "#a0aec0",
+                  cursor: "not-allowed",
+                },
+              }}
             >
               Accept
             </Button>
             <Button
               leftIcon={<XCircle size={20} />}
               onClick={() => setAction("reject")}
-              variant={action === "reject" ? "filled" : "outline"}
+              variant="filled"
               disabled={fetchedformData.status !== "Pending"}
+              style={{
+                padding: "8px 16px",
+                borderRadius: "6px",
+                fontWeight: 600,
+                fontSize: "14px",
+                backgroundColor: "#e53e3e",
+                color: "white",
+                border: "none",
+                "&:hover": {
+                  backgroundColor: "#c53030",
+                },
+                "&:disabled": {
+                  backgroundColor: "#e2e8f0",
+                  color: "#a0aec0",
+                  cursor: "not-allowed",
+                },
+              }}
             >
               Reject
             </Button>
             <Button
               leftIcon={<PaperPlaneRight size={20} />}
               onClick={() => setAction("forward")}
-              variant={action === "forward" ? "filled" : "outline"}
+              variant="filled"
               disabled={fetchedformData.status !== "Pending"}
+              style={{
+                padding: "8px 16px",
+                borderRadius: "6px",
+                fontWeight: 600,
+                fontSize: "14px",
+                backgroundColor: "#d69e2e",
+                color: "white",
+                border: "none",
+                "&:hover": {
+                  backgroundColor: "#b7791f",
+                },
+                "&:disabled": {
+                  backgroundColor: "#e2e8f0",
+                  color: "#a0aec0",
+                  cursor: "not-allowed",
+                },
+              }}
             >
               Forward
             </Button>
           </Group>
 
-          {/* Section 4: Forward User Selection */}
+          {/* Forward User Selection */}
           {action === "forward" && (
-            <>
-              <Title order={4} mt="xl">
+            <div style={{ marginTop: "32px" }}>
+              <Title
+                order={4}
+                style={{
+                  marginBottom: "16px",
+                  color: "#2b6cb0",
+                  fontSize: "16px",
+                  fontWeight: 600,
+                }}
+              >
                 Forward To
               </Title>
-              <Divider my="sm" />
               <SearchAndSelectUser
                 onUserSelect={(user) => setForwardToUser(user)}
               />
-            </>
+            </div>
           )}
 
-          {/* Section 5: File Remarks */}
-          <Title order={4} mt="xl">
-            File Remarks
-          </Title>
-          <Divider my="sm" />
-          <Textarea
-            placeholder="Enter remarks for the action"
-            value={fileRemarks}
-            onChange={(e) => setFileRemarks(e.target.value)}
-            style={{ marginBottom: "20px" }}
-          />
+          {/* File Remarks */}
+          <div style={{ marginTop: "32px" }}>
+            <Title
+              order={4}
+              style={{
+                marginBottom: "16px",
+                color: "#2b6cb0",
+                fontSize: "16px",
+                fontWeight: 600,
+              }}
+            >
+              File Remarks
+            </Title>
+            <div
+              style={{
+                backgroundColor: "#f7fafc",
+                padding: "16px 20px",
+                borderRadius: "8px",
+                border: "1px solid #e2e8f0",
+                display: "flex",
+                alignItems: "center",
+                gap: "16px",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+                position: "relative",
+                overflow: "hidden",
+                marginBottom: "24px",
+              }}
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: "4px",
+                  background: "linear-gradient(to bottom, #1a365d, #2b6cb0)",
+                  boxShadow: "0 2px 4px rgba(43, 108, 176, 0.2)",
+                }}
+              />
+              <div
+                style={{
+                  width: "36px",
+                  height: "36px",
+                  background: "linear-gradient(135deg, #2b6cb0, #4299e1)",
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                  boxShadow: "0 2px 4px rgba(66, 153, 225, 0.2)",
+                  marginLeft: "8px",
+                }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+                  <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z" />
+                </svg>
+              </div>
+              <Textarea
+                placeholder="Enter remarks for the action"
+                value={fileRemarks}
+                onChange={(e) => setFileRemarks(e.target.value)}
+                style={{
+                  width: "100%",
+                  padding: "12px 16px",
+                  border: "1px solid #e0e0e0",
+                  borderRadius: "8px",
+                  backgroundColor: "#ffffff",
+                  color: "#2d3748",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  transition: "all 0.2s ease",
+                  boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+                  minHeight: "100px",
+                  resize: "vertical",
+                  "&:hover": {
+                    borderColor: "#4299e1",
+                    boxShadow: "0 2px 4px rgba(66, 153, 225, 0.1)",
+                  },
+                  "&:focus": {
+                    borderColor: "#4299e1",
+                    boxShadow: "0 2px 4px rgba(66, 153, 225, 0.1)",
+                    outline: "none",
+                  },
+                }}
+              />
+            </div>
+          </div>
 
-          {/* Section 6: Submit Button */}
+          {/* Submit Button */}
           <Group position="center" mt="xl">
             <Button
               onClick={handleActionSubmit}
               loading={submitting}
               disabled={!action || (action === "forward" && !forwardToUser)}
+              style={{
+                padding: "10px 20px",
+                borderRadius: "6px",
+                fontWeight: 600,
+                fontSize: "14px",
+                backgroundColor: "#4299e1",
+                color: "white",
+                border: "none",
+                "&:hover": {
+                  backgroundColor: "#3182ce",
+                },
+                "&:disabled": {
+                  backgroundColor: "#e2e8f0",
+                  color: "#a0aec0",
+                  cursor: "not-allowed",
+                },
+              }}
             >
               Submit Action
             </Button>
           </Group>
-        </Box>
+        </div>
       </Box>
     </>
   );

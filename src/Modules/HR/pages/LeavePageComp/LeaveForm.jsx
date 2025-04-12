@@ -928,6 +928,67 @@ const LeaveForm = () => {
             </div>
           </Grid.Col>
 
+          {/* Leave Balance Note */}
+          <Grid.Col span={12} mb={32} style={{ padding: "0 8px" }}>
+            <div
+              style={{
+                backgroundColor: "#f7fafc",
+                padding: "16px 20px",
+                borderRadius: "8px",
+                border: "1px solid #e2e8f0",
+                display: "flex",
+                alignItems: "center",
+                gap: "16px",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+                position: "relative",
+                overflow: "hidden",
+              }}
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: "4px",
+                  background: "linear-gradient(to bottom, #1a365d, #2b6cb0)",
+                  boxShadow: "0 2px 4px rgba(43, 108, 176, 0.2)",
+                }}
+              />
+              <div
+                style={{
+                  width: "36px",
+                  height: "36px",
+                  background: "linear-gradient(135deg, #2b6cb0, #4299e1)",
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                  boxShadow: "0 2px 4px rgba(66, 153, 225, 0.2)",
+                  marginLeft: "8px",
+                }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                </svg>
+              </div>
+              <p
+                style={{
+                  margin: 0,
+                  color: "#4a5568",
+                  fontSize: "13px",
+                  lineHeight: 1.5,
+                  fontWeight: 500,
+                }}
+              >
+                <span style={{ fontWeight: 700, color: "#2b6cb0" }}>Note:</span>{" "}
+                Please check your leave balance before applying to avoid
+                rejection
+              </p>
+            </div>
+          </Grid.Col>
+
           {/* Leave Type Inputs */}
           <Grid.Col
             span={12}
@@ -1050,7 +1111,7 @@ const LeaveForm = () => {
                           }
                         }}
                         style={{
-                          width: "36px",
+                          minWidth: "36px",
                           height: "36px",
                           borderRadius: "8px",
                           border: `1px solid ${color}40`,
@@ -1115,7 +1176,7 @@ const LeaveForm = () => {
                           });
                         }}
                         style={{
-                          width: "36px",
+                          minWidth: "36px",
                           height: "36px",
                           borderRadius: "8px",
                           border: `1px solid ${color}40`,
@@ -1304,69 +1365,223 @@ const LeaveForm = () => {
             </div>
           </Grid.Col>
 
-          {/* Leave Balance Note */}
+          {/* Station Leave Subsection */}
           <Grid.Col
             span={12}
             mb={32}
-            style={{ padding: "0 8px", marginTop: "16px" }}
+            style={{ padding: "0 8px", marginTop: "24px" }}
           >
             <div
               style={{
-                backgroundColor: "#f7fafc",
-                padding: "16px 20px",
-                borderRadius: "8px",
-                border: "1px solid #e2e8f0",
+                marginBottom: "24px",
+                borderBottom: "1px solid #e0e0e0",
+                paddingBottom: "16px",
                 display: "flex",
                 alignItems: "center",
                 gap: "16px",
-                boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
-                position: "relative",
-                overflow: "hidden",
               }}
             >
               <div
                 style={{
-                  position: "absolute",
-                  left: 0,
-                  top: 0,
-                  bottom: 0,
                   width: "4px",
-                  background: "linear-gradient(to bottom, #1a365d, #2b6cb0)",
-                  boxShadow: "0 2px 4px rgba(43, 108, 176, 0.2)",
+                  height: "28px",
+                  background: "linear-gradient(to bottom, #2b6cb0, #4299e1)",
+                  borderRadius: "2px",
+                  boxShadow: "0 2px 4px rgba(66, 153, 225, 0.2)",
                 }}
               />
-              <div
+              <Title
+                order={4}
                 style={{
-                  width: "36px",
-                  height: "36px",
-                  background: "linear-gradient(135deg, #2b6cb0, #4299e1)",
-                  borderRadius: "50%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexShrink: 0,
-                  boxShadow: "0 2px 4px rgba(66, 153, 225, 0.2)",
-                  marginLeft: "8px",
+                  color: "#1a1a1a",
+                  margin: 0,
+                  fontSize: "16px",
+                  fontWeight: 700,
+                  letterSpacing: "-0.2px",
+                  textShadow: "0 1px 2px rgba(0,0,0,0.05)",
                 }}
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                </svg>
-              </div>
-              <p
+                Station Leave Details
+              </Title>
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+                marginBottom: "24px",
+                padding: "12px 0",
+                borderRadius: "8px",
+              }}
+            >
+              <span
                 style={{
-                  margin: 0,
-                  color: "#4a5568",
-                  fontSize: "13px",
-                  lineHeight: 1.5,
+                  color: "#2d3748",
+                  fontSize: "15px",
                   fontWeight: 500,
                 }}
               >
-                <span style={{ fontWeight: 700, color: "#2b6cb0" }}>Note:</span>{" "}
-                Please check your leave balance before applying to avoid
-                rejection
-              </p>
+                Do you want to take station leave?
+              </span>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  marginLeft: "8px",
+                }}
+              >
+                <span style={{ color: "#4a5568", fontSize: "14px" }}>YES</span>
+                <input
+                  type="checkbox"
+                  checked={stationLeave}
+                  onChange={(e) => setStationLeave(e.currentTarget.checked)}
+                  style={{
+                    width: "18px",
+                    height: "18px",
+                    cursor: "pointer",
+                    accentColor: "#2b6cb0",
+                  }}
+                />
+              </div>
             </div>
+
+            {stationLeave && (
+              <Grid gutter={0} style={{ padding: "0 16px" }}>
+                <Grid.Col span={3} style={{ paddingRight: "12px" }}>
+                  <div style={{ position: "relative" }}>
+                    <label
+                      style={{
+                        display: "block",
+                        marginBottom: "8px",
+                        color: "#2b6cb0",
+                        fontSize: "12px",
+                        fontWeight: 700,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.4px",
+                      }}
+                    >
+                      STATION LEAVE START DATE
+                    </label>
+                    <input
+                      type="date"
+                      name="stationLeaveStartDate"
+                      value={formData.stationLeaveStartDate}
+                      onChange={handleInputChange}
+                      required={stationLeave}
+                      placeholder="dd-mm-yyyy"
+                      style={{
+                        width: "100%",
+                        padding: "12px 16px",
+                        border: "1px solid #e0e0e0",
+                        borderRadius: "6px",
+                        backgroundColor: "#ffffff",
+                        color: "#2d3748",
+                        fontSize: "14px",
+                        fontWeight: 500,
+                        transition: "all 0.2s ease",
+                        "&:hover": {
+                          borderColor: "#4299e1",
+                        },
+                        "&:focus": {
+                          borderColor: "#2563eb",
+                          outline: "none",
+                        },
+                      }}
+                    />
+                  </div>
+                </Grid.Col>
+
+                <Grid.Col span={3} style={{ paddingRight: "12px" }}>
+                  <div style={{ position: "relative" }}>
+                    <label
+                      style={{
+                        display: "block",
+                        marginBottom: "8px",
+                        color: "#2b6cb0",
+                        fontSize: "12px",
+                        fontWeight: 700,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.4px",
+                      }}
+                    >
+                      STATION LEAVE END DATE
+                    </label>
+                    <input
+                      type="date"
+                      name="stationLeaveEndDate"
+                      value={formData.stationLeaveEndDate}
+                      onChange={handleInputChange}
+                      required={stationLeave}
+                      placeholder="dd-mm-yyyy"
+                      style={{
+                        width: "100%",
+                        padding: "12px 16px",
+                        border: "1px solid #e0e0e0",
+                        borderRadius: "6px",
+                        backgroundColor: "#ffffff",
+                        color: "#2d3748",
+                        fontSize: "14px",
+                        fontWeight: 500,
+                        transition: "all 0.2s ease",
+                        "&:hover": {
+                          borderColor: "#4299e1",
+                        },
+                        "&:focus": {
+                          borderColor: "#2563eb",
+                          outline: "none",
+                        },
+                      }}
+                    />
+                  </div>
+                </Grid.Col>
+
+                <Grid.Col span={6}>
+                  <div style={{ position: "relative" }}>
+                    <label
+                      style={{
+                        display: "block",
+                        marginBottom: "8px",
+                        color: "#2b6cb0",
+                        fontSize: "12px",
+                        fontWeight: 700,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.4px",
+                      }}
+                    >
+                      ADDRESS DURING STATION LEAVE
+                    </label>
+                    <input
+                      type="text"
+                      name="stationLeaveAddress"
+                      value={formData.stationLeaveAddress}
+                      onChange={handleInputChange}
+                      placeholder="Enter address"
+                      required={stationLeave}
+                      style={{
+                        width: "100%",
+                        padding: "12px 16px",
+                        border: "1px solid #e0e0e0",
+                        borderRadius: "6px",
+                        backgroundColor: "#ffffff",
+                        color: "#2d3748",
+                        fontSize: "14px",
+                        fontWeight: 500,
+                        transition: "all 0.2s ease",
+                        "&:hover": {
+                          borderColor: "#4299e1",
+                        },
+                        "&:focus": {
+                          borderColor: "#2563eb",
+                          outline: "none",
+                        },
+                      }}
+                    />
+                  </div>
+                </Grid.Col>
+              </Grid>
+            )}
           </Grid.Col>
         </Grid>
       </div>
@@ -1647,12 +1862,12 @@ const LeaveForm = () => {
           marginBottom: "32px",
         }}
       >
-        <button
+        <Button
           onClick={handleSubmit}
           disabled={!activeSubmit}
-          style={{
+          sx={(theme) => ({
             padding: "16px 48px",
-            backgroundColor: "#2b6cb0",
+            backgroundColor: "#2563eb", // Updated to deeper blue
             color: "white",
             border: "none",
             borderRadius: "8px",
@@ -1661,24 +1876,28 @@ const LeaveForm = () => {
             letterSpacing: "0.3px",
             cursor: "pointer",
             transition: "all 0.3s ease",
-            boxShadow: "0 2px 4px rgba(43, 108, 176, 0.2)",
+            boxShadow: "0 2px 4px rgba(37, 99, 235, 0.2)",
             position: "relative",
             overflow: "hidden",
+
             "&:hover": {
-              backgroundColor: "#2c5282",
+              backgroundColor: "#1d4ed8", // Darker blue on hover
               transform: "translateY(-2px)",
-              boxShadow: "0 4px 8px rgba(43, 108, 176, 0.3)",
+              boxShadow: "0 4px 8px rgba(29, 78, 216, 0.3)",
             },
+
             "&:active": {
               transform: "translateY(0)",
-              boxShadow: "0 2px 4px rgba(43, 108, 176, 0.2)",
+              boxShadow: "0 2px 4px rgba(37, 99, 235, 0.2)",
             },
+
             "&:disabled": {
-              backgroundColor: "#a0aec0",
+              backgroundColor: "#94a3b8", // Updated disabled color
               cursor: "not-allowed",
               transform: "none",
               boxShadow: "none",
             },
+
             "&::before": {
               content: '""',
               position: "absolute",
@@ -1687,17 +1906,25 @@ const LeaveForm = () => {
               width: "100%",
               height: "100%",
               background:
-                "linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent)",
+                "linear-gradient(45deg, transparent, rgba(255,255,255,0.15), transparent)",
               transform: "translateX(-100%)",
               transition: "transform 0.6s ease",
             },
+
             "&:hover::before": {
               transform: "translateX(100%)",
             },
-          }}
+
+            // Mobile hover fix
+            "@media (hover: hover) and (pointer: fine)": {
+              "&:hover": {
+                backgroundColor: "#1d4ed8",
+              },
+            },
+          })}
         >
           Submit Application
-        </button>
+        </Button>
       </div>
     </div>
   );
