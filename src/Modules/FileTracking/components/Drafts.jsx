@@ -14,7 +14,6 @@ import {
   Pagination,
 } from "@mantine/core";
 import {
-  Archive,
   CaretUp,
   CaretDown,
   ArrowsDownUp,
@@ -203,10 +202,10 @@ export default function Draft() {
   const endIndex = Math.min(startIndex + itemsPerPage, filteredFiles.length);
 
   // Archive modal functions
-  const openArchiveModal = (file) => {
-    setSelectedArchiveFile(file);
-    setShowArchiveModal(true);
-  };
+  // const openArchiveModal = (file) => {
+  //   setSelectedArchiveFile(file);
+  //   setShowArchiveModal(true);
+  // };
 
   const confirmArchive = () => {
     if (selectedArchiveFile) {
@@ -317,7 +316,7 @@ export default function Draft() {
                   }}
                 >
                   <tr style={{ backgroundColor: "#0000" }}>
-                    <th
+                    {/* <th
                       style={{
                         padding: "6px",
                         width: "7%",
@@ -325,7 +324,7 @@ export default function Draft() {
                       }}
                     >
                       Archive
-                    </th>
+                    </th> */}
                     {[
                       { key: "file_id", label: "File ID" },
                       { key: "uploader", label: "Created By" },
@@ -389,7 +388,7 @@ export default function Draft() {
                     )
                     .map((file, index) => (
                       <tr key={index}>
-                        <td
+                        {/* <td
                           style={{
                             padding: "8px",
                             textAlign: "center",
@@ -421,7 +420,7 @@ export default function Draft() {
                               <Archive size="1.5rem" />
                             </ActionIcon>
                           </Tooltip>
-                        </td>
+                        </td> */}
                         <td
                           style={{
                             padding: "6px",
