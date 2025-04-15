@@ -281,7 +281,7 @@ export default function Draft() {
           <EditDraft
             file={editFile}
             onBack={handleBack}
-            deleteDraft={(file) => openDeleteModal(file)}
+            deleteDraft={handleDeleteFile}
           />
         ) : (
           <Box
