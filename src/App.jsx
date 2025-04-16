@@ -458,6 +458,14 @@ export default function App() {
             </Layout>
           }
         />
+        <Route
+          path="/department"
+          element={
+            <Layout>
+              <DepartmentPage />
+            </Layout>
+          }
+        />
 
         <Route path="/healthcenter/*" element={<HealthCenter />} />
         <Route path="/purchase/*" element={<PurchaseRoutes />} />
