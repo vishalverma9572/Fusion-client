@@ -132,7 +132,7 @@ function Dashboard() {
             parsedData = JSON.parse(item.data.replace(/'/g, '"'));
           } catch (err) {
             console.error("Error parsing notification data:", err);
-            parsedData = {}; 
+            parsedData = {};
           }
 
           return {
