@@ -13,6 +13,7 @@ import {
 } from "@mantine/core";
 import HrBreadcrumbs from "../../components/HrBreadcrumbs";
 import { admin_get_all_leave_balances } from "../../../../routes/hr";
+import { Button } from "@mantine/core";
 
 const ViewEmployeeLB = () => {
   const [allEmployees, setAllEmployees] = useState([]);
@@ -21,6 +22,7 @@ const ViewEmployeeLB = () => {
   const [departmentFilter, setDepartmentFilter] = useState("All");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
   // Updated leave types with explicit keys to match API response:
   // - The "allottedKey" maps to LeavePerYear (e.g., "casual_leave_allotted")
@@ -135,6 +137,29 @@ const ViewEmployeeLB = () => {
     fetchEmployeesAndLeaveData();
   }, []);
 
+  const handleSort = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
+    setSortConfig({ key, direction });
+
+    const sorted = [...filteredEmployees].sort((a, b) => {
+      const aVal = a[key] ?? "";
+      const bVal = b[key] ?? "";
+
+      if (typeof aVal === "number" && typeof bVal === "number") {
+        return direction === "asc" ? aVal - bVal : bVal - aVal;
+      } else {
+        return direction === "asc"
+          ? aVal.toString().localeCompare(bVal.toString())
+          : bVal.toString().localeCompare(aVal.toString());
+      }
+    });
+
+    setFilteredEmployees(sorted);
+  };
+
   // Compute unique department options if available.
   const departmentOptions = Array.from(
     new Set(
@@ -210,6 +235,49 @@ const ViewEmployeeLB = () => {
     border: "1px solid #ccc",
     textAlign: "left",
     fontSize: "0.75rem",
+  };
+
+  const generateCSV = () => {
+    const headers = [
+      "S.No",
+      "ID",
+      "Name",
+      "Username",
+      "Department",
+      ...leaveTypes.flatMap((leave) => [
+        `${leave.abbrev} A`, // Allotted
+        `${leave.abbrev} T`, // Taken
+      ]),
+    ];
+
+    const rows = filteredEmployees.map((emp, index) => {
+      const row = [
+        index + 1,
+        emp.id,
+        emp.name,
+        emp.username,
+        emp.department || "N/A",
+        ...leaveTypes.flatMap((leave) => [
+          emp[leave.allottedKey] !== undefined ? emp[leave.allottedKey] : "-",
+          emp[leave.takenKey] !== undefined ? emp[leave.takenKey] : "-",
+        ]),
+      ];
+      return row;
+    });
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map((row) => row.join(",")),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "employee_leave_balances.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -303,6 +371,16 @@ const ViewEmployeeLB = () => {
             <Text style={{ fontWeight: "bold", marginBottom: "25px" }}>
               Total Matched Employees: {filteredEmployees.length}
             </Text>
+            <Button
+              onClick={generateCSV}
+              variant="light"
+              color="blue"
+              mb="md"
+              style={{ float: "right" }}
+            >
+              Download CSV
+            </Button>
+
             <Table
               striped
               highlightOnHover
@@ -312,14 +390,99 @@ const ViewEmployeeLB = () => {
               <thead>
                 <tr>
                   <th style={headerCellStyle}>#</th>
-                  <th style={headerCellStyle}>ID</th>
-                  <th style={headerCellStyle}>Name</th>
-                  <th style={headerCellStyle}>Username</th>
-                  <th style={headerCellStyle}>Department</th>
+                  <th style={headerCellStyle}>
+                    ID{" "}
+                    <Button
+                      compact
+                      size="xs"
+                      variant="subtle"
+                      onClick={() => handleSort("id")}
+                    >
+                      {sortConfig.key === "id"
+                        ? sortConfig.direction === "asc"
+                          ? "↑"
+                          : "↓"
+                        : "⇅"}
+                    </Button>
+                  </th>
+                  <th style={headerCellStyle}>
+                    Name{" "}
+                    <Button
+                      compact
+                      size="xs"
+                      variant="subtle"
+                      onClick={() => handleSort("name")}
+                    >
+                      {sortConfig.key === "name"
+                        ? sortConfig.direction === "asc"
+                          ? "↑"
+                          : "↓"
+                        : "⇅"}
+                    </Button>
+                  </th>
+                  <th style={headerCellStyle}>
+                    Username{" "}
+                    <Button
+                      compact
+                      size="xs"
+                      variant="subtle"
+                      onClick={() => handleSort("username")}
+                    >
+                      {sortConfig.key === "username"
+                        ? sortConfig.direction === "asc"
+                          ? "↑"
+                          : "↓"
+                        : "⇅"}
+                    </Button>
+                  </th>
+                  <th style={headerCellStyle}>
+                    Department{" "}
+                    <Button
+                      compact
+                      size="xs"
+                      variant="subtle"
+                      onClick={() => handleSort("department")}
+                    >
+                      {sortConfig.key === "department"
+                        ? sortConfig.direction === "asc"
+                          ? "↑"
+                          : "↓"
+                        : "⇅"}
+                    </Button>
+                  </th>
+
                   {leaveTypes.map((leave) => (
                     <React.Fragment key={leave.key}>
-                      <th style={headerCellStyle}>{leave.abbrev} A</th>
-                      <th style={headerCellStyle}>{leave.abbrev} T</th>
+                      <th style={headerCellStyle}>
+                        {leave.abbrev} A{" "}
+                        <Button
+                          compact
+                          size="xs"
+                          variant="subtle"
+                          onClick={() => handleSort(leave.allottedKey)}
+                        >
+                          {sortConfig.key === leave.allottedKey
+                            ? sortConfig.direction === "asc"
+                              ? "↑"
+                              : "↓"
+                            : "⇅"}
+                        </Button>
+                      </th>
+                      <th style={headerCellStyle}>
+                        {leave.abbrev} T{" "}
+                        <Button
+                          compact
+                          size="xs"
+                          variant="subtle"
+                          onClick={() => handleSort(leave.takenKey)}
+                        >
+                          {sortConfig.key === leave.takenKey
+                            ? sortConfig.direction === "asc"
+                              ? "↑"
+                              : "↓"
+                            : "⇅"}
+                        </Button>
+                      </th>
                     </React.Fragment>
                   ))}
                 </tr>
