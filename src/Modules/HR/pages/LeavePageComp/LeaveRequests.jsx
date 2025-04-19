@@ -1,34 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { Title, Select, TextInput, Container } from "@mantine/core";
+import { Title, Select, TextInput, ActionIcon } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
-import { Eye } from "@phosphor-icons/react";
+import { Eye, CaretUp, CaretDown } from "@phosphor-icons/react";
 import LoadingComponent from "../../components/Loading";
 import { EmptyTable } from "../../components/tables/EmptyTable";
 import { get_leave_requests } from "../../../../routes/hr/index";
 import "./LeaveRequests.css";
 
 function LeaveRequests() {
-  const [requestData, setRequestData] = useState([]); // State for leave requests
-  const [filteredData, setFilteredData] = useState([]); // State for filtered leave requests
-  const [loading, setLoading] = useState(true); // Loading state
-  const [selectedStatus, setSelectedStatus] = useState("All"); // State for status filter
-  const [selectedDate, setSelectedDate] = useState(""); // State for date filter (as string)
+  const [requestData, setRequestData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedStatus, setSelectedStatus] = useState("All");
+  const [selectedDate, setSelectedDate] = useState("");
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+
   const navigate = useNavigate();
 
-  // Fetch leave requests from the backend
   useEffect(() => {
     const fetchLeaveRequests = async () => {
-      console.log("Fetching leave requests...");
       const token = localStorage.getItem("authToken");
       if (!token) {
         console.error("No authentication token found!");
         return;
       }
+
       try {
         const queryParams = new URLSearchParams();
-        if (selectedDate) {
-          queryParams.append("date", selectedDate);
-        }
+        if (selectedDate) queryParams.append("date", selectedDate);
+
         const response = await fetch(
           `${get_leave_requests}?${queryParams.toString()}`,
           {
@@ -37,69 +37,79 @@ function LeaveRequests() {
         );
         const data = await response.json();
 
-        // Sort the data by submissionDate in descending order (latest first)
-        const sortedData = data.leave_requests.sort((a, b) => {
-          return new Date(b.submissionDate) - new Date(a.submissionDate);
-        });
+        const sortedData = data.leave_requests.sort(
+          (a, b) => new Date(b.submissionDate) - new Date(a.submissionDate),
+        );
 
-        setRequestData(sortedData); // Set fetched and sorted data
-        setFilteredData(sortedData); // Initialize filtered data
-        setLoading(false); // Set loading to false once data is fetched
-        console.log(data);
+        setRequestData(sortedData);
+        setFilteredData(sortedData);
+        setLoading(false);
       } catch (error) {
         console.error("Failed to fetch leave requests:", error);
-        setLoading(false); // Set loading to false if there’s an error
+        setLoading(false);
       }
     };
-    fetchLeaveRequests(); // Call the function to fetch data
-  }, [selectedDate]); // Re-fetch data when selectedDate changes
 
-  // Handle "View" button click
+    fetchLeaveRequests();
+  }, [selectedDate]);
+
   const handleViewClick = (view) => {
     navigate(`./view/${view}`);
   };
 
-  // Function to determine status color
   const getStatusColor = (status) => {
     switch (status) {
       case "Pending":
-        return "#FFD700"; // Yellow
+        return "#FFD700";
       case "Accepted":
-        return "#32CD32"; // Green
+        return "#32CD32";
       case "Rejected":
-        return "#FF0000"; // Red
+        return "#FF0000";
       default:
-        return "#333"; // Default color
+        return "#333";
     }
   };
 
-  // Handle status filter change
   const handleStatusFilterChange = (value) => {
     setSelectedStatus(value);
     if (value === "All") {
-      setFilteredData(requestData); // Show all data
+      setFilteredData(requestData);
     } else {
       const filtered = requestData.filter((item) => item.status === value);
-      setFilteredData(filtered); // Filter by status
+      setFilteredData(filtered);
     }
   };
 
-  // Handle date filter change
   const handleDateFilterChange = (event) => {
-    setSelectedDate(event.target.value); // Update selectedDate state
+    setSelectedDate(event.target.value);
   };
 
-  // Table headers
-  const headers = [
-    "ID",
-    "Submission Date",
-    "Status",
-    "Leave Start Date",
-    "Leave End Date",
-    "View",
-  ];
+  // General sorting function
+  const sortByColumn = (key, isDate = false) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
 
-  // Render loading component if data is still being fetched
+    const sorted = [...filteredData].sort((a, b) => {
+      const aVal = isDate ? new Date(a[key]) : a[key];
+      const bVal = isDate ? new Date(b[key]) : b[key];
+      return direction === "asc" ? aVal - bVal : bVal - aVal;
+    });
+
+    setSortConfig({ key, direction });
+    setFilteredData(sorted);
+  };
+
+  const renderSortIcon = (key) => {
+    if (sortConfig.key !== key) return <CaretUp size={14} opacity={0.3} />;
+    return sortConfig.direction === "asc" ? (
+      <CaretUp size={14} />
+    ) : (
+      <CaretDown size={14} />
+    );
+  };
+
   if (loading) {
     return <LoadingComponent loadingMsg="Fetching Leave Requests..." />;
   }
@@ -113,11 +123,10 @@ function LeaveRequests() {
         Leave Requests
       </Title>
 
-      {/* Filter Section */}
+      {/* Filters */}
       <div style={{ margin: "20px 15px", display: "flex", gap: "20px" }}>
         <TextInput
           label="Filter by Date"
-          placeholder="Select or enter a date"
           type="date"
           value={selectedDate}
           onChange={handleDateFilterChange}
@@ -125,7 +134,6 @@ function LeaveRequests() {
         />
         <Select
           label="Filter by Status"
-          placeholder="Select a status"
           value={selectedStatus}
           onChange={handleStatusFilterChange}
           data={[
@@ -137,7 +145,7 @@ function LeaveRequests() {
         />
       </div>
 
-      {/* Display EmptyTable if no data is found */}
+      {/* Table */}
       {filteredData.length === 0 ? (
         <EmptyTable
           title="No Leave Requests Found"
@@ -148,13 +156,64 @@ function LeaveRequests() {
           <table className="form-table">
             <thead>
               <tr>
-                {headers.map((header, index) => (
-                  <th key={index} className="table-header">
-                    {header}
-                  </th>
-                ))}
+                <th className="table-header">
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    ID
+                    <ActionIcon
+                      variant="subtle"
+                      onClick={() => sortByColumn("id")}
+                      ml={5}
+                    >
+                      {renderSortIcon("id")}
+                    </ActionIcon>
+                  </div>
+                </th>
+
+                <th className="table-header">
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    Submission Date
+                    <ActionIcon
+                      variant="subtle"
+                      onClick={() => sortByColumn("submissionDate", true)}
+                      ml={5}
+                    >
+                      {renderSortIcon("submissionDate")}
+                    </ActionIcon>
+                  </div>
+                </th>
+
+                <th className="table-header">Status</th>
+
+                <th className="table-header">
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    Leave Start Date
+                    <ActionIcon
+                      variant="subtle"
+                      onClick={() => sortByColumn("leaveStartDate", true)}
+                      ml={5}
+                    >
+                      {renderSortIcon("leaveStartDate")}
+                    </ActionIcon>
+                  </div>
+                </th>
+
+                <th className="table-header">
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    Leave End Date
+                    <ActionIcon
+                      variant="subtle"
+                      onClick={() => sortByColumn("leaveEndDate", true)}
+                      ml={5}
+                    >
+                      {renderSortIcon("leaveEndDate")}
+                    </ActionIcon>
+                  </div>
+                </th>
+
+                <th className="table-header">View</th>
               </tr>
             </thead>
+
             <tbody>
               {filteredData.map((item, index) => (
                 <tr

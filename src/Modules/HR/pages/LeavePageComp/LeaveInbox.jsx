@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Title, Select, TextInput, Container, Badge } from "@mantine/core";
+import {
+  Title,
+  Select,
+  TextInput,
+  Container,
+  Badge,
+  ActionIcon,
+} from "@mantine/core";
 import { useNavigate } from "react-router-dom";
-import { Eye } from "@phosphor-icons/react";
+import { Eye, CaretUp, CaretDown } from "@phosphor-icons/react";
 import LoadingComponent from "../../components/Loading";
 import { EmptyTable } from "../../components/tables/EmptyTable";
 import { get_leave_inbox } from "../../../../routes/hr/index";
@@ -12,13 +19,14 @@ function LeaveInbox() {
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedStatus, setSelectedStatus] = useState("All");
-  const [selectedType, setSelectedType] = useState("All"); // New state for type filter
+  const [selectedType, setSelectedType] = useState("All");
   const [fromDate, setFromDate] = useState("");
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchInboxData = async () => {
-      console.log("Fetching leave inbox...");
       const token = localStorage.getItem("authToken");
       if (!token) {
         console.error("No authentication token found!");
@@ -26,16 +34,14 @@ function LeaveInbox() {
       }
       try {
         const queryParams = new URLSearchParams();
-        if (fromDate) {
-          queryParams.append("date", fromDate);
-        }
+        if (fromDate) queryParams.append("date", fromDate);
+
         const response = await fetch(
           `${get_leave_inbox}?${queryParams.toString()}`,
-          {
-            headers: { Authorization: `Token ${token}` },
-          },
+          { headers: { Authorization: `Token ${token}` } },
         );
         const data = await response.json();
+
         const combinedData = [
           ...data.leave_inbox.map((item) => ({
             ...item,
@@ -121,33 +127,37 @@ function LeaveInbox() {
   const applyFilters = (status, type, date) => {
     let filtered = inboxData;
 
-    // Filter by status
-    if (status !== "All") {
+    if (status !== "All")
       filtered = filtered.filter((item) => item.status === status);
-    }
-
-    // Filter by type
-    if (type !== "All") {
+    if (type !== "All")
       filtered = filtered.filter((item) => item.type === type);
-    }
-
-    // Filter by date
-    if (date) {
-      filtered = filtered.filter((item) => item.date === date);
-    }
+    if (date) filtered = filtered.filter((item) => item.date === date);
 
     setFilteredData(filtered);
   };
 
-  const headers = [
-    "Type",
-    "ID",
-    "Submission Date",
-    "Name",
-    "Designation",
-    "Status",
-    "View",
-  ];
+  // Sorting
+  const sortByColumn = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc")
+      direction = "desc";
+
+    const sorted = [...filteredData].sort((a, b) => {
+      return direction === "asc" ? a[key] - b[key] : b[key] - a[key];
+    });
+
+    setSortConfig({ key, direction });
+    setFilteredData(sorted);
+  };
+
+  const renderSortIcon = (key) => {
+    if (sortConfig.key !== key) return <CaretUp size={14} opacity={0.3} />;
+    return sortConfig.direction === "asc" ? (
+      <CaretUp size={14} />
+    ) : (
+      <CaretDown size={14} />
+    );
+  };
 
   if (loading) {
     return <LoadingComponent loadingMsg="Fetching Leave Inbox..." />;
@@ -212,11 +222,24 @@ function LeaveInbox() {
           <table className="form-table">
             <thead>
               <tr>
-                {headers.map((header, index) => (
-                  <th key={index} className="table-header">
-                    {header}
-                  </th>
-                ))}
+                <th className="table-header">Type</th>
+                <th className="table-header">
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    ID
+                    <ActionIcon
+                      variant="subtle"
+                      onClick={() => sortByColumn("id")}
+                      ml={5}
+                    >
+                      {renderSortIcon("id")}
+                    </ActionIcon>
+                  </div>
+                </th>
+                <th className="table-header">Submission Date</th>
+                <th className="table-header">Name</th>
+                <th className="table-header">Designation</th>
+                <th className="table-header">Status</th>
+                <th className="table-header">View</th>
               </tr>
             </thead>
             <tbody>
