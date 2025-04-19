@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Title, Select, TextInput, Container, Badge } from "@mantine/core";
+import { Title, Select, TextInput, Badge } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { Eye } from "@phosphor-icons/react";
 import LoadingComponent from "../../components/Loading";
@@ -102,22 +102,6 @@ function LeaveInbox() {
         return "#333";
     }
   };
-
-  const handleStatusFilterChange = (value) => {
-    setSelectedStatus(value);
-    applyFilters(value, selectedType, fromDate);
-  };
-
-  const handleTypeFilterChange = (value) => {
-    setSelectedType(value);
-    applyFilters(selectedStatus, value, fromDate);
-  };
-
-  const handleDateFilterChange = (event) => {
-    setFromDate(event.target.value);
-    applyFilters(selectedStatus, selectedType, event.target.value);
-  };
-
   const applyFilters = (status, type, date) => {
     let filtered = inboxData;
 
@@ -137,6 +121,20 @@ function LeaveInbox() {
     }
 
     setFilteredData(filtered);
+  };
+  const handleStatusFilterChange = (value) => {
+    setSelectedStatus(value);
+    applyFilters(value, selectedType, fromDate);
+  };
+
+  const handleTypeFilterChange = (value) => {
+    setSelectedType(value);
+    applyFilters(selectedStatus, value, fromDate);
+  };
+
+  const handleDateFilterChange = (event) => {
+    setFromDate(event.target.value);
+    applyFilters(selectedStatus, selectedType, event.target.value);
   };
 
   const headers = [
@@ -162,44 +160,74 @@ function LeaveInbox() {
         Leave Inbox
       </Title>
 
-      <div style={{ margin: "20px 15px", display: "flex", gap: "20px" }}>
-        <TextInput
-          label="Filter from Date"
-          type="date"
-          value={fromDate}
-          onChange={handleDateFilterChange}
-          style={{ maxWidth: "300px" }}
-        />
-        <Select
-          label="Filter by Status"
-          placeholder="Select a status"
-          value={selectedStatus}
-          onChange={handleStatusFilterChange}
-          data={[
-            { value: "All", label: "All" },
-            { value: "Pending", label: "Pending" },
-            { value: "Accepted", label: "Accepted" },
-            { value: "Rejected", label: "Rejected" },
-          ]}
-        />
-        <Select
-          label="Filter by Type"
-          placeholder="Select a type"
-          value={selectedType}
-          onChange={handleTypeFilterChange}
-          data={[
-            { value: "All", label: "All" },
-            { value: "Leave Request", label: "Leave Request" },
-            {
-              value: "Academic Responsibility",
-              label: "Academic Responsibility",
-            },
-            {
-              value: "Administrative Responsibility",
-              label: "Administrative Responsibility",
-            },
-          ]}
-        />
+      <div
+        style={{
+          margin: "20px 15px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center", // Align items vertically in the center
+        }}
+      >
+        {/* Left Side: Filters */}
+        <div style={{ display: "flex", gap: "20px" }}>
+          <TextInput
+            label="Filter from Date"
+            type="date"
+            value={fromDate}
+            onChange={handleDateFilterChange}
+            style={{ maxWidth: "300px" }}
+          />
+          <Select
+            label="Filter by Status"
+            placeholder="Select a status"
+            value={selectedStatus}
+            onChange={handleStatusFilterChange}
+            data={[
+              { value: "All", label: "All" },
+              { value: "Pending", label: "Pending" },
+              { value: "Accepted", label: "Accepted" },
+              { value: "Rejected", label: "Rejected" },
+            ]}
+          />
+          <Select
+            label="Filter by Type"
+            placeholder="Select a type"
+            value={selectedType}
+            onChange={handleTypeFilterChange}
+            data={[
+              { value: "All", label: "All" },
+              { value: "Leave Request", label: "Leave Request" },
+              {
+                value: "Academic Responsibility",
+                label: "Academic Responsibility",
+              },
+              {
+                value: "Administrative Responsibility",
+                label: "Administrative Responsibility",
+              },
+            ]}
+          />
+        </div>
+
+        {/* Right Side: Showing Results */}
+        <Title order={4} style={{ fontWeight: "400" }}>
+          {fromDate
+            ? `Filtered results as of ${new Date(fromDate).toLocaleDateString(
+                "en-US",
+                {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                },
+              )}`
+            : `Filtered results as of ${new Date(
+                Date.now() - 365 * 24 * 60 * 60 * 1000, // One year in milliseconds
+              ).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}`}
+        </Title>
       </div>
 
       {filteredData.length === 0 ? (
