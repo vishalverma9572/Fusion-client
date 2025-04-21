@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Title, Select, TextInput, Badge } from "@mantine/core";
+import {
+  Title,
+  Select,
+  TextInput,
+  // Container,
+  Badge,
+  ActionIcon,
+} from "@mantine/core";
 import { useNavigate } from "react-router-dom";
-import { Eye } from "@phosphor-icons/react";
+import { Eye, CaretUp, CaretDown } from "@phosphor-icons/react";
 import LoadingComponent from "../../components/Loading";
 import { EmptyTable } from "../../components/tables/EmptyTable";
 import { get_leave_inbox } from "../../../../routes/hr/index";
@@ -11,59 +18,30 @@ function LeaveInbox() {
   const [inboxData, setInboxData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filtering, setFiltering] = useState(false); // New state for filter loading
   const [selectedStatus, setSelectedStatus] = useState("All");
   const [selectedType, setSelectedType] = useState("All");
   const [fromDate, setFromDate] = useState("");
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+
   const navigate = useNavigate();
-
-  const applyFilters = (status, type, date, data = inboxData) => {
-    setFiltering(true);
-    let filtered = data;
-
-    if (status !== "All") {
-      filtered = filtered.filter((item) => item.status === status);
-    }
-
-    if (type !== "All") {
-      filtered = filtered.filter((item) => item.type === type);
-    }
-
-    // Filter by date if fromDate is set
-    if (date) {
-      const selectedDate = new Date(date);
-      filtered = filtered.filter((item) => {
-        const itemDate = new Date(item.date);
-        return itemDate >= selectedDate;
-      });
-    }
-
-    setFilteredData(filtered);
-    setFiltering(false);
-  };
 
   useEffect(() => {
     const fetchInboxData = async () => {
-      setLoading(true);
       const token = localStorage.getItem("authToken");
       if (!token) {
         console.error("No authentication token found!");
-        setLoading(false);
         return;
       }
-
       try {
         const queryParams = new URLSearchParams();
         if (fromDate) queryParams.append("date", fromDate);
 
         const response = await fetch(
           `${get_leave_inbox}?${queryParams.toString()}`,
-          {
-            headers: { Authorization: `Token ${token}` },
-          },
+          { headers: { Authorization: `Token ${token}` } },
         );
-
         const data = await response.json();
+
         const combinedData = [
           ...data.leave_inbox.map((item) => ({
             ...item,
@@ -83,14 +61,13 @@ function LeaveInbox() {
         ].sort((a, b) => new Date(b.date) - new Date(a.date));
 
         setInboxData(combinedData);
-        applyFilters(selectedStatus, selectedType, fromDate, combinedData); // <== call filters after fetch
+        setFilteredData(combinedData);
+        setLoading(false);
       } catch (error) {
         console.error("Failed to fetch leave inbox:", error);
-      } finally {
         setLoading(false);
       }
     };
-
     fetchInboxData();
   }, [fromDate]);
 
@@ -132,6 +109,18 @@ function LeaveInbox() {
     }
   };
 
+  const applyFilters = (status, type, date) => {
+    let filtered = inboxData;
+
+    if (status !== "All")
+      filtered = filtered.filter((item) => item.status === status);
+    if (type !== "All")
+      filtered = filtered.filter((item) => item.type === type);
+    if (date) filtered = filtered.filter((item) => item.date === date);
+
+    setFilteredData(filtered);
+  };
+
   const handleStatusFilterChange = (value) => {
     setSelectedStatus(value);
     applyFilters(value, selectedType, fromDate);
@@ -147,15 +136,32 @@ function LeaveInbox() {
     applyFilters(selectedStatus, selectedType, event.target.value);
   };
 
-  const headers = [
-    "Type",
-    "ID",
-    "Submission Date",
-    "Name",
-    "Designation",
-    "Status",
-    "View",
-  ];
+  // Sorting
+  const sortByColumn = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc")
+      direction = "desc";
+
+    const sorted = [...filteredData].sort((a, b) => {
+      return direction === "asc" ? a[key] - b[key] : b[key] - a[key];
+    });
+
+    setSortConfig({ key, direction });
+    setFilteredData(sorted);
+  };
+
+  const renderSortIcon = (key) => {
+    if (sortConfig.key !== key) return <CaretUp size={14} opacity={0.3} />;
+    return sortConfig.direction === "asc" ? (
+      <CaretUp size={14} />
+    ) : (
+      <CaretDown size={14} />
+    );
+  };
+
+  if (loading) {
+    return <LoadingComponent loadingMsg="Fetching Leave Inbox..." />;
+  }
 
   return (
     <div className="app-container">
@@ -166,101 +172,74 @@ function LeaveInbox() {
         Leave Inbox
       </Title>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          margin: "20px 15px",
-        }}
-      >
-        {/* Filters section */}
-        <div style={{ display: "flex", gap: "20px" }}>
-          <TextInput
-            label="Filter from Date"
-            type="date"
-            value={fromDate}
-            onChange={handleDateFilterChange}
-            style={{ maxWidth: "300px" }}
-          />
-          <Select
-            label="Filter by Status"
-            placeholder="Select a status"
-            value={selectedStatus}
-            onChange={handleStatusFilterChange}
-            data={[
-              { value: "All", label: "All" },
-              { value: "Pending", label: "Pending" },
-              { value: "Accepted", label: "Accepted" },
-              { value: "Rejected", label: "Rejected" },
-            ]}
-          />
-          <Select
-            label="Filter by Type"
-            placeholder="Select a type"
-            value={selectedType}
-            onChange={handleTypeFilterChange}
-            data={[
-              { value: "All", label: "All" },
-              { value: "Leave Request", label: "Leave Request" },
-              {
-                value: "Academic Responsibility",
-                label: "Academic Responsibility",
-              },
-              {
-                value: "Administrative Responsibility",
-                label: "Administrative Responsibility",
-              },
-            ]}
-          />
-        </div>
-
-        {/* Filtered results text section */}
-        <Title order={4} style={{ fontWeight: "400", marginLeft: "auto" }}>
-          {fromDate
-            ? `Filtered results as of ${new Date(fromDate).toLocaleDateString(
-                "en-US",
-                {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                },
-              )}`
-            : `Filtered results as of ${new Date(
-                Date.now() - 365 * 24 * 60 * 60 * 1000,
-              ).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}`}
-        </Title>
+      <div style={{ margin: "20px 15px", display: "flex", gap: "20px" }}>
+        <TextInput
+          label="Filter from Date"
+          type="date"
+          value={fromDate}
+          onChange={handleDateFilterChange}
+          style={{ maxWidth: "300px" }}
+        />
+        <Select
+          label="Filter by Status"
+          placeholder="Select a status"
+          value={selectedStatus}
+          onChange={handleStatusFilterChange}
+          data={[
+            { value: "All", label: "All" },
+            { value: "Pending", label: "Pending" },
+            { value: "Accepted", label: "Accepted" },
+            { value: "Rejected", label: "Rejected" },
+          ]}
+        />
+        <Select
+          label="Filter by Type"
+          placeholder="Select a type"
+          value={selectedType}
+          onChange={handleTypeFilterChange}
+          data={[
+            { value: "All", label: "All" },
+            { value: "Leave Request", label: "Leave Request" },
+            {
+              value: "Academic Responsibility",
+              label: "Academic Responsibility",
+            },
+            {
+              value: "Administrative Responsibility",
+              label: "Administrative Responsibility",
+            },
+          ]}
+        />
       </div>
 
-      {(loading || filtering) && (
-        <LoadingComponent
-          loadingMsg={
-            loading ? "Fetching Leave Inbox..." : "Applying filters..."
-          }
-        />
-      )}
-
-      {!loading && !filtering && filteredData.length === 0 && (
+      {filteredData.length === 0 ? (
         <EmptyTable
           title="No Records Found"
           message="There are no records available."
         />
-      )}
-
-      {!loading && !filtering && filteredData.length > 0 && (
+      ) : (
         <div className="form-table-container">
           <table className="form-table">
             <thead>
               <tr>
-                {headers.map((header, index) => (
-                  <th key={index} className="table-header">
-                    {header}
-                  </th>
-                ))}
+                <th className="table-header">Type</th>
+                <th className="table-header">
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    ID
+                    <ActionIcon
+                      variant="subtle"
+                      onClick={() => sortByColumn("id")}
+                      ml={5}
+                    >
+                      {renderSortIcon("id")}
+                    </ActionIcon>
+                  </div>
+                </th>
+                <th className="table-header">Submission Date</th>
+                <th className="table-header">Name</th>
+                <th className="table-header">Designation</th>
+                <th className="table-header">Status</th>
+                <th className="table-header">View</th>
               </tr>
             </thead>
             <tbody>

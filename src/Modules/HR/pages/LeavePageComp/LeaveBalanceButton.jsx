@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, ScrollArea, Loader } from "@mantine/core";
-import { ListChecks } from "@phosphor-icons/react";
+import { Modal, Button, ScrollArea, Loader, ActionIcon } from "@mantine/core";
+import { ListChecks, CaretUp, CaretDown } from "@phosphor-icons/react";
 import { get_leave_balance } from "../../../../routes/hr";
 
-const LeaveBalanceButton = () => {
+function LeaveBalanceButton() {
   const [opened, setOpened] = useState(false);
   const [leaveBalance, setLeaveBalance] = useState(null);
+  const [sortedBalance, setSortedBalance] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
   const fetchLeaveBalance = async () => {
     const token = localStorage.getItem("authToken");
@@ -30,7 +32,8 @@ const LeaveBalanceButton = () => {
       }
 
       const data = await response.json();
-      setLeaveBalance(data.leave_balance); // Extract 'leave_balance' object from response
+      setLeaveBalance(data.leave_balance);
+      setSortedBalance(Object.entries(data.leave_balance));
     } catch (err) {
       console.error(err.message);
       setError("Failed to fetch leave balance.");
@@ -44,6 +47,40 @@ const LeaveBalanceButton = () => {
       fetchLeaveBalance();
     }
   }, [opened]);
+
+  const sortData = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
+
+    const sorted = [...Object.entries(leaveBalance)].sort((a, b) => {
+      if (key === "leave_type") {
+        const nameA = a[0].toLowerCase();
+        const nameB = b[0].toLowerCase();
+        return direction === "asc"
+          ? nameA.localeCompare(nameB)
+          : nameB.localeCompare(nameA);
+      }
+
+      const valA = a[1][key];
+      const valB = b[1][key];
+      return direction === "asc" ? valA - valB : valB - valA;
+    });
+
+    setSortConfig({ key, direction });
+    setSortedBalance(sorted);
+  };
+
+  const renderSortIcon = (columnKey) => {
+    if (sortConfig.key !== columnKey)
+      return <CaretUp size={14} opacity={0.3} />;
+    return sortConfig.direction === "asc" ? (
+      <CaretUp size={14} />
+    ) : (
+      <CaretDown size={14} />
+    );
+  };
 
   return (
     <>
@@ -63,6 +100,7 @@ const LeaveBalanceButton = () => {
           Show Leave Balance
         </Button>
       </div>
+
       <Modal
         opened={opened}
         onClose={() => setOpened(false)}
@@ -96,21 +134,62 @@ const LeaveBalanceButton = () => {
           </div>
         ) : leaveBalance ? (
           <ScrollArea>
-            <div
-              className="form-table-container"
-              style={{ margin: " 0 auto " }}
-            >
+            <div className="form-table-container" style={{ margin: "0 auto" }}>
               <table className="form-table">
                 <thead>
                   <tr>
-                    <th className="table-header">Leave Type</th>
-                    <th className="table-header">Allotted</th>
-                    <th className="table-header">Taken</th>
-                    <th className="table-header">Balance</th>
+                    <th className="table-header">
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        Leave Type
+                        <ActionIcon
+                          variant="subtle"
+                          onClick={() => sortData("leave_type")}
+                          ml={5}
+                        >
+                          {renderSortIcon("leave_type")}
+                        </ActionIcon>
+                      </div>
+                    </th>
+                    <th className="table-header">
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        Allotted
+                        <ActionIcon
+                          variant="subtle"
+                          onClick={() => sortData("allotted")}
+                          ml={5}
+                        >
+                          {renderSortIcon("allotted")}
+                        </ActionIcon>
+                      </div>
+                    </th>
+                    <th className="table-header">
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        Taken
+                        <ActionIcon
+                          variant="subtle"
+                          onClick={() => sortData("taken")}
+                          ml={5}
+                        >
+                          {renderSortIcon("taken")}
+                        </ActionIcon>
+                      </div>
+                    </th>
+                    <th className="table-header">
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        Balance
+                        <ActionIcon
+                          variant="subtle"
+                          onClick={() => sortData("balance")}
+                          ml={5}
+                        >
+                          {renderSortIcon("balance")}
+                        </ActionIcon>
+                      </div>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {Object.entries(leaveBalance).map(([key, value], index) => (
+                  {sortedBalance.map(([key, value]) => (
                     <tr
                       className="table-row"
                       key={key}
@@ -143,6 +222,6 @@ const LeaveBalanceButton = () => {
       </Modal>
     </>
   );
-};
+}
 
 export default LeaveBalanceButton;

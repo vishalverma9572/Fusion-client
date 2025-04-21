@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Title,
@@ -12,20 +12,21 @@ import {
   Flex,
   Button,
 } from "@mantine/core";
-import { useNavigate } from "react-router-dom";
 import HrBreadcrumbs from "../../components/HrBreadcrumbs";
 import { admin_get_all_leave_balances } from "../../../../routes/hr";
 
 function ViewEmployeeLB() {
-  const navigate = useNavigate();
   const [allEmployees, setAllEmployees] = useState([]);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("All");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const abbreviationRef = useRef(null);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
+  // Updated leave types with explicit keys to match API response:
+  // - The "allottedKey" maps to LeavePerYear (e.g., "casual_leave_allotted")
+  // - The "takenKey" maps to LeaveBalance (e.g., "casual_leave_taken")
   const leaveTypes = [
     {
       key: "casual_leave",
@@ -114,6 +115,7 @@ function ViewEmployeeLB() {
           throw new Error(errorData.error || "Failed to fetch leave details");
         }
         const data = await response.json();
+        // Transform the received employee leave data
         const mergedData = data.leave_balances.map((emp) => {
           const { employee_id, employee_username, employee_fullname, ...rest } =
             emp;
@@ -134,6 +136,28 @@ function ViewEmployeeLB() {
     };
     fetchEmployeesAndLeaveData();
   }, []);
+
+  const handleSort = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
+    setSortConfig({ key, direction });
+
+    const sorted = [...filteredEmployees].sort((a, b) => {
+      const aVal = a[key] ?? "";
+      const bVal = b[key] ?? "";
+
+      if (typeof aVal === "number" && typeof bVal === "number") {
+        return direction === "asc" ? aVal - bVal : bVal - aVal;
+      }
+      return direction === "asc"
+        ? aVal.toString().localeCompare(bVal.toString())
+        : bVal.toString().localeCompare(aVal.toString());
+    });
+
+    setFilteredEmployees(sorted);
+  };
 
   // Compute unique department options if available.
   const departmentOptions = Array.from(
@@ -169,11 +193,6 @@ function ViewEmployeeLB() {
     setFilteredEmployees(filtered);
   }, [searchQuery, departmentFilter, allEmployees]);
 
-  // Handle row click to navigate to employee's leave review page
-  const handleRowClick = (username) => {
-    navigate(`/hr/admin_leave/review_leave_requests?emp=${username}`);
-  };
-
   // Standard table cell styling.
   const headerCellStyle = {
     padding: "8px",
@@ -187,12 +206,8 @@ function ViewEmployeeLB() {
     padding: "8px",
     border: "1px solid #ccc",
     textAlign: "left",
-    cursor: "pointer", // Add pointer cursor to indicate clickable rows
   };
 
-  const scrollToAbbreviations = () => {
-    abbreviationRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
   // Breadcrumbs for navigation.
   const exampleItems = [
     { title: "Home", path: "/dashboard" },
@@ -204,6 +219,66 @@ function ViewEmployeeLB() {
     },
   ];
 
+  // Abbreviation table styles for smaller text.
+  const abbrHeaderCellStyle = {
+    padding: "4px 8px",
+    border: "1px solid #ccc",
+    textAlign: "left",
+    backgroundColor: "#e9ecef",
+    fontWeight: "bold",
+    fontSize: "0.75rem",
+  };
+
+  const abbrCellStyle = {
+    padding: "4px 8px",
+    border: "1px solid #ccc",
+    textAlign: "left",
+    fontSize: "0.75rem",
+  };
+
+  const generateCSV = () => {
+    const headers = [
+      "S.No",
+      "ID",
+      "Name",
+      "Username",
+      "Department",
+      ...leaveTypes.flatMap((leave) => [
+        `${leave.abbrev} A`, // Allotted
+        `${leave.abbrev} T`, // Taken
+      ]),
+    ];
+
+    const rows = filteredEmployees.map((emp, index) => {
+      const row = [
+        index + 1,
+        emp.id,
+        emp.name,
+        emp.username,
+        emp.department || "N/A",
+        ...leaveTypes.flatMap((leave) => [
+          emp[leave.allottedKey] !== undefined ? emp[leave.allottedKey] : "-",
+          emp[leave.takenKey] !== undefined ? emp[leave.takenKey] : "-",
+        ]),
+      ];
+      return row;
+    });
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map((row) => row.join(",")),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "employee_leave_balances.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <>
       <HrBreadcrumbs items={exampleItems} />
@@ -213,27 +288,60 @@ function ViewEmployeeLB() {
         </Title>
 
         {/* Top Section: Search/Filter Panel & Abbreviation Chart */}
+        <Flex
+          gap="md"
+          wrap="nowrap"
+          mb="xl"
+          style={{
+            alignItems: "stretch",
+            maxWidth: "1000px",
+            margin: "0 auto",
+          }}
+        >
+          {/* Search/Filter Panel */}
+          <Card withBorder shadow="sm" p="lg" style={{ flex: 1 }}>
+            <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+              <TextInput
+                placeholder="Search by name or username"
+                label="Search Employees"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                mb="md"
+              />
+              <Select
+                label="Filter by Department"
+                placeholder="Select Department"
+                data={["All", ...departmentOptions]}
+                value={departmentFilter}
+                onChange={handleDepartmentChange}
+              />
+            </div>
+          </Card>
 
-        <Flex gap="md" align="flex-end">
-          <TextInput
-            placeholder="Search by name or username"
-            label="Search Employees"
-            value={searchQuery}
-            onChange={handleSearchChange}
-            style={{ maxWidth: "300px", flex: 1 }}
-          />
-          <Select
-            label="Filter by Department"
-            placeholder="Select Department"
-            data={["All", ...departmentOptions]}
-            value={departmentFilter}
-            onChange={handleDepartmentChange}
-            style={{ maxWidth: "300px", flex: 1 }}
-          />
-          {/* a button to take it to abbreviatio */}
-          <Button variant="outline" onClick={scrollToAbbreviations}>
-            View Abbreviations
-          </Button>
+          {/* Abbreviation Table */}
+          <Card withBorder shadow="sm" p="lg" style={{ flex: 1 }}>
+            <Title order={5} mb="sm" style={{ fontSize: "1rem" }}>
+              Leave Type Abbreviations
+            </Title>
+            <Table fontSize="xs">
+              <thead>
+                <tr>
+                  <th style={abbrHeaderCellStyle}>Leave Type</th>
+                  <th style={abbrHeaderCellStyle}>Allotted</th>
+                  <th style={abbrHeaderCellStyle}>Taken</th>
+                </tr>
+              </thead>
+              <tbody>
+                {leaveTypes.map((leave) => (
+                  <tr key={leave.key}>
+                    <td style={abbrCellStyle}>{leave.fullName}</td>
+                    <td style={abbrCellStyle}>{`${leave.abbrev} A`}</td>
+                    <td style={abbrCellStyle}>{`${leave.abbrev} T`}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </Card>
         </Flex>
 
         <Divider mb="xl" />
@@ -262,6 +370,16 @@ function ViewEmployeeLB() {
             <Text style={{ fontWeight: "bold", marginBottom: "25px" }}>
               Total Matched Employees: {filteredEmployees.length}
             </Text>
+            <Button
+              onClick={generateCSV}
+              variant="light"
+              color="blue"
+              mb="md"
+              style={{ float: "right" }}
+            >
+              Download CSV
+            </Button>
+
             <Table
               striped
               highlightOnHover
@@ -271,25 +389,106 @@ function ViewEmployeeLB() {
               <thead>
                 <tr>
                   <th style={headerCellStyle}>#</th>
-                  <th style={headerCellStyle}>ID</th>
-                  <th style={headerCellStyle}>Name</th>
-                  <th style={headerCellStyle}>Username</th>
-                  <th style={headerCellStyle}>Department</th>
+                  <th style={headerCellStyle}>
+                    ID{" "}
+                    <Button
+                      compact
+                      size="xs"
+                      variant="subtle"
+                      onClick={() => handleSort("id")}
+                    >
+                      {sortConfig.key === "id"
+                        ? sortConfig.direction === "asc"
+                          ? "↑"
+                          : "↓"
+                        : "⇅"}
+                    </Button>
+                  </th>
+                  <th style={headerCellStyle}>
+                    Name{" "}
+                    <Button
+                      compact
+                      size="xs"
+                      variant="subtle"
+                      onClick={() => handleSort("name")}
+                    >
+                      {sortConfig.key === "name"
+                        ? sortConfig.direction === "asc"
+                          ? "↑"
+                          : "↓"
+                        : "⇅"}
+                    </Button>
+                  </th>
+                  <th style={headerCellStyle}>
+                    Username{" "}
+                    <Button
+                      compact
+                      size="xs"
+                      variant="subtle"
+                      onClick={() => handleSort("username")}
+                    >
+                      {sortConfig.key === "username"
+                        ? sortConfig.direction === "asc"
+                          ? "↑"
+                          : "↓"
+                        : "⇅"}
+                    </Button>
+                  </th>
+                  <th style={headerCellStyle}>
+                    Department{" "}
+                    <Button
+                      compact
+                      size="xs"
+                      variant="subtle"
+                      onClick={() => handleSort("department")}
+                    >
+                      {sortConfig.key === "department"
+                        ? sortConfig.direction === "asc"
+                          ? "↑"
+                          : "↓"
+                        : "⇅"}
+                    </Button>
+                  </th>
+
                   {leaveTypes.map((leave) => (
                     <React.Fragment key={leave.key}>
-                      <th style={headerCellStyle}>{leave.abbrev} A</th>
-                      <th style={headerCellStyle}>{leave.abbrev} T</th>
+                      <th style={headerCellStyle}>
+                        {leave.abbrev} A{" "}
+                        <Button
+                          compact
+                          size="xs"
+                          variant="subtle"
+                          onClick={() => handleSort(leave.allottedKey)}
+                        >
+                          {sortConfig.key === leave.allottedKey
+                            ? sortConfig.direction === "asc"
+                              ? "↑"
+                              : "↓"
+                            : "⇅"}
+                        </Button>
+                      </th>
+                      <th style={headerCellStyle}>
+                        {leave.abbrev} T{" "}
+                        <Button
+                          compact
+                          size="xs"
+                          variant="subtle"
+                          onClick={() => handleSort(leave.takenKey)}
+                        >
+                          {sortConfig.key === leave.takenKey
+                            ? sortConfig.direction === "asc"
+                              ? "↑"
+                              : "↓"
+                            : "⇅"}
+                        </Button>
+                      </th>
                     </React.Fragment>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {filteredEmployees.map((emp, index) => (
-                  <tr
-                    key={emp.id}
-                    onClick={() => handleRowClick(emp.username)}
-                    style={{ cursor: "pointer" }} // Make rows look clickable
-                  >
+                  <tr key={emp.id}>
                     <td style={cellStyle}>{index + 1}</td>
                     <td style={cellStyle}>{emp.id}</td>
                     <td style={cellStyle}>{emp.name}</td>
@@ -317,80 +516,6 @@ function ViewEmployeeLB() {
         ) : (
           <Text>No employees found.</Text>
         )}
-        <br />
-        <Divider mb="xl" />
-        <Card
-          ref={abbreviationRef}
-          withBorder
-          shadow="sm"
-          p="md"
-          mb="xl"
-          style={{ overflowX: "auto" }}
-        >
-          <Title order={4} mb="sm" style={{ fontSize: "1.1rem" }}>
-            Leave Type Abbreviations
-          </Title>
-          <Table
-            striped
-            highlightOnHover={false}
-            fontSize="sm"
-            verticalSpacing="xs"
-            horizontalSpacing="md"
-          >
-            <thead>
-              <tr>
-                <th
-                  style={{
-                    textAlign: "left",
-                    padding: "12px",
-                    backgroundColor: "#f8f9fa",
-                  }}
-                >
-                  Leave Type
-                </th>
-                <th
-                  style={{
-                    textAlign: "left",
-                    padding: "12px",
-                    backgroundColor: "#f8f9fa",
-                  }}
-                >
-                  Abbreviation
-                </th>
-                <th
-                  style={{
-                    textAlign: "left",
-                    padding: "12px",
-                    backgroundColor: "#f8f9fa",
-                  }}
-                >
-                  Allotted
-                </th>
-                <th
-                  style={{
-                    textAlign: "left",
-                    padding: "12px",
-                    backgroundColor: "#f8f9fa",
-                  }}
-                >
-                  Taken
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {leaveTypes.map((leave) => (
-                <tr key={leave.key}>
-                  <td style={{ padding: "12px" }}>{leave.fullName}</td>
-                  <td style={{ padding: "12px", fontWeight: 600 }}>
-                    {leave.abbrev}
-                  </td>
-                  <td style={{ padding: "12px" }}>{`${leave.abbrev} A`}</td>
-                  <td style={{ padding: "12px" }}>{`${leave.abbrev} T`}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </Card>
       </Container>
     </>
   );
